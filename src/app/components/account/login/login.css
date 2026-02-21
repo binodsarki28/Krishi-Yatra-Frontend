@@ -1,0 +1,249 @@
+/* ===================================================
+   LOGIN PAGE – Centered Card Layout (100% zoom)
+   =================================================== */
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    background: linear-gradient(135deg, #f0f4f0 0%, #e8f5e9 100%);
+    padding: 10rem 1.5rem 5rem;
+    /* Large top padding to clear navbar */
+}
+
+.login-wrapper {
+    width: 100%;
+    max-width: 880px;
+}
+
+.login-card {
+    display: grid;
+    grid-template-columns: 42% 58%;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.13);
+}
+
+/* ── Left Panel ── */
+.left-panel {
+    background: linear-gradient(160deg, #1b5e20 0%, #2e7d32 45%, #43a047 80%, #66bb6a 100%);
+    padding: 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.panel-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+.logo-section i {
+    font-size: 4.5rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.95;
+}
+
+.welcome-title {
+    font-size: 1.75rem;
+    font-weight: 300;
+    margin: 0 0 0.4rem;
+    letter-spacing: 2px;
+    opacity: 0.9;
+}
+
+.brand-name {
+    font-size: 2.75rem;
+    font-weight: 800;
+    margin: 0 0 1.5rem;
+    letter-spacing: -0.5px;
+}
+
+.tagline {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    opacity: 0.88;
+    max-width: 260px;
+}
+
+/* Decorative Circles - Removed for better clarity */
+.decorative-circles {
+    display: none;
+}
+
+/* ── Right Panel ── */
+.right-panel {
+    padding: 3rem 3.5rem;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+}
+
+.form-container {
+    width: 100%;
+}
+
+.form-header {
+    margin-bottom: 2rem;
+}
+
+.form-header h2 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+}
+
+.form-header p {
+    color: #6b7280;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.link-primary {
+    color: #4caf50;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+
+.link-primary:hover {
+    color: #1b5e20;
+}
+
+/* ── Form Groups ── */
+.form-group {
+    margin-bottom: 1.4rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group ::ng-deep .p-password input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 0.95rem;
+    border: 1.5px solid #d1d5db;
+    border-radius: 10px;
+    transition: all 0.2s;
+    box-sizing: border-box;
+    background: #fafafa;
+    color: #111827;
+}
+
+.form-group input:focus,
+.form-group ::ng-deep .p-password input:focus {
+    border-color: #4caf50;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.12);
+    background: #fff;
+}
+
+/* ── Form Options ── */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.75rem;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.checkbox-wrapper label {
+    color: #6b7280;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.link-secondary {
+    color: #6b7280;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+}
+
+.link-secondary:hover {
+    color: #4caf50;
+}
+
+/* ── Submit Button ── */
+.submit-btn {
+    width: 100%;
+    padding: 0.95rem;
+    font-size: 1.05rem !important;
+    font-weight: 700;
+    background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 14px rgba(76, 175, 80, 0.35);
+    letter-spacing: 0.3px;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(76, 175, 80, 0.4);
+}
+
+/* PrimeNG password wrapper */
+::ng-deep .login-page .p-password {
+    width: 100%;
+    display: block;
+}
+
+::ng-deep .login-page .p-password-input {
+    width: 100% !important;
+    padding: 0.8rem 1rem !important;
+    font-size: 0.95rem !important;
+    border: 1.5px solid #d1d5db !important;
+    border-radius: 10px !important;
+    box-sizing: border-box !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .login-card {
+        grid-template-columns: 1fr;
+    }
+
+    .left-panel {
+        min-height: 220px;
+        padding: 2.5rem;
+    }
+
+    .brand-name {
+        font-size: 2.25rem;
+    }
+
+    .right-panel {
+        padding: 2.5rem 2rem;
+    }
+
+    .form-header h2 {
+        font-size: 2rem;
+    }
+}

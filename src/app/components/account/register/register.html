@@ -1,0 +1,101 @@
+<div class="register-page">
+    <div class="register-wrapper">
+        <div class="register-card">
+            <!-- Left Panel - Modern Green Gradient -->
+            <div class="left-panel">
+                <div class="panel-content">
+                    <div class="logo-section">
+                        <i class="pi pi-leaf"></i>
+                    </div>
+                    <h1 class="welcome-title">Join</h1>
+                    <h2 class="brand-name">KrishiYatra</h2>
+                    <p class="tagline">Connect with farmers, access markets, and grow your agricultural business</p>
+                    <div class="decorative-circles">
+                        <div class="circle circle-1"></div>
+                        <div class="circle circle-2"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Register Form -->
+            <div class="right-panel">
+                <div class="form-container">
+                    <div class="form-header">
+                        <h2>Create Account</h2>
+                    </div>
+
+                    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fullName">Full Name</label>
+                                <input id="fullName" type="text" pInputText formControlName="fullName"
+                                    placeholder="John Doe">
+                                <small class="error-message"
+                                    *ngIf="registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched">
+                                    Name must be 5-20 characters (Example: John Doe)
+                                </small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input id="username" type="text" pInputText formControlName="username"
+                                    placeholder="johndoe">
+                                <small class="error-message"
+                                    *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+                                    Username is required
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input id="email" type="email" pInputText formControlName="email"
+                                placeholder="john@example.com">
+                            <small class="error-message"
+                                *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+                                Please enter a valid email address
+                            </small>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <p-password id="password" [toggleMask]="true" formControlName="password"
+                                    placeholder="••••••••" styleClass="w-full" [feedback]="false"></p-password>
+                                <small class="error-message"
+                                    *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+                                    Password must be 8+ chars with uppercase, lowercase, number and special char
+                                </small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <p-password id="confirmPassword" [toggleMask]="true" formControlName="confirmPassword"
+                                    placeholder="••••••••" [feedback]="false" styleClass="w-full"></p-password>
+                            </div>
+                        </div>
+                        <small class="error-message"
+                            *ngIf="registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched">Passwords
+                            do not match</small>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input id="phone" type="tel" pInputText formControlName="phoneNumber"
+                                placeholder="+977 9800000000">
+                            <small class="error-message"
+                                *ngIf="registerForm.get('phoneNumber')?.invalid && registerForm.get('phoneNumber')?.touched">
+                                Use a valid Nepal number (Example: 9841234567)
+                            </small>
+                        </div>
+
+                        <p-button label="Create Account" [loading]="loading" (onClick)="onSubmit()"
+                            styleClass="submit-btn"></p-button>
+
+                        <p class="signin-link">Already have an account? <a routerLink="/account/login"
+                                class="link-primary">Sign in</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

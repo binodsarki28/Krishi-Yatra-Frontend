@@ -1,0 +1,109 @@
+/* ===================================================
+   VERIFY OTP PAGE – Centered Card (100% zoom)
+   =================================================== */
+.verify-otp-page {
+    min-height: calc(100vh - 70px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f0f4f0 0%, #e8f5e9 100%);
+    padding: 2.5rem 1.5rem;
+}
+
+.verify-card {
+    background: white;
+    border-radius: 20px;
+    padding: 3.5rem 4rem;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.13);
+    width: 100%;
+    max-width: 520px;
+    text-align: center;
+}
+
+.verify-icon {
+    font-size: 4rem !important;
+    color: #4caf50 !important;
+    margin-bottom: 1.5rem !important;
+    display: block;
+}
+
+.verify-title {
+    font-size: 2.4rem !important;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+}
+
+.verify-subtitle {
+    color: #6b7280;
+    font-size: 1rem !important;
+    margin-bottom: 2.25rem;
+    line-height: 1.6;
+}
+
+/* OTP input boxes */
+::ng-deep .p-inputotp-input {
+    width: 3.25rem !important;
+    height: 3.25rem !important;
+    font-size: 1.5rem !important;
+    border-radius: 10px !important;
+    border: 1.5px solid #d1d5db !important;
+    text-align: center;
+    font-weight: 700;
+    background: #fafafa;
+    transition: all 0.2s;
+}
+
+::ng-deep .p-inputotp-input:focus {
+    border-color: #4caf50 !important;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.12) !important;
+    outline: none !important;
+    background: #fff !important;
+}
+
+::ng-deep .p-inputotp {
+    gap: 0.875rem !important;
+    margin-bottom: 2.25rem !important;
+    justify-content: center !important;
+}
+
+/* PrimeNG Verify button */
+::ng-deep .verify-card .p-button {
+    width: 100% !important;
+    padding: 0.95rem 1.25rem !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    border-radius: 10px !important;
+    background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%) !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(76, 175, 80, 0.35) !important;
+    margin-bottom: 1.25rem !important;
+    transition: all 0.3s !important;
+}
+
+::ng-deep .verify-card .p-button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 22px rgba(76, 175, 80, 0.4) !important;
+}
+
+::ng-deep .verify-card .p-button .p-button-label {
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+}
+
+.resend-link {
+    font-size: 0.95rem;
+    color: #4caf50;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 0.25rem;
+    transition: color 0.2s;
+}
+
+.resend-link:hover {
+    color: #1b5e20;
+    text-decoration: underline;
+}
