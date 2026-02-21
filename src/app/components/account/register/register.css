@@ -1,243 +1,289 @@
 /* ===================================================
-   REGISTER PAGE – Centered Card Layout (100% zoom)
-   =================================================== */
+    REGISTER PAGE – Classic Premium Layout
+    =================================================== */
 .register-page {
-    min-height: 100vh;
+    min-height: calc(100vh - 7rem);
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #f0f4f0 0%, #e8f5e9 100%);
-    padding: 10rem 1.5rem 5rem;
-    /* Large top padding to clear navbar */
+    background: #f8fafc;
+    /* Standardized background */
+    padding: 2rem 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.back-btn-minimal {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    width: 45px;
+    height: 45px;
+    background: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a4d2e;
+    font-size: 1.25rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    z-index: 100;
+}
+
+.back-btn-minimal:hover {
+    transform: translateX(-5px);
+    background: #1a4d2e;
+    color: #ffffff;
 }
 
 .register-wrapper {
     width: 100%;
-    max-width: 980px;
+    max-width: 1000px;
+    perspective: 1000px;
 }
 
 .register-card {
-    display: grid;
-    grid-template-columns: 38% 62%;
-    background: white;
-    border-radius: 20px;
+    display: flex;
+    background: #ffffff;
+    border-radius: 24px;
     overflow: hidden;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.13);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+    min-height: 600px;
 }
 
-/* ── Left Panel ── */
+/* ── Left Panel (Classic Wave Design) ── */
 .left-panel {
-    background: linear-gradient(160deg, #1b5e20 0%, #2e7d32 45%, #43a047 80%, #66bb6a 100%);
-    padding: 3rem 2rem;
+    flex: 1;
+    background: #1a4d2e;
+    color: #ffffff;
+    padding: 0;
     position: relative;
     overflow: hidden;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+}
+
+.left-panel-inner {
+    padding: 3rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
+    position: relative;
+    z-index: 10;
+}
+
+/* Decorative Waves */
+.left-panel::before {
+    content: '';
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    background: #2d6a4f;
+    /* Muted Green */
+    border-radius: 40%;
+    top: -50%;
+    right: -70%;
+    z-index: 1;
+}
+
+.left-panel::after {
+    content: '';
+    position: absolute;
+    width: 140%;
+    height: 140%;
+    background: #40916c;
+    /* Bright Green Wave */
+    border-radius: 45%;
+    top: -40%;
+    right: -80%;
+    z-index: 2;
 }
 
 .panel-content {
     position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: white;
+    z-index: 10;
 }
 
-.logo-section i {
-    font-size: 4.5rem;
-    margin-bottom: 1.5rem;
-    opacity: 0.95;
-}
-
-.welcome-title {
-    font-size: 1.75rem;
+.hello-text {
+    font-size: 2.5rem;
     font-weight: 300;
-    margin: 0 0 0.4rem;
-    letter-spacing: 2px;
+    margin: 0;
     opacity: 0.9;
 }
 
-.brand-name {
-    font-size: 2.75rem;
+.welcome-text {
+    font-size: 3.5rem;
     font-weight: 800;
     margin: 0 0 1.5rem;
-    letter-spacing: -0.5px;
+    line-height: 1;
+    letter-spacing: -1px;
 }
 
 .tagline {
-    font-size: 1.05rem;
-    line-height: 1.75;
-    opacity: 0.88;
-    max-width: 260px;
-}
-
-/* Decorative Circles - Removed for better clarity */
-.decorative-circles {
-    display: none;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 320px;
+    opacity: 0.8;
+    margin-bottom: 3rem;
 }
 
 /* ── Right Panel ── */
 .right-panel {
-    padding: 2.75rem 3rem;
+    flex: 1.2;
+    padding: 2.5rem 3.5rem;
+    /* More compact padding */
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: #ffffff;
 }
 
 .form-container {
-    max-width: 100%;
+    width: 100%;
+    max-width: 380px;
 }
 
 .form-header {
-    margin-bottom: 1.75rem;
+    margin-bottom: 3rem;
+    /* Standardized gap */
 }
 
 .form-header h2 {
-    font-size: 2.4rem;
-    font-weight: 800;
-    color: #111827;
-    margin-bottom: 0.5rem;
-    line-height: 1.2;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1a4d2e;
+    margin: 0;
+}
+
+.form-group-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    /* Controlled vertical gap between rows */
 }
 
 .form-header p {
-    color: #6b7280;
-    font-size: 1rem;
-    line-height: 1.6;
+    color: #64748b;
+    margin-bottom: 2rem;
+    /* Reduced margin */
 }
 
 .link-primary {
-    color: #4caf50;
-    font-weight: 700;
+    color: #2d6a4f;
+    font-weight: 600;
     text-decoration: none;
-    font-size: 1rem;
-    transition: color 0.2s;
 }
 
-.link-primary:hover {
-    color: #1b5e20;
-}
-
-/* ── Form Layout ── */
+/* Form Styles */
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.1rem;
+    gap: 1.5rem;
 }
 
 .form-group {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.2rem;
+    /* Compact margin */
 }
 
 .form-group label {
     display: block;
-    font-size: 0.95rem;
+    font-size: 0.825rem;
+    /* Smaller labels */
     font-weight: 600;
-    color: #374151;
-    margin-bottom: 0.45rem;
+    color: #475569;
+    margin-bottom: 0.4rem;
 }
 
-.form-group input,
-.form-group ::ng-deep .p-password input {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    font-size: 0.95rem;
-    border: 1.5px solid #d1d5db;
-    border-radius: 10px;
-    transition: all 0.2s;
-    box-sizing: border-box;
-    background: #fafafa;
-    color: #111827;
+::ng-deep .p-inputtext,
+::ng-deep .p-password-input {
+    width: 100% !important;
+    padding: 0.75rem 0 !important;
+    border: none !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    font-size: 1rem !important;
+    transition: all 0.3s ease !important;
+    box-shadow: none !important;
 }
 
-.form-group input:focus,
-.form-group ::ng-deep .p-password input:focus {
-    border-color: #4caf50;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.12);
-    background: #fff;
+::ng-deep .p-inputtext:focus,
+::ng-deep .p-password-input:focus {
+    border-color: #2d6a4f !important;
+    outline: none !important;
 }
 
 .error-message {
-    display: block;
     color: #ef4444;
-    font-size: 0.875rem;
-    margin-top: -1rem;
-    margin-bottom: 1rem;
-}
-
-/* ── Submit Button ── */
-.submit-btn {
-    width: 100%;
-    padding: 0.95rem;
-    font-size: 1.05rem !important;
-    font-weight: 700;
-    background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
-    border: none;
-    border-radius: 10px;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s;
-    box-shadow: 0 4px 14px rgba(76, 175, 80, 0.35);
-    margin-top: 0.5rem;
-    letter-spacing: 0.3px;
-}
-
-.submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(76, 175, 80, 0.4);
-}
-
-/* Sign-in link below submit button */
-.signin-link {
-    text-align: center;
-    margin-top: 1.25rem;
-    font-size: 0.95rem;
-    color: #6b7280;
-    margin-bottom: 0;
-}
-
-/* PrimeNG password wrapper */
-::ng-deep .register-page .p-password {
-    width: 100%;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
     display: block;
 }
 
-::ng-deep .register-page .p-password-input {
-    width: 100% !important;
-    padding: 0.8rem 1rem !important;
-    font-size: 0.95rem !important;
-    border: 1.5px solid #d1d5db !important;
-    border-radius: 10px !important;
-    box-sizing: border-box !important;
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2rem 0;
+    font-size: 0.875rem;
 }
 
-/* ── Responsive ── */
-@media (max-width: 768px) {
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.link-secondary {
+    color: #64748b;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+::ng-deep .submit-btn {
+    width: 100% !important;
+    background: #1a4d2e !important;
+    border: none !important;
+    border-radius: 50px !important;
+    padding: 1rem !important;
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 10px 15px -3px rgba(26, 77, 46, 0.3) !important;
+}
+
+::ng-deep .submit-btn:hover {
+    background: #2d6a4f !important;
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(26, 77, 46, 0.4) !important;
+}
+
+/* ── Responsiveness ── */
+@media (max-width: 900px) {
     .register-card {
-        grid-template-columns: 1fr;
+        flex-direction: column;
     }
 
     .left-panel {
-        min-height: 220px;
-        padding: 2.5rem;
+        padding: 4rem 2rem;
+        min-height: 300px;
     }
 
-    .brand-name {
-        font-size: 2.25rem;
+    .left-panel::before,
+    .left-panel::after {
+        display: none;
     }
 
     .right-panel {
-        padding: 2rem 1.75rem;
+        padding: 3rem 2rem;
     }
 
     .form-row {
         grid-template-columns: 1fr;
-    }
-
-    .form-header h2 {
-        font-size: 2rem;
+        gap: 0;
     }
 }

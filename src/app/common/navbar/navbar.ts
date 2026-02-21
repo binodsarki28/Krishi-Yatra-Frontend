@@ -26,12 +26,7 @@ export class NavbarComponent implements OnInit {
     private accountService: AccountService
   ) { }
 
-  checkLoginStatus() {
-    this.accountService.updateLoginStatus();
-  }
-
   ngOnInit() {
-    // Subscribe to login status changes
     this.accountService.isLoggedIn$.subscribe((status: boolean) => {
       this.isLoggedIn = status;
     });

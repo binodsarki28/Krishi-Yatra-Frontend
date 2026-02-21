@@ -1,17 +1,29 @@
-
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './common/navbar/navbar';
 import { FooterComponent } from './common/footer/footer';
 import { GlobalToastComponent } from './common/global-toast/global-toast';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, FooterComponent, GlobalToastComponent],
+  imports: [RouterOutlet, NavbarComponent, FooterComponent, GlobalToastComponent, CommonModule],
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
 export class AppComponent {
   title = 'KrishiYatra';
+  showFooter = true;
+  private router = inject(Router);
+
+  constructor() {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      const url = event.urlAfterRedirects || event.url;
+      this.showFooter = !url.includes('/account/login') && !url.includes('/account/register');
+    });
+  }
 }
