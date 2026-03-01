@@ -16,9 +16,12 @@
             <p-button label="Verify & Proceed" icon="pi pi-check" [loading]="loading" (onClick)="onVerify()"
                 styleClass="w-full mb-3"></p-button>
 
-            <div class="mt-4">
+            <div class="mt-4 flex align-items-center justify-content-center">
                 <span class="text-gray-500 text-sm">Didn't receive code? </span>
-                <a (click)="resendOtp()" class="resend-link">Resend Code</a>
+                <a (click)="resendOtp()" class="resend-link ml-2" [class.disabled]="resendLoading">
+                    <i class="pi pi-spin pi-spinner mr-1" *ngIf="resendLoading"></i>
+                    {{ resendLoading ? 'Sending...' : 'Resend Code' }}
+                </a>
             </div>
         </form>
     </div>

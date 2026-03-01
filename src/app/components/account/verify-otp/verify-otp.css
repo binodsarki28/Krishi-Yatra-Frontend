@@ -107,3 +107,10 @@
     color: #1b5e20;
     text-decoration: underline;
 }
+
+.resend-link.disabled {
+    color: #9ca3af;
+    cursor: not-allowed;
+    pointer-events: none;
+    text-decoration: none;
+}

@@ -1,13 +1,12 @@
 /* ===================================================
-    LOGIN PAGE – Classic Premium Layout
+    LOGIN PAGE – Polished Premium Layout
     =================================================== */
 .login-page {
     min-height: calc(100vh - 7rem);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f8fafc;
-    /* Standardized background */
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
     padding: 2rem 1.5rem;
     position: relative;
     z-index: 1;
@@ -17,50 +16,50 @@
     position: absolute;
     top: 2rem;
     left: 2rem;
-    width: 45px;
-    height: 45px;
-    background: #ffffff;
-    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    background: #fff;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #1a4d2e;
-    font-size: 1.25rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    color: #064e3b;
+    font-size: 1.15rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     transition: all 0.3s ease;
     text-decoration: none;
     z-index: 100;
+    border: 1px solid #e8ecf1;
 }
 
 .back-btn-minimal:hover {
-    transform: translateX(-5px);
-    background: #1a4d2e;
-    color: #ffffff;
+    transform: translateX(-4px);
+    background: #064e3b;
+    color: #fff;
+    border-color: #064e3b;
 }
 
 .login-wrapper {
     width: 100%;
-    max-width: 1000px;
-    perspective: 1000px;
+    max-width: 960px;
 }
 
 .login-card {
     display: flex;
-    background: #ffffff;
-    border-radius: 24px;
+    background: #fff;
+    border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-    min-height: 600px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+    min-height: 560px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
-/* ── Left Panel (Classic Wave Design) ── */
+/* ── Left Panel ── */
 .left-panel {
     flex: 1;
-    background: #1a4d2e;
-    /* Deep Forest Green */
-    color: #ffffff;
+    background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+    color: #fff;
     padding: 0;
-    /* Remove internal padding to fix top gap */
     position: relative;
     overflow: hidden;
     display: flex;
@@ -77,48 +76,48 @@
     z-index: 10;
 }
 
-/* Decorative Waves */
 .left-panel::before {
     content: '';
     position: absolute;
-    width: 150%;
-    height: 150%;
-    background: #2d6a4f;
-    /* Muted Green */
-    border-radius: 40%;
-    top: -50%;
-    right: -70%;
+    width: 200%;
+    height: 200%;
+    background: rgba(52, 211, 153, 0.08);
+    border-radius: 50%;
+    top: -80%;
+    right: -80%;
     z-index: 1;
 }
 
 .left-panel::after {
     content: '';
     position: absolute;
-    width: 140%;
-    height: 140%;
-    background: #40916c;
-    /* Bright Green Wave */
-    border-radius: 45%;
-    top: -40%;
-    right: -80%;
+    width: 160%;
+    height: 160%;
+    background: rgba(16, 185, 129, 0.06);
+    border-radius: 50%;
+    bottom: -60%;
+    left: -40%;
     z-index: 2;
 }
 
-.panel-content {
-    position: relative;
-    z-index: 10;
+.logo-section {
+    margin-bottom: 2rem;
+}
+
+.logo-section i {
+    font-size: 2.5rem;
+    color: #34d399;
 }
 
 .hello-text {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 300;
     margin: 0;
-    opacity: 0.9;
+    opacity: 0.85;
 }
 
 .welcome-text {
-    font-size: 3.5rem;
-    /* Slightly smaller to prevent overflow */
+    font-size: 3rem;
     font-weight: 800;
     margin: 0 0 1.5rem;
     line-height: 1;
@@ -126,98 +125,103 @@
 }
 
 .tagline {
-    font-size: 1.1rem;
+    font-size: 1rem;
     line-height: 1.6;
-    max-width: 320px;
-    opacity: 0.8;
-    margin-bottom: 3rem;
+    max-width: 300px;
+    opacity: 0.7;
+    margin: 0;
 }
 
 /* ── Right Panel ── */
 .right-panel {
     flex: 1.2;
-    padding: 4rem;
+    padding: 3.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ffffff;
+    background: #fff;
 }
 
 .form-container {
     width: 100%;
-    max-width: 380px;
+    max-width: 360px;
 }
 
 .form-header {
-    margin-bottom: 3.5rem;
-    /* Increased gap */
+    margin-bottom: 2.5rem;
 }
 
 .form-header h2 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #1a4d2e;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1e293b;
     margin: 0 0 0.5rem;
+    letter-spacing: -0.5px;
 }
 
 .form-header p {
-    color: #64748b;
+    color: #94a3b8;
     margin: 0;
+    font-size: 0.9rem;
+}
+
+.link-primary {
+    color: #047857;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.link-primary:hover {
+    color: #065f46;
 }
 
 .form-group-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
-    /* Controlled gap between fields */
+    gap: 0.5rem;
 }
 
-.link-primary {
-    color: #2d6a4f;
-    font-weight: 600;
-    text-decoration: none;
-}
-
-/* Form Styles */
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
 }
 
 .form-group label {
     display: block;
-    font-size: 0.875rem;
+    font-size: 0.82rem;
     font-weight: 600;
     color: #475569;
     margin-bottom: 0.5rem;
 }
 
-::ng-deep .p-inputtext,
-::ng-deep .p-password-input {
+::ng-deep .login-page .p-inputtext,
+::ng-deep .login-page .p-password-input {
     width: 100% !important;
-    padding: 0.75rem 0 !important;
-    border: none !important;
-    border-bottom: 2px solid #e2e8f0 !important;
-    background: transparent !important;
-    border-radius: 0 !important;
-    font-size: 1rem !important;
-    transition: all 0.3s ease !important;
+    padding: 0.8rem 1rem !important;
+    border: 1.5px solid #e2e8f0 !important;
+    background: #fafbfc !important;
+    border-radius: 10px !important;
+    font-size: 0.95rem !important;
+    transition: all 0.2s ease !important;
     box-shadow: none !important;
 }
 
-::ng-deep .p-inputtext:focus,
-::ng-deep .p-password-input:focus {
-    border-color: #2d6a4f !important;
+::ng-deep .login-page .p-inputtext:focus,
+::ng-deep .login-page .p-password-input:focus {
+    border-color: #047857 !important;
+    background: #fff !important;
     outline: none !important;
+    box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.08) !important;
 }
 
-::ng-deep .p-password input {
+::ng-deep .login-page .p-password input {
     width: 100% !important;
-    border-radius: 0 !important;
+    border-radius: 10px !important;
 }
 
 .error-message {
     color: #ef4444;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     margin-top: 0.25rem;
     display: block;
 }
@@ -226,8 +230,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 2rem 0;
-    font-size: 0.875rem;
+    margin: 1.5rem 0;
+    font-size: 0.82rem;
 }
 
 .checkbox-wrapper {
@@ -237,50 +241,47 @@
 }
 
 .link-secondary {
-    color: #64748b;
+    color: #94a3b8;
     text-decoration: none;
     cursor: pointer;
+    font-weight: 500;
+    transition: color 0.2s;
 }
 
-::ng-deep .submit-btn {
+.link-secondary:hover {
+    color: #047857;
+}
+
+::ng-deep .login-page .submit-btn {
     width: 100% !important;
-    background: #1a4d2e !important;
+    background: linear-gradient(135deg, #064e3b, #047857) !important;
     border: none !important;
-    border-radius: 50px !important;
-    padding: 1rem !important;
-    font-size: 1.125rem !important;
-    font-weight: 600 !important;
+    border-radius: 12px !important;
+    padding: 0.9rem !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
     transition: all 0.3s ease !important;
-    box-shadow: 0 10px 15px -3px rgba(26, 77, 46, 0.3) !important;
+    box-shadow: 0 4px 16px rgba(4, 120, 87, 0.2) !important;
 }
 
-::ng-deep .submit-btn:hover {
-    background: #2d6a4f !important;
-    transform: translateY(-2px);
-}
-
-::ng-deep .login-page .p-password-input {
-    width: 100% !important;
-    padding: 0.8rem 1rem !important;
-    font-size: 0.95rem !important;
-    border: 1.5px solid #d1d5db !important;
-    border-radius: 10px !important;
-    box-sizing: border-box !important;
+::ng-deep .login-page .submit-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(4, 120, 87, 0.3) !important;
 }
 
 /* ── Responsive ── */
 @media (max-width: 768px) {
     .login-card {
-        grid-template-columns: 1fr;
+        flex-direction: column;
     }
 
     .left-panel {
-        min-height: 220px;
-        padding: 2.5rem;
+        min-height: 200px;
     }
 
-    .brand-name {
-        font-size: 2.25rem;
+    .left-panel::before,
+    .left-panel::after {
+        display: none;
     }
 
     .right-panel {
@@ -288,6 +289,10 @@
     }
 
     .form-header h2 {
-        font-size: 2rem;
+        font-size: 1.75rem;
+    }
+
+    .welcome-text {
+        font-size: 2.5rem;
     }
 }

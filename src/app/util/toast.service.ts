@@ -23,6 +23,7 @@ export class ToastService {
   }
 
   errorResponse(err: any): void {
+    console.error('API Error:', err);
     if (this.errorToastShown) return;
     this.errorToastShown = true;
 

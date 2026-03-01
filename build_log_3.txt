@@ -1,0 +1,85 @@
+[33m❯[39m Building...
+API Error: ReferenceError: localStorage is not defined
+    at Hb (file:///C:/Final%20Year%20Project/KrishiYatra-frontend/.angular/prerender-root/3637cc06-750d-4bba-9da2-827f426d21cd/main.server.mjs:357:2780)
+    at file:///C:/Final%20Year%20Project/KrishiYatra-frontend/.angular/prerender-root/3637cc06-750d-4bba-9da2-827f426d21cd/chunk-AKWWPUCT.mjs:32:16096
+    at Ne (file:///C:/Final%20Year%20Project/KrishiYatra-frontend/.angular/prerender-root/3637cc06-750d-4bba-9da2-827f426d21cd/chunk-AKWWPUCT.mjs:5:9609)
+    at file:///C:/Final%20Year%20Project/KrishiYatra-frontend/.angular/prerender-root/3637cc06-750d-4bba-9da2-827f426d21cd/chunk-AKWWPUCT.mjs:32:16087
+    at file:///C:/Final%20Year%20Project/KrishiYatra-frontend/.angular/prerender-root/3637cc06-750d-4bba-9da2-827f426d21cd/chunk-AKWWPUCT.mjs:32:16103
+    at bx (file:///C:/Final%20Year%20Project/KrishiYatra-frontend/.angular/prerender-root/3637cc06-750d-4bba-9da2-827f426d21cd/chunk-AKWWPUCT.mjs:32:20209)
+    at file:///C:/Final%20Year%20Project/KrishiYatra-frontend/.angular/prerender-root/3637cc06-750d-4bba-9da2-827f426d21cd/chunk-AKWWPUCT.mjs:32:16096
+    at Ne (file:///C:/Final%20Year%20Project/KrishiYatra-frontend/.angular/prerender-root/3637cc06-750d-4bba-9da2-827f426d21cd/chunk-AKWWPUCT.mjs:5:9609)
+    at e.chain (file:///C:/Final%20Year%20Project/KrishiYatra-frontend/.angular/prerender-root/3637cc06-750d-4bba-9da2-827f426d21cd/chunk-AKWWPUCT.mjs:32:16087)
+    at e.handle (file:///C:/Final%20Year%20Project/KrishiYatra-frontend/.angular/prerender-root/3637cc06-750d-4bba-9da2-827f426d21cd/chunk-AKWWPUCT.mjs:32:16771)
+[32m✔[39m Building...
+[35mBrowser bundles[39m     
+[1mInitial chunk files[22m [2m | [22m[1mNames[22m           [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mchunk-C5G3GLFV.js[39m   [2m | [22m[2m-[22m               [2m | [22m[36m453.91 kB[39m[2m | [22m              [36m114.28 kB[39m
+[32mstyles-3CK3YAJI.css[39m [2m | [22m[2mstyles[22m          [2m | [22m[36m359.88 kB[39m[2m | [22m               [36m19.84 kB[39m
+[32mmain-QNCCYZXM.js[39m    [2m | [22m[2mmain[22m            [2m | [22m[36m230.99 kB[39m[2m | [22m               [36m41.00 kB[39m
+[32mchunk-GNXGKETU.js[39m   [2m | [22m[2m-[22m               [2m | [22m [36m18.33 kB[39m[2m | [22m                [36m4.36 kB[39m
+[32mchunk-HWJEREV2.js[39m   [2m | [22m[2m-[22m               [2m | [22m  [36m4.71 kB[39m[2m | [22m                [36m1.57 kB[39m
+[32mchunk-7ZUZ7ZUC.js[39m   [2m | [22m[2m-[22m               [2m | [22m  [36m4.69 kB[39m[2m | [22m                [36m1.34 kB[39m
+[32mchunk-RKL2JBHQ.js[39m   [2m | [22m[2m-[22m               [2m | [22m  [36m3.00 kB[39m[2m | [22m                [36m1.01 kB[39m
+[32mchunk-AAVUTQY2.js[39m   [2m | [22m[2m-[22m               [2m | [22m  [36m1.09 kB[39m[2m | [22m              [36m564 bytes[39m
+[32mchunk-7CGTOI24.js[39m   [2m | [22m[2m-[22m               [2m | [22m[36m618 bytes[39m[2m | [22m              [36m618 bytes[39m
+
+[1m [22m                   [2m | [22m[1mInitial total[22m   [2m | [22m  [1m1.08 MB[22m[2m | [22m              [1m184.58 kB[22m
+
+[1mLazy chunk files[22m    [2m | [22m[1mNames[22m           [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mchunk-64EUY5HJ.js[39m   [2m | [22m[2madmin-route[22m     [2m | [22m[36m424.25 kB[39m[2m | [22m               [36m72.43 kB[39m
+[32mchunk-F5DHFAJP.js[39m   [2m | [22m[2mfarmer-route[22m    [2m | [22m [36m79.17 kB[39m[2m | [22m               [36m17.36 kB[39m
+[32mchunk-OOV2S2NU.js[39m   [2m | [22m[2m-[22m               [2m | [22m [36m69.93 kB[39m[2m | [22m               [36m15.46 kB[39m
+[32mchunk-DSIH26ZC.js[39m   [2m | [22m[2m-[22m               [2m | [22m [36m42.54 kB[39m[2m | [22m                [36m9.15 kB[39m
+[32mchunk-LQ56FBBW.js[39m   [2m | [22m[2m-[22m               [2m | [22m [36m32.03 kB[39m[2m | [22m                [36m7.73 kB[39m
+[32mchunk-SPLRS3JW.js[39m   [2m | [22m[2mprofile[22m         [2m | [22m [36m31.88 kB[39m[2m | [22m                [36m7.76 kB[39m
+[32mchunk-LZW7L4AX.js[39m   [2m | [22m[2m-[22m               [2m | [22m [36m22.34 kB[39m[2m | [22m                [36m6.38 kB[39m
+[32mchunk-LMTEU6FN.js[39m   [2m | [22m[2mlogin[22m           [2m | [22m [36m14.20 kB[39m[2m | [22m                [36m3.78 kB[39m
+[32mchunk-3T3V3EKO.js[39m   [2m | [22m[2m-[22m               [2m | [22m [36m13.63 kB[39m[2m | [22m                [36m3.64 kB[39m
+[32mchunk-5TY2T7HG.js[39m   [2m | [22m[2mverify-otp[22m      [2m | [22m [36m12.61 kB[39m[2m | [22m                [36m4.25 kB[39m
+[32mchunk-ZZUNE2OL.js[39m   [2m | [22m[2mregister[22m        [2m | [22m [36m10.45 kB[39m[2m | [22m                [36m2.94 kB[39m
+[32mchunk-QVXMKXCS.js[39m   [2m | [22m[2m-[22m               [2m | [22m  [36m5.82 kB[39m[2m | [22m                [36m1.78 kB[39m
+[32mchunk-NGSKSCHA.js[39m   [2m | [22m[2mlanding[22m         [2m | [22m  [36m3.69 kB[39m[2m | [22m                [36m1.39 kB[39m
+[32mchunk-FH6GI7VX.js[39m   [2m | [22m[2m-[22m               [2m | [22m  [36m2.14 kB[39m[2m | [22m              [36m796 bytes[39m
+[32mchunk-BOICFWCE.js[39m   [2m | [22m[2maccount-route[22m   [2m | [22m[36m479 bytes[39m[2m | [22m              [36m479 bytes[39m
+
+
+[35mServer bundles[39m      
+[1mInitial chunk files[22m [2m | [22m[1mNames[22m           [2m | [22m [1mRaw size[22m
+[32mserver.mjs[39m          [2m | [22m[2mserver[22m          [2m | [22m[36m806.05 kB[39m[2m | [22m                       
+[32mmain.server.mjs[39m     [2m | [22m[2mmain.server[22m     [2m | [22m[36m675.80 kB[39m[2m | [22m                       
+[32mchunk-AKWWPUCT.mjs[39m  [2m | [22m[2m-[22m               [2m | [22m[36m452.64 kB[39m[2m | [22m                       
+[32mpolyfills.server.mjs[39m[2m | [22m[2mpolyfills.server[22m[2m | [22m[36m233.48 kB[39m[2m | [22m                       
+[32mchunk-B3GCXOBO.mjs[39m  [2m | [22m[2m-[22m               [2m | [22m [36m18.36 kB[39m[2m | [22m                       
+[32mchunk-DF5IST3K.mjs[39m  [2m | [22m[2m-[22m               [2m | [22m  [36m4.74 kB[39m[2m | [22m                       
+[32mchunk-LZLDXYDS.mjs[39m  [2m | [22m[2m-[22m               [2m | [22m  [36m4.73 kB[39m[2m | [22m                       
+[32mchunk-BPW3AO3L.mjs[39m  [2m | [22m[2m-[22m               [2m | [22m  [36m3.04 kB[39m[2m | [22m                       
+[32mchunk-L2MVFUKD.mjs[39m  [2m | [22m[2m-[22m               [2m | [22m  [36m1.32 kB[39m[2m | [22m                       
+[32mchunk-3M2G5OYR.mjs[39m  [2m | [22m[2m-[22m               [2m | [22m  [36m1.12 kB[39m[2m | [22m                       
+[32mchunk-T55IDOPT.mjs[39m  [2m | [22m[2m-[22m               [2m | [22m[36m976 bytes[39m[2m | [22m                       
+
+[1mLazy chunk files[22m    [2m | [22m[1mNames[22m           [2m | [22m [1mRaw size[22m
+[32mchunk-OPBWE7NI.mjs[39m  [2m | [22m[2madmin-route[22m     [2m | [22m[36m424.30 kB[39m[2m | [22m                       
+[32mchunk-62PNRTIL.mjs[39m  [2m | [22m[2mfarmer-route[22m    [2m | [22m [36m79.22 kB[39m[2m | [22m                       
+[32mchunk-DW4FUSOX.mjs[39m  [2m | [22m[2m-[22m               [2m | [22m [36m69.97 kB[39m[2m | [22m                       
+[32mchunk-VLCXPUBE.mjs[39m  [2m | [22m[2m-[22m               [2m | [22m [36m42.58 kB[39m[2m | [22m                       
+[32mchunk-WYAXWC22.mjs[39m  [2m | [22m[2m-[22m               [2m | [22m [36m32.08 kB[39m[2m | [22m                       
+[32mchunk-GO6B4DDY.mjs[39m  [2m | [22m[2mprofile[22m         [2m | [22m [36m31.93 kB[39m[2m | [22m                       
+[32mchunk-SSGPMXEE.mjs[39m  [2m | [22m[2m-[22m               [2m | [22m [36m22.39 kB[39m[2m | [22m                       
+[32mchunk-ZJPERPWM.mjs[39m  [2m | [22m[2mlogin[22m           [2m | [22m [36m14.24 kB[39m[2m | [22m                       
+[32mchunk-6UUQBKJ6.mjs[39m  [2m | [22m[2m-[22m               [2m | [22m [36m13.67 kB[39m[2m | [22m                       
+[32mchunk-OHQO2LJ2.mjs[39m  [2m | [22m[2mverify-otp[22m      [2m | [22m [36m12.66 kB[39m[2m | [22m                       
+[32mchunk-RHDGF2TI.mjs[39m  [2m | [22m[2mxhr2[22m            [2m | [22m [36m12.14 kB[39m[2m | [22m                       
+[32mchunk-N3SI5I4Q.mjs[39m  [2m | [22m[2mxhr2[22m            [2m | [22m [36m12.07 kB[39m[2m | [22m                       
+[32mchunk-TKI5N2W2.mjs[39m  [2m | [22m[2mregister[22m        [2m | [22m [36m10.49 kB[39m[2m | [22m                       
+[32mchunk-3TLGDXMB.mjs[39m  [2m | [22m[2m-[22m               [2m | [22m  [36m5.86 kB[39m[2m | [22m                       
+[32mchunk-PASOL6FA.mjs[39m  [2m | [22m[2mlanding[22m         [2m | [22m  [36m3.73 kB[39m[2m | [22m                       
+[2m...and 2 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+[35mPrerendered 10 static routes.[39m
+Application bundle generation failed. [43.774 seconds] - 2026-02-22T06:35:41.330Z
+
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mAn error occurred while prerendering route '/admin/verify-farmer'.
+
+[object Object][0m
+
+[39m[22m

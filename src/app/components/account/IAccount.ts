@@ -114,7 +114,10 @@ export interface IJwtResponse {
     token: string;
     type: string;
     username: string;
+    fullName: string;
+    email: string;
     roles: RoleType[];
+    verifiedRoles: RoleType[];
 }
 
 /**

@@ -1,0 +1,98 @@
+@if (buyer) {
+<div class="detail-container glass-effect">
+    <!-- Header Section -->
+    <div class="header">
+        <div class="profile-summary">
+            <div class="avatar-circle buyer-theme">
+                {{ buyer.businessName.charAt(0) }}
+            </div>
+            <div class="summary-text">
+                <h2>{{ buyer.businessName }}</h2>
+                <p class="username">@{{ buyer.username }}</p>
+                <span class="status-badge" [class.verified]="buyer.verified">
+                    <i [class]="buyer.verified ? 'pi pi-check-circle' : 'pi pi-clock'"></i>
+                    {{ buyer.verified ? 'Verified Buyer' : 'Pending Verification' }}
+                </span>
+            </div>
+        </div>
+        <div class="actions">
+            @if (!buyer.verified) {
+            <button class="btn-approve" (click)="onApprove.emit(buyer.username)">
+                <i class="pi pi-check"></i> Approve
+            </button>
+            <button class="btn-reject" (click)="onReject.emit(buyer.username)">
+                <i class="pi pi-times"></i> Reject
+            </button>
+            }
+            <button class="btn-block" [class.danger]="buyer.active"
+                (click)="onBlockToggle.emit({username: buyer.username, active: buyer.active})">
+                <i [class]="buyer.active ? 'pi pi-lock' : 'pi pi-lock-open'"></i>
+                {{ buyer.active ? 'Block Account' : 'Unblock Account' }}
+            </button>
+        </div>
+    </div>
+
+    <div class="detail-grid">
+        <!-- Business Information -->
+        <div class="card business-info">
+            <h3><i class="pi pi-briefcase"></i> Business Details</h3>
+            <div class="info-row">
+                <span class="label">Business Name:</span>
+                <span class="value">{{ buyer.businessName }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Location:</span>
+                <span class="value">{{ buyer.businessLocation }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Consumer Type:</span>
+                <span class="value badge-type">{{ buyer.consumerType }}</span>
+            </div>
+        </div>
+
+        <!-- Contact Details -->
+        <div class="card contact-info">
+            <h3><i class="pi pi-user"></i> Primary Contact</h3>
+            <div class="info-row">
+                <span class="label">Full Name:</span>
+                <span class="value">{{ buyer.fullName }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Email:</span>
+                <span class="value">{{ buyer.email }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Phone:</span>
+                <span class="value">{{ buyer.phoneNumber }}</span>
+            </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="card system-info">
+            <h3><i class="pi pi-shield"></i> Safety & Status</h3>
+            <div class="status-metrics">
+                <div class="metric">
+                    <span class="m-value" [class.active]="buyer.active">{{ buyer.active ? 'ACTIVE' : 'INACTIVE'
+                        }}</span>
+                    <span class="m-label">Network Status</span>
+                </div>
+                <div class="metric">
+                    <span class="m-value">{{ buyer.verified ? 'HIGH' : 'LOW' }}</span>
+                    <span class="m-label">Trust Index</span>
+                </div>
+                <div class="metric">
+                    <span class="m-value">{{ buyer.createdAt | date:'shortDate' }}</span>
+                    <span class="m-label">Member Since</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+@if (loading) {
+<div class="loading-overlay">
+    <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    <p>Loading buyer profile...</p>
+</div>
+}

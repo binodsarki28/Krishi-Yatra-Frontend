@@ -1,52 +1,145 @@
 <div class="landing-page">
-    <div class="hero-section flex flex-column justify-content-center align-items-center text-center p-8">
-        <h1 class="text-7xl font-bold text-white mb-4 slide-in-bottom">Empowering Agriculture with Tech</h1>
-        <p class="text-2xl text-white-alpha-90 mb-6 max-w-40rem slide-in-bottom animation-delay-300">
-            Join the KrishiYatra community to revolutionize farming practices through innovation and connectivity.
-        </p>
-        <p-button label="Join Us Today" icon="pi pi-arrow-right"
-            styleClass="p-button-lg p-button-rounded p-button-success font-bold px-5 py-3 shadow-4 hover-lift"
-            (onClick)="navigateToRegister()"></p-button>
-    </div>
-
-    <div class="features-section surface-ground py-8 px-4 lg:px-8">
-        <div class="grid">
-            <div class="col-12 md:col-4 p-3">
-                <div
-                    class="surface-card shadow-2 p-4 border-round text-center h-full hover-scale transition-duration-300">
-                    <span
-                        class="inline-flex align-items-center justify-content-center bg-green-100 text-green-600 border-circle w-4rem h-4rem mb-4">
-                        <i class="pi pi-globe text-2xl"></i>
-                    </span>
-                    <div class="text-900 font-medium text-xl mb-2">Global Connectivity</div>
-                    <p class="text-600 line-height-3 m-0">Connect with farmers and experts worldwide to share knowledge
-                        and improve yields.</p>
-                </div>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-bg-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-badge slide-in-bottom">
+                <i class="pi pi-verified"></i>
+                <span>Nepal's #1 Farm-to-Market Platform</span>
             </div>
-            <div class="col-12 md:col-4 p-3">
-                <div
-                    class="surface-card shadow-2 p-4 border-round text-center h-full hover-scale transition-duration-300">
-                    <span
-                        class="inline-flex align-items-center justify-content-center bg-blue-100 text-blue-600 border-circle w-4rem h-4rem mb-4">
-                        <i class="pi pi-chart-line text-2xl"></i>
-                    </span>
-                    <div class="text-900 font-medium text-xl mb-2">Smart Analytics</div>
-                    <p class="text-600 line-height-3 m-0">Leverage data-driven insights to make informed decisions for
-                        your crops.</p>
-                </div>
+            <h1 class="hero-title slide-in-bottom">Empowering Agriculture<br><span class="hero-highlight">with
+                    Technology</span></h1>
+            <p class="hero-subtitle slide-in-bottom animation-delay-200">
+                Join the KrishiYatra community to revolutionize farming practices
+                through innovation, connectivity, and transparent trade.
+            </p>
+            <div class="hero-actions slide-in-bottom animation-delay-400">
+                <button class="btn-primary" (click)="navigateToRegister()">
+                    <span>Get Started Free</span>
+                    <i class="pi pi-arrow-right"></i>
+                </button>
+                <button class="btn-outline" (click)="navigateToLogin()">
+                    <i class="pi pi-sign-in"></i>
+                    <span>Sign In</span>
+                </button>
             </div>
-            <div class="col-12 md:col-4 p-3">
-                <div
-                    class="surface-card shadow-2 p-4 border-round text-center h-full hover-scale transition-duration-300">
-                    <span
-                        class="inline-flex align-items-center justify-content-center bg-orange-100 text-orange-600 border-circle w-4rem h-4rem mb-4">
-                        <i class="pi pi-shield text-2xl"></i>
-                    </span>
-                    <div class="text-900 font-medium text-xl mb-2">Secure Transactions</div>
-                    <p class="text-600 line-height-3 m-0">Experience safe and transparent agricultural trading with
-                        verified partners.</p>
+            <div class="hero-stats slide-in-bottom animation-delay-600">
+                <div class="hero-stat">
+                    <span class="stat-num">1,200+</span>
+                    <span class="stat-text">Farmers</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="stat-num">350+</span>
+                    <span class="stat-text">Buyers</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="stat-num">75</span>
+                    <span class="stat-text">Districts</span>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="features-container">
+            <div class="section-heading">
+                <span class="section-label">What We Offer</span>
+                <h2 class="section-title">Everything You Need to<br>Grow Your Business</h2>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon green-icon">
+                        <i class="pi pi-globe"></i>
+                    </div>
+                    <h3>Global Connectivity</h3>
+                    <p>Connect with farmers and experts across Nepal to share knowledge and improve yields.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon blue-icon">
+                        <i class="pi pi-chart-line"></i>
+                    </div>
+                    <h3>Smart Analytics</h3>
+                    <p>Track your farming activity, sales analytics, and market trends in real time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon orange-icon">
+                        <i class="pi pi-truck"></i>
+                    </div>
+                    <h3>Secure Transportation</h3>
+                    <p>Verified delivery partners ensure your products reach buyers safely and on time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon purple-icon">
+                        <i class="pi pi-shield"></i>
+                    </div>
+                    <h3>Verified Partners</h3>
+                    <p>Each farmer, buyer, and delivery partner is verified to ensure trust in every transaction.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon red-icon">
+                        <i class="pi pi-wallet"></i>
+                    </div>
+                    <h3>Fair Pricing</h3>
+                    <p>Direct farm-to-market model eliminates middlemen, ensuring fair returns for farmers.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon teal-icon">
+                        <i class="pi pi-mobile"></i>
+                    </div>
+                    <h3>Easy to Use</h3>
+                    <p>Intuitive interface designed for everyone — no technical expertise required.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-section">
+        <div class="how-container">
+            <div class="section-heading">
+                <span class="section-label">How It Works</span>
+                <h2 class="section-title">3 Simple Steps to Get Started</h2>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Create Account</h3>
+                    <p>Register in seconds with your basic details. Choose your role — Farmer, Buyer, or Delivery.</p>
+                </div>
+                <div class="step-connector">
+                    <i class="pi pi-arrow-right"></i>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Get Verified</h3>
+                    <p>Our admin team reviews and verifies your identity for a secure marketplace experience.</p>
+                </div>
+                <div class="step-connector">
+                    <i class="pi pi-arrow-right"></i>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Start Trading</h3>
+                    <p>List or browse products, place orders, and track deliveries — all in one platform.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Transform Your<br>Agricultural Journey?</h2>
+            <p>Join thousands of farmers, buyers, and delivery partners already on KrishiYatra.</p>
+            <button class="btn-primary btn-large" (click)="navigateToRegister()">
+                <span>Create Free Account</span>
+                <i class="pi pi-arrow-right"></i>
+            </button>
+        </div>
+    </section>
 </div>

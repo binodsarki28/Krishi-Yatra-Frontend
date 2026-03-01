@@ -72,7 +72,15 @@ export class RegisterComponent {
 
     const { fullName, username, email, password, phoneNumber } = this.registerForm.value;
 
-    this.accountService.register({ fullName, username, email, password, phoneNumber })
+    const trimmedEmail = email.trim();
+
+    this.accountService.register({
+      fullName: fullName.trim(),
+      username: username.trim(),
+      email: trimmedEmail,
+      password,
+      phoneNumber
+    })
       .pipe(finalize(() => {
         this.loading = false;
         this.cdr.markForCheck();
@@ -82,7 +90,7 @@ export class RegisterComponent {
         next: (res) => {
           this.toastService.successResponse(res);
           this.router.navigate(['/account/verify-otp'], {
-            state: { email },
+            state: { email: trimmedEmail },
           });
         },
         error: (err) => {

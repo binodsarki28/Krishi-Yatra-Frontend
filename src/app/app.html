@@ -1,6 +1,9 @@
 <app-global-toast></app-global-toast>
 <div class="krishi-yatra-app">
+  @if (showNavbar) {
   <app-navbar></app-navbar>
+  <div style="height: 7rem;"></div>
+  }
 
   <div class="main-content">
     <router-outlet></router-outlet>

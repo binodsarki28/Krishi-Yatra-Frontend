@@ -1,0 +1,60 @@
+<div class="registration-container p-5 flex justify-content-center account-bg">
+    <p-card header="Buyer Registration" subheader="Register as a buyer to start purchasing fresh produce"
+        [style]="{ width: '550px' }" class="shadow-4 border-round-xl">
+
+        <div class="flex flex-column align-items-center mb-4 pt-2">
+            <div class="bg-blue-100 p-3 border-circle mb-3">
+                <i class="pi pi-shopping-bag text-5xl text-blue-600"></i>
+            </div>
+            <p class="text-600 text-center px-4">Help us personalize your experience by providing your business or
+                individual details.</p>
+        </div>
+
+        <form [formGroup]="buyerForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-4">
+
+            <div class="flex flex-column gap-2">
+                <label for="businessName" class="font-bold">Business / Personal Name</label>
+                <span class="p-input-icon-left w-full">
+                    <i class="pi pi-briefcase"></i>
+                    <input id="businessName" type="text" pInputText formControlName="businessName"
+                        placeholder="e.g. Organic Mart or Your Name" class="w-full" />
+                </span>
+                <small class="p-error block"
+                    *ngIf="buyerForm.get('businessName')?.invalid && buyerForm.get('businessName')?.touched">
+                    Name is required (min 3 chars).
+                </small>
+            </div>
+
+            <div class="flex flex-column gap-2">
+                <label for="consumerType" class="font-bold">Consumer Category</label>
+                <p-select [options]="consumerTypes" formControlName="consumerType" optionLabel="label"
+                    optionValue="value" placeholder="Select your category" class="w-full"
+                    styleClass="w-full"></p-select>
+                <small class="p-error block"
+                    *ngIf="buyerForm.get('consumerType')?.invalid && buyerForm.get('consumerType')?.touched">
+                    Please select a category.
+                </small>
+            </div>
+
+            <div class="flex flex-column gap-2">
+                <label for="businessLocation" class="font-bold">Location</label>
+                <span class="p-input-icon-left w-full">
+                    <i class="pi pi-map-marker"></i>
+                    <input id="businessLocation" type="text" pInputText formControlName="businessLocation"
+                        placeholder="Address of your business/home" class="w-full" />
+                </span>
+                <small class="p-error block"
+                    *ngIf="buyerForm.get('businessLocation')?.invalid && buyerForm.get('businessLocation')?.touched">
+                    Location is required.
+                </small>
+            </div>
+
+            <div class="flex justify-content-between gap-3 mt-4">
+                <p-button label="Cancel" icon="pi pi-times" severity="secondary" [text]="true" (onClick)="cancel()"
+                    class="flex-1"></p-button>
+                <p-button label="Register as Buyer" icon="pi pi-check" [loading]="loading" type="submit" class="flex-1"
+                    styleClass="w-full"></p-button>
+            </div>
+        </form>
+    </p-card>
+</div>

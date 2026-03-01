@@ -1,0 +1,73 @@
+<div class="registration-container p-5 flex justify-content-center account-bg">
+    <p-card header="Delivery Partner Registration" subheader="Join our logistics network and start earning"
+        [style]="{ width: '600px' }" class="shadow-4 border-round-xl">
+
+        <div class="flex flex-column align-items-center mb-4 pt-2">
+            <div class="bg-orange-100 p-3 border-circle mb-3">
+                <i class="pi pi-truck text-5xl text-orange-600"></i>
+            </div>
+            <p class="text-600 text-center px-4">Provide your vehicle and license information to be verified as a
+                KrishiYatra Linker.</p>
+        </div>
+
+        <form [formGroup]="deliveryForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-4">
+
+            <div class="grid">
+                <div class="col-12 md:col-6 flex flex-column gap-2">
+                    <label for="vehicleType" class="font-bold">Vehicle Type</label>
+                    <p-select [options]="vehicleTypes" formControlName="vehicleType" optionLabel="label"
+                        optionValue="value" placeholder="Select type" class="w-full" styleClass="w-full"></p-select>
+                    <small class="p-error block"
+                        *ngIf="deliveryForm.get('vehicleType')?.invalid && deliveryForm.get('vehicleType')?.touched">
+                        Required.
+                    </small>
+                </div>
+                <div class="col-12 md:col-6 flex flex-column gap-2">
+                    <label for="vehicleBrand" class="font-bold">Vehicle Model / Brand</label>
+                    <span class="p-input-icon-left w-full">
+                        <i class="pi pi-car"></i>
+                        <input id="vehicleBrand" type="text" pInputText formControlName="vehicleBrand"
+                            placeholder="e.g. Tata, Mahindra" class="w-full" />
+                    </span>
+                    <small class="p-error block"
+                        *ngIf="deliveryForm.get('vehicleBrand')?.invalid && deliveryForm.get('vehicleBrand')?.touched">
+                        Brand is required.
+                    </small>
+                </div>
+            </div>
+
+            <div class="flex flex-column gap-2">
+                <label for="numberPlate" class="font-bold">Number Plate</label>
+                <span class="p-input-icon-left w-full">
+                    <i class="pi pi-id-card"></i>
+                    <input id="numberPlate" type="text" pInputText formControlName="numberPlate"
+                        placeholder="e.g. BA 1 PA 1234" class="w-full" />
+                </span>
+                <small class="p-error block"
+                    *ngIf="deliveryForm.get('numberPlate')?.invalid && deliveryForm.get('numberPlate')?.touched">
+                    Required.
+                </small>
+            </div>
+
+            <div class="flex flex-column gap-2">
+                <label for="licenseNumber" class="font-bold">Driving License Number</label>
+                <span class="p-input-icon-left w-full">
+                    <i class="pi pi-user"></i>
+                    <input id="licenseNumber" type="text" pInputText formControlName="licenseNumber"
+                        placeholder="Your license ID" class="w-full" />
+                </span>
+                <small class="p-error block"
+                    *ngIf="deliveryForm.get('licenseNumber')?.invalid && deliveryForm.get('licenseNumber')?.touched">
+                    License is required.
+                </small>
+            </div>
+
+            <div class="flex justify-content-between gap-3 mt-4">
+                <p-button label="Cancel" icon="pi pi-times" severity="secondary" [text]="true" (onClick)="cancel()"
+                    class="flex-1"></p-button>
+                <p-button label="Register as Partner" icon="pi pi-check" [loading]="loading" type="submit"
+                    class="flex-1" styleClass="w-full"></p-button>
+            </div>
+        </form>
+    </p-card>
+</div>

@@ -16,6 +16,7 @@ import { filter } from 'rxjs';
 export class AppComponent {
   title = 'KrishiYatra';
   showFooter = true;
+  showNavbar = true;
   private router = inject(Router);
 
   constructor() {
@@ -23,7 +24,12 @@ export class AppComponent {
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
       const url = event.urlAfterRedirects || event.url;
-      this.showFooter = !url.includes('/account/login') && !url.includes('/account/register');
+      const isAccount = url.includes('/account');
+      const isAdmin = url.includes('/admin');
+      const isProfile = url.includes('/profile');
+
+      this.showFooter = !isAccount && !isAdmin && !isProfile;
+      this.showNavbar = !isAccount && !isAdmin;
     });
   }
 }

@@ -34,6 +34,53 @@ export class AccountService {
         this.isLoggedInSubject.next(this.getInitialLoginStatus());
     }
 
+    getUserEmail(): string {
+        if (isPlatformBrowser(this.platformId)) {
+            return localStorage.getItem('email') || '';
+        }
+        return '';
+    }
+
+    getFullName(): string {
+        if (isPlatformBrowser(this.platformId)) {
+            return localStorage.getItem('fullName') || '';
+        }
+        return '';
+    }
+
+    getUsername(): string {
+        if (isPlatformBrowser(this.platformId)) {
+            return localStorage.getItem('username') || '';
+        }
+        return '';
+    }
+
+    getRoles(): string[] {
+        if (isPlatformBrowser(this.platformId)) {
+            const roles = localStorage.getItem('roles');
+            return roles ? JSON.parse(roles) : [];
+        }
+        return [];
+    }
+
+    getVerifiedRoles(): string[] {
+        if (isPlatformBrowser(this.platformId)) {
+            const roles = localStorage.getItem('verifiedRoles');
+            return roles ? JSON.parse(roles) : [];
+        }
+        return [];
+    }
+
+    hasRole(role: string): boolean {
+        return this.getRoles().includes(role);
+    }
+
+    isRoleVerified(role: string): boolean {
+        // ADMIN is always verified
+        if (role === 'ADMIN') return this.hasRole('ADMIN');
+        return this.getVerifiedRoles().includes(role);
+    }
+
     /**
      * POST /api/v1/user/login
      * Returns ServerResponse with JwtResponse as the response object.
@@ -69,4 +116,5 @@ export class AccountService {
         const url: string = GenerateUrlUtils.generateUrl(Endpoint.RESEND_OTP);
         return this.http.post<IResponse>(url, request);
     }
+
 }

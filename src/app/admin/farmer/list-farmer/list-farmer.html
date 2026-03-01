@@ -1,0 +1,188 @@
+<div class="farmers-page">
+    <div class="page-header">
+        <div class="header-left">
+            <div class="header-icon farmer-header-icon">
+                <i class="pi pi-users"></i>
+            </div>
+            <div>
+                <h2 class="page-title">Farmer Management</h2>
+                <p class="page-desc">View, verify and manage all farmer registrations</p>
+            </div>
+        </div>
+        <button class="refresh-btn" (click)="loadFarmers()" [disabled]="loading">
+            <i class="pi pi-refresh" [class.spin]="loading"></i>
+            Refresh
+        </button>
+    </div>
+
+    <!-- Search Filters -->
+    <div class="search-filters">
+        <div class="search-group">
+            <i class="pi pi-search"></i>
+            <input type="text" [(ngModel)]="filters.fullName" (input)="onSearch()" placeholder="Search by name...">
+        </div>
+        <div class="search-group">
+            <i class="pi pi-at"></i>
+            <input type="text" [(ngModel)]="filters.username" (input)="onSearch()" placeholder="Search username...">
+        </div>
+        <div class="search-group">
+            <i class="pi pi-tag"></i>
+            <input type="text" [(ngModel)]="filters.farmTypes" (input)="onSearch()" placeholder="Search farm types...">
+        </div>
+        <div class="search-group">
+            <i class="pi pi-map-marker"></i>
+            <input type="text" [(ngModel)]="filters.farmLocation" (input)="onSearch()" placeholder="Search location...">
+        </div>
+        <button class="btn-search" (click)="onSearch(true)">
+            <i class="pi pi-search"></i> Search
+        </button>
+        <button class="btn-clear" (click)="clearFilters()">
+            <i class="pi pi-times"></i> Clear
+        </button>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+        <button class="filter-tab" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">
+            <i class="pi pi-list"></i> All Farmers
+        </button>
+        <button class="filter-tab pending-tab" [class.active]="activeFilter === 'pending'"
+            (click)="setFilter('pending')">
+            <i class="pi pi-clock"></i> Pending Verification
+        </button>
+        <button class="filter-tab verified-tab" [class.active]="activeFilter === 'verified'"
+            (click)="setFilter('verified')">
+            <i class="pi pi-check-circle"></i> Verified
+        </button>
+    </div>
+
+    <!-- Loading -->
+    @if (loading) {
+    <div class="loading-state">
+        <div class="loader-ring"></div>
+        <p>Loading farmers...</p>
+    </div>
+    }
+
+    <!-- Empty -->
+    @if (!loading && farmers.length === 0) {
+    <div class="empty-state">
+        <div class="empty-icon"><i class="pi pi-check-circle"></i></div>
+        <h3>No Farmers Found</h3>
+        <p>No farmers match the current filter.</p>
+    </div>
+    }
+
+    <!-- Table -->
+    @if (!loading && farmers.length > 0) {
+    <div class="table-card">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Farm Types</th>
+                        <th>Location</th>
+                        <th>Verified</th>
+                        <th>Account</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (farmer of farmers; track farmer.username; let i = $index) {
+                    <tr [style.animation-delay]="i * 0.05 + 's'">
+                        <td>
+                            <div class="name-cell">
+                                <div class="user-avatar farmer-avatar">{{ farmer.fullName.charAt(0) || 'F' }}</div>
+                                <div class="name-info">
+                                    <span class="name-text">{{ farmer.fullName }}</span>
+                                    <span class="username-text">{{ farmer.username }}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ farmer.farmTypes || '—' }}</td>
+                        <td>{{ farmer.farmLocation || '—' }}</td>
+                        <td>
+                            <span [class]="farmer.isVerified ? 'status-verified' : 'status-pending'">
+                                <i [class]="farmer.isVerified ? 'pi pi-check-circle' : 'pi pi-clock'"></i>
+                                {{ farmer.isVerified ? 'Verified' : 'Pending' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span [class]="farmer.isActive ? 'status-verified' : 'status-rejected'">
+                                <i [class]="farmer.isActive ? 'pi pi-user' : 'pi pi-ban'"></i>
+                                {{ farmer.isActive ? 'Active' : 'Blocked' }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="actions-cell">
+                                <button class="btn-detail" (click)="viewDetail(farmer.username)">
+                                    <i class="pi pi-eye"></i>
+                                </button>
+                                <!-- Verify/Reject actions for pending farmers -->
+                                @if (!farmer.isVerified) {
+                                <button class="btn-approve" (click)="approveFarmer(farmer.username)">
+                                    <i class="pi pi-check"></i> Verify
+                                </button>
+                                <button class="btn-reject" (click)="showRejectDialog(farmer.username)">
+                                    <i class="pi pi-times"></i> Reject
+                                </button>
+                                }
+                                <!-- Block/Unblock for verified farmers -->
+                                @if (farmer.isVerified) {
+                                <button [class]="farmer.isActive ? 'btn-reject' : 'btn-approve'"
+                                    (click)="blockUnblock(farmer.username, farmer.isActive)">
+                                    <i [class]="farmer.isActive ? 'pi pi-ban' : 'pi pi-check-circle'"></i>
+                                    {{ farmer.isActive ? 'Block' : 'Unblock' }}
+                                </button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        @if (farmers.length === size || page > 0) {
+        <div class="pagination-controls">
+            <span class="page-info">Page {{ page + 1 }}</span>
+            <div class="page-actions">
+                <button class="page-btn" [disabled]="page === 0" (click)="prevPage()">
+                    <i class="pi pi-chevron-left"></i> Previous
+                </button>
+                <button class="page-btn" [disabled]="!hasMore" (click)="nextPage()">
+                    Next <i class="pi pi-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        }
+    </div>
+    }
+</div>
+
+<!-- Stunning Detail Dialog -->
+<p-dialog [(visible)]="detailDialog" [modal]="true" [style]="{ width: '700px' }" [draggable]="false" [resizable]="false"
+    header="Farmer Profile Insights" class="premium-dialog">
+    <app-detail-farmer [farmer]="selectedFarmer" [loading]="detailLoading" (onApprove)="approveFarmer($event)"
+        (onReject)="showRejectDialog($event)" (onBlockToggle)="blockUnblock($event.username, $event.active)">
+    </app-detail-farmer>
+</p-dialog>
+
+<!-- Rejection Dialog -->
+<p-dialog header="Reject Farmer Application" [(visible)]="rejectDialog" [modal]="true" [style]="{ width: '440px' }"
+    [draggable]="false" [resizable]="false">
+    <div class="reject-dialog-body">
+        <div class="dialog-icon"><i class="pi pi-exclamation-triangle"></i></div>
+        <p class="dialog-text">Please provide a reason for rejecting this farmer application.</p>
+        <textarea pInputTextarea [(ngModel)]="rejectionReason" rows="4" placeholder="Enter reason..."
+            class="reject-textarea"></textarea>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="dialog-actions">
+            <button class="dialog-btn cancel-btn" (click)="rejectDialog = false">Cancel</button>
+            <button class="dialog-btn confirm-reject-btn" (click)="confirmReject()">Confirm Reject</button>
+        </div>
+    </ng-template>
+</p-dialog>

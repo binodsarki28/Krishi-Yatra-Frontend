@@ -50,3 +50,41 @@ export const publicGuard: CanActivateFn = () => {
     router.navigate(['/profile']);
     return false;
 };
+
+/**
+ * adminGuard — Protects routes that require ADMIN role.
+ * Redirects to /profile if user is not an admin.
+ */
+export const adminGuard: CanActivateFn = () => {
+    const router = inject(Router);
+    const platformId = inject(PLATFORM_ID);
+
+    if (!isPlatformBrowser(platformId)) return true;
+
+    const roles = localStorage.getItem('roles');
+    if (roles && JSON.parse(roles).includes('ADMIN')) {
+        return true;
+    }
+
+    router.navigate(['/profile']);
+    return false;
+};
+
+/**
+ * userGuard — Protects non-admin routes.
+ * Redirects to /admin if user is an admin.
+ */
+export const userGuard: CanActivateFn = () => {
+    const router = inject(Router);
+    const platformId = inject(PLATFORM_ID);
+
+    if (!isPlatformBrowser(platformId)) return true;
+
+    const roles = localStorage.getItem('roles');
+    if (roles && JSON.parse(roles).includes('ADMIN')) {
+        router.navigate(['/admin']);
+        return false;
+    }
+
+    return true;
+};
