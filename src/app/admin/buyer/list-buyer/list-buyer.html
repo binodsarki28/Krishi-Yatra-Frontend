@@ -1,0 +1,186 @@
+<div class="farmers-page">
+    <div class="page-header">
+        <div class="header-left">
+            <div class="header-icon buyer-header-icon">
+                <i class="pi pi-shopping-bag"></i>
+            </div>
+            <div>
+                <h2 class="page-title">Buyer Management</h2>
+                <p class="page-desc">View, verify and manage all buyer registrations</p>
+            </div>
+        </div>
+        <button class="refresh-btn" (click)="loadBuyers()" [disabled]="loading">
+            <i class="pi pi-refresh" [class.spin]="loading"></i>
+            Refresh
+        </button>
+    </div>
+
+    <!-- Search Filters -->
+    <div class="search-filters">
+        <div class="search-group">
+            <i class="pi pi-search"></i>
+            <input type="text" [(ngModel)]="filters.fullName" (input)="onSearch()" placeholder="Search by name...">
+        </div>
+        <div class="search-group">
+            <i class="pi pi-at"></i>
+            <input type="text" [(ngModel)]="filters.username" (input)="onSearch()" placeholder="Search username...">
+        </div>
+        <div class="search-group">
+            <i class="pi pi-tag"></i>
+            <input type="text" [(ngModel)]="filters.consumerType" (input)="onSearch()"
+                placeholder="Search consumer type...">
+        </div>
+        <div class="search-group">
+            <i class="pi pi-map-marker"></i>
+            <input type="text" [(ngModel)]="filters.businessLocation" (input)="onSearch()"
+                placeholder="Search location...">
+        </div>
+        <button class="btn-search" (click)="onSearch(true)">
+            <i class="pi pi-search"></i> Search
+        </button>
+        <button class="btn-clear" (click)="clearFilters()">
+            <i class="pi pi-times"></i> Clear
+        </button>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+        <button class="filter-tab" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">
+            <i class="pi pi-list"></i> All Buyers
+        </button>
+        <button class="filter-tab pending-tab" [class.active]="activeFilter === 'pending'"
+            (click)="setFilter('pending')">
+            <i class="pi pi-clock"></i> Pending Verification
+        </button>
+        <button class="filter-tab verified-tab" [class.active]="activeFilter === 'verified'"
+            (click)="setFilter('verified')">
+            <i class="pi pi-check-circle"></i> Verified
+        </button>
+    </div>
+
+    <!-- Loading -->
+    @if (loading) {
+    <div class="loading-state">
+        <div class="loader-ring"></div>
+        <p>Loading buyers...</p>
+    </div>
+    }
+
+    <!-- Empty -->
+    @if (!loading && buyers.length === 0) {
+    <div class="empty-state">
+        <div class="empty-icon"><i class="pi pi-check-circle"></i></div>
+        <h3>No Buyers Found</h3>
+        <p>No buyers match the current filter.</p>
+    </div>
+    }
+
+    <!-- Table -->
+    @if (!loading && buyers.length > 0) {
+    <div class="table-card">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Consumer Type</th>
+                        <th>Location</th>
+                        <th>Verified</th>
+                        <th>Account</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (buyer of buyers; track buyer.username; let i = $index) {
+                    <tr [style.animation-delay]="i * 0.05 + 's'">
+                        <td>
+                            <div class="name-cell">
+                                <div class="user-avatar buyer-avatar">{{ buyer.fullName.charAt(0) || 'B' }}</div>
+                                <div class="name-info">
+                                    <span class="name-text">{{ buyer.fullName }}</span>
+                                    <span class="username-text">{{ buyer.username }}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ buyer.consumerType || '—' }}</td>
+                        <td>{{ buyer.businessLocation || '—' }}</td>
+                        <td>
+                            <span [class]="buyer.isVerified ? 'status-verified' : 'status-pending'">
+                                <i [class]="buyer.isVerified ? 'pi pi-check-circle' : 'pi pi-clock'"></i>
+                                {{ buyer.isVerified ? 'Verified' : 'Pending' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span [class]="buyer.isActive ? 'status-verified' : 'status-rejected'">
+                                <i [class]="buyer.isActive ? 'pi pi-user' : 'pi pi-ban'"></i>
+                                {{ buyer.isActive ? 'Active' : 'Blocked' }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="actions-cell">
+                                <button class="btn-detail" (click)="viewDetail(buyer.username)">
+                                    <i class="pi pi-eye"></i>
+                                </button>
+                                @if (!buyer.isVerified) {
+                                <button class="btn-approve" (click)="approveBuyer(buyer.username)">
+                                    <i class="pi pi-check"></i> Verify
+                                </button>
+                                <button class="btn-reject" (click)="showRejectDialog(buyer.username)">
+                                    <i class="pi pi-times"></i> Reject
+                                </button>
+                                }
+                                @if (buyer.isVerified) {
+                                <button [class]="buyer.isActive ? 'btn-reject' : 'btn-approve'"
+                                    (click)="blockUnblock(buyer.username, buyer.isActive)">
+                                    <i [class]="buyer.isActive ? 'pi pi-ban' : 'pi pi-check-circle'"></i>
+                                    {{ buyer.isActive ? 'Block' : 'Unblock' }}
+                                </button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (buyers.length === size || page > 0) {
+        <div class="pagination-controls">
+            <span class="page-info">Page {{ page + 1 }}</span>
+            <div class="page-actions">
+                <button class="page-btn" [disabled]="page === 0" (click)="prevPage()">
+                    <i class="pi pi-chevron-left"></i> Previous
+                </button>
+                <button class="page-btn" [disabled]="!hasMore" (click)="nextPage()">
+                    Next <i class="pi pi-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        }
+    </div>
+    }
+</div>
+
+<!-- Stunning Detail Dialog -->
+<p-dialog [(visible)]="detailDialog" [modal]="true" [style]="{ width: '700px' }" [draggable]="false" [resizable]="false"
+    header="Buyer Profile Insights" class="premium-dialog">
+    <app-detail-buyer [buyer]="selectedBuyer" [loading]="detailLoading" (onApprove)="approveBuyer($event)"
+        (onReject)="showRejectDialog($event)" (onBlockToggle)="blockUnblock($event.username, $event.active)">
+    </app-detail-buyer>
+</p-dialog>
+
+<!-- Rejection Dialog -->
+<p-dialog header="Reject Buyer Application" [(visible)]="rejectDialog" [modal]="true" [style]="{ width: '440px' }"
+    [draggable]="false" [resizable]="false">
+    <div class="reject-dialog-body">
+        <div class="dialog-icon"><i class="pi pi-exclamation-triangle"></i></div>
+        <p class="dialog-text">Provide a reason for rejecting this buyer application.</p>
+        <textarea pInputTextarea [(ngModel)]="rejectionReason" rows="4" placeholder="Enter reason..."
+            class="reject-textarea"></textarea>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="dialog-actions">
+            <button class="dialog-btn cancel-btn" (click)="rejectDialog = false">Cancel</button>
+            <button class="dialog-btn confirm-reject-btn" (click)="confirmReject()">Confirm Reject</button>
+        </div>
+    </ng-template>
+</p-dialog>

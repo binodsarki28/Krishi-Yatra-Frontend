@@ -1,0 +1,64 @@
+<div class="registration-container flex align-items-center justify-content-center surface-ground p-3"
+    style="min-height: calc(100vh - 112px);">
+    <p-card [style]="{ width: '100%', maxWidth: '550px', overflow: 'hidden' }"
+        styleClass="shadow-4 border-round-xl w-full">
+
+        <ng-template pTemplate="title">
+            <div class="flex align-items-center gap-3 border-bottom-1 surface-border pb-3">
+                <div
+                    class="bg-blue-600 text-white border-circle w-3rem h-3rem flex align-items-center justify-content-center shadow-2 flex-shrink-0">
+                    <i class="pi pi-shopping-bag text-xl"></i>
+                </div>
+                <div>
+                    <div class="text-xl md:text-2xl font-bold text-900">Buyer Registration</div>
+                    <div class="text-500 font-normal text-sm mt-1">Register as a buyer to start purchasing fresh produce
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+
+        <form [formGroup]="buyerForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-3 pt-2">
+
+            <div class="flex flex-column gap-1">
+                <label for="businessName" class="font-bold text-sm text-700">Business / Personal Name</label>
+                <input id="businessName" type="text" pInputText formControlName="businessName"
+                    placeholder="e.g. Organic Mart or Your Name" class="w-full" />
+                @if(buyerForm.get('businessName')?.invalid && buyerForm.get('businessName')?.touched) {
+                <small class="p-error block font-bold text-red-500 text-xs mt-1">
+                    Name is required (min 3 chars).
+                </small>
+                }
+            </div>
+
+            <div class="flex flex-column gap-1">
+                <label for="consumerType" class="font-bold text-sm text-700">Consumer Category</label>
+                <p-select [options]="consumerTypes" formControlName="consumerType" optionLabel="label"
+                    optionValue="value" placeholder="Select your category" class="w-full"
+                    styleClass="w-full"></p-select>
+                @if(buyerForm.get('consumerType')?.invalid && buyerForm.get('consumerType')?.touched) {
+                <small class="p-error block font-bold text-red-500 text-xs mt-1">
+                    Please select a category.
+                </small>
+                }
+            </div>
+
+            <div class="flex flex-column gap-1">
+                <label for="businessLocation" class="font-bold text-sm text-700">Location</label>
+                <input id="businessLocation" type="text" pInputText formControlName="businessLocation"
+                    placeholder="Address of your business/home" class="w-full" />
+                @if(buyerForm.get('businessLocation')?.invalid && buyerForm.get('businessLocation')?.touched) {
+                <small class="p-error block font-bold text-red-500 text-xs mt-1">
+                    Location is required.
+                </small>
+                }
+            </div>
+
+            <div class="flex flex-column md:flex-row justify-content-end gap-3 mt-4 pt-4 border-top-1 surface-border">
+                <p-button label="Cancel" icon="pi pi-times" severity="secondary" [text]="true" (onClick)="cancel()"
+                    class="w-full md:w-auto" styleClass="w-full"></p-button>
+                <p-button label="Create Account" icon="pi pi-check" [loading]="loading" type="submit"
+                    class="w-full md:w-auto" styleClass="w-full p-button-primary"></p-button>
+            </div>
+        </form>
+    </p-card>
+</div>

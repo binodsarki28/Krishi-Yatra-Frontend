@@ -1,0 +1,82 @@
+.toast-box {
+  pointer-events: all;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0.6rem 1.1rem !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15) !important;
+  width: auto !important;
+  min-width: 300px !important;
+  max-width: 450px !important;
+  opacity: 0;
+  transform: translateY(-15px) scale(0.98);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 100000;
+  border: none !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+.toast-show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.toast-hide {
+  opacity: 0;
+  transform: translateY(-15px) scale(0.98);
+}
+
+.toast-icon-wrapper {
+  margin-right: 0.85rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: white !important;
+  flex-shrink: 0 !important;
+}
+
+.toast-icon-wrapper svg {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.toast-message {
+  flex-grow: 1 !important;
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+  color: white !important;
+  line-height: 1.4 !important;
+}
+
+.toast-close-btn {
+  background: transparent !important;
+  border: none !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  cursor: pointer !important;
+  margin-left: 0.8rem !important;
+  padding: 4px !important;
+  display: flex !important;
+  align-items: center !important;
+  transition: all 0.2s ease !important;
+}
+
+.toast-close-btn:hover {
+  color: white !important;
+}
+
+/* Elegant Solid Colors */
+.toast-success {
+  background: #059669 !important;
+}
+
+.toast-error {
+  background: #e11d48 !important;
+}
+
+.toast-warning {
+  background: #d97706 !important;
+}
+
+.toast-info {
+  background: #2563eb !important;
+}

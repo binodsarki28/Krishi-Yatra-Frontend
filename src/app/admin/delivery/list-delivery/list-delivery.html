@@ -1,0 +1,185 @@
+<div class="farmers-page">
+    <div class="page-header">
+        <div class="header-left">
+            <div class="header-icon delivery-header-icon">
+                <i class="pi pi-truck"></i>
+            </div>
+            <div>
+                <h2 class="page-title">Delivery Management</h2>
+                <p class="page-desc">View, verify and manage all delivery partner registrations</p>
+            </div>
+        </div>
+        <button class="refresh-btn" (click)="loadPartners()" [disabled]="loading">
+            <i class="pi pi-refresh" [class.spin]="loading"></i>
+            Refresh
+        </button>
+    </div>
+
+    <!-- Search Filters -->
+    <div class="search-filters">
+        <div class="search-group">
+            <i class="pi pi-search"></i>
+            <input type="text" [(ngModel)]="filters.fullName" (input)="onSearch()" placeholder="Search by name...">
+        </div>
+        <div class="search-group">
+            <i class="pi pi-at"></i>
+            <input type="text" [(ngModel)]="filters.username" (input)="onSearch()" placeholder="Search username...">
+        </div>
+        <div class="search-group">
+            <i class="pi pi-car"></i>
+            <input type="text" [(ngModel)]="filters.vehicleType" (input)="onSearch()"
+                placeholder="Search vehicle type...">
+        </div>
+        <div class="search-group">
+            <i class="pi pi-id-card"></i>
+            <input type="text" [(ngModel)]="filters.licenseNumber" (input)="onSearch()" placeholder="Search license...">
+        </div>
+        <button class="btn-search" (click)="onSearch(true)">
+            <i class="pi pi-search"></i> Search
+        </button>
+        <button class="btn-clear" (click)="clearFilters()">
+            <i class="pi pi-times"></i> Clear
+        </button>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+        <button class="filter-tab" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">
+            <i class="pi pi-list"></i> All Partners
+        </button>
+        <button class="filter-tab pending-tab" [class.active]="activeFilter === 'pending'"
+            (click)="setFilter('pending')">
+            <i class="pi pi-clock"></i> Pending Verification
+        </button>
+        <button class="filter-tab verified-tab" [class.active]="activeFilter === 'verified'"
+            (click)="setFilter('verified')">
+            <i class="pi pi-check-circle"></i> Verified
+        </button>
+    </div>
+
+    <!-- Loading -->
+    @if (loading) {
+    <div class="loading-state">
+        <div class="loader-ring"></div>
+        <p>Loading partners...</p>
+    </div>
+    }
+
+    <!-- Empty -->
+    @if (!loading && partners.length === 0) {
+    <div class="empty-state">
+        <div class="empty-icon"><i class="pi pi-check-circle"></i></div>
+        <h3>No Partners Found</h3>
+        <p>No delivery partners match the current filter.</p>
+    </div>
+    }
+
+    <!-- Table -->
+    @if (!loading && partners.length > 0) {
+    <div class="table-card">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Vehicle Type</th>
+                        <th>License No.</th>
+                        <th>Verified</th>
+                        <th>Account</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (partner of partners; track partner.username; let i = $index) {
+                    <tr [style.animation-delay]="i * 0.05 + 's'">
+                        <td>
+                            <div class="name-cell">
+                                <div class="user-avatar delivery-avatar">{{ partner.fullName.charAt(0) || 'D' }}</div>
+                                <div class="name-info">
+                                    <span class="name-text">{{ partner.fullName }}</span>
+                                    <span class="username-text">{{ partner.username }}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="type-badge">{{ partner.vehicleType }}</span></td>
+                        <td>{{ partner.licenseNumber || '—' }}</td>
+                        <td>
+                            <span [class]="partner.isVerified ? 'status-verified' : 'status-pending'">
+                                <i [class]="partner.isVerified ? 'pi pi-check-circle' : 'pi pi-clock'"></i>
+                                {{ partner.isVerified ? 'Verified' : 'Pending' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span [class]="partner.isActive ? 'status-verified' : 'status-rejected'">
+                                <i [class]="partner.isActive ? 'pi pi-user' : 'pi pi-ban'"></i>
+                                {{ partner.isActive ? 'Active' : 'Blocked' }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="actions-cell">
+                                <button class="btn-detail" (click)="viewDetail(partner.username)">
+                                    <i class="pi pi-eye"></i>
+                                </button>
+                                @if (!partner.isVerified) {
+                                <button class="btn-approve" (click)="approvePartner(partner.username)">
+                                    <i class="pi pi-check"></i> Verify
+                                </button>
+                                <button class="btn-reject" (click)="showRejectDialog(partner.username)">
+                                    <i class="pi pi-times"></i> Reject
+                                </button>
+                                }
+                                @if (partner.isVerified) {
+                                <button [class]="partner.isActive ? 'btn-reject' : 'btn-approve'"
+                                    (click)="blockUnblock(partner.username, partner.isActive)">
+                                    <i [class]="partner.isActive ? 'pi pi-ban' : 'pi pi-check-circle'"></i>
+                                    {{ partner.isActive ? 'Block' : 'Unblock' }}
+                                </button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        @if (partners.length === size || page > 0) {
+        <div class="pagination-controls">
+            <span class="page-info">Page {{ page + 1 }}</span>
+            <div class="page-actions">
+                <button class="page-btn" [disabled]="page === 0" (click)="prevPage()">
+                    <i class="pi pi-chevron-left"></i> Previous
+                </button>
+                <button class="page-btn" [disabled]="!hasMore" (click)="nextPage()">
+                    Next <i class="pi pi-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        }
+    </div>
+    }
+</div>
+
+<!-- Stunning Detail Dialog -->
+<p-dialog [(visible)]="detailDialog" [modal]="true" [style]="{ width: '700px' }" [draggable]="false" [resizable]="false"
+    header="Delivery Partner Profile Insights" class="premium-dialog">
+    <app-detail-delivery [delivery]="selectedPartner" [loading]="detailLoading" (onApprove)="approvePartner($event)"
+        (onReject)="showRejectDialog($event)" (onBlockToggle)="blockUnblock($event.username, $event.active)">
+    </app-detail-delivery>
+</p-dialog>
+
+<!-- Rejection Dialog -->
+<p-dialog header="Reject Partner Application" [(visible)]="rejectDialog" [modal]="true" [style]="{ width: '440px' }"
+    [draggable]="false" [resizable]="false">
+    <div class="reject-dialog-body">
+        <div class="dialog-icon"><i class="pi pi-exclamation-triangle"></i></div>
+        <p class="dialog-text">Provide a reason for rejecting this delivery partner application.</p>
+        <textarea pInputTextarea [(ngModel)]="rejectionReason" rows="4" placeholder="Enter reason..."
+            class="reject-textarea"></textarea>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="dialog-actions">
+            <button class="dialog-btn cancel-btn" (click)="rejectDialog = false">Cancel</button>
+            <button class="dialog-btn confirm-reject-btn" (click)="confirmReject()">Confirm Reject</button>
+        </div>
+    </ng-template>
+</p-dialog>

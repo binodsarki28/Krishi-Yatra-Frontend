@@ -1,0 +1,182 @@
+<div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-header">
+            <div class="logo-wrapper">
+                <div class="logo-icon-wrap">
+                    <i class="pi pi-shield"></i>
+                </div>
+                <div>
+                    <h1 class="logo-title">KrishiYatra</h1>
+                    <p class="logo-subtitle">Admin Dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <!-- Dashboard -->
+            <a class="nav-item" routerLink="/admin" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active">
+                <i class="pi pi-th-large nav-item-icon"></i>
+                <span class="nav-item-label">Dashboard</span>
+            </a>
+
+            <!-- Farmer Management Group -->
+            <div class="nav-group" [class.expanded]="expandedGroup === 'farmer'">
+                <button class="nav-group-header" (click)="toggleGroup('farmer')">
+                    <div class="nav-group-left">
+                        <div class="group-icon farmer-group">
+                            <i class="pi pi-users"></i>
+                        </div>
+                        <span>Farmer Management</span>
+                    </div>
+                    <i class="pi pi-chevron-down group-arrow"></i>
+                </button>
+                <div class="nav-group-items">
+                    <a class="nav-sub-item" routerLink="/admin/farmers" routerLinkActive="active">
+                        <i class="pi pi-list"></i>
+                        <span>Manage Farmers</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Buyer Management Group -->
+            <div class="nav-group" [class.expanded]="expandedGroup === 'buyer'">
+                <button class="nav-group-header" (click)="toggleGroup('buyer')">
+                    <div class="nav-group-left">
+                        <div class="group-icon buyer-group">
+                            <i class="pi pi-shopping-bag"></i>
+                        </div>
+                        <span>Buyer Management</span>
+                    </div>
+                    <i class="pi pi-chevron-down group-arrow"></i>
+                </button>
+                <div class="nav-group-items">
+                    <a class="nav-sub-item" routerLink="/admin/buyers" routerLinkActive="active">
+                        <i class="pi pi-list"></i>
+                        <span>Manage Buyers</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Delivery Management Group -->
+            <div class="nav-group" [class.expanded]="expandedGroup === 'delivery'">
+                <button class="nav-group-header" (click)="toggleGroup('delivery')">
+                    <div class="nav-group-left">
+                        <div class="group-icon delivery-group">
+                            <i class="pi pi-truck"></i>
+                        </div>
+                        <span>Delivery Management</span>
+                    </div>
+                    <i class="pi pi-chevron-down group-arrow"></i>
+                </button>
+                <div class="nav-group-items">
+                    <a class="nav-sub-item" routerLink="/admin/delivery" routerLinkActive="active">
+                        <i class="pi pi-list"></i>
+                        <span>Manage Partners</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="logout-btn" (click)="logout()">
+                <i class="pi pi-sign-out"></i>
+                <span>Logout Admin</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- Child route content -->
+        <router-outlet></router-outlet>
+
+        <!-- Default dashboard home -->
+        @if (isDefaultRoute) {
+        <div class="dashboard-home">
+            <!-- Stats Row -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-left">
+                        <span class="stat-label">Pending Farmers</span>
+                        <span class="stat-value">{{ pendingFarmers }}</span>
+                    </div>
+                    <div class="stat-icon-box stat-green">
+                        <i class="pi pi-users"></i>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-left">
+                        <span class="stat-label">Pending Buyers</span>
+                        <span class="stat-value">{{ pendingBuyers }}</span>
+                    </div>
+                    <div class="stat-icon-box stat-blue">
+                        <i class="pi pi-shopping-bag"></i>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-left">
+                        <span class="stat-label">Pending Delivery</span>
+                        <span class="stat-value">{{ pendingDelivery }}</span>
+                    </div>
+                    <div class="stat-icon-box stat-orange">
+                        <i class="pi pi-truck"></i>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-left">
+                        <span class="stat-label">Total Pending</span>
+                        <span class="stat-value">{{ pendingFarmers + pendingBuyers + pendingDelivery }}</span>
+                    </div>
+                    <div class="stat-icon-box stat-red">
+                        <i class="pi pi-exclamation-triangle"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h3>Quick Actions</h3>
+                    <p>Jump to verification pages</p>
+                </div>
+                <div class="quick-grid">
+                    <a class="quick-card" routerLink="/admin/farmers">
+                        <div class="quick-icon green-bg">
+                            <i class="pi pi-users"></i>
+                        </div>
+                        <div class="quick-info">
+                            <span class="quick-title">Manage Farmers</span>
+                            <span class="quick-desc">{{ pendingFarmers }} pending verification</span>
+                        </div>
+                        <i class="pi pi-arrow-right quick-arrow"></i>
+                    </a>
+                    <a class="quick-card" routerLink="/admin/buyers">
+                        <div class="quick-icon blue-bg">
+                            <i class="pi pi-shopping-bag"></i>
+                        </div>
+                        <div class="quick-info">
+                            <span class="quick-title">Manage Buyers</span>
+                            <span class="quick-desc">{{ pendingBuyers }} pending verification</span>
+                        </div>
+                        <i class="pi pi-arrow-right quick-arrow"></i>
+                    </a>
+                    <a class="quick-card" routerLink="/admin/delivery">
+                        <div class="quick-icon orange-bg">
+                            <i class="pi pi-truck"></i>
+                        </div>
+                        <div class="quick-info">
+                            <span class="quick-title">Manage Delivery Partners</span>
+                            <span class="quick-desc">{{ pendingDelivery }} pending verification</span>
+                        </div>
+                        <i class="pi pi-arrow-right quick-arrow"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        }
+    </main>
+</div>

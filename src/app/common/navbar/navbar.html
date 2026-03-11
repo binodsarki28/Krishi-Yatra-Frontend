@@ -1,0 +1,32 @@
+<div class="layout-topbar shadow-3 w-full p-0 m-0 fixed top-0 left-0 z-5 bg-white"
+    style="background-color: white !important; z-index: 1000;">
+    <p-menubar [model]="items" styleClass="border-none border-noround w-full h-7rem px-6 py-4 surface-overlay">
+        <ng-template pTemplate="start">
+            <div class="flex align-items-center cursor-pointer gap-3" (click)="navigateToHome()">
+                <i class="pi pi-compass text-5xl text-green-600"></i>
+                <span class="text-4xl font-bold text-900 line-height-1">Krishi<span
+                        class="text-green-600">Yatra</span></span>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="end">
+            <div class="flex align-items-center gap-4">
+                @if (isLoggedIn) {
+                <button pButton pRipple label="Profile" icon="pi pi-user"
+                    class="p-button-text p-button-plain font-bold px-5 py-3 navbar-btn-text"
+                    (click)="navigateToProfile()"></button>
+                <button pButton pRipple label="Logout" icon="pi pi-sign-out"
+                    class="p-button-danger p-button-outlined font-bold border-round-3xl px-6 py-3 shadow-1 transition-transform hover-scale navbar-btn-text"
+                    (click)="logout()"></button>
+                } @else {
+                <button pButton pRipple label="Sign In" icon="pi pi-user"
+                    class="p-button-text p-button-plain font-bold px-5 py-3 navbar-btn-text"
+                    (click)="navigateToLogin()"></button>
+                <button pButton pRipple label="Join Now" icon="pi pi-arrow-right"
+                    class="p-button-success font-bold border-round-3xl px-6 py-3 shadow-3 transition-transform hover-scale navbar-btn-text"
+                    (click)="navigateToRegister()"></button>
+                }
+            </div>
+        </ng-template>
+    </p-menubar>
+</div>

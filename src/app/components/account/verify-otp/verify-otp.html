@@ -1,0 +1,28 @@
+<div class="verify-otp-page">
+    <div class="verify-card">
+        <i class="pi pi-lock verify-icon"></i>
+        <h2 class="verify-title">Two-Step Verification</h2>
+        <p class="verify-subtitle">Enter the 6-digit code sent to your email.</p>
+
+        <form [formGroup]="otpForm" (ngSubmit)="onVerify()" class="flex flex-column align-items-center">
+            <div class="form-group">
+                <p-inputOtp formControlName="otp" [length]="6" styleClass="otp-input"></p-inputOtp>
+                <small class="error-message text-center block mt-2"
+                    *ngIf="otpForm.get('otp')?.invalid && otpForm.get('otp')?.touched">
+                    Please enter the 6-digit code
+                </small>
+            </div>
+
+            <p-button label="Verify & Proceed" icon="pi pi-check" [loading]="loading" (onClick)="onVerify()"
+                styleClass="w-full mb-3"></p-button>
+
+            <div class="mt-4 flex align-items-center justify-content-center">
+                <span class="text-gray-500 text-sm">Didn't receive code? </span>
+                <a (click)="resendOtp()" class="resend-link ml-2" [class.disabled]="resendLoading">
+                    <i class="pi pi-spin pi-spinner mr-1" *ngIf="resendLoading"></i>
+                    {{ resendLoading ? 'Sending...' : 'Resend Code' }}
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

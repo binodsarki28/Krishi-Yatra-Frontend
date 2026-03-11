@@ -1,12 +1,36 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { NavbarComponent } from './common/navbar/navbar';
+import { FooterComponent } from './common/footer/footer';
+import { GlobalToastComponent } from './common/global-toast/global-toast';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [RouterOutlet, NavbarComponent, FooterComponent, GlobalToastComponent, CommonModule],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
-export class App {
-  protected readonly title = signal('KrishiYatra-frontend');
+export class AppComponent {
+  title = 'KrishiYatra';
+  showFooter = true;
+  showNavbar = true;
+  private router = inject(Router);
+
+  constructor() {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      const url = event.urlAfterRedirects || event.url;
+      const isAccount = url.includes('/account');
+      const isAdmin = url.includes('/admin');
+      const isProfile = url.includes('/profile');
+      const isRegister = url.includes('/register');
+
+      this.showFooter = !isAccount && !isAdmin && !isProfile && !isRegister;
+      this.showNavbar = !isAccount && !isAdmin;
+    });
+  }
 }

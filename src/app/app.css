@@ -1,0 +1,11 @@
+.krishi-yatra-app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #f8fafc;
+    /* Standardized global background */
+}
+
+.main-content {
+    flex: 1;
+}

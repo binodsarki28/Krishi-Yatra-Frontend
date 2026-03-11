@@ -1,0 +1,209 @@
+<div class="landing-page surface-ground">
+    <!-- Hero Section -->
+    <section class="hero-section relative flex align-items-center justify-content-center overflow-hidden py-8 px-4"
+        style="min-height: 92vh; background: linear-gradient(135deg, #064e3b 0%, #065f46 25%, #047857 50%, #059669 100%);">
+        <div class="hero-bg-overlay absolute top-0 left-0 w-full h-full"
+            style="background: radial-gradient(ellipse at 20% 50%, rgba(16, 185, 129, 0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(52, 211, 153, 0.1) 0%, transparent 50%);">
+        </div>
+        <div class="hero-content relative z-2 text-center" style="max-width: 720px;">
+            <div class="hero-badge inline-flex align-items-center gap-2 px-3 py-2 mb-4 border-round-3xl text-sm font-semibold"
+                style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); color: #a7f3d0; backdrop-filter: blur(8px);">
+                <i class="pi pi-verified text-green-400"></i>
+                <span>Nepal's #1 Farm-to-Market Platform</span>
+            </div>
+
+            <h1 class="text-white text-5xl md:text-7xl font-bold line-height-2 mb-3 mt-0"
+                style="letter-spacing: -1.5px;">
+                Empowering Agriculture<br>
+                <span
+                    style="background: linear-gradient(135deg, #34d399, #6ee7b7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">with
+                    Technology</span>
+            </h1>
+
+            <p class="text-white-alpha-80 text-lg md:text-xl line-height-3 mb-6 mx-auto" style="max-width: 540px;">
+                Join the KrishiYatra community to revolutionize farming practices through innovation, connectivity, and
+                transparent trade.
+            </p>
+
+            <div class="flex flex-column sm:flex-row gap-3 justify-content-center mb-6">
+                <button pButton pRipple type="button" label="Get Started Free" icon="pi pi-arrow-right" iconPos="right"
+                    class="p-button-rounded text-green-900 bg-white border-none font-bold px-5 py-3 shadow-4 hover:shadow-6 transition-all"
+                    (click)="navigateToRegister()"></button>
+                <button pButton pRipple type="button" label="Sign In" icon="pi pi-sign-in"
+                    class="p-button-outlined p-button-rounded text-white border-white font-bold px-5 py-3 hover:bg-white-alpha-10 transition-all"
+                    (click)="navigateToLogin()"></button>
+            </div>
+
+            <div class="flex align-items-center justify-content-center gap-4 md:gap-6 mt-4">
+                <div class="flex flex-column align-items-center">
+                    <span class="text-white text-3xl font-bold">1,200+</span>
+                    <span class="text-white-alpha-60 text-xs font-semibold uppercase tracking-wide">Farmers</span>
+                </div>
+                <div class="h-2rem w-1px bg-white-alpha-20"></div>
+                <div class="flex flex-column align-items-center">
+                    <span class="text-white text-3xl font-bold">350+</span>
+                    <span class="text-white-alpha-60 text-xs font-semibold uppercase tracking-wide">Buyers</span>
+                </div>
+                <div class="h-2rem w-1px bg-white-alpha-20"></div>
+                <div class="flex flex-column align-items-center">
+                    <span class="text-white text-3xl font-bold">75</span>
+                    <span class="text-white-alpha-60 text-xs font-semibold uppercase tracking-wide">Districts</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="surface-ground py-8 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-8">
+                <span
+                    class="inline-block px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-bold uppercase tracking-wide mb-3 border-round-3xl">What
+                    We Offer</span>
+                <h2 class="text-900 text-4xl font-bold m-0 line-height-2" style="letter-spacing: -0.5px;">Everything You
+                    Need to<br>Grow Your Business</h2>
+            </div>
+
+            <div class="grid">
+                <div class="col-12 md:col-6 lg:col-4 p-3">
+                    <div
+                        class="surface-card p-5 shadow-2 border-round-2xl hover:shadow-5 transition-all transition-duration-300 border-1 border-200 hover:border-400 h-full">
+                        <div class="flex align-items-center justify-content-center w-3rem h-3rem border-round-lg mb-4"
+                            style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                            <i class="pi pi-globe text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-900 font-bold text-xl m-0 mb-3">Global Connectivity</h3>
+                        <p class="text-600 line-height-3 m-0">Connect with farmers and experts across Nepal to share
+                            knowledge and improve yields.</p>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-6 lg:col-4 p-3">
+                    <div
+                        class="surface-card p-5 shadow-2 border-round-2xl hover:shadow-5 transition-all transition-duration-300 border-1 border-200 hover:border-400 h-full">
+                        <div class="flex align-items-center justify-content-center w-3rem h-3rem border-round-lg mb-4"
+                            style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                            <i class="pi pi-chart-line text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-900 font-bold text-xl m-0 mb-3">Smart Analytics</h3>
+                        <p class="text-600 line-height-3 m-0">Track your farming activity, sales analytics, and market
+                            trends in real time.</p>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-6 lg:col-4 p-3">
+                    <div
+                        class="surface-card p-5 shadow-2 border-round-2xl hover:shadow-5 transition-all transition-duration-300 border-1 border-200 hover:border-400 h-full">
+                        <div class="flex align-items-center justify-content-center w-3rem h-3rem border-round-lg mb-4"
+                            style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                            <i class="pi pi-truck text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-900 font-bold text-xl m-0 mb-3">Secure Transportation</h3>
+                        <p class="text-600 line-height-3 m-0">Verified delivery partners ensure your products reach
+                            buyers safely and on time.</p>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-6 lg:col-4 p-3">
+                    <div
+                        class="surface-card p-5 shadow-2 border-round-2xl hover:shadow-5 transition-all transition-duration-300 border-1 border-200 hover:border-400 h-full">
+                        <div class="flex align-items-center justify-content-center w-3rem h-3rem border-round-lg mb-4"
+                            style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                            <i class="pi pi-shield text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-900 font-bold text-xl m-0 mb-3">Verified Partners</h3>
+                        <p class="text-600 line-height-3 m-0">Each farmer, buyer, and delivery partner is verified to
+                            ensure trust in every transaction.</p>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-6 lg:col-4 p-3">
+                    <div
+                        class="surface-card p-5 shadow-2 border-round-2xl hover:shadow-5 transition-all transition-duration-300 border-1 border-200 hover:border-400 h-full">
+                        <div class="flex align-items-center justify-content-center w-3rem h-3rem border-round-lg mb-4"
+                            style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                            <i class="pi pi-wallet text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-900 font-bold text-xl m-0 mb-3">Fair Pricing</h3>
+                        <p class="text-600 line-height-3 m-0">Direct farm-to-market model eliminates middlemen, ensuring
+                            fair returns for farmers.</p>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-6 lg:col-4 p-3">
+                    <div
+                        class="surface-card p-5 shadow-2 border-round-2xl hover:shadow-5 transition-all transition-duration-300 border-1 border-200 hover:border-400 h-full">
+                        <div class="flex align-items-center justify-content-center w-3rem h-3rem border-round-lg mb-4"
+                            style="background: linear-gradient(135deg, #14b8a6, #0d9488);">
+                            <i class="pi pi-mobile text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-900 font-bold text-xl m-0 mb-3">Easy to Use</h3>
+                        <p class="text-600 line-height-3 m-0">Intuitive interface designed for everyone — no technical
+                            expertise required.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="surface-white py-8 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-8">
+                <span
+                    class="inline-block px-3 py-1 bg-green-50 text-green-600 rounded-full text-xs font-bold uppercase tracking-wide mb-3 border-round-3xl">How
+                    It Works</span>
+                <h2 class="text-900 text-4xl font-bold m-0 line-height-2" style="letter-spacing: -0.5px;">3 Simple Steps
+                    to Get Started</h2>
+            </div>
+
+            <div class="flex flex-column md:flex-row align-items-center justify-content-center gap-4">
+                <div class="surface-ground border-1 border-200 p-5 text-center border-round-2xl hover:-translate-y-1 hover:shadow-4 transition-all transition-duration-300"
+                    style="max-width: 280px; width: 100%;">
+                    <div class="flex align-items-center justify-content-center w-3rem h-3rem border-round-circle mx-auto mb-4 text-white text-xl font-bold shadow-2"
+                        style="background: linear-gradient(135deg, #22c55e, #16a34a);">1</div>
+                    <h3 class="text-900 font-bold text-xl m-0 mb-3">Create Account</h3>
+                    <p class="text-600 line-height-3 m-0">Register in seconds with your basic details. Choose your role
+                        — Farmer, Buyer, or Delivery.</p>
+                </div>
+
+                <div class="text-300 text-3xl hidden md:block"><i class="pi pi-arrow-right"></i></div>
+                <div class="text-300 text-3xl md:hidden text-center"><i class="pi pi-arrow-down"></i></div>
+
+                <div class="surface-ground border-1 border-200 p-5 text-center border-round-2xl hover:-translate-y-1 hover:shadow-4 transition-all transition-duration-300"
+                    style="max-width: 280px; width: 100%;">
+                    <div class="flex align-items-center justify-content-center w-3rem h-3rem border-round-circle mx-auto mb-4 text-white text-xl font-bold shadow-2"
+                        style="background: linear-gradient(135deg, #22c55e, #16a34a);">2</div>
+                    <h3 class="text-900 font-bold text-xl m-0 mb-3">Get Verified</h3>
+                    <p class="text-600 line-height-3 m-0">Our admin team reviews and verifies your identity for a secure
+                        marketplace experience.</p>
+                </div>
+
+                <div class="text-300 text-3xl hidden md:block"><i class="pi pi-arrow-right"></i></div>
+                <div class="text-300 text-3xl md:hidden text-center"><i class="pi pi-arrow-down"></i></div>
+
+                <div class="surface-ground border-1 border-200 p-5 text-center border-round-2xl hover:-translate-y-1 hover:shadow-4 transition-all transition-duration-300"
+                    style="max-width: 280px; width: 100%;">
+                    <div class="flex align-items-center justify-content-center w-3rem h-3rem border-round-circle mx-auto mb-4 text-white text-xl font-bold shadow-2"
+                        style="background: linear-gradient(135deg, #22c55e, #16a34a);">3</div>
+                    <h3 class="text-900 font-bold text-xl m-0 mb-3">Start Trading</h3>
+                    <p class="text-600 line-height-3 m-0">List or browse products, place orders, and track deliveries —
+                        all in one platform.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-8 px-4 text-center" style="background: linear-gradient(135deg, #064e3b 0%, #047857 100%);">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-white text-4xl font-bold m-0 mb-3 line-height-2" style="letter-spacing: -0.5px;">Ready to
+                Transform Your<br>Agricultural Journey?</h2>
+            <p class="text-white-alpha-80 text-lg mb-6 line-height-3">Join thousands of farmers, buyers, and delivery
+                partners already on KrishiYatra.</p>
+            <button pButton pRipple type="button" label="Create Free Account" icon="pi pi-arrow-right" iconPos="right"
+                class="p-button-rounded p-button-success font-bold px-6 py-4 shadow-4 hover:shadow-6 transition-all text-lg"
+                style="background: white; color: #064e3b; border: none;" (click)="navigateToRegister()"></button>
+        </div>
+    </section>
+</div>

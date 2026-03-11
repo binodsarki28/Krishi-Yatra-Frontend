@@ -1,0 +1,287 @@
+/* ===================================================
+    REGISTER PAGE – Polished Premium Layout
+    =================================================== */
+.register-page {
+    min-height: calc(100vh - 7rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    padding: 2rem 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.back-btn-minimal {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    width: 44px;
+    height: 44px;
+    background: #fff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #064e3b;
+    font-size: 1.15rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    z-index: 100;
+    border: 1px solid #e8ecf1;
+}
+
+.back-btn-minimal:hover {
+    transform: translateX(-4px);
+    background: #064e3b;
+    color: #fff;
+    border-color: #064e3b;
+}
+
+.register-wrapper {
+    width: 100%;
+    max-width: 1000px;
+}
+
+.register-card {
+    display: flex;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+    min-height: 600px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+/* ── Left Panel ── */
+.left-panel {
+    flex: 0.9;
+    background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+    color: #fff;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.left-panel-inner {
+    padding: 3rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+}
+
+.left-panel::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: rgba(52, 211, 153, 0.08);
+    border-radius: 50%;
+    top: -80%;
+    right: -80%;
+    z-index: 1;
+}
+
+.left-panel::after {
+    content: '';
+    position: absolute;
+    width: 160%;
+    height: 160%;
+    background: rgba(16, 185, 129, 0.06);
+    border-radius: 50%;
+    bottom: -60%;
+    left: -40%;
+    z-index: 2;
+}
+
+.logo-section {
+    margin-bottom: 2rem;
+}
+
+.logo-section i {
+    font-size: 2.5rem;
+    color: #34d399;
+}
+
+.hello-text {
+    font-size: 2rem;
+    font-weight: 300;
+    margin: 0;
+    opacity: 0.85;
+}
+
+.welcome-text {
+    font-size: 3rem;
+    font-weight: 800;
+    margin: 0 0 1.5rem;
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+.tagline {
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 300px;
+    opacity: 0.7;
+    margin: 0;
+}
+
+/* ── Right Panel ── */
+.right-panel {
+    flex: 1.3;
+    padding: 2.5rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 420px;
+}
+
+.form-header {
+    margin-bottom: 2rem;
+}
+
+.form-header h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.form-header p {
+    color: #94a3b8;
+    margin: 0.5rem 0 0 0;
+    font-size: 0.9rem;
+}
+
+.link-primary {
+    color: #047857;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.link-primary:hover {
+    color: #065f46;
+}
+
+.form-group-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 0.4rem;
+}
+
+::ng-deep .register-page .p-inputtext,
+::ng-deep .register-page .p-password-input {
+    width: 100% !important;
+    padding: 0.75rem 1rem !important;
+    border: 1.5px solid #e2e8f0 !important;
+    background: #fafbfc !important;
+    border-radius: 10px !important;
+    font-size: 0.9rem !important;
+    transition: all 0.2s ease !important;
+    box-shadow: none !important;
+}
+
+::ng-deep .register-page .p-inputtext:focus,
+::ng-deep .register-page .p-password-input:focus {
+    border-color: #047857 !important;
+    background: #fff !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.08) !important;
+}
+
+::ng-deep .register-page .p-password input {
+    width: 100% !important;
+    border-radius: 10px !important;
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 0.72rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.signin-link {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.85rem;
+    margin-top: 1.25rem;
+}
+
+::ng-deep .register-page .submit-btn {
+    width: 100% !important;
+    background: linear-gradient(135deg, #064e3b, #047857) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 0.9rem !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 16px rgba(4, 120, 87, 0.2) !important;
+    margin-top: 0.75rem;
+}
+
+::ng-deep .register-page .submit-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(4, 120, 87, 0.3) !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+    .register-card {
+        flex-direction: column;
+    }
+
+    .left-panel {
+        min-height: 200px;
+    }
+
+    .left-panel::before,
+    .left-panel::after {
+        display: none;
+    }
+
+    .right-panel {
+        padding: 2.5rem 2rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .welcome-text {
+        font-size: 2.5rem;
+    }
+}

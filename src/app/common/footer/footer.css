@@ -1,0 +1,129 @@
+/* ===================================================
+   FOOTER – Compact, 100% zoom
+   =================================================== */
+.footer-container {
+    background: #ffffff;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+    margin-top: auto;
+    padding: 1.75rem 3.5rem 1rem !important;
+}
+
+/* Logo line */
+.footer-container .flex.align-items-center.mb-4 {
+    margin-bottom: 0.75rem !important;
+}
+
+/* Logo icon */
+.footer-container .pi-compass {
+    font-size: 1.75rem !important;
+    margin-right: 0.5rem !important;
+}
+
+/* Brand name */
+.footer-container .line-height-1 {
+    font-size: 1.4rem !important;
+    font-weight: 800 !important;
+}
+
+/* Tagline paragraph */
+.footer-container .text-700.line-height-3 {
+    font-size: 0.875rem !important;
+    line-height: 1.6 !important;
+    margin-right: 1.5rem;
+}
+
+/* Section headings */
+.footer-container .font-bold.text-900 {
+    font-size: 1rem !important;
+    margin-bottom: 0.75rem !important;
+}
+
+/* List items */
+.footer-container li {
+    margin-bottom: 0.4rem !important;
+}
+
+/* List links */
+.footer-container li a {
+    font-size: 0.875rem !important;
+    line-height: 1.6 !important;
+    text-decoration: none;
+    display: inline-block;
+    transition: color 0.2s;
+}
+
+/* Subscribe text */
+.footer-container p.text-700.line-height-3.mb-4 {
+    font-size: 0.875rem !important;
+    margin-bottom: 0.75rem !important;
+}
+
+/* Social buttons row */
+.footer-container .flex.gap-3 {
+    gap: 0.25rem !important;
+}
+
+/* Social buttons */
+.footer-container .p-button.p-button-rounded {
+    width: 2.2rem !important;
+    height: 2.2rem !important;
+}
+
+.footer-container .p-button .p-button-icon {
+    font-size: 1.1rem !important;
+}
+
+/* Divider spacing */
+.footer-container p-divider {
+    margin: 0.875rem 0 !important;
+}
+
+/* Copyright bar */
+.footer-container .flex.justify-content-between span {
+    font-size: 0.825rem !important;
+    color: #6b7280;
+}
+
+/* Colors */
+.text-green-600 {
+    color: #4caf50 !important;
+}
+
+.hover\:text-green-600:hover {
+    color: #2e7d32 !important;
+}
+
+ul {
+    padding-left: 0;
+}
+
+li a {
+    text-decoration: none;
+    display: inline-block;
+}
+
+/* PrimeNG text utility overrides */
+.footer-container .text-6xl {
+    font-size: 1.75rem !important;
+}
+
+.footer-container .text-4xl {
+    font-size: 1.4rem !important;
+}
+
+.footer-container .text-2xl {
+    font-size: 1rem !important;
+}
+
+.footer-container .text-xl {
+    font-size: 0.875rem !important;
+}
+
+/* Grid spacing fix */
+.footer-container .grid {
+    margin-bottom: 0 !important;
+}
+
+.footer-container .mb-4 {
+    margin-bottom: 0.75rem !important;
+}

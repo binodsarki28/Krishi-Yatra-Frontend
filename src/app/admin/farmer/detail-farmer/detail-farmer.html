@@ -1,0 +1,102 @@
+@if (farmer) {
+<div class="detail-container glass-effect">
+    <!-- Header Section -->
+    <div class="header">
+        <div class="profile-summary">
+            <div class="avatar-circle">
+                {{ farmer.fullName.charAt(0) }}
+            </div>
+            <div class="summary-text">
+                <h2>{{ farmer.fullName }}</h2>
+                <p class="username">@{{ farmer.username }}</p>
+                <span class="status-badge" [class.verified]="farmer.verified">
+                    <i [class]="farmer.verified ? 'pi pi-check-circle' : 'pi pi-clock'"></i>
+                    {{ farmer.verified ? 'Verified Farmer' : 'Pending Verification' }}
+                </span>
+            </div>
+        </div>
+        <div class="actions">
+            @if (!farmer.verified) {
+            <button class="btn-approve" (click)="onApprove.emit(farmer.username)">
+                <i class="pi pi-check"></i> Approve
+            </button>
+            <button class="btn-reject" (click)="onReject.emit(farmer.username)">
+                <i class="pi pi-times"></i> Reject
+            </button>
+            }
+            <button class="btn-block" [class.danger]="farmer.active"
+                (click)="onBlockToggle.emit({username: farmer.username, active: farmer.active})">
+                <i [class]="farmer.active ? 'pi pi-lock' : 'pi pi-lock-open'"></i>
+                {{ farmer.active ? 'Block Account' : 'Unblock Account' }}
+            </button>
+        </div>
+    </div>
+
+    <div class="detail-grid">
+        <!-- Farm Information -->
+        <div class="card farm-info">
+            <h3><i class="pi pi-map"></i> Farm Information</h3>
+            <div class="info-row">
+                <span class="label">Farm Name:</span>
+                <span class="value">{{ farmer.farmName }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Location:</span>
+                <span class="value">{{ farmer.farmLocation }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Farm Area:</span>
+                <span class="value">{{ farmer.farmArea }} Hectares</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Crop Types:</span>
+                <div class="tag-container">
+                    @for (type of farmer.farmTypes; track type) {
+                    <span class="tag">{{ type }}</span>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Details -->
+        <div class="card contact-info">
+            <h3><i class="pi pi-phone"></i> Contact Details</h3>
+            <div class="info-row">
+                <span class="label">Email:</span>
+                <span class="value">{{ farmer.email }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Phone:</span>
+                <span class="value">{{ farmer.phoneNumber }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Joined On:</span>
+                <span class="value">{{ farmer.createdAt | date:'longDate' }}</span>
+            </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="card system-info">
+            <h3><i class="pi pi-shield"></i> Safety & Status</h3>
+            <div class="status-metrics">
+                <div class="metric">
+                    <span class="m-value" [class.active]="farmer.active">{{ farmer.active ? 'ACTIVE' : 'INACTIVE'
+                        }}</span>
+                    <span class="m-label">Network Status</span>
+                </div>
+                <div class="metric">
+                    <span class="m-value">{{ farmer.verified ? 'HIGH' : 'LOW' }}</span>
+                    <span class="m-label">Trust Index</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+@if (loading) {
+<div class="loading-overlay">
+    <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    <p>Loading farmer credentials...</p>
+</div>
+}

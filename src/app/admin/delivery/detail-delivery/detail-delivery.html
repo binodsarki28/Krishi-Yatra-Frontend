@@ -1,0 +1,97 @@
+@if (delivery) {
+<div class="detail-container glass-effect">
+    <!-- Header Section -->
+    <div class="header">
+        <div class="profile-summary">
+            <div class="avatar-circle delivery-theme">
+                <i class="pi pi-truck" style="font-size: 1.5rem"></i>
+            </div>
+            <div class="summary-text">
+                <h2>{{ delivery.fullName }}</h2>
+                <p class="username">@{{ delivery.username }}</p>
+                <span class="status-badge" [class.verified]="delivery.verified">
+                    <i [class]="delivery.verified ? 'pi pi-check-circle' : 'pi pi-clock'"></i>
+                    {{ delivery.verified ? 'Verified Partner' : 'Verification Needed' }}
+                </span>
+            </div>
+        </div>
+        <div class="actions">
+            @if (!delivery.verified) {
+            <button class="btn-approve" (click)="onApprove.emit(delivery.username)">
+                <i class="pi pi-check"></i> Verify
+            </button>
+            <button class="btn-reject" (click)="onReject.emit(delivery.username)">
+                <i class="pi pi-times"></i> Reject
+            </button>
+            }
+            <button class="btn-block" [class.danger]="delivery.active"
+                (click)="onBlockToggle.emit({username: delivery.username, active: delivery.active})">
+                <i [class]="delivery.active ? 'pi pi-lock' : 'pi pi-lock-open'"></i>
+                {{ delivery.active ? 'Suspend' : 'Resume' }}
+            </button>
+        </div>
+    </div>
+
+    <div class="detail-grid">
+        <!-- Vehicle Information -->
+        <div class="card vehicle-info">
+            <h3><i class="pi pi-car"></i> Fleet Details</h3>
+            <div class="info-row">
+                <span class="label">Vehicle Type:</span>
+                <span class="value">{{ delivery.vehicleType }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Brand/Model:</span>
+                <span class="value">{{ delivery.vehicleBrand }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Number Plate:</span>
+                <span class="value plate-badge">{{ delivery.numberPlate }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">License No:</span>
+                <span class="value">{{ delivery.licenseNumber }}</span>
+            </div>
+        </div>
+
+        <!-- Contact & Personal -->
+        <div class="card contact-info">
+            <h3><i class="pi pi-user"></i> Partner Contact</h3>
+            <div class="info-row">
+                <span class="label">Email:</span>
+                <span class="value">{{ delivery.email }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Phone:</span>
+                <span class="value">{{ delivery.phoneNumber }}</span>
+            </div>
+            <div class="info-row">
+                <span class="label">Registration:</span>
+                <span class="value">{{ delivery.createdAt | date:'mediumDate' }}</span>
+            </div>
+        </div>
+
+        <!-- Documents Visual -->
+        <div class="card document-preview full-width">
+            <h3><i class="pi pi-file"></i> Document Verification</h3>
+            <div class="doc-grid">
+                <div class="doc-box">
+                    <i class="pi pi-image"></i>
+                    <span>Vehicle Photo</span>
+                </div>
+                <div class="doc-box">
+                    <i class="pi pi-id-card"></i>
+                    <span>Driving License</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+@if (loading) {
+<div class="loading-overlay">
+    <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+    <p>Authenticating partner details...</p>
+</div>
+}
