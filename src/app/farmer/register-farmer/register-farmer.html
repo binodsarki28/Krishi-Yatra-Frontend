@@ -1,78 +1,77 @@
-<div class="registration-container p-5 flex justify-content-center account-bg">
-    <p-card header="Farmer Registration" subheader="Register your farm to start selling your products"
-        [style]="{ width: '550px' }" class="shadow-4 border-round-xl">
-        <form [formGroup]="farmerForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-4 pt-4">
+<div class="registration-container flex align-items-center justify-content-center surface-ground p-3"
+    style="min-height: calc(100vh - 112px);">
+    <p-card [style]="{ width: '100%', maxWidth: '550px', overflow: 'hidden' }"
+        styleClass="shadow-4 border-round-xl w-full">
 
-            <div class="flex flex-column gap-2">
-                <label for="farmName" class="font-bold">Farm Name</label>
-                <span class="p-input-icon-left w-full">
-                    <i class="pi pi-home"></i>
-                    <input id="farmName" type="text" pInputText formControlName="farmName"
-                        placeholder="Enter your farm name" class="w-full" />
-                </span>
-                <small class="p-error block"
-                    *ngIf="farmerForm.get('farmName')?.invalid && farmerForm.get('farmName')?.touched">
+        <ng-template pTemplate="title">
+            <div class="flex align-items-center gap-3 border-bottom-1 surface-border pb-3">
+                <div
+                    class="bg-green-600 text-white border-circle w-3rem h-3rem flex align-items-center justify-content-center shadow-2 flex-shrink-0">
+                    <i class="pi pi-home text-xl"></i>
+                </div>
+                <div>
+                    <div class="text-xl md:text-2xl font-bold text-900">Farmer Registration</div>
+                    <div class="text-500 font-normal text-sm mt-1">Register your farm to start selling your products
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+
+        <form [formGroup]="farmerForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-3 pt-2">
+
+            <div class="flex flex-column gap-1">
+                <label for="farmName" class="font-bold text-sm text-700">Farm Name</label>
+                <input id="farmName" type="text" pInputText formControlName="farmName"
+                    placeholder="Enter your farm name" class="w-full" />
+                @if(farmerForm.get('farmName')?.invalid && farmerForm.get('farmName')?.touched) {
+                <small class="p-error block font-bold text-red-500 text-xs mt-1">
                     Farm name is required (min 3 chars).
                 </small>
+                }
             </div>
 
-            <div class="flex flex-column gap-2">
-                <label for="farmLocation" class="font-bold">Farm Location</label>
-                <span class="p-input-icon-left w-full">
-                    <i class="pi pi-map-marker"></i>
-                    <input id="farmLocation" type="text" pInputText formControlName="farmLocation"
-                        placeholder="Enter farm address" class="w-full" />
-                </span>
-                <small class="p-error block"
-                    *ngIf="farmerForm.get('farmLocation')?.invalid && farmerForm.get('farmLocation')?.touched">
+            <div class="flex flex-column gap-1">
+                <label for="farmLocation" class="font-bold text-sm text-700">Farm Location</label>
+                <input id="farmLocation" type="text" pInputText formControlName="farmLocation"
+                    placeholder="Enter farm address" class="w-full" />
+                @if(farmerForm.get('farmLocation')?.invalid && farmerForm.get('farmLocation')?.touched) {
+                <small class="p-error block font-bold text-red-500 text-xs mt-1">
                     Farm location is required.
                 </small>
+                }
             </div>
 
-            <div class="grid">
-                <div class="col-12 md:col-6 flex flex-column gap-2">
-                    <label for="farmArea" class="font-bold">Farm Area (Acre)</label>
+            <div class="grid m-0">
+                <div class="col-12 md:col-6 flex flex-column gap-1 p-0 md:pr-2 pb-3 md:pb-0">
+                    <label for="farmArea" class="font-bold text-sm text-700">Farm Area (Acre)</label>
                     <p-inputNumber id="farmArea" formControlName="farmArea" mode="decimal" [minFractionDigits]="2"
-                        [maxFractionDigits]="2" placeholder="e.g. 5.5" class="w-full"></p-inputNumber>
-                    <small class="p-error block"
-                        *ngIf="farmerForm.get('farmArea')?.invalid && farmerForm.get('farmArea')?.touched">
+                        [maxFractionDigits]="2" placeholder="e.g. 5.5" styleClass="w-full"
+                        class="w-full"></p-inputNumber>
+                    @if(farmerForm.get('farmArea')?.invalid && farmerForm.get('farmArea')?.touched) {
+                    <small class="p-error block font-bold text-red-500 text-xs mt-1">
                         Valid area is required.
                     </small>
+                    }
                 </div>
-                <div class="col-12 md:col-6 flex flex-column gap-2">
-                    <label for="types" class="font-bold">Farm Types</label>
+                <div class="col-12 md:col-6 flex flex-column gap-1 p-0 md:pl-2">
+                    <label for="types" class="font-bold text-sm text-700">Farm Types</label>
                     <p-multiSelect [options]="farmTypes" formControlName="types" optionLabel="label" optionValue="value"
-                        placeholder="Select type(s)" class="w-full" [filter]="false" [showClear]="true"></p-multiSelect>
-                    <small class="p-error block"
-                        *ngIf="farmerForm.get('types')?.invalid && farmerForm.get('types')?.touched">
+                        placeholder="Select type(s)" styleClass="w-full" class="w-full" [filter]="false"
+                        [showClear]="true"></p-multiSelect>
+                    @if(farmerForm.get('types')?.invalid && farmerForm.get('types')?.touched) {
+                    <small class="p-error block font-bold text-red-500 text-xs mt-1">
                         At least one type is required.
                     </small>
+                    }
                 </div>
             </div>
 
-            <div class="flex justify-content-between gap-3 mt-4">
+            <div class="flex flex-column md:flex-row justify-content-end gap-3 mt-4 pt-4 border-top-1 surface-border">
                 <p-button label="Cancel" icon="pi pi-times" severity="secondary" [text]="true" (onClick)="cancel()"
-                    class="flex-1"></p-button>
-                <p-button label="Register Farm" icon="pi pi-check" [loading]="loading" type="submit" class="flex-1"
-                    styleClass="w-full"></p-button>
+                    class="w-full md:w-auto" styleClass="w-full"></p-button>
+                <p-button label="Create Account" icon="pi pi-check" [loading]="loading" type="submit"
+                    class="w-full md:w-auto" styleClass="w-full p-button-success"></p-button>
             </div>
         </form>
     </p-card>
 </div>
-
-<style>
-    .account-bg {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        min-height: calc(100vh - 80px);
-        padding-top: 130px !important;
-        padding-bottom: 50px !important;
-    }
-
-    :host ::ng-deep .p-inputnumber input {
-        width: 100%;
-    }
-
-    :host ::ng-deep .p-multiselect {
-        width: 100%;
-    }
-</style>

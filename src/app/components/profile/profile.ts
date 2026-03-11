@@ -102,7 +102,7 @@ export class ProfileComponent implements OnInit {
   }
 
   navigateTo(path: string) {
-    if (path.includes('/farmer/') && !this.isFarmerVerified) {
+    if (path.includes('/farmer/') && this.isFarmer && !this.isFarmerVerified) {
       this.toastService.warningResponse('Your Farmer account is currently under verification. Please wait for admin approval.');
       return;
     }
@@ -110,7 +110,7 @@ export class ProfileComponent implements OnInit {
       this.toastService.warningResponse('Your Buyer account is currently under verification. Please wait for admin approval.');
       return;
     }
-    if (path.includes('/delivery/') && !this.isDeliveryVerified) {
+    if (path.includes('/delivery/') && this.isDelivery && !this.isDeliveryVerified) {
       this.toastService.warningResponse('Your Delivery Partner account is currently under verification. Please wait for admin approval.');
       return;
     }

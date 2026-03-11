@@ -1,54 +1,63 @@
-<div class="profile-container p-5 min-h-screen bg-gray-50">
+<div class="p-5 surface-ground" style="min-height: calc(100vh - 80px);">
     <div class="max-w-7xl mx-auto">
         <h1 class="text-3xl font-bold text-gray-800 mb-6">User Profile</h1>
 
-        <div class="grid g-4">
+        <div class="grid">
             <!-- Left Sidebar: Profile Summary -->
             <div class="col-12 md:col-4">
-                <p-card class="shadow-3 border-round-xl p-0 h-full overflow-hidden">
-                    <div class="flex flex-column align-items-center py-5 bg-gradient-to-br from-green-500 to-green-700">
-                        <div class="user-avatar-large relative border-circle shadow-5 flex align-items-center justify-content-center bg-white"
-                            style="width: 120px; height: 120px;">
+                <p-card styleClass="shadow-3 border-round-2xl p-0 h-full overflow-hidden border-1 border-200">
+                    <div class="flex flex-column align-items-center py-5"
+                        style="background: linear-gradient(135deg, #064e3b 0%, #047857 100%);">
+                        <div class="relative border-circle shadow-5 flex align-items-center justify-content-center bg-white transition-transform hover:-translate-y-1 hover:shadow-6 transition-duration-300"
+                            style="width: 120px; height: 120px; border: 4px solid rgba(255,255,255,0.2);">
                             <i class="pi pi-user text-6xl text-green-600"></i>
-                            <div class="online-status"></div>
+                            <div class="absolute border-circle bg-green-500 shadow-2"
+                                style="bottom: 5px; right: 5px; width: 18px; height: 18px; border: 3px solid white;">
+                            </div>
                         </div>
                         <h2 class="mt-4 text-white font-bold text-xl m-0">{{ user.fullName }}</h2>
-                        <p class="text-white opacity-80 mt-1">{{ user.email }}</p>
+                        <p class="text-white-alpha-80 mt-1">{{ user.email }}</p>
                     </div>
 
                     <div class="p-4 flex flex-column gap-4">
                         <div class="flex flex-column">
-                            <span class="text-sm font-semibold text-500 uppercase tracking-wider mb-2">My Roles</span>
+                            <span class="text-xs font-bold text-500 uppercase tracking-wider mb-2">My Roles</span>
                             <div class="flex flex-wrap gap-2">
-                                <span *ngFor="let role of user.roles"
-                                    class="px-3 py-1 bg-green-50 text-green-700 border-round-pill text-xs font-bold uppercase ring-1 ring-green-200">
+                                @for (role of user.roles; track role) {
+                                <span
+                                    class="px-3 py-1 bg-green-50 text-green-700 border-round-3xl text-xs font-bold uppercase border-1 border-green-200 shadow-1">
                                     {{ role }}
                                 </span>
+                                }
                             </div>
                         </div>
 
                         <p-divider></p-divider>
 
                         <div class="flex flex-column gap-3">
-                            <div class="flex align-items-center gap-3">
-                                <i class="pi pi-id-card text-500 text-lg"></i>
+                            <div
+                                class="flex align-items-center gap-3 p-2 surface-ground border-round-lg hover:surface-hover transition-colors transition-duration-200 cursor-pointer">
+                                <div class="p-2 border-circle bg-white shadow-1"><i class="pi pi-id-card text-500"></i>
+                                </div>
                                 <div class="flex flex-column">
-                                    <span class="text-xs text-400">Username</span>
-                                    <span class="text-sm font-medium text-700">{{ user.username }}</span>
+                                    <span class="text-xs text-500 font-medium">Username</span>
+                                    <span class="text-sm font-bold text-800">{{ user.username }}</span>
                                 </div>
                             </div>
-                            <div class="flex align-items-center gap-3">
-                                <i class="pi pi-calendar text-500 text-lg"></i>
+                            <div
+                                class="flex align-items-center gap-3 p-2 surface-ground border-round-lg hover:surface-hover transition-colors transition-duration-200 cursor-pointer">
+                                <div class="p-2 border-circle bg-white shadow-1"><i class="pi pi-calendar text-500"></i>
+                                </div>
                                 <div class="flex flex-column">
-                                    <span class="text-xs text-400">Member Since</span>
-                                    <span class="text-sm font-medium text-700">June 2024</span> <!-- Static for now -->
+                                    <span class="text-xs text-500 font-medium">Member Since</span>
+                                    <span class="text-sm font-bold text-800">June 2024</span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="mt-4">
                             <p-button label="Sign Out" icon="pi pi-sign-out" severity="danger" [outlined]="true"
-                                class="w-full" (onClick)="logout()"></p-button>
+                                styleClass="w-full font-bold border-round-3xl" (onClick)="logout()"></p-button>
                         </div>
                     </div>
                 </p-card>
@@ -56,209 +65,239 @@
 
             <!-- Right: Tabbed Content -->
             <div class="col-12 md:col-8">
-                <div class="surface-card p-4 shadow-3 border-round-xl h-full">
+                <div class="surface-card p-4 shadow-3 border-round-2xl border-1 border-200 h-full">
                     <p-tabs value="0">
                         <p-tablist>
                             <p-tab value="0" class="flex align-items-center gap-2">
                                 <i class="pi pi-cog"></i>
-                                <span>Account Actions</span>
+                                <span class="font-bold">Account Actions</span>
                             </p-tab>
                             <p-tab value="1" class="flex align-items-center gap-2">
                                 <i class="pi pi-lock"></i>
-                                <span>Security</span>
+                                <span class="font-bold">Security</span>
                             </p-tab>
                         </p-tablist>
                         <p-tabpanels>
                             <p-tabpanel value="0" class="pt-5">
                                 <div class="flex flex-column gap-6">
-                                    <div *ngIf="isAdmin"
-                                        class="action-card bg-purple-50 p-4 border-round-xl border-left-3 border-purple-500 flex align-items-center justify-content-between">
+
+                                    @if(isAdmin) {
+                                    <div
+                                        class="bg-indigo-50 p-4 border-round-xl border-left-3 border-indigo-500 shadow-1 hover:shadow-3 transition-all flex flex-column md:flex-row align-items-start md:align-items-center justify-content-between gap-3 mb-4">
                                         <div class="flex align-items-center gap-4">
-                                            <div class="bg-purple-100 p-3 border-round-lg">
-                                                <i class="pi pi-shield text-3xl text-purple-600"></i>
+                                            <div class="bg-indigo-100 p-3 border-round-xl custom-icon-box">
+                                                <i class="pi pi-shield text-3xl text-indigo-600"></i>
                                             </div>
                                             <div>
-                                                <h3 class="m-0 font-bold text-gray-800">Administrator Console</h3>
-                                                <p class="m-0 text-gray-600 text-sm mt-1">Manage users, products, and
+                                                <h3 class="m-0 font-bold text-900">Administrator Console</h3>
+                                                <p class="m-0 text-700 text-sm mt-1">Manage users, products, and
                                                     platform settings.</p>
                                             </div>
                                         </div>
-                                        <p-button label="Manage Platform" severity="help" rounded="true" size="small"
-                                            (onClick)="navigateTo('/admin')"></p-button>
+                                        <p-button label="Manage Platform" severity="help" [rounded]="true" size="small"
+                                            [outlined]="true" (onClick)="navigateTo('/admin')"></p-button>
                                     </div>
+                                    }
 
-                                    <div *ngIf="isFarmer"
-                                        class="action-card bg-emerald-50 p-4 border-round-xl border-left-3 border-emerald-500 flex align-items-center justify-content-between mb-4">
+                                    @if(isFarmer) {
+                                    <div
+                                        class="bg-green-50 p-4 border-round-xl border-left-3 border-green-500 shadow-1 hover:shadow-3 transition-all flex flex-column md:flex-row align-items-start md:align-items-center justify-content-between gap-3 mb-4">
                                         <div class="flex align-items-center gap-4">
-                                            <div class="bg-emerald-100 p-3 border-round-lg">
-                                                <i class="pi pi-chart-bar text-3xl text-emerald-600"></i>
+                                            <div class="bg-green-100 p-3 border-round-xl">
+                                                <i class="pi pi-chart-bar text-3xl text-green-600"></i>
                                             </div>
                                             <div>
-                                                <h3 class="m-0 font-bold text-gray-800">Farmer Dashboard</h3>
-                                                <p class="m-0 text-gray-600 text-sm mt-1">Manage your crops, stock, and
-                                                    view sale analytics.</p>
+                                                <h3 class="m-0 font-bold text-900">Farmer Dashboard</h3>
+                                                <p class="m-0 text-700 text-sm mt-1">Manage your crops, stock, and view
+                                                    sale analytics.</p>
                                             </div>
                                         </div>
-                                        <p-button label="Go to the dashboard" severity="success" rounded="true"
-                                            size="small" (onClick)="navigateTo('/farmer/dashboard')"></p-button>
+                                        <p-button label="Go to the dashboard" severity="success" [rounded]="true"
+                                            size="small" styleClass="font-bold shadow-2 hover:shadow-4"
+                                            (onClick)="navigateTo('/farmer/dashboard')"></p-button>
                                     </div>
+                                    }
 
-                                    <div *ngIf="isBuyer"
-                                        class="action-card bg-blue-50 p-4 border-round-xl border-left-3 border-blue-500 flex align-items-center justify-content-between mb-4">
+                                    @if(isBuyer) {
+                                    <div
+                                        class="bg-blue-50 p-4 border-round-xl border-left-3 border-blue-500 shadow-1 hover:shadow-3 transition-all flex flex-column md:flex-row align-items-start md:align-items-center justify-content-between gap-3 mb-4">
                                         <div class="flex align-items-center gap-4">
-                                            <div class="bg-blue-100 p-3 border-round-lg">
+                                            <div class="bg-blue-100 p-3 border-round-xl">
                                                 <i class="pi pi-shopping-cart text-3xl text-blue-600"></i>
                                             </div>
                                             <div>
-                                                <h3 class="m-0 font-bold text-gray-800">Shopping Hub</h3>
-                                                <p class="m-0 text-gray-600 text-sm mt-1">Browse order and
-                                                    manage your orders.</p>
+                                                <h3 class="m-0 font-bold text-900">Shopping Hub</h3>
+                                                <p class="m-0 text-700 text-sm mt-1">Browse and manage your orders.</p>
                                             </div>
                                         </div>
-                                        <p-button label="Go to the dashboard" severity="info" rounded="true"
-                                            size="small" (onClick)="navigateTo('/buyer/dashboard')"></p-button>
+                                        <p-button label="Go to the dashboard" severity="info" [rounded]="true"
+                                            size="small" styleClass="font-bold shadow-2 hover:shadow-4"
+                                            (onClick)="navigateTo('/buyer/dashboard')"></p-button>
                                     </div>
+                                    }
 
-                                    <div *ngIf="isDelivery"
-                                        class="action-card bg-orange-50 p-4 border-round-xl border-left-3 border-orange-500 flex align-items-center justify-content-between mb-4">
+                                    @if(isDelivery) {
+                                    <div
+                                        class="bg-orange-50 p-4 border-round-xl border-left-3 border-orange-500 shadow-1 hover:shadow-3 transition-all flex flex-column md:flex-row align-items-start md:align-items-center justify-content-between gap-3 mb-4">
                                         <div class="flex align-items-center gap-4">
-                                            <div class="bg-orange-100 p-3 border-round-lg">
+                                            <div class="bg-orange-100 p-3 border-round-xl">
                                                 <i class="pi pi-truck text-3xl text-orange-600"></i>
                                             </div>
                                             <div>
-                                                <h3 class="m-0 font-bold text-gray-800">Delivery Portal</h3>
-                                                <p class="m-0 text-gray-600 text-sm mt-1">View assigned deliveries and
-                                                    track transportation status.</p>
+                                                <h3 class="m-0 font-bold text-900">Delivery Portal</h3>
+                                                <p class="m-0 text-700 text-sm mt-1">View assigned deliveries and track
+                                                    transportation status.</p>
                                             </div>
                                         </div>
-                                        <p-button label="Go to the dashboard" severity="warn" rounded="true"
-                                            size="small" (onClick)="navigateTo('/delivery/dashboard')"></p-button>
+                                        <p-button label="Go to the dashboard" severity="warn" [rounded]="true"
+                                            size="small" styleClass="font-bold shadow-2 hover:shadow-4"
+                                            (onClick)="navigateTo('/delivery/dashboard')"></p-button>
                                     </div>
+                                    }
 
                                     <!-- Registration Prompts for missing roles -->
                                     <div class="mt-4">
-                                        <h4 class="text-sm font-semibold text-500 uppercase mb-3">Join KrishiYatra
+                                        <h4 class="text-sm font-bold text-500 uppercase mb-3 px-2">Join KrishiYatra
                                             Network</h4>
-                                        <div class="grid g-3">
-                                            <div *ngIf="!isFarmer" class="col-12 md:col-4">
-                                                <div class="p-3 border-1 border-200 border-round-lg hover:border-emerald-500 transition-all cursor-pointer bg-white h-full flex flex-column align-items-center text-center gap-2"
+                                        <div class="grid">
+                                            @if(!isFarmer) {
+                                            <div class="col-12 md:col-4 p-2">
+                                                <div class="p-3 border-1 border-200 border-round-xl hover:border-green-500 shadow-1 hover:shadow-3 transition-all cursor-pointer surface-card flex flex-column align-items-center text-center gap-2 h-full"
                                                     (click)="navigateTo('/farmer/register')">
-                                                    <i class="pi pi-user-plus text-2xl text-emerald-600"></i>
-                                                    <span class="font-bold text-gray-700">As Farmer</span>
-                                                    <small class="text-500">Sell your crops</small>
+                                                    <i
+                                                        class="pi pi-user-plus text-2xl text-green-600 bg-green-50 p-3 border-circle"></i>
+                                                    <span class="font-bold text-800">As Farmer</span>
+                                                    <small class="text-500 font-medium">Sell your crops</small>
                                                 </div>
                                             </div>
-                                            <div *ngIf="!isBuyer" class="col-12 md:col-4">
-                                                <div class="p-3 border-1 border-200 border-round-lg hover:border-blue-500 transition-all cursor-pointer bg-white h-full flex flex-column align-items-center text-center gap-2"
+                                            }
+                                            @if(!isBuyer) {
+                                            <div class="col-12 md:col-4 p-2">
+                                                <div class="p-3 border-1 border-200 border-round-xl hover:border-blue-500 shadow-1 hover:shadow-3 transition-all cursor-pointer surface-card flex flex-column align-items-center text-center gap-2 h-full"
                                                     (click)="navigateTo('/buyer/register')">
-                                                    <i class="pi pi-shopping-bag text-2xl text-blue-600"></i>
-                                                    <span class="font-bold text-gray-700">As Buyer</span>
-                                                    <small class="text-500">Buy in bulk</small>
+                                                    <i
+                                                        class="pi pi-shopping-bag text-2xl text-blue-600 bg-blue-50 p-3 border-circle"></i>
+                                                    <span class="font-bold text-800">As Buyer</span>
+                                                    <small class="text-500 font-medium">Buy in bulk</small>
                                                 </div>
                                             </div>
-                                            <div *ngIf="!isDelivery" class="col-12 md:col-4">
-                                                <div class="p-3 border-1 border-200 border-round-lg hover:border-orange-500 transition-all cursor-pointer bg-white h-full flex flex-column align-items-center text-center gap-2"
+                                            }
+                                            @if(!isDelivery) {
+                                            <div class="col-12 md:col-4 p-2">
+                                                <div class="p-3 border-1 border-200 border-round-xl hover:border-orange-500 shadow-1 hover:shadow-3 transition-all cursor-pointer surface-card flex flex-column align-items-center text-center gap-2 h-full"
                                                     (click)="navigateTo('/delivery/register')">
-                                                    <i class="pi pi-map text-2xl text-orange-600"></i>
-                                                    <span class="font-bold text-gray-700">As Linker</span>
-                                                    <small class="text-500">Manage logistics</small>
+                                                    <i
+                                                        class="pi pi-map text-2xl text-orange-600 bg-orange-50 p-3 border-circle"></i>
+                                                    <span class="font-bold text-800">As Linker</span>
+                                                    <small class="text-500 font-medium">Manage logistics</small>
                                                 </div>
                                             </div>
+                                            }
                                         </div>
                                     </div>
 
-                                    <div class="grid g-4 mt-4">
-                                        <div class="col-12 md:col-6">
-                                            <div class="surface-ground p-4 border-round-xl border-1 border-200">
-                                                <div class="flex align-items-center justify-content-between mb-3">
+                                    <div class="grid mt-4">
+                                        <div class="col-12 md:col-6 p-2">
+                                            <div
+                                                class="surface-ground p-4 border-round-2xl border-1 border-200 shadow-1 h-full">
+                                                <div class="flex align-items-center justify-content-between mb-4">
                                                     <div class="flex align-items-center gap-2">
-                                                        <i class="pi pi-shopping-bag text-blue-600 text-xl"></i>
-                                                        <h4 class="m-0 font-bold text-gray-700">Recent Orders</h4>
+                                                        <i
+                                                            class="pi pi-shopping-bag text-blue-600 text-xl border-circle bg-white p-2 shadow-1"></i>
+                                                        <h4 class="m-0 font-bold text-800">Recent Orders</h4>
                                                     </div>
                                                     <span
-                                                        class="text-xs font-bold px-2 py-1 bg-blue-100 text-blue-700 border-round">2
+                                                        class="text-xs font-bold px-2 py-1 bg-blue-100 text-blue-700 border-round-3xl shadow-1">2
                                                         Active</span>
                                                 </div>
-                                                <div class="flex flex-column gap-3">
+                                                <div class="flex flex-column gap-3 mb-4">
                                                     <div
-                                                        class="flex align-items-center justify-content-between p-2 surface-card border-round shadow-1">
+                                                        class="flex align-items-center justify-content-between p-3 surface-card border-round-xl shadow-1 hover:shadow-2 transition-all">
                                                         <div class="flex align-items-center gap-3">
                                                             <div
-                                                                class="w-2rem h-2rem bg-gray-100 border-round flex align-items-center justify-content-center">
-                                                                <i class="pi pi-image text-400"></i>
+                                                                class="w-3rem h-3rem bg-gray-100 border-round-lg flex align-items-center justify-content-center">
+                                                                <i class="pi pi-image text-500"></i>
                                                             </div>
-                                                            <div class="flex flex-column">
-                                                                <span class="text-xs font-bold text-gray-800">Fresh
+                                                            <div class="flex flex-column gap-1">
+                                                                <span
+                                                                    class="text-sm font-bold text-800 line-height-1">Fresh
                                                                     Tomatoes (50kg)</span>
-                                                                <span class="text-100 text-600"
-                                                                    style="font-size: 10px;">ORD-7721 • Paid</span>
-                                                            </div>
-                                                        </div>
-                                                        <span class="text-xs font-bold text-emerald-600">Shipped</span>
-                                                    </div>
-                                                    <div
-                                                        class="flex align-items-center justify-content-between p-2 surface-card border-round shadow-1">
-                                                        <div class="flex align-items-center gap-3">
-                                                            <div
-                                                                class="w-2rem h-2rem bg-gray-100 border-round flex align-items-center justify-content-center">
-                                                                <i class="pi pi-image text-400"></i>
-                                                            </div>
-                                                            <div class="flex flex-column">
-                                                                <span class="text-xs font-bold text-gray-800">Organic
-                                                                    Wheat (200kg)</span>
-                                                                <span class="text-100 text-600"
-                                                                    style="font-size: 10px;">ORD-6540 • COD</span>
+                                                                <span class="text-xs font-medium text-500">ORD-7721 •
+                                                                    Paid</span>
                                                             </div>
                                                         </div>
                                                         <span
-                                                            class="text-xs font-bold text-orange-600">Processing</span>
+                                                            class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 border-round-lg">Shipped</span>
+                                                    </div>
+                                                    <div
+                                                        class="flex align-items-center justify-content-between p-3 surface-card border-round-xl shadow-1 hover:shadow-2 transition-all">
+                                                        <div class="flex align-items-center gap-3">
+                                                            <div
+                                                                class="w-3rem h-3rem bg-gray-100 border-round-lg flex align-items-center justify-content-center">
+                                                                <i class="pi pi-image text-500"></i>
+                                                            </div>
+                                                            <div class="flex flex-column gap-1">
+                                                                <span
+                                                                    class="text-sm font-bold text-800 line-height-1">Organic
+                                                                    Wheat (200kg)</span>
+                                                                <span class="text-xs font-medium text-500">ORD-6540 •
+                                                                    COD</span>
+                                                            </div>
+                                                        </div>
+                                                        <span
+                                                            class="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 border-round-lg">Processing</span>
                                                     </div>
                                                 </div>
                                                 <p-button label="View All Orders" icon="pi pi-external-link"
-                                                    [text]="true" class="mt-3 block text-center"></p-button>
+                                                    [text]="true" styleClass="w-full font-bold"></p-button>
                                             </div>
                                         </div>
-                                        <div class="col-12 md:col-6">
-                                            <div class="surface-ground p-4 border-round-xl border-1 border-200">
-                                                <div class="flex align-items-center justify-content-between mb-3">
+                                        <div class="col-12 md:col-6 p-2">
+                                            <div
+                                                class="surface-ground p-4 border-round-2xl border-1 border-200 shadow-1 h-full">
+                                                <div class="flex align-items-center justify-content-between mb-4">
                                                     <div class="flex align-items-center gap-2">
-                                                        <i class="pi pi-heart text-pink-600 text-xl"></i>
-                                                        <h4 class="m-0 font-bold text-gray-700">Wishlist</h4>
+                                                        <i
+                                                            class="pi pi-heart text-pink-600 text-xl border-circle bg-white p-2 shadow-1"></i>
+                                                        <h4 class="m-0 font-bold text-800">Wishlist</h4>
                                                     </div>
-                                                    <span class="text-xs font-bold text-500">3 Items</span>
+                                                    <span class="text-xs font-bold text-600">3 Items</span>
                                                 </div>
-                                                <div class="flex flex-column gap-3">
+                                                <div class="flex flex-column gap-3 mb-4">
                                                     <div
-                                                        class="flex align-items-center gap-3 p-2 surface-card border-round shadow-1">
+                                                        class="flex align-items-center gap-3 p-3 surface-card border-round-xl shadow-1 hover:shadow-2 transition-all">
                                                         <div
-                                                            class="w-2rem h-2rem bg-gray-100 border-round flex align-items-center justify-content-center">
-                                                            <i class="pi pi-image text-400"></i>
+                                                            class="w-3rem h-3rem bg-gray-100 border-round-lg flex align-items-center justify-content-center">
+                                                            <i class="pi pi-image text-500"></i>
                                                         </div>
-                                                        <div class="flex-1 flex flex-column">
-                                                            <span class="text-xs font-bold text-gray-800">Premium
+                                                        <div class="flex-1 flex flex-column gap-1">
+                                                            <span
+                                                                class="text-sm font-bold text-800 line-height-1">Premium
                                                                 Apples</span>
-                                                            <span class="text-xs text-emerald-600 font-bold">Rs. 250
+                                                            <span class="text-sm text-green-600 font-bold">Rs. 250
                                                                 /kg</span>
                                                         </div>
-                                                        <i class="pi pi-cart-plus text-blue-600 cursor-pointer"></i>
+                                                        <p-button icon="pi pi-cart-plus" [text]="true" [rounded]="true"
+                                                            severity="info"></p-button>
                                                     </div>
                                                     <div
-                                                        class="flex align-items-center gap-3 p-2 surface-card border-round shadow-1">
+                                                        class="flex align-items-center gap-3 p-3 surface-card border-round-xl shadow-1 hover:shadow-2 transition-all">
                                                         <div
-                                                            class="w-2rem h-2rem bg-gray-100 border-round flex align-items-center justify-content-center">
-                                                            <i class="pi pi-image text-400"></i>
+                                                            class="w-3rem h-3rem bg-gray-100 border-round-lg flex align-items-center justify-content-center">
+                                                            <i class="pi pi-image text-500"></i>
                                                         </div>
-                                                        <div class="flex-1 flex flex-column">
-                                                            <span class="text-xs font-bold text-gray-800">Red Onions
-                                                                Bulk</span>
-                                                            <span class="text-xs text-emerald-600 font-bold">Rs. 80
+                                                        <div class="flex-1 flex flex-column gap-1">
+                                                            <span class="text-sm font-bold text-800 line-height-1">Red
+                                                                Onions Bulk</span>
+                                                            <span class="text-sm text-green-600 font-bold">Rs. 80
                                                                 /kg</span>
                                                         </div>
-                                                        <i class="pi pi-cart-plus text-blue-600 cursor-pointer"></i>
+                                                        <p-button icon="pi pi-cart-plus" [text]="true" [rounded]="true"
+                                                            severity="info"></p-button>
                                                     </div>
                                                 </div>
                                                 <p-button label="Go to Marketplace" icon="pi pi-shopping-bag"
-                                                    [text]="true" class="mt-3 block text-center"></p-button>
+                                                    [text]="true" styleClass="w-full font-bold"></p-button>
                                             </div>
                                         </div>
                                     </div>
@@ -267,49 +306,55 @@
 
                             <p-tabpanel value="1" class="pt-5">
                                 <form [formGroup]="passwordForm" (ngSubmit)="updatePassword()"
-                                    class="flex flex-column gap-6 max-w-lg">
+                                    class="flex flex-column gap-5 max-w-lg surface-ground p-5 border-round-2xl border-1 border-200">
                                     <div>
-                                        <h3 class="m-0 font-bold text-gray-800">Change Password</h3>
-                                        <p class="text-sm text-500 mt-1">Ensure your account is using a long, random
-                                            password to stay secure.</p>
+                                        <h3 class="m-0 font-bold text-900 text-xl border-bottom-1 border-300 pb-3">
+                                            Change Password</h3>
+                                        <p class="text-sm text-600 mt-3 font-medium line-height-3">Ensure your account
+                                            is using a long, random password to stay secure.</p>
                                     </div>
 
                                     <div class="flex flex-column gap-4">
                                         <div class="flex flex-column gap-2">
-                                            <label class="text-sm font-semibold">Current Password</label>
+                                            <label class="text-sm font-bold text-800">Current Password</label>
                                             <p-password formControlName="currentPassword" [feedback]="false"
                                                 [toggleMask]="true" styleClass="w-full"
-                                                inputStyleClass="w-full"></p-password>
+                                                inputStyleClass="w-full p-3 border-round-lg custom-input"></p-password>
                                         </div>
 
-                                        <p-divider></p-divider>
+                                        <p-divider styleClass="m-0"></p-divider>
 
                                         <div class="flex flex-column gap-2">
-                                            <label class="text-sm font-semibold">New Password</label>
+                                            <label class="text-sm font-bold text-800">New Password</label>
                                             <p-password formControlName="newPassword" [toggleMask]="true"
-                                                styleClass="w-full" inputStyleClass="w-full"
+                                                styleClass="w-full"
+                                                inputStyleClass="w-full p-3 border-round-lg custom-input"
                                                 placeholder="At least 6 characters"></p-password>
-                                            <small class="p-error"
-                                                *ngIf="passwordForm.get('newPassword')?.touched && passwordForm.get('newPassword')?.errors?.['minlength']">
+                                            @if(passwordForm.get('newPassword')?.touched &&
+                                            passwordForm.get('newPassword')?.errors?.['minlength']) {
+                                            <small class="p-error font-bold">
                                                 Password must be at least 6 characters.
                                             </small>
+                                            }
                                         </div>
 
                                         <div class="flex flex-column gap-2">
-                                            <label class="text-sm font-semibold">Confirm New Password</label>
+                                            <label class="text-sm font-bold text-800">Confirm New Password</label>
                                             <p-password formControlName="confirmPassword" [feedback]="false"
                                                 [toggleMask]="true" styleClass="w-full"
-                                                inputStyleClass="w-full"></p-password>
-                                            <small class="p-error"
-                                                *ngIf="passwordForm.errors?.['mismatch'] && passwordForm.get('confirmPassword')?.touched">
+                                                inputStyleClass="w-full p-3 border-round-lg custom-input"></p-password>
+                                            @if(passwordForm.errors?.['mismatch'] &&
+                                            passwordForm.get('confirmPassword')?.touched) {
+                                            <small class="p-error font-bold">
                                                 Passwords do not match.
                                             </small>
+                                            }
                                         </div>
                                     </div>
 
-                                    <div class="flex justify-content-end mt-4">
+                                    <div class="flex justify-content-end mt-2">
                                         <p-button type="submit" label="Save Changes" [loading]="loading"
-                                            icon="pi pi-check" rounded="true"></p-button>
+                                            icon="pi pi-check" [rounded]="true" styleClass="px-5 shadow-3"></p-button>
                                     </div>
                                 </form>
                             </p-tabpanel>
@@ -320,21 +365,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .account-bg {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        min-height: calc(100vh - 80px);
-    }
-
-    .info-item {
-        padding: 0.75rem;
-        border-radius: 12px;
-        background-color: #f8fafc;
-        transition: transform 0.2s;
-    }
-
-    .info-item:hover {
-        transform: translateX(5px);
-    }
-</style>

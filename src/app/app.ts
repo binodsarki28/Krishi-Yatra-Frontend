@@ -27,8 +27,9 @@ export class AppComponent {
       const isAccount = url.includes('/account');
       const isAdmin = url.includes('/admin');
       const isProfile = url.includes('/profile');
+      const isRegister = url.includes('/register');
 
-      this.showFooter = !isAccount && !isAdmin && !isProfile;
+      this.showFooter = !isAccount && !isAdmin && !isProfile && !isRegister;
       this.showNavbar = !isAccount && !isAdmin;
     });
   }
