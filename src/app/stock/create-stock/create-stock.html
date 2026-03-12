@@ -1,0 +1,130 @@
+<div class="fadein animation-duration-300">
+    <!-- Header: Explicitly matching Admin Dashboard pattern -->
+    <div class="flex align-items-center justify-content-between mb-4">
+        <div class="flex align-items-center gap-3">
+            <div class="flex align-items-center justify-content-center border-round-xl"
+                style="width:38px; height:38px; background: linear-gradient(135deg, #22c55e, #16a34a);">
+                <i class="pi pi-plus text-white" style="font-size: 18px;"></i>
+            </div>
+            <div>
+                <h2 class="m-0 text-xl font-bold text-900">List New Farm Stock</h2>
+                <p class="m-0 mt-1 text-xs text-500">Fill in the details below to list your product for sale</p>
+            </div>
+        </div>
+        <p-button icon="pi pi-times" label="Cancel" [outlined]="true" severity="secondary"
+            size="small" styleClass="border-round-lg" [routerLink]="['/farmer/stocks/my-stocks']"></p-button>
+    </div>
+
+    <!-- Form -->
+    <div class="surface-card border-round-xl border-1 border-200 p-4 shadow-1 mx-auto" style="max-width: 900px;">
+        <form [formGroup]="stockForm" (ngSubmit)="onSubmit()">
+            <div class="grid row-gap-4">
+                <!-- Row 1 -->
+                <div class="col-12 md:col-4 relative">
+                    <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Stock Name</label>
+                    <div class="field-with-icon">
+                        <i class="pi pi-box"></i>
+                        <input pInputText formControlName="stockName" placeholder="e.g. Fresh Red Tomatoes" 
+                            class="w-full text-sm border-round-lg" />
+                    </div>
+                    @if (stockForm.get('stockName')?.invalid && stockForm.get('stockName')?.touched) {
+                        <small class="validation-error">Required (min 3 chars)</small>
+                    }
+                </div>
+
+                <div class="col-12 md:col-4 relative">
+                    <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Product Name</label>
+                    <div class="field-with-icon">
+                        <i class="pi pi-shopping-bag"></i>
+                        <input pInputText formControlName="productName" placeholder="e.g. Tomato" 
+                            class="w-full text-sm border-round-lg" />
+                    </div>
+                    @if (stockForm.get('productName')?.invalid && stockForm.get('productName')?.touched) {
+                        <small class="validation-error">Product name is required</small>
+                    }
+                </div>
+
+                <div class="col-12 md:col-4 relative">
+                    <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Category</label>
+                    <div class="field-with-icon">
+                        <i class="pi pi-tag"></i>
+                        <p-select [options]="categories" formControlName="categoryId" optionLabel="categoryName" optionValue="categoryId"
+                            placeholder="Select Category" (onChange)="onCategoryChange()" [filter]="true"
+                            styleClass="w-full border-round-lg shadow-none"></p-select>
+                    </div>
+                    @if (stockForm.get('categoryId')?.invalid && stockForm.get('categoryId')?.touched) {
+                        <small class="validation-error">Category is required</small>
+                    }
+                </div>
+
+                <!-- Row 2 -->
+                <div class="col-12 md:col-4 relative">
+                    <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Sub Category</label>
+                    <div class="field-with-icon">
+                        <i class="pi pi-tags"></i>
+                        <p-select [options]="subCategoriesFiltered" formControlName="subCategoryId" optionLabel="subCategoryName" optionValue="subCategoryId"
+                            placeholder="Select Sub Category" [disabled]="!stockForm.get('categoryId')?.value" [filter]="true"
+                            styleClass="w-full border-round-lg shadow-none"></p-select>
+                    </div>
+                    @if (stockForm.get('subCategoryId')?.invalid && stockForm.get('subCategoryId')?.touched) {
+                        <small class="validation-error">Sub-category is required</small>
+                    }
+                </div>
+
+                <div class="col-12 md:col-4 relative">
+                    <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Quantity (Units)</label>
+                    <div class="field-with-icon">
+                        <i class="pi pi-info-circle"></i>
+                        <p-inputNumber formControlName="quantity" placeholder="Quantity" 
+                            styleClass="w-full" inputStyleClass="w-full border-round-lg text-sm" inputId="quantity"></p-inputNumber>
+                    </div>
+                    @if (stockForm.get('quantity')?.invalid && stockForm.get('quantity')?.touched) {
+                        <small class="validation-error">Quantity must be at least 1</small>
+                    }
+                </div>
+
+                <div class="col-12 md:col-4 relative">
+                    <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Price Per (Rs.)</label>
+                    <div class="field-with-icon">
+                        <i class="pi pi-dollar"></i>
+                        <p-inputNumber formControlName="pricePerUnit" placeholder="Price" 
+                            styleClass="w-full" inputStyleClass="w-full border-round-lg text-sm" inputId="price"></p-inputNumber>
+                    </div>
+                    @if (stockForm.get('pricePerUnit')?.invalid && stockForm.get('pricePerUnit')?.touched) {
+                        <small class="validation-error">Price is required</small>
+                    }
+                </div>
+
+                <!-- Images & Description -->
+                <div class="col-12 relative">
+                    <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Stock Images (URLs)</label>
+                    <div class="field-with-icon">
+                        <i class="pi pi-image"></i>
+                        <input pInputText formControlName="stockImages" placeholder="Image URL (comma separated)" 
+                            class="w-full text-sm border-round-lg" />
+                    </div>
+                </div>
+
+                <div class="col-12 relative pb-2">
+                    <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Detailed Description</label>
+                    <textarea pTextarea formControlName="description" rows="3" placeholder="Tell us more about your stock..." 
+                        class="w-full text-sm border-round-lg shadow-none text-900 border-1 border-300 p-3 bg-white"></textarea>
+                    @if (stockForm.get('description')?.invalid && stockForm.get('description')?.touched) {
+                        <small class="validation-error">Description is required</small>
+                    }
+                </div>
+            </div>
+
+            <!-- Footer: Actions -->
+            <div class="flex justify-content-end gap-2 mt-5">
+                <p-button label="Discard" icon="pi pi-times" [outlined]="true" severity="secondary" 
+                    [routerLink]="['/farmer/stocks/my-stocks']" styleClass="border-round-lg px-4"></p-button>
+                <p-button type="submit" label="List Stock" icon="pi pi-check" 
+                    [loading]="submitting" [disabled]="stockForm.invalid" 
+                    severity="success" styleClass="border-round-lg px-5"></p-button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<p-toast></p-toast>

@@ -38,4 +38,14 @@ export class Endpoint {
   public static readonly BLOCK_DELIVERY: string = Endpoint.API_VERSION + 'delivery/block-unblock/';
   public static readonly DELIVERY_DETAIL: string = Endpoint.API_VERSION + 'delivery/detail/';
 
+  //Stock
+  public static readonly STOCK_LIST: string = Endpoint.API_VERSION + 'stock/list';
+  public static readonly STOCK_CREATE: string = Endpoint.API_VERSION + 'stock/create';
+  public static readonly STOCK_UPDATE: string = Endpoint.API_VERSION + 'stock/update';
+  public static readonly STOCK_DELETE: string = Endpoint.API_VERSION + 'stock/delete/';
+  public static readonly STOCK_DETAILS: string = Endpoint.API_VERSION + 'stock/details/';
+  public static readonly MY_STOCKS: string = Endpoint.API_VERSION + 'stock/my-stocks';
+  public static readonly CATEGORIES: string = Endpoint.API_VERSION + 'stock/categories';
+  public static readonly SUB_CATEGORIES: string = Endpoint.API_VERSION + 'stock/subcategories';
+
 }

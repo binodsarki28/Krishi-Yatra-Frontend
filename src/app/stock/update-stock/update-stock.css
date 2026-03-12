@@ -1,0 +1,77 @@
+/* 1. Container Strategy */
+.field-with-icon {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* 2. Icon Positioning - Top level to ensure it sits above everything */
+.field-with-icon i {
+    position: absolute !important;
+    left: 12px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 20 !important; /* Higher than input background */
+    pointer-events: none !important;
+    color: #94a3b8 !important;
+    font-size: 16px !important;
+}
+
+/* 3. Standard Text Input - Force Padding to prevent text overlap */
+.field-with-icon input.p-inputtext,
+.field-with-icon .p-inputtext {
+    padding-left: 40px !important; /* Forces text to start after the icon */
+    height: 42px !important;
+    width: 100% !important;
+    border-radius: 8px !important;
+    z-index: 1 !important;
+}
+
+/* 4. PrimeNG Components (p-select and p-inputNumber) */
+:host ::ng-deep .field-with-icon .p-select {
+    width: 100% !important;
+    height: 42px !important;
+    border-radius: 8px !important;
+    z-index: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+:host ::ng-deep .field-with-icon .p-select.p-disabled {
+    background: #f8fafc !important;
+    opacity: 1 !important;
+    border-color: #e2e8f0 !important;
+}
+
+:host ::ng-deep .field-with-icon .p-select .p-select-label {
+    padding-left: 40px !important; /* Align with text inputs */
+    display: flex !important;
+    align-items: center !important;
+    font-size: 14px !important;
+}
+
+:host ::ng-deep .field-with-icon p-inputnumber {
+    width: 100% !important;
+}
+
+:host ::ng-deep .field-with-icon .p-inputnumber .p-inputtext {
+    padding-left: 40px !important; /* Force internal input padding */
+    height: 42px !important;
+}
+
+/* 5. Validation Messages */
+.validation-error {
+    position: absolute;
+    bottom: -1.2rem;
+    left: 0.25rem;
+    font-size: 0.75rem;
+    color: #ef4444;
+}
+
+/* 6. Interaction Polish */
+:host ::ng-deep .p-inputtext:enabled:focus,
+:host ::ng-deep .p-select.p-focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 0.1rem rgba(59, 130, 246, 0.1) !important;
+}
