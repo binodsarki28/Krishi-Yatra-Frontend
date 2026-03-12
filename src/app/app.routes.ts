@@ -20,6 +20,16 @@ export const routes: Routes = [
         canActivate: [publicGuard],
     },
 
+    // ── Admin Login ───────────────────────────────────────────────
+    {
+        path: 'admin-login',
+        loadComponent: () =>
+            import('./admin/login/login').then(
+                (m) => m.AdminLoginComponent
+            ),
+        canActivate: [publicGuard],
+    },
+
     // ── Protected ─────────────────────────────────────────────────
     {
         path: 'profile',

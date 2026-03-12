@@ -117,4 +117,13 @@ export class AccountService {
         return this.http.post<IResponse>(url, request);
     }
 
+    /**
+     * GET /api/v1/user/me
+     * Fetches the latest user details including verified roles.
+     */
+    getCurrentUser(): Observable<IResponseWithObject> {
+        const url: string = GenerateUrlUtils.generateUrl(Endpoint.GET_ME);
+        return this.http.get<IResponseWithObject>(url);
+    }
+
 }

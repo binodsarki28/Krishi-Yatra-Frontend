@@ -11,12 +11,12 @@ import { Router, RouterModule } from '@angular/router';
 import { RippleModule } from 'primeng/ripple';
 import { finalize } from 'rxjs';
 
-import { AccountService } from '../account.service';
-import { ToastService } from '../../../util/toast.service';
-import { IJwtResponse, RoleType } from '../IAccount';
+import { AccountService } from '../../components/account/account.service';
+import { ToastService } from '../../util/toast.service';
+import { IJwtResponse, RoleType } from '../../components/account/IAccount';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-admin-login',
   standalone: true,
   imports: [
     CommonModule,
@@ -33,7 +33,7 @@ import { IJwtResponse, RoleType } from '../IAccount';
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
-export class LoginComponent {
+export class AdminLoginComponent {
   loginForm: FormGroup;
   loading: boolean = false;
 
@@ -84,19 +84,13 @@ export class LoginComponent {
           this.accountService.updateLoginStatus();
           this.toastService.successResponse(res);
           if (jwt.roles.includes(RoleType.ADMIN)) {
-            // Log out and show error if an admin tries to login through normal login page
+            this.router.navigate(['/admin']);
+          } else {
+            // Log out and show error if a normal user tries to login through admin login page
             localStorage.clear();
             this.accountService.updateLoginStatus();
             this.toastService.warningResponse('Invalid username or password');
-            return;
-          } else if (jwt.roles.includes(RoleType.FARMER) && jwt.verifiedRoles?.includes(RoleType.FARMER)) {
-            this.router.navigate(['/farmer/dashboard']);
-          } else if (jwt.roles.includes(RoleType.DELIVERY) && jwt.verifiedRoles?.includes(RoleType.DELIVERY)) {
-            this.router.navigate(['/delivery/dashboard']);
-          } else if (jwt.roles.includes(RoleType.BUYER) && jwt.verifiedRoles?.includes(RoleType.BUYER)) {
-            this.router.navigate(['/']);
-          } else {
-            this.router.navigate(['/profile']);
+            this.router.navigate(['/admin-login']);
           }
         },
         error: (err) => {

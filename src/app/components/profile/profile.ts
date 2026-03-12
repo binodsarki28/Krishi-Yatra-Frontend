@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { AccountService } from '../account/account.service';
+import { IJwtResponse } from '../account/IAccount';
 import { ToastService } from '../../util/toast.service';
 import { TabsModule } from 'primeng/tabs';
 import { DividerModule } from 'primeng/divider';
@@ -49,7 +50,18 @@ export class ProfileComponent implements OnInit {
     }, { validators: this.passwordMatchValidator });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.accountService.getCurrentUser().subscribe({
+        next: (res) => {
+          const jwt = res.response as IJwtResponse;
+          if (jwt.roles) localStorage.setItem('roles', JSON.stringify(jwt.roles));
+          if (jwt.verifiedRoles) localStorage.setItem('verifiedRoles', JSON.stringify(jwt.verifiedRoles));
+        },
+        error: (err) => console.error('Failed to sync user roles:', err)
+      });
+    }
+  }
 
   passwordMatchValidator(g: FormGroup) {
     return g.get('newPassword')?.value === g.get('confirmPassword')?.value

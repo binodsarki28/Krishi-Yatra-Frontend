@@ -11,6 +11,8 @@ export class Endpoint {
     Endpoint.API_VERSION + 'user/verify-otp';
   public static readonly RESEND_OTP: string =
     Endpoint.API_VERSION + 'user/resend-otp';
+  public static readonly GET_ME: string =
+    Endpoint.API_VERSION + 'user/me';
 
   //Farmer
   public static readonly REGISTER_FARMER: string = Endpoint.API_VERSION + 'farmer/register';
