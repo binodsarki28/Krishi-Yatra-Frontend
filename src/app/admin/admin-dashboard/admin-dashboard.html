@@ -1,178 +1,231 @@
-<div class="admin-layout">
+<div class="flex h-screen surface-ground overflow-hidden" style="font-family: 'Inter', 'Segoe UI', sans-serif;">
     <!-- Sidebar -->
-    <aside class="admin-sidebar">
-        <div class="sidebar-header">
-            <div class="logo-wrapper">
-                <div class="logo-icon-wrap">
-                    <i class="pi pi-shield"></i>
+    <aside class="flex flex-column flex-shrink-0 surface-card border-right-1 border-200"
+        style="width: 272px; box-shadow: 2px 0 12px rgba(0,0,0,0.03);">
+
+        <!-- Sidebar Header -->
+        <div class="p-3 border-bottom-1 border-200">
+            <div class="flex align-items-center gap-3">
+                <div class="flex align-items-center justify-content-center border-round-xl"
+                    style="width:40px; height:40px; background: linear-gradient(135deg, #22c55e, #16a34a);">
+                    <i class="pi pi-shield text-white" style="font-size: 18px;"></i>
                 </div>
                 <div>
-                    <h1 class="logo-title">KrishiYatra</h1>
-                    <p class="logo-subtitle">Admin Dashboard</p>
+                    <h1 class="m-0 text-lg font-bold text-900" style="letter-spacing: -0.3px;">KrishiYatra</h1>
+                    <p class="m-0 mt-1 text-xs text-500 font-medium">Admin Dashboard</p>
                 </div>
             </div>
         </div>
 
-        <nav class="sidebar-nav">
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto p-3">
             <!-- Dashboard -->
-            <a class="nav-item" routerLink="/admin" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active">
-                <i class="pi pi-th-large nav-item-icon"></i>
-                <span class="nav-item-label">Dashboard</span>
+            <a class="flex align-items-center gap-2 px-3 py-2 border-round-lg text-600 no-underline text-sm font-semibold mb-1 nav-item"
+                routerLink="/admin" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active-nav">
+                <i class="pi pi-th-large" style="font-size: 16px;"></i>
+                <span>Dashboard</span>
             </a>
 
             <!-- Farmer Management Group -->
-            <div class="nav-group" [class.expanded]="expandedGroup === 'farmer'">
-                <button class="nav-group-header" (click)="toggleGroup('farmer')">
-                    <div class="nav-group-left">
-                        <div class="group-icon farmer-group">
-                            <i class="pi pi-users"></i>
+            <div class="mb-1" [class.expanded]="expandedGroup === 'farmer'">
+                <button
+                    class="flex align-items-center justify-content-between w-full px-3 py-2 border-round-lg border-none bg-transparent text-700 text-sm font-semibold cursor-pointer nav-group-header"
+                    (click)="toggleGroup('farmer')">
+                    <div class="flex align-items-center gap-2">
+                        <div class="flex align-items-center justify-content-center border-round-lg bg-green-50 text-green-600"
+                            style="width:32px; height:32px;">
+                            <i class="pi pi-users" style="font-size: 14px;"></i>
                         </div>
                         <span>Farmer Management</span>
                     </div>
-                    <i class="pi pi-chevron-down group-arrow"></i>
+                    <i class="pi pi-chevron-down text-400 group-arrow"
+                        [style.transform]="expandedGroup === 'farmer' ? 'rotate(180deg)' : 'none'"
+                        style="font-size: 10px; transition: transform 0.25s ease;"></i>
                 </button>
-                <div class="nav-group-items">
-                    <a class="nav-sub-item" routerLink="/admin/farmers" routerLinkActive="active">
-                        <i class="pi pi-list"></i>
+                <div class="pl-4 nav-group-items" [style.max-height]="expandedGroup === 'farmer' ? '200px' : '0'"
+                    style="overflow: hidden; transition: max-height 0.25s ease;">
+                    <a class="flex align-items-center gap-2 px-3 py-2 border-round-md text-600 no-underline text-xs font-medium my-1 nav-sub-item"
+                        routerLink="/admin/farmers" routerLinkActive="active-nav">
+                        <i class="pi pi-list" style="font-size: 12px;"></i>
                         <span>Manage Farmers</span>
                     </a>
                 </div>
             </div>
 
             <!-- Buyer Management Group -->
-            <div class="nav-group" [class.expanded]="expandedGroup === 'buyer'">
-                <button class="nav-group-header" (click)="toggleGroup('buyer')">
-                    <div class="nav-group-left">
-                        <div class="group-icon buyer-group">
-                            <i class="pi pi-shopping-bag"></i>
+            <div class="mb-1" [class.expanded]="expandedGroup === 'buyer'">
+                <button
+                    class="flex align-items-center justify-content-between w-full px-3 py-2 border-round-lg border-none bg-transparent text-700 text-sm font-semibold cursor-pointer nav-group-header"
+                    (click)="toggleGroup('buyer')">
+                    <div class="flex align-items-center gap-2">
+                        <div class="flex align-items-center justify-content-center border-round-lg bg-blue-50 text-blue-600"
+                            style="width:32px; height:32px;">
+                            <i class="pi pi-shopping-bag" style="font-size: 14px;"></i>
                         </div>
                         <span>Buyer Management</span>
                     </div>
-                    <i class="pi pi-chevron-down group-arrow"></i>
+                    <i class="pi pi-chevron-down text-400 group-arrow"
+                        [style.transform]="expandedGroup === 'buyer' ? 'rotate(180deg)' : 'none'"
+                        style="font-size: 10px; transition: transform 0.25s ease;"></i>
                 </button>
-                <div class="nav-group-items">
-                    <a class="nav-sub-item" routerLink="/admin/buyers" routerLinkActive="active">
-                        <i class="pi pi-list"></i>
+                <div class="pl-4 nav-group-items" [style.max-height]="expandedGroup === 'buyer' ? '200px' : '0'"
+                    style="overflow: hidden; transition: max-height 0.25s ease;">
+                    <a class="flex align-items-center gap-2 px-3 py-2 border-round-md text-600 no-underline text-xs font-medium my-1 nav-sub-item"
+                        routerLink="/admin/buyers" routerLinkActive="active-nav">
+                        <i class="pi pi-list" style="font-size: 12px;"></i>
                         <span>Manage Buyers</span>
                     </a>
                 </div>
             </div>
 
             <!-- Delivery Management Group -->
-            <div class="nav-group" [class.expanded]="expandedGroup === 'delivery'">
-                <button class="nav-group-header" (click)="toggleGroup('delivery')">
-                    <div class="nav-group-left">
-                        <div class="group-icon delivery-group">
-                            <i class="pi pi-truck"></i>
+            <div class="mb-1" [class.expanded]="expandedGroup === 'delivery'">
+                <button
+                    class="flex align-items-center justify-content-between w-full px-3 py-2 border-round-lg border-none bg-transparent text-700 text-sm font-semibold cursor-pointer nav-group-header"
+                    (click)="toggleGroup('delivery')">
+                    <div class="flex align-items-center gap-2">
+                        <div class="flex align-items-center justify-content-center border-round-lg bg-orange-50 text-orange-600"
+                            style="width:32px; height:32px;">
+                            <i class="pi pi-truck" style="font-size: 14px;"></i>
                         </div>
                         <span>Delivery Management</span>
                     </div>
-                    <i class="pi pi-chevron-down group-arrow"></i>
+                    <i class="pi pi-chevron-down text-400 group-arrow"
+                        [style.transform]="expandedGroup === 'delivery' ? 'rotate(180deg)' : 'none'"
+                        style="font-size: 10px; transition: transform 0.25s ease;"></i>
                 </button>
-                <div class="nav-group-items">
-                    <a class="nav-sub-item" routerLink="/admin/delivery" routerLinkActive="active">
-                        <i class="pi pi-list"></i>
+                <div class="pl-4 nav-group-items" [style.max-height]="expandedGroup === 'delivery' ? '200px' : '0'"
+                    style="overflow: hidden; transition: max-height 0.25s ease;">
+                    <a class="flex align-items-center gap-2 px-3 py-2 border-round-md text-600 no-underline text-xs font-medium my-1 nav-sub-item"
+                        routerLink="/admin/delivery" routerLinkActive="active-nav">
+                        <i class="pi pi-list" style="font-size: 12px;"></i>
                         <span>Manage Partners</span>
                     </a>
                 </div>
             </div>
         </nav>
 
-        <div class="sidebar-footer">
-            <button class="logout-btn" (click)="logout()">
-                <i class="pi pi-sign-out"></i>
-                <span>Logout Admin</span>
-            </button>
+        <!-- Sidebar Footer -->
+        <div class="p-3 border-top-1 border-200">
+            <p-button label="Logout Admin" icon="pi pi-sign-out" severity="danger" [outlined]="true"
+                styleClass="w-full font-semibold border-round-xl" (onClick)="logout()"></p-button>
         </div>
     </aside>
 
     <!-- Main Content -->
-    <main class="admin-main">
+    <main class="flex-1 overflow-y-auto p-4 md:p-5 surface-ground">
         <!-- Child route content -->
         <router-outlet></router-outlet>
 
         <!-- Default dashboard home -->
         @if (isDefaultRoute) {
-        <div class="dashboard-home">
+        <div class="fadein animation-duration-300">
             <!-- Stats Row -->
-            <div class="stats-row">
-                <div class="stat-card">
-                    <div class="stat-left">
-                        <span class="stat-label">Pending Farmers</span>
-                        <span class="stat-value">{{ pendingFarmers }}</span>
-                    </div>
-                    <div class="stat-icon-box stat-green">
-                        <i class="pi pi-users"></i>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-left">
-                        <span class="stat-label">Pending Buyers</span>
-                        <span class="stat-value">{{ pendingBuyers }}</span>
-                    </div>
-                    <div class="stat-icon-box stat-blue">
-                        <i class="pi pi-shopping-bag"></i>
+            <div class="grid mb-4">
+                <div class="col-12 md:col-6 lg:col-3">
+                    <div
+                        class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between hover:shadow-3 transition-all transition-duration-200">
+                        <div class="flex flex-column gap-1">
+                            <span class="text-xs text-500 font-medium">Pending Farmers</span>
+                            <span class="text-3xl font-bold text-900" style="letter-spacing: -0.5px; line-height: 1;">{{
+                                pendingFarmers }}</span>
+                        </div>
+                        <div class="flex align-items-center justify-content-center border-round-xl"
+                            style="width:44px; height:44px; background: linear-gradient(135deg, #22c55e, #16a34a);">
+                            <i class="pi pi-users text-white" style="font-size: 18px;"></i>
+                        </div>
                     </div>
                 </div>
 
-                <div class="stat-card">
-                    <div class="stat-left">
-                        <span class="stat-label">Pending Delivery</span>
-                        <span class="stat-value">{{ pendingDelivery }}</span>
-                    </div>
-                    <div class="stat-icon-box stat-orange">
-                        <i class="pi pi-truck"></i>
+                <div class="col-12 md:col-6 lg:col-3">
+                    <div
+                        class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between hover:shadow-3 transition-all transition-duration-200">
+                        <div class="flex flex-column gap-1">
+                            <span class="text-xs text-500 font-medium">Pending Buyers</span>
+                            <span class="text-3xl font-bold text-900" style="letter-spacing: -0.5px; line-height: 1;">{{
+                                pendingBuyers }}</span>
+                        </div>
+                        <div class="flex align-items-center justify-content-center border-round-xl"
+                            style="width:44px; height:44px; background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                            <i class="pi pi-shopping-bag text-white" style="font-size: 18px;"></i>
+                        </div>
                     </div>
                 </div>
 
-                <div class="stat-card">
-                    <div class="stat-left">
-                        <span class="stat-label">Total Pending</span>
-                        <span class="stat-value">{{ pendingFarmers + pendingBuyers + pendingDelivery }}</span>
+                <div class="col-12 md:col-6 lg:col-3">
+                    <div
+                        class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between hover:shadow-3 transition-all transition-duration-200">
+                        <div class="flex flex-column gap-1">
+                            <span class="text-xs text-500 font-medium">Pending Delivery</span>
+                            <span class="text-3xl font-bold text-900" style="letter-spacing: -0.5px; line-height: 1;">{{
+                                pendingDelivery }}</span>
+                        </div>
+                        <div class="flex align-items-center justify-content-center border-round-xl"
+                            style="width:44px; height:44px; background: linear-gradient(135deg, #f59e0b, #d97706);">
+                            <i class="pi pi-truck text-white" style="font-size: 18px;"></i>
+                        </div>
                     </div>
-                    <div class="stat-icon-box stat-red">
-                        <i class="pi pi-exclamation-triangle"></i>
+                </div>
+
+                <div class="col-12 md:col-6 lg:col-3">
+                    <div
+                        class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between hover:shadow-3 transition-all transition-duration-200">
+                        <div class="flex flex-column gap-1">
+                            <span class="text-xs text-500 font-medium">Total Pending</span>
+                            <span class="text-3xl font-bold text-900" style="letter-spacing: -0.5px; line-height: 1;">{{
+                                pendingFarmers + pendingBuyers +
+                                pendingDelivery }}</span>
+                        </div>
+                        <div class="flex align-items-center justify-content-center border-round-xl"
+                            style="width:44px; height:44px; background: linear-gradient(135deg, #ef4444, #dc2626);">
+                            <i class="pi pi-exclamation-triangle text-white" style="font-size: 18px;"></i>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Quick Actions -->
-            <div class="section-card">
-                <div class="section-header">
-                    <h3>Quick Actions</h3>
-                    <p>Jump to verification pages</p>
+            <div class="surface-card border-1 border-200 border-round-xl p-4">
+                <div class="mb-4">
+                    <h3 class="m-0 text-lg font-bold text-900">Quick Actions</h3>
+                    <p class="m-0 mt-1 text-sm text-500">Jump to verification pages</p>
                 </div>
-                <div class="quick-grid">
-                    <a class="quick-card" routerLink="/admin/farmers">
-                        <div class="quick-icon green-bg">
-                            <i class="pi pi-users"></i>
+                <div class="flex flex-column gap-2">
+                    <a class="flex align-items-center gap-3 p-3 surface-ground border-1 border-200 border-round-xl no-underline cursor-pointer hover:surface-hover transition-all transition-duration-200 quick-card"
+                        routerLink="/admin/farmers">
+                        <div class="flex align-items-center justify-content-center border-round-lg flex-shrink-0"
+                            style="width:42px; height:42px; background: linear-gradient(135deg, #22c55e, #16a34a);">
+                            <i class="pi pi-users text-white" style="font-size: 17px;"></i>
                         </div>
-                        <div class="quick-info">
-                            <span class="quick-title">Manage Farmers</span>
-                            <span class="quick-desc">{{ pendingFarmers }} pending verification</span>
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-900">Manage Farmers</span>
+                            <span class="block text-xs text-500 mt-1">{{ pendingFarmers }} pending verification</span>
                         </div>
-                        <i class="pi pi-arrow-right quick-arrow"></i>
+                        <i class="pi pi-arrow-right text-300" style="font-size: 12px;"></i>
                     </a>
-                    <a class="quick-card" routerLink="/admin/buyers">
-                        <div class="quick-icon blue-bg">
-                            <i class="pi pi-shopping-bag"></i>
+                    <a class="flex align-items-center gap-3 p-3 surface-ground border-1 border-200 border-round-xl no-underline cursor-pointer hover:surface-hover transition-all transition-duration-200 quick-card"
+                        routerLink="/admin/buyers">
+                        <div class="flex align-items-center justify-content-center border-round-lg flex-shrink-0"
+                            style="width:42px; height:42px; background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                            <i class="pi pi-shopping-bag text-white" style="font-size: 17px;"></i>
                         </div>
-                        <div class="quick-info">
-                            <span class="quick-title">Manage Buyers</span>
-                            <span class="quick-desc">{{ pendingBuyers }} pending verification</span>
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-900">Manage Buyers</span>
+                            <span class="block text-xs text-500 mt-1">{{ pendingBuyers }} pending verification</span>
                         </div>
-                        <i class="pi pi-arrow-right quick-arrow"></i>
+                        <i class="pi pi-arrow-right text-300" style="font-size: 12px;"></i>
                     </a>
-                    <a class="quick-card" routerLink="/admin/delivery">
-                        <div class="quick-icon orange-bg">
-                            <i class="pi pi-truck"></i>
+                    <a class="flex align-items-center gap-3 p-3 surface-ground border-1 border-200 border-round-xl no-underline cursor-pointer hover:surface-hover transition-all transition-duration-200 quick-card"
+                        routerLink="/admin/delivery">
+                        <div class="flex align-items-center justify-content-center border-round-lg flex-shrink-0"
+                            style="width:42px; height:42px; background: linear-gradient(135deg, #f59e0b, #d97706);">
+                            <i class="pi pi-truck text-white" style="font-size: 17px;"></i>
                         </div>
-                        <div class="quick-info">
-                            <span class="quick-title">Manage Delivery Partners</span>
-                            <span class="quick-desc">{{ pendingDelivery }} pending verification</span>
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-900">Manage Delivery Partners</span>
+                            <span class="block text-xs text-500 mt-1">{{ pendingDelivery }} pending verification</span>
                         </div>
-                        <i class="pi pi-arrow-right quick-arrow"></i>
+                        <i class="pi pi-arrow-right text-300" style="font-size: 12px;"></i>
                     </a>
                 </div>
             </div>

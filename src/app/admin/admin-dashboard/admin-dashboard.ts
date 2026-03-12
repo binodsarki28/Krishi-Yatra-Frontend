@@ -7,11 +7,12 @@ import { DeliveryService } from '../delivery/delivery.service';
 import { AdminAppService } from '../admin-app.service';
 import { filter } from 'rxjs';
 import { AccountService } from '../../components/account/account.service';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'app-admin-dashboard',
     standalone: true,
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, RouterModule, ButtonModule],
     templateUrl: './admin-dashboard.html',
     styleUrls: ['./admin-dashboard.css']
 })

@@ -9,11 +9,19 @@ import { BuyerService } from '../buyer.service';
 import { ToastService } from '../../../util/toast.service';
 import { IBuyerListResponse } from '../IBuyer';
 import { DetailBuyerComponent } from '../detail-buyer/detail-buyer';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { TagModule } from 'primeng/tag';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     selector: 'app-list-buyer',
     standalone: true,
-    imports: [CommonModule, DialogModule, FormsModule, TextareaModule, DetailBuyerComponent],
+    imports: [CommonModule, DialogModule, FormsModule, TextareaModule, DetailBuyerComponent,
+        TableModule, ButtonModule, TagModule, ProgressSpinnerModule, IconFieldModule, InputIconModule, InputTextModule],
     templateUrl: './list-buyer.html',
     styleUrls: ['./list-buyer.css']
 })
@@ -54,7 +62,9 @@ export class ListBuyerComponent implements OnInit {
 
     ngOnInit() {
         this.setupSearch();
-        this.loadBuyers();
+        if (isPlatformBrowser(this.platformId)) {
+            this.loadBuyers();
+        }
     }
 
     setupSearch() {

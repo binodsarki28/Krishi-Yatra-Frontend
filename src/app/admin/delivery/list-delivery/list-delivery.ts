@@ -9,11 +9,19 @@ import { DeliveryService } from '../delivery.service';
 import { ToastService } from '../../../util/toast.service';
 import { IDeliveryListResponse } from '../IDelivery';
 import { DetailDeliveryComponent } from '../detail-delivery/detail-delivery';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { TagModule } from 'primeng/tag';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     selector: 'app-list-delivery',
     standalone: true,
-    imports: [CommonModule, DialogModule, FormsModule, TextareaModule, DetailDeliveryComponent],
+    imports: [CommonModule, DialogModule, FormsModule, TextareaModule, DetailDeliveryComponent,
+        TableModule, ButtonModule, TagModule, ProgressSpinnerModule, IconFieldModule, InputIconModule, InputTextModule],
     templateUrl: './list-delivery.html',
     styleUrls: ['./list-delivery.css']
 })
@@ -33,7 +41,7 @@ export class ListDeliveryComponent implements OnInit {
         fullName: '',
         username: '',
         vehicleType: '',
-        licenseNumber: ''
+        vehicleBrand: ''
     };
     private searchSubject = new Subject<void>();
 
@@ -54,7 +62,9 @@ export class ListDeliveryComponent implements OnInit {
 
     ngOnInit() {
         this.setupSearch();
-        this.loadPartners();
+        if (isPlatformBrowser(this.platformId)) {
+            this.loadPartners();
+        }
     }
 
     setupSearch() {
@@ -80,7 +90,7 @@ export class ListDeliveryComponent implements OnInit {
             fullName: '',
             username: '',
             vehicleType: '',
-            licenseNumber: ''
+            vehicleBrand: ''
         };
         this.page = 0;
         this.loadPartners();

@@ -9,11 +9,19 @@ import { FarmerService } from '../farmer.service';
 import { ToastService } from '../../../util/toast.service';
 import { IFarmerListResponse } from '../IFarmer';
 import { DetailFarmerComponent } from '../detail-farmer/detail-farmer';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { TagModule } from 'primeng/tag';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     selector: 'app-list-farmer',
     standalone: true,
-    imports: [CommonModule, DialogModule, FormsModule, TextareaModule, DetailFarmerComponent],
+    imports: [CommonModule, DialogModule, FormsModule, TextareaModule, DetailFarmerComponent,
+        TableModule, ButtonModule, TagModule, ProgressSpinnerModule, IconFieldModule, InputIconModule, InputTextModule],
     templateUrl: './list-farmer.html',
     styleUrls: ['./list-farmer.css']
 })
@@ -54,7 +62,9 @@ export class ListFarmerComponent implements OnInit {
 
     ngOnInit() {
         this.setupSearch();
-        this.loadFarmers();
+        if (isPlatformBrowser(this.platformId)) {
+            this.loadFarmers();
+        }
     }
 
     setupSearch() {

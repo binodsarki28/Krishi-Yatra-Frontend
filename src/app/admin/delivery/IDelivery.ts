@@ -2,7 +2,7 @@ export interface IDeliveryListResponse {
     fullName: string;
     username: string;
     vehicleType: string;
-    licenseNumber: string;
+    vehicleBrand: string;
     isVerified: boolean;
     isActive: boolean;
 }

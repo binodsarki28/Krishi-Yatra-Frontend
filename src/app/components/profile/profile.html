@@ -24,10 +24,7 @@
                             <span class="text-xs font-bold text-500 uppercase tracking-wider mb-2">My Roles</span>
                             <div class="flex flex-wrap gap-2">
                                 @for (role of user.roles; track role) {
-                                <span
-                                    class="px-3 py-1 bg-green-50 text-green-700 border-round-3xl text-xs font-bold uppercase border-1 border-green-200 shadow-1">
-                                    {{ role }}
-                                </span>
+                                <p-tag [value]="role" severity="success" [rounded]="true"></p-tag>
                                 }
                             </div>
                         </div>
@@ -36,7 +33,7 @@
 
                         <div class="flex flex-column gap-3">
                             <div
-                                class="flex align-items-center gap-3 p-2 surface-ground border-round-lg hover:surface-hover transition-colors transition-duration-200 cursor-pointer">
+                                class="flex align-items-center gap-3 p-2 surface-ground border-round-lg hover:surface-hover transition-colors transition-duration-200">
                                 <div class="p-2 border-circle bg-white shadow-1"><i class="pi pi-id-card text-500"></i>
                                 </div>
                                 <div class="flex flex-column">
@@ -45,12 +42,21 @@
                                 </div>
                             </div>
                             <div
-                                class="flex align-items-center gap-3 p-2 surface-ground border-round-lg hover:surface-hover transition-colors transition-duration-200 cursor-pointer">
-                                <div class="p-2 border-circle bg-white shadow-1"><i class="pi pi-calendar text-500"></i>
+                                class="flex align-items-center gap-3 p-2 surface-ground border-round-lg hover:surface-hover transition-colors transition-duration-200">
+                                <div class="p-2 border-circle bg-white shadow-1"><i class="pi pi-envelope text-500"></i>
                                 </div>
                                 <div class="flex flex-column">
-                                    <span class="text-xs text-500 font-medium">Member Since</span>
-                                    <span class="text-sm font-bold text-800">June 2024</span>
+                                    <span class="text-xs text-500 font-medium">Email</span>
+                                    <span class="text-sm font-bold text-800">{{ user.email }}</span>
+                                </div>
+                            </div>
+                            <div
+                                class="flex align-items-center gap-3 p-2 surface-ground border-round-lg hover:surface-hover transition-colors transition-duration-200">
+                                <div class="p-2 border-circle bg-white shadow-1"><i class="pi pi-phone text-500"></i>
+                                </div>
+                                <div class="flex flex-column">
+                                    <span class="text-xs text-500 font-medium">Phone</span>
+                                    <span class="text-sm font-bold text-800">{{ user.phone || 'Not set' }}</span>
                                 </div>
                             </div>
                         </div>
@@ -81,11 +87,12 @@
                             <p-tabpanel value="0" class="pt-5">
                                 <div class="flex flex-column gap-6">
 
+                                    <!-- Role-based Dashboard Cards -->
                                     @if(isAdmin) {
                                     <div
-                                        class="bg-indigo-50 p-4 border-round-xl border-left-3 border-indigo-500 shadow-1 hover:shadow-3 transition-all flex flex-column md:flex-row align-items-start md:align-items-center justify-content-between gap-3 mb-4">
+                                        class="bg-indigo-50 p-4 border-round-xl border-left-3 border-indigo-500 shadow-1 hover:shadow-3 transition-all flex flex-column md:flex-row align-items-start md:align-items-center justify-content-between gap-3 mb-2">
                                         <div class="flex align-items-center gap-4">
-                                            <div class="bg-indigo-100 p-3 border-round-xl custom-icon-box">
+                                            <div class="bg-indigo-100 p-3 border-round-xl">
                                                 <i class="pi pi-shield text-3xl text-indigo-600"></i>
                                             </div>
                                             <div>
@@ -101,15 +108,15 @@
 
                                     @if(isFarmer) {
                                     <div
-                                        class="bg-green-50 p-4 border-round-xl border-left-3 border-green-500 shadow-1 hover:shadow-3 transition-all flex flex-column md:flex-row align-items-start md:align-items-center justify-content-between gap-3 mb-4">
+                                        class="bg-green-50 p-4 border-round-xl border-left-3 border-green-500 shadow-1 hover:shadow-3 transition-all flex flex-column md:flex-row align-items-start md:align-items-center justify-content-between gap-3 mb-2">
                                         <div class="flex align-items-center gap-4">
                                             <div class="bg-green-100 p-3 border-round-xl">
                                                 <i class="pi pi-chart-bar text-3xl text-green-600"></i>
                                             </div>
                                             <div>
                                                 <h3 class="m-0 font-bold text-900">Farmer Dashboard</h3>
-                                                <p class="m-0 text-700 text-sm mt-1">Manage your crops, stock, and view
-                                                    sale analytics.</p>
+                                                <p class="m-0 text-700 text-sm mt-1">Manage your crops, stock, and
+                                                    view sale analytics.</p>
                                             </div>
                                         </div>
                                         <p-button label="Go to the dashboard" severity="success" [rounded]="true"
@@ -120,14 +127,15 @@
 
                                     @if(isBuyer) {
                                     <div
-                                        class="bg-blue-50 p-4 border-round-xl border-left-3 border-blue-500 shadow-1 hover:shadow-3 transition-all flex flex-column md:flex-row align-items-start md:align-items-center justify-content-between gap-3 mb-4">
+                                        class="bg-blue-50 p-4 border-round-xl border-left-3 border-blue-500 shadow-1 hover:shadow-3 transition-all flex flex-column md:flex-row align-items-start md:align-items-center justify-content-between gap-3 mb-2">
                                         <div class="flex align-items-center gap-4">
                                             <div class="bg-blue-100 p-3 border-round-xl">
                                                 <i class="pi pi-shopping-cart text-3xl text-blue-600"></i>
                                             </div>
                                             <div>
                                                 <h3 class="m-0 font-bold text-900">Shopping Hub</h3>
-                                                <p class="m-0 text-700 text-sm mt-1">Browse and manage your orders.</p>
+                                                <p class="m-0 text-700 text-sm mt-1">Browse and manage your orders.
+                                                </p>
                                             </div>
                                         </div>
                                         <p-button label="Go to the dashboard" severity="info" [rounded]="true"
@@ -138,15 +146,15 @@
 
                                     @if(isDelivery) {
                                     <div
-                                        class="bg-orange-50 p-4 border-round-xl border-left-3 border-orange-500 shadow-1 hover:shadow-3 transition-all flex flex-column md:flex-row align-items-start md:align-items-center justify-content-between gap-3 mb-4">
+                                        class="bg-orange-50 p-4 border-round-xl border-left-3 border-orange-500 shadow-1 hover:shadow-3 transition-all flex flex-column md:flex-row align-items-start md:align-items-center justify-content-between gap-3 mb-2">
                                         <div class="flex align-items-center gap-4">
                                             <div class="bg-orange-100 p-3 border-round-xl">
                                                 <i class="pi pi-truck text-3xl text-orange-600"></i>
                                             </div>
                                             <div>
                                                 <h3 class="m-0 font-bold text-900">Delivery Portal</h3>
-                                                <p class="m-0 text-700 text-sm mt-1">View assigned deliveries and track
-                                                    transportation status.</p>
+                                                <p class="m-0 text-700 text-sm mt-1">View assigned deliveries and
+                                                    track transportation status.</p>
                                             </div>
                                         </div>
                                         <p-button label="Go to the dashboard" severity="warn" [rounded]="true"
@@ -156,7 +164,8 @@
                                     }
 
                                     <!-- Registration Prompts for missing roles -->
-                                    <div class="mt-4">
+                                    @if (!isFarmer || !isBuyer || !isDelivery) {
+                                    <div class="mt-2">
                                         <h4 class="text-sm font-bold text-500 uppercase mb-3 px-2">Join KrishiYatra
                                             Network</h4>
                                         <div class="grid">
@@ -195,109 +204,54 @@
                                             }
                                         </div>
                                     </div>
+                                    }
 
-                                    <div class="grid mt-4">
-                                        <div class="col-12 md:col-6 p-2">
-                                            <div
-                                                class="surface-ground p-4 border-round-2xl border-1 border-200 shadow-1 h-full">
-                                                <div class="flex align-items-center justify-content-between mb-4">
-                                                    <div class="flex align-items-center gap-2">
-                                                        <i
-                                                            class="pi pi-shopping-bag text-blue-600 text-xl border-circle bg-white p-2 shadow-1"></i>
-                                                        <h4 class="m-0 font-bold text-800">Recent Orders</h4>
+                                    <!-- Account Overview Stats (dynamic, not hardcoded) -->
+                                    <div class="mt-2">
+                                        <h4 class="text-sm font-bold text-500 uppercase mb-3 px-2">Account
+                                            Overview</h4>
+                                        <div class="grid">
+                                            <div class="col-12 md:col-4 p-2">
+                                                <div
+                                                    class="surface-ground p-4 border-round-xl border-1 border-200 text-center shadow-1">
+                                                    <div class="flex align-items-center justify-content-center mx-auto mb-3 border-circle bg-green-50"
+                                                        style="width: 48px; height: 48px;">
+                                                        <i class="pi pi-verified text-green-600 text-xl"></i>
                                                     </div>
-                                                    <span
-                                                        class="text-xs font-bold px-2 py-1 bg-blue-100 text-blue-700 border-round-3xl shadow-1">2
-                                                        Active</span>
+                                                    <span class="block text-2xl font-bold text-900">{{ user.roles.length
+                                                        }}</span>
+                                                    <span class="block text-xs text-500 font-medium mt-1">Active
+                                                        Roles</span>
                                                 </div>
-                                                <div class="flex flex-column gap-3 mb-4">
-                                                    <div
-                                                        class="flex align-items-center justify-content-between p-3 surface-card border-round-xl shadow-1 hover:shadow-2 transition-all">
-                                                        <div class="flex align-items-center gap-3">
-                                                            <div
-                                                                class="w-3rem h-3rem bg-gray-100 border-round-lg flex align-items-center justify-content-center">
-                                                                <i class="pi pi-image text-500"></i>
-                                                            </div>
-                                                            <div class="flex flex-column gap-1">
-                                                                <span
-                                                                    class="text-sm font-bold text-800 line-height-1">Fresh
-                                                                    Tomatoes (50kg)</span>
-                                                                <span class="text-xs font-medium text-500">ORD-7721 •
-                                                                    Paid</span>
-                                                            </div>
-                                                        </div>
-                                                        <span
-                                                            class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 border-round-lg">Shipped</span>
-                                                    </div>
-                                                    <div
-                                                        class="flex align-items-center justify-content-between p-3 surface-card border-round-xl shadow-1 hover:shadow-2 transition-all">
-                                                        <div class="flex align-items-center gap-3">
-                                                            <div
-                                                                class="w-3rem h-3rem bg-gray-100 border-round-lg flex align-items-center justify-content-center">
-                                                                <i class="pi pi-image text-500"></i>
-                                                            </div>
-                                                            <div class="flex flex-column gap-1">
-                                                                <span
-                                                                    class="text-sm font-bold text-800 line-height-1">Organic
-                                                                    Wheat (200kg)</span>
-                                                                <span class="text-xs font-medium text-500">ORD-6540 •
-                                                                    COD</span>
-                                                            </div>
-                                                        </div>
-                                                        <span
-                                                            class="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 border-round-lg">Processing</span>
-                                                    </div>
-                                                </div>
-                                                <p-button label="View All Orders" icon="pi pi-external-link"
-                                                    [text]="true" styleClass="w-full font-bold"></p-button>
                                             </div>
-                                        </div>
-                                        <div class="col-12 md:col-6 p-2">
-                                            <div
-                                                class="surface-ground p-4 border-round-2xl border-1 border-200 shadow-1 h-full">
-                                                <div class="flex align-items-center justify-content-between mb-4">
-                                                    <div class="flex align-items-center gap-2">
-                                                        <i
-                                                            class="pi pi-heart text-pink-600 text-xl border-circle bg-white p-2 shadow-1"></i>
-                                                        <h4 class="m-0 font-bold text-800">Wishlist</h4>
+                                            <div class="col-12 md:col-4 p-2">
+                                                <div
+                                                    class="surface-ground p-4 border-round-xl border-1 border-200 text-center shadow-1">
+                                                    <div class="flex align-items-center justify-content-center mx-auto mb-3 border-circle bg-blue-50"
+                                                        style="width: 48px; height: 48px;">
+                                                        <i class="pi pi-shield text-blue-600 text-xl"></i>
                                                     </div>
-                                                    <span class="text-xs font-bold text-600">3 Items</span>
+                                                    <span class="block text-2xl font-bold text-900">
+                                                        @if(isAdmin) { Admin }
+                                                        @else { Standard }
+                                                    </span>
+                                                    <span class="block text-xs text-500 font-medium mt-1">Account
+                                                        Type</span>
                                                 </div>
-                                                <div class="flex flex-column gap-3 mb-4">
-                                                    <div
-                                                        class="flex align-items-center gap-3 p-3 surface-card border-round-xl shadow-1 hover:shadow-2 transition-all">
-                                                        <div
-                                                            class="w-3rem h-3rem bg-gray-100 border-round-lg flex align-items-center justify-content-center">
-                                                            <i class="pi pi-image text-500"></i>
-                                                        </div>
-                                                        <div class="flex-1 flex flex-column gap-1">
-                                                            <span
-                                                                class="text-sm font-bold text-800 line-height-1">Premium
-                                                                Apples</span>
-                                                            <span class="text-sm text-green-600 font-bold">Rs. 250
-                                                                /kg</span>
-                                                        </div>
-                                                        <p-button icon="pi pi-cart-plus" [text]="true" [rounded]="true"
-                                                            severity="info"></p-button>
+                                            </div>
+                                            <div class="col-12 md:col-4 p-2">
+                                                <div
+                                                    class="surface-ground p-4 border-round-xl border-1 border-200 text-center shadow-1">
+                                                    <div class="flex align-items-center justify-content-center mx-auto mb-3 border-circle bg-orange-50"
+                                                        style="width: 48px; height: 48px;">
+                                                        <i class="pi pi-check-circle text-orange-600 text-xl"></i>
                                                     </div>
-                                                    <div
-                                                        class="flex align-items-center gap-3 p-3 surface-card border-round-xl shadow-1 hover:shadow-2 transition-all">
-                                                        <div
-                                                            class="w-3rem h-3rem bg-gray-100 border-round-lg flex align-items-center justify-content-center">
-                                                            <i class="pi pi-image text-500"></i>
-                                                        </div>
-                                                        <div class="flex-1 flex flex-column gap-1">
-                                                            <span class="text-sm font-bold text-800 line-height-1">Red
-                                                                Onions Bulk</span>
-                                                            <span class="text-sm text-green-600 font-bold">Rs. 80
-                                                                /kg</span>
-                                                        </div>
-                                                        <p-button icon="pi pi-cart-plus" [text]="true" [rounded]="true"
-                                                            severity="info"></p-button>
-                                                    </div>
+                                                    <span class="block text-2xl font-bold text-green-600">
+                                                        Active
+                                                    </span>
+                                                    <span class="block text-xs text-500 font-medium mt-1">Account
+                                                        Status</span>
                                                 </div>
-                                                <p-button label="Go to Marketplace" icon="pi pi-shopping-bag"
-                                                    [text]="true" styleClass="w-full font-bold"></p-button>
                                             </div>
                                         </div>
                                     </div>
@@ -310,7 +264,8 @@
                                     <div>
                                         <h3 class="m-0 font-bold text-900 text-xl border-bottom-1 border-300 pb-3">
                                             Change Password</h3>
-                                        <p class="text-sm text-600 mt-3 font-medium line-height-3">Ensure your account
+                                        <p class="text-sm text-600 mt-3 font-medium line-height-3">Ensure your
+                                            account
                                             is using a long, random password to stay secure.</p>
                                     </div>
 
@@ -319,7 +274,7 @@
                                             <label class="text-sm font-bold text-800">Current Password</label>
                                             <p-password formControlName="currentPassword" [feedback]="false"
                                                 [toggleMask]="true" styleClass="w-full"
-                                                inputStyleClass="w-full p-3 border-round-lg custom-input"></p-password>
+                                                inputStyleClass="w-full p-3 border-round-lg"></p-password>
                                         </div>
 
                                         <p-divider styleClass="m-0"></p-divider>
@@ -327,8 +282,7 @@
                                         <div class="flex flex-column gap-2">
                                             <label class="text-sm font-bold text-800">New Password</label>
                                             <p-password formControlName="newPassword" [toggleMask]="true"
-                                                styleClass="w-full"
-                                                inputStyleClass="w-full p-3 border-round-lg custom-input"
+                                                styleClass="w-full" inputStyleClass="w-full p-3 border-round-lg"
                                                 placeholder="At least 6 characters"></p-password>
                                             @if(passwordForm.get('newPassword')?.touched &&
                                             passwordForm.get('newPassword')?.errors?.['minlength']) {
@@ -342,7 +296,7 @@
                                             <label class="text-sm font-bold text-800">Confirm New Password</label>
                                             <p-password formControlName="confirmPassword" [feedback]="false"
                                                 [toggleMask]="true" styleClass="w-full"
-                                                inputStyleClass="w-full p-3 border-round-lg custom-input"></p-password>
+                                                inputStyleClass="w-full p-3 border-round-lg"></p-password>
                                             @if(passwordForm.errors?.['mismatch'] &&
                                             passwordForm.get('confirmPassword')?.touched) {
                                             <small class="p-error font-bold">

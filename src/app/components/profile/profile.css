@@ -1,5 +1,1 @@
-/* PrimeFlex is used for all styling in the profile component */
-::ng-deep .profile-container .p-button-help {
-    background: linear-gradient(135deg, #7c3aed, #6d28d9) !important;
-    border: none !important;
-}
+/* PrimeFlex handles all styling for the profile component */

@@ -13,6 +13,7 @@ import { AccountService } from '../account/account.service';
 import { ToastService } from '../../util/toast.service';
 import { TabsModule } from 'primeng/tabs';
 import { DividerModule } from 'primeng/divider';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-profile',
@@ -25,7 +26,8 @@ import { DividerModule } from 'primeng/divider';
     PasswordModule,
     ReactiveFormsModule,
     TabsModule,
-    DividerModule
+    DividerModule,
+    TagModule
   ],
   templateUrl: './profile.html',
   styleUrls: ['./profile.css']
@@ -61,7 +63,8 @@ export class ProfileComponent implements OnInit {
       fullName: this.accountService.getFullName(),
       email: this.accountService.getUserEmail(),
       username: this.accountService.getUsername(),
-      roles: this.accountService.getRoles()
+      roles: this.accountService.getRoles(),
+      phone: isPlatformBrowser(this.platformId) ? (localStorage.getItem('phone') || '') : ''
     };
   }
 

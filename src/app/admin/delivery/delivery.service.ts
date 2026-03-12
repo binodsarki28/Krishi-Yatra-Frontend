@@ -22,7 +22,7 @@ export class DeliveryService {
         if (filters.fullName) url += `&fullName=${encodeURIComponent(filters.fullName)}`;
         if (filters.username) url += `&username=${encodeURIComponent(filters.username)}`;
         if (filters.vehicleType) url += `&vehicleType=${encodeURIComponent(filters.vehicleType)}`;
-        if (filters.licenseNumber) url += `&licenseNumber=${encodeURIComponent(filters.licenseNumber)}`;
+        if (filters.vehicleBrand) url += `&vehicleBrand=${encodeURIComponent(filters.vehicleBrand)}`;
 
         return this.http.get<IDeliveryListResponse[]>(GenerateUrlUtils.generateUrl(url));
     }
