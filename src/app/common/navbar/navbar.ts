@@ -38,6 +38,11 @@ export class NavbarComponent implements OnInit {
         command: () => this.router.navigate(['/'])
       },
       {
+        label: 'Stocks',
+        icon: 'pi pi-list',
+        command: () => this.router.navigate(['/stocks'])
+      },
+      {
         label: 'Features',
         icon: 'pi pi-star'
       },

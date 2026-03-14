@@ -1,0 +1,170 @@
+<div class="stock-list-container min-h-screen bg-gray-50 pt-4 px-4 md:px-8">
+    <!-- Compact Header Section -->
+    <div class="max-w-full mx-auto mb-5 text-center md:text-left">
+        <div class="flex flex-column md:flex-row md:align-items-center justify-content-between gap-4 border-bottom-1 surface-border pb-5">
+            <div>
+                <h1 class="text-3xl font-bold text-900 m-0">Marketplace</h1>
+                <p class="text-500 m-0 mt-1">Fresh from farms, directly to you.</p>
+            </div>
+            
+            <div class="search-box w-full md:w-28rem">
+                <div class="flex align-items-center bg-white border-round-3xl shadow-1 p-1 pl-3 border-1 surface-border focus-within:border-green-500 transition-colors">
+                    <i class="pi pi-search text-500 mr-2 text-xl"></i>
+                    <input type="text" pInputText 
+                        placeholder="Search crops, fruits..." 
+                        class="flex-1 border-none shadow-none text-lg py-3 px-4 focus:ring-0" 
+                        style="outline: none !important; background: transparent;"
+                        [(ngModel)]="searchTerm" (keyup.enter)="onSearch()" />
+                    
+                    @if (searchTerm) {
+                        <button pButton icon="pi pi-times" 
+                            class="p-button-text p-button-rounded p-button-secondary p-1 mr-1" 
+                            style="width: 2.5rem; height: 2.5rem"
+                            (click)="onClearSearch()"></button>
+                    }
+                    
+                    <button pButton label="Search" 
+                        class="p-button-success border-round-3xl px-5 py-2 font-bold shadow-2 ml-1" 
+                        (click)="onSearch()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Section (Compact) -->
+    <div class="max-w-full mx-auto mb-4">
+        <div class="filter-card bg-white p-3 border-round-xl shadow-1">
+            <div class="flex flex-column gap-3">
+                <!-- Categories -->
+                <div class="flex align-items-center gap-4">
+                    <span class="text-900 font-bold uppercase text-xs tracking-wider white-space-nowrap">Categories:</span>
+                    <div class="flex flex-wrap gap-2 overflow-x-auto pb-1">
+                        <button pButton label="All" 
+                            class="p-button-outlined p-button-sm border-round-3xl"
+                            [ngClass]="{'bg-green-600 text-white border-green-600': !selectedCategoryId}"
+                            (click)="selectCategory(null)"></button>
+                        @for (cat of categories; track cat.categoryId) {
+                            <button pButton [label]="cat.categoryName" 
+                                class="p-button-outlined p-button-sm border-round-3xl"
+                                [ngClass]="{'bg-green-600 text-white border-green-600': selectedCategoryId === cat.categoryId}"
+                                (click)="selectCategory(cat.categoryId)"></button>
+                        }
+                    </div>
+                </div>
+
+                <!-- Sub-Categories (Conditional) -->
+                @if (subCategories.length > 0) {
+                <div class="fadein flex align-items-center gap-4 border-top-1 surface-border pt-3">
+                    <span class="text-900 font-bold uppercase text-xs tracking-wider white-space-nowrap">Sub-Categories:</span>
+                    <div class="flex flex-wrap gap-2">
+                        <button pButton label="All" 
+                            class="p-button-outlined p-button-secondary p-button-sm border-round-3xl"
+                            [ngClass]="{'bg-blue-600 text-white border-blue-600': !selectedSubCategoryId}"
+                            (click)="selectSubCategory(null)"></button>
+                        @for (sub of subCategories; track sub.subCategoryId) {
+                            <button pButton [label]="sub.subCategoryName" 
+                                class="p-button-outlined p-button-secondary p-button-sm border-round-3xl"
+                                [ngClass]="{'bg-blue-600 text-white border-blue-600': selectedSubCategoryId === sub.subCategoryId}"
+                                (click)="selectSubCategory(sub.subCategoryId)"></button>
+                        }
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Stock Grid -->
+    <div class="max-w-full mx-auto">
+        @if (loading && page === 0) {
+            <!-- Skeleton View -->
+            <div class="flex flex-wrap -m-2">
+                @for (i of [1,2,3,4,5,6,7,8,9,10]; track i) {
+                    <div class="col-five">
+                        <p-card styleClass="h-full border-round-xl overflow-hidden shadow-1 border-none bg-white">
+                            <p-skeleton width="100%" height="150px" styleClass="mb-3 border-round-lg"></p-skeleton>
+                            <p-skeleton width="60%" height="1.2rem" styleClass="mb-2"></p-skeleton>
+                            <p-skeleton width="40%" height="0.8rem" styleClass="mb-3"></p-skeleton>
+                            <div class="flex justify-content-between">
+                                <p-skeleton width="30%" height="1.5rem"></p-skeleton>
+                                <p-skeleton width="40%" height="1.5rem"></p-skeleton>
+                            </div>
+                        </p-card>
+                    </div>
+                }
+            </div>
+        } @else if (stocks.length > 0) {
+            <div class="flex flex-wrap -m-2">
+                @for (stock of stocks; track stock.stockSlug; let i = $index) {
+                    <div class="col-five stock-card-wrapper" [style.animation-delay]="(i % 20) * 0.05 + 's'">
+                        <div class="stock-card bg-white border-round-xl shadow-1 overflow-hidden h-full flex flex-column">
+                            <!-- Image Section -->
+                            <div class="relative cursor-pointer overflow-hidden aspect-ratio-box" (click)="viewDetail(stock.stockSlug)">
+                                <img [src]="'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=400&auto=format&fit=crop'" 
+                                    [alt]="stock.stockName" 
+                                    class="w-full h-12rem object-cover transition-transform hover-scale" />
+                                <div class="absolute top-0 right-0 p-2">
+                                    <p-tag [value]="stock.categoryName" severity="success" styleClass="px-2 py-1 border-round-lg text-xs"></p-tag>
+                                </div>
+                            </div>
+                            
+                            <!-- Content Section -->
+                            <div class="p-3 flex flex-column flex-grow-1">
+                                <div class="flex-grow-1">
+                                    <h3 class="text-lg font-bold text-900 m-0 mb-1 line-height-2 cursor-pointer hover:text-green-600 transition-colors"
+                                        (click)="viewDetail(stock.stockSlug)">
+                                        {{stock.productName}}
+                                    </h3>
+                                    <div class="flex align-items-center gap-1 text-500 mb-2 text-xs">
+                                        <i class="pi pi-user text-xs"></i>
+                                        <span>{{stock.farmerName}}</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-auto pt-3 border-top-1 surface-border flex align-items-center justify-content-between">
+                                    <div class="price-section">
+                                        <span class="text-xl font-bold text-green-700">Rs. {{stock.pricePerUnit}}</span>
+                                    </div>
+                                    
+                                    <button pButton pRipple icon="pi pi-shopping-cart" label="Order" 
+                                        class="p-button-success p-button-sm border-round-xl px-3"
+                                        (click)="orderNow(stock)"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Lazy Loading Skeletons -->
+            @if (loadingMore) {
+                <div class="flex flex-wrap -m-2 mt-2">
+                    @for (i of [1,2,3,4,5,6,7,8,9,10]; track i) {
+                        <div class="col-five">
+                            <p-card styleClass="h-full border-round-xl overflow-hidden shadow-1 border-none bg-white">
+                                <p-skeleton width="100%" height="150px" styleClass="mb-3 border-round-lg"></p-skeleton>
+                                <p-skeleton width="60%" height="1.2rem" styleClass="mb-2"></p-skeleton>
+                                <p-skeleton width="40%" height="0.8rem" styleClass="mb-3"></p-skeleton>
+                            </p-card>
+                        </div>
+                    }
+                </div>
+            }
+
+            @if (!hasMore && stocks.length > 0) {
+                <div class="text-center p-8 text-500 italic">
+                    You've reached the end of the harvest! 🌾
+                </div>
+            }
+        } @else if (!loading && !loadingMore) {
+            <!-- Empty State -->
+            <div class="flex flex-column align-items-center justify-content-center p-8 bg-white border-round-3xl shadow-1">
+                <i class="pi pi-search text-7xl text-300 mb-4"></i>
+                <h2 class="text-900 m-0">No stocks found</h2>
+                <p class="text-600 mt-2 mb-4">Try adjusting your filters or search terms.</p>
+                <button pButton label="Clear Filters" icon="pi pi-filter-slash" 
+                    class="p-button-outlined border-round-3xl px-6" (click)="resetFilters()"></button>
+            </div>
+        }
+    </div>
+</div>

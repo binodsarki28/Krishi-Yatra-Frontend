@@ -29,18 +29,17 @@ export class AppComponent {
   }
 
   private updateVisibility(url: string) {
-    const dashboardRoutes = ['/admin', '/farmer', '/buyer', '/delivery', '/stock', '/profile'];
+    const dashboardRoutes = ['/admin', '/farmer', '/buyer', '/delivery'];
     const authRoutes = ['/account', '/register'];
     
-    const isDashboard = dashboardRoutes.some(path => url.includes(path));
-    const isAuth = authRoutes.some(path => url.includes(path));
+    const isDashboard = dashboardRoutes.some(path => url.startsWith(path));
+    const isAuth = authRoutes.some(path => url.startsWith(path));
 
     this.showFooter = !isDashboard && !isAuth;
     this.showNavbar = !isDashboard && !isAuth;
     
-    // Special exception for profile: maybe show navbar but no footer?
-    // User said "remove footer from these all pages", targeting the dashboard areas.
-    if (url.includes('/profile')) {
+    // Explicitly show navbar on marketplace and profile
+    if (url.includes('/stocks') || url.includes('/stock-detail') || url.includes('/profile')) {
         this.showNavbar = true; 
         this.showFooter = false;
     }
