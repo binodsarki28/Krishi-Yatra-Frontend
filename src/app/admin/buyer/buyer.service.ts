@@ -12,10 +12,10 @@ export class BuyerService {
 
     constructor(private http: HttpClient) { }
 
-    getBuyers(verified?: boolean, page: number = 0, size: number = 10, filters: any = {}): Observable<IBuyerListResponse[]> {
+    getBuyers(status?: string, page: number = 0, size: number = 10, filters: any = {}): Observable<IBuyerListResponse[]> {
         let url = `${Endpoint.LIST_BUYERS}?page=${page}&size=${size}`;
-        if (verified !== undefined) {
-            url += `&verified=${verified}`;
+        if (status) {
+            url += `&status=${status}`;
         }
 
         // Append filters
@@ -31,8 +31,12 @@ export class BuyerService {
         return this.http.post<IResponse>(GenerateUrlUtils.generateUrl(Endpoint.VERIFY_BUYER), request);
     }
 
-    blockUnblockBuyer(username: string, block: boolean): Observable<IResponse> {
-        return this.http.post<IResponse>(GenerateUrlUtils.generateUrl(`${Endpoint.BLOCK_BUYER}${username}?block=${block}`), {});
+    blockUnblockBuyer(username: string, block: boolean, reason?: string): Observable<IResponse> {
+        let url = `${Endpoint.BLOCK_BUYER}${username}?block=${block}`;
+        if (reason) {
+            url += `&reason=${encodeURIComponent(reason)}`;
+        }
+        return this.http.post<IResponse>(GenerateUrlUtils.generateUrl(url), {});
     }
 
     getBuyerDetail(username: string): Observable<any> {

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { RegisterDeliveryComponent } from './register-delivery/register-delivery';
 import { DeliveryDashboard } from './delivery-dashboard/delivery-dashboard';
+import { deliveryGuard } from '../auth/auth.guard';
 
 export const DELIVERY_ROUTES: Routes = [
     {
@@ -11,6 +12,7 @@ export const DELIVERY_ROUTES: Routes = [
     {
         path: 'dashboard',
         component: DeliveryDashboard,
+        canActivate: [deliveryGuard],
         data: { breadcrumb: 'Delivery Dashboard' }
     }
 ];

@@ -53,13 +53,13 @@
                     </div>
 
                     <div class="col-12 md:col-4 relative">
-                        <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Category</label>
-                        <div class="field-with-icon">
-                            <i class="pi pi-tag"></i>
-                            <p-select [options]="categories" formControlName="categoryId" optionLabel="categoryName" optionValue="categoryId"
-                                placeholder="Select Category" (onChange)="onCategoryChange()" [filter]="true"
-                                styleClass="w-full border-round-lg shadow-none"></p-select>
-                        </div>
+                        <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase flex align-items-center gap-2">
+                            <i class="pi pi-tag text-blue-500"></i>
+                            Category
+                        </label>
+                        <p-select [options]="categories" formControlName="categoryId" optionLabel="categoryName" optionValue="categoryId"
+                            placeholder="Select Category" (onChange)="onCategoryChange()" [filter]="true"
+                            styleClass="w-full border-round-lg shadow-none"></p-select>
                         @if (stockForm.get('categoryId')?.invalid && stockForm.get('categoryId')?.touched) {
                             <small class="validation-error">Category is required</small>
                         }
@@ -67,13 +67,13 @@
 
                     <!-- Row 2 -->
                     <div class="col-12 md:col-4 relative">
-                        <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Sub Category</label>
-                        <div class="field-with-icon">
-                            <i class="pi pi-tags"></i>
-                            <p-select [options]="subCategoriesFiltered" formControlName="subCategoryId" optionLabel="subCategoryName" optionValue="subCategoryId"
-                                placeholder="Select Sub Category" [disabled]="!stockForm.get('categoryId')?.value" [filter]="true"
-                                styleClass="w-full border-round-lg shadow-none"></p-select>
-                        </div>
+                        <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase flex align-items-center gap-2">
+                            <i class="pi pi-tags text-blue-500"></i>
+                            Sub Category
+                        </label>
+                        <p-select [options]="subCategoriesFiltered" formControlName="subCategoryId" optionLabel="subCategoryName" optionValue="subCategoryId"
+                            placeholder="Select Sub Category" [filter]="true"
+                            styleClass="w-full border-round-lg shadow-none"></p-select>
                         @if (stockForm.get('subCategoryId')?.invalid && stockForm.get('subCategoryId')?.touched) {
                             <small class="validation-error">Sub-category is required</small>
                         }
@@ -98,19 +98,61 @@
                             <p-inputNumber formControlName="pricePerUnit" placeholder="Price" 
                                 styleClass="w-full" inputStyleClass="w-full border-round-lg text-sm" inputId="price"></p-inputNumber>
                         </div>
-                        @if (stockForm.get('pricePerUnit')?.invalid && stockForm.get('pricePerUnit')?.touched) {
-                            <small class="validation-error">Price is required</small>
-                        }
                     </div>
 
-                    <!-- Images & Description -->
-                    <div class="col-12 relative">
-                        <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Stock Images (URLs)</label>
+                    <div class="col-12 md:col-4 relative">
+                        <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Min Order Quantity</label>
                         <div class="field-with-icon">
-                            <i class="pi pi-image"></i>
-                            <input pInputText formControlName="stockImages" placeholder="Image URL (comma separated)" 
-                                class="w-full text-sm border-round-lg" />
+                            <i class="pi pi-cart-plus"></i>
+                            <p-inputNumber formControlName="minQuantity" placeholder="Min Qty" 
+                                styleClass="w-full" inputStyleClass="w-full border-round-lg text-sm" inputId="minQuantity"></p-inputNumber>
                         </div>
+                    </div>
+
+                    <div class="col-12 mt-2">
+                        <label class="block text-xs font-bold text-500 mb-2 ml-1 uppercase flex align-items-center gap-2">
+                            <i class="pi pi-images text-blue-500"></i>
+                            Current Product Photos
+                        </label>
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            @for (img of existingImages; track $index) {
+                                <div class="relative">
+                                    <img [src]="img" class="border-round-lg border-1 border-200" style="width: 80px; height: 80px; object-fit: cover;">
+                                </div>
+                            } @empty {
+                                <div class="p-3 bg-gray-50 border-round-lg border-1 border-200 text-xs text-500 italic">No existing photos</div>
+                            }
+                        </div>
+
+                        <label class="block text-xs font-bold text-500 mb-2 ml-1 uppercase flex align-items-center gap-2">
+                            <i class="pi pi-plus-circle text-blue-500"></i>
+                            Replace with New Photos (Max 5)
+                        </label>
+                        <p-fileupload name="images" [multiple]="true" accept="image/*" [maxFileSize]="5000000" 
+                            [fileLimit]="5" (onSelect)="onFilesSelected($event)"
+                            [showUploadButton]="false" [showCancelButton]="false"
+                            styleClass="w-full border-round-lg shadow-none font-medium"
+                            chooseLabel="Select New Photos" chooseIcon="pi pi-cloud-upload"></p-fileupload>
+                        
+                        <!-- Selected Queue Previews -->
+                        @if (selectedFiles.length > 0) {
+                            <div class="flex flex-wrap gap-2 mt-3 p-3 bg-blue-50 border-round-lg border-1 border-blue-100">
+                                @for (file of selectedFiles; track $index) {
+                                    <div class="relative shadow-2 border-round-lg overflow-hidden" style="width: 70px; height: 70px;">
+                                        <img [src]="file.objectURL" class="w-full h-full" style="object-fit: cover;">
+                                        <div (click)="removeFile($index)" class="absolute top-0 right-0 p-1 bg-red-500 text-white cursor-pointer hover:bg-red-600 transition-colors" 
+                                             style="border-bottom-left-radius: 8px;">
+                                            <i class="pi pi-times" style="font-size: 10px;"></i>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="flex align-items-center ml-2 text-blue-600 font-bold text-xs">
+                                    {{selectedFiles.length}} New Ready
+                                </div>
+                            </div>
+                        }
+                        
+                        <small class="text-xs text-400 mt-1 block px-1 italic">Adding new photos will replace all previous ones.</small>
                     </div>
 
                     <div class="col-12 relative pb-2">

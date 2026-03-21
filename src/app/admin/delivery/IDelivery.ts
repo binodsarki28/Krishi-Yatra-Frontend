@@ -3,7 +3,7 @@ export interface IDeliveryListResponse {
     username: string;
     vehicleType: string;
     vehicleBrand: string;
-    isVerified: boolean;
+    status: string;
     isActive: boolean;
 }
 

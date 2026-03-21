@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { FarmerService } from '../farmer/farmer.service';
@@ -8,6 +8,7 @@ import { AdminAppService } from '../admin-app.service';
 import { filter } from 'rxjs';
 import { AccountService } from '../../components/account/account.service';
 import { ButtonModule } from 'primeng/button';
+import { NavigationService } from '../../util/navigation.service';
 
 @Component({
     selector: 'app-admin-dashboard',
@@ -29,6 +30,7 @@ export class AdminDashboardComponent implements OnInit {
         private deliveryService: DeliveryService,
         private adminAppService: AdminAppService,
         private accountService: AccountService,
+        private navigationService: NavigationService,
         private router: Router,
         @Inject(PLATFORM_ID) private platformId: Object
     ) { }
@@ -51,6 +53,8 @@ export class AdminDashboardComponent implements OnInit {
                 this.expandedGroup = 'buyer';
             } else if (url.includes('/delivery')) {
                 this.expandedGroup = 'delivery';
+            } else if (url.includes('/stocks')) {
+                this.expandedGroup = 'stock';
             }
         });
 
@@ -60,6 +64,7 @@ export class AdminDashboardComponent implements OnInit {
         if (currentUrl.includes('/farmers')) this.expandedGroup = 'farmer';
         else if (currentUrl.includes('/buyers')) this.expandedGroup = 'buyer';
         else if (currentUrl.includes('/delivery')) this.expandedGroup = 'delivery';
+        else if (currentUrl.includes('/stocks')) this.expandedGroup = 'stock';
     }
 
     toggleGroup(group: string) {
@@ -85,7 +90,10 @@ export class AdminDashboardComponent implements OnInit {
         if (isPlatformBrowser(this.platformId)) {
             localStorage.clear();
         }
+        this.navigationService.isExiting = true;
         this.accountService.updateLoginStatus();
-        this.router.navigate(['/account/login']);
+        this.router.navigate(['/account/login']).then(() => {
+            this.navigationService.isExiting = false;
+        });
     }
 }

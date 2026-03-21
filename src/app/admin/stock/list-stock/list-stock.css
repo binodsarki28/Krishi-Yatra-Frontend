@@ -22,6 +22,10 @@
     transition: box-shadow 0.3s ease;
 }
 
+.surface-card:hover {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+}
+
 /* Detail dialog styling */
 ::ng-deep .detail-dialog .p-dialog-header {
     background: #f8fafc;

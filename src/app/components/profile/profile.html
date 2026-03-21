@@ -1,321 +1,195 @@
-<div class="p-5 surface-ground" style="min-height: calc(100vh - 80px);">
-    <div class="max-w-7xl mx-auto">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6">User Profile</h1>
+<div class="surface-ground p-0 flex justify-content-center overflow-hidden" style="height: calc(100vh - 5rem); margin: 0 !important;">
+  <div class="max-w-7xl w-full flex bg-white shadow-2 border-round-3xl overflow-hidden h-full">
+    
+    <!-- Fixed Sidebar -->
+    <div class="w-16rem border-right-1 border-200 flex flex-column bg-white" style="flex-shrink: 0;">
+      <div class="p-3 border-bottom-1 border-100 mb-2">
+        <h2 class="m-0 font-bold" style="font-family: 'Brush Script MT', cursive; font-size: 2rem; color: #15803d;">KrishiYatra</h2>
+      </div>
 
-        <div class="grid">
-            <!-- Left Sidebar: Profile Summary -->
-            <div class="col-12 md:col-4">
-                <p-card styleClass="shadow-3 border-round-2xl p-0 h-full overflow-hidden border-1 border-200">
-                    <div class="flex flex-column align-items-center py-5"
-                        style="background: linear-gradient(135deg, #064e3b 0%, #047857 100%);">
-                        <div class="relative border-circle shadow-5 flex align-items-center justify-content-center bg-white transition-transform hover:-translate-y-1 hover:shadow-6 transition-duration-300"
-                            style="width: 120px; height: 120px; border: 4px solid rgba(255,255,255,0.2);">
-                            <i class="pi pi-user text-6xl text-green-600"></i>
-                            <div class="absolute border-circle bg-green-500 shadow-2"
-                                style="bottom: 5px; right: 5px; width: 18px; height: 18px; border: 3px solid white;">
-                            </div>
-                        </div>
-                        <h2 class="mt-4 text-white font-bold text-xl m-0">{{ user.fullName }}</h2>
-                        <p class="text-white-alpha-80 mt-1">{{ user.email }}</p>
-                    </div>
+      <div class="flex-grow-1 overflow-y-auto px-2 pb-3 custom-scrollbar">
+        <div class="text-xs font-bold text-gray-400 uppercase px-3 py-2">Profile</div>
+        <a class="flex align-items-center gap-2 px-3 py-2 border-round-xl cursor-pointer transition-colors transition-duration-200 mb-1"
+           [class.bg-green-50]="activeTab === 'profile'" [class.text-green-700]="activeTab === 'profile'" (click)="switchTab('profile')">
+           <i class="pi pi-user"></i> <span class="text-sm font-medium">Overview</span>
+        </a>
+        <a class="flex align-items-center gap-2 px-3 py-2 border-round-xl cursor-pointer transition-colors transition-duration-200 mb-1"
+           [class.bg-green-50]="activeTab === 'edit-profile'" [class.text-green-700]="activeTab === 'edit-profile'" (click)="switchTab('edit-profile')">
+           <i class="pi pi-user-edit"></i> <span class="text-sm font-medium">Edit Profile</span>
+        </a>
 
-                    <div class="p-4 flex flex-column gap-4">
-                        <div class="flex flex-column">
-                            <span class="text-xs font-bold text-500 uppercase tracking-wider mb-2">My Roles</span>
-                            <div class="flex flex-wrap gap-2">
-                                @for (role of user.roles; track role) {
-                                <p-tag [value]="role" severity="success" [rounded]="true"></p-tag>
-                                }
-                            </div>
-                        </div>
+        <div class="text-xs font-bold text-gray-400 uppercase px-3 py-2 mt-2">Roles</div>
+        <a class="flex align-items-center gap-2 px-3 py-2 border-round-xl cursor-pointer transition-colors transition-duration-200 mb-1" (click)="switchTab('farmer-dashboard')">
+           <i class="pi pi-chart-line"></i> <span class="text-sm font-medium">{{ isFarmer ? 'Farmer Dashboard' : 'Join as Farmer' }}</span>
+        </a>
+        <a class="flex align-items-center gap-2 px-3 py-2 border-round-xl cursor-pointer transition-colors transition-duration-200 mb-1" (click)="switchTab('buyer-dashboard')">
+           <i class="pi pi-shopping-cart"></i> <span class="text-sm font-medium">{{ isBuyer ? 'Buyer Dashboard' : 'Join as Buyer' }}</span>
+        </a>
+        <a class="flex align-items-center gap-2 px-3 py-2 border-round-xl cursor-pointer transition-colors transition-duration-200 mb-1" (click)="switchTab('delivery-dashboard')">
+           <i class="pi pi-truck"></i> <span class="text-sm font-medium">{{ isDelivery ? 'Linker Dashboard' : 'Join as Linker' }}</span>
+        </a>
 
-                        <p-divider></p-divider>
+        <div class="text-xs font-bold text-gray-400 uppercase px-3 py-2 mt-2">Security</div>
+        <a class="flex align-items-center gap-2 px-3 py-2 border-round-xl cursor-pointer transition-colors transition-duration-200 mb-1"
+           [class.bg-green-50]="activeTab === 'security'" [class.text-green-700]="activeTab === 'security'" (click)="switchTab('security')">
+           <i class="pi pi-shield"></i> <span class="text-sm font-medium">Security</span>
+        </a>
+        <a class="flex align-items-center gap-2 px-3 py-2 border-round-xl cursor-pointer transition-colors transition-duration-200 mb-1"
+           [class.bg-green-50]="activeTab === 'privacy'" [class.text-green-700]="activeTab === 'privacy'" (click)="switchTab('privacy')">
+           <i class="pi pi-lock"></i> <span class="text-sm font-medium">Privacy</span>
+        </a>
+      </div>
+      
+      <div class="p-3 mb-8">
+        <a class="flex align-items-center gap-2 p-2 border-round-lg cursor-pointer text-red-500 hover:bg-red-50 transition-colors w-full" (click)="logout()">
+           <i class="pi pi-sign-out"></i> <span class="text-sm font-bold">Log Out</span>
+        </a>
+      </div>
+    </div>
 
-                        <div class="flex flex-column gap-3">
-                            <div
-                                class="flex align-items-center gap-3 p-2 surface-ground border-round-lg hover:surface-hover transition-colors transition-duration-200">
-                                <div class="p-2 border-circle bg-white shadow-1"><i class="pi pi-id-card text-500"></i>
-                                </div>
-                                <div class="flex flex-column">
-                                    <span class="text-xs text-500 font-medium">Username</span>
-                                    <span class="text-sm font-bold text-800">{{ user.username }}</span>
-                                </div>
-                            </div>
-                            <div
-                                class="flex align-items-center gap-3 p-2 surface-ground border-round-lg hover:surface-hover transition-colors transition-duration-200">
-                                <div class="p-2 border-circle bg-white shadow-1"><i class="pi pi-envelope text-500"></i>
-                                </div>
-                                <div class="flex flex-column">
-                                    <span class="text-xs text-500 font-medium">Email</span>
-                                    <span class="text-sm font-bold text-800">{{ user.email }}</span>
-                                </div>
-                            </div>
-                            <div
-                                class="flex align-items-center gap-3 p-2 surface-ground border-round-lg hover:surface-hover transition-colors transition-duration-200">
-                                <div class="p-2 border-circle bg-white shadow-1"><i class="pi pi-phone text-500"></i>
-                                </div>
-                                <div class="flex flex-column">
-                                    <span class="text-xs text-500 font-medium">Phone</span>
-                                    <span class="text-sm font-bold text-800">{{ user.phone || 'Not set' }}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-4">
-                            <p-button label="Sign Out" icon="pi pi-sign-out" severity="danger" [outlined]="true"
-                                styleClass="w-full font-bold border-round-3xl" (onClick)="logout()"></p-button>
-                        </div>
-                    </div>
-                </p-card>
+    <!-- Right Content Area -->
+    <div class="flex-grow-1 p-3 bg-white overflow-y-auto">
+        <div class="w-full flex flex-column h-full" *ngIf="activeTab === 'edit-profile'">
+            
+            <div class="flex align-items-center gap-3 mb-3">
+                <h1 class="m-0 text-3xl font-bold text-gray-900">Edit Profile</h1>
             </div>
 
-            <!-- Right: Tabbed Content -->
-            <div class="col-12 md:col-8">
-                <div class="surface-card p-4 shadow-3 border-round-2xl border-1 border-200 h-full">
-                    <p-tabs value="0">
-                        <p-tablist>
-                            <p-tab value="0" class="flex align-items-center gap-2">
-                                <i class="pi pi-cog"></i>
-                                <span class="font-bold">Account Actions</span>
-                            </p-tab>
-                            <p-tab value="1" class="flex align-items-center gap-2">
-                                <i class="pi pi-lock"></i>
-                                <span class="font-bold">Security</span>
-                            </p-tab>
-                        </p-tablist>
-                        <p-tabpanels>
-                            <p-tabpanel value="0" class="pt-5">
-                                <div class="flex flex-column gap-6">
+            <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="flex flex-column h-full">
+                
+                <div class="flex align-items-center gap-4 mb-3">
+                    <div class="relative cursor-pointer" style="width: 80px; height: 80px;" (click)="fileInput.click()">
+                        <div class="w-full h-full border-circle bg-gray-200 flex align-items-center justify-content-center overflow-hidden border-2 border-gray-300">
+                           <img *ngIf="profilePreview" [src]="profilePreview" class="w-full h-full object-cover" />
+                           <i *ngIf="!profilePreview" class="pi pi-user text-3xl text-gray-400"></i>
+                        </div>
+                        <div class="absolute bg-white border-circle shadow-3 flex align-items-center justify-content-center cursor-pointer" 
+                             style="bottom: 0px; right: 0px; width: 25px; height: 25px; border: 1px solid #e5e7eb;">
+                           <i class="pi pi-pencil text-gray-700 text-xs"></i>
+                        </div>
+                    </div>
+                    <input type="file" #fileInput (change)="onFileChange($event)" accept="image/*" class="hidden" />
 
-                                    <!-- Role-based Dashboard Cards -->
-                                    @if(isAdmin) {
-                                    <div
-                                        class="bg-indigo-50 p-4 border-round-xl border-left-3 border-indigo-500 shadow-1 hover:shadow-3 transition-all flex flex-column md:flex-row align-items-start md:align-items-center justify-content-between gap-3 mb-2">
-                                        <div class="flex align-items-center gap-4">
-                                            <div class="bg-indigo-100 p-3 border-round-xl">
-                                                <i class="pi pi-shield text-3xl text-indigo-600"></i>
-                                            </div>
-                                            <div>
-                                                <h3 class="m-0 font-bold text-900">Administrator Console</h3>
-                                                <p class="m-0 text-700 text-sm mt-1">Manage users, products, and
-                                                    platform settings.</p>
-                                            </div>
-                                        </div>
-                                        <p-button label="Manage Platform" severity="help" [rounded]="true" size="small"
-                                            [outlined]="true" (onClick)="navigateTo('/admin')"></p-button>
+                    <div class="flex flex-column">
+                        <h2 class="m-0 text-xl font-bold text-gray-900">
+                             {{ profileForm.get('firstName')?.value || 'Your Name' }} {{ profileForm.get('lastName')?.value || '' }}
+                        </h2>
+                        <span class="text-gray-500 mt-1 font-medium">{{ profileForm.get('phone')?.value || 'No phone set' }}</span>
+                    </div>
+                </div>
+
+                <div class="grid formgrid mt-2">
+                    <div class="col-12 md:col-6 field mb-1">
+                        <label class="block text-gray-500 font-medium mb-1 pl-1">First Name <span class="text-red-500">*</span></label>
+                        <input pInputText formControlName="firstName" class="w-full p-2 bg-white border-1 border-gray-300 border-round-xl text-lg text-gray-800" [class.border-red-500]="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched" />
+                    </div>
+                    <div class="col-12 md:col-6 field mb-1">
+                        <label class="block text-gray-500 font-medium mb-1 pl-1">Last Name <span class="text-red-500">*</span></label>
+                        <input pInputText formControlName="lastName" class="w-full p-2 bg-white border-1 border-gray-300 border-round-xl text-lg text-gray-800" [class.border-red-500]="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched" />
+                    </div>
+                    
+                    <div class="col-12 field mb-2">
+                        <label class="block text-gray-700 font-bold mb-1 pl-1">Username <span class="text-red-500">*</span></label>
+                        <input pInputText formControlName="username" class="w-full p-2 bg-white border-1 border-gray-300 border-round-xl text-lg text-gray-800" [class.border-red-500]="profileForm.get('username')?.invalid && profileForm.get('username')?.touched" />
+                        <small class="text-red-500 block pl-1" *ngIf="profileForm.get('username')?.invalid && profileForm.get('username')?.touched">Username is required.</small>
+                    </div>
+
+                    <div class="col-12 md:col-6 field mb-2">
+                        <label class="block text-gray-500 font-medium mb-1 pl-1">Phone Number</label>
+                        <input pInputText formControlName="phone" class="w-full p-2 bg-white border-1 border-gray-300 border-round-xl text-lg text-gray-800" />
+                    </div>
+
+                    <div class="col-12 field mb-2">
+                        <label class="block text-gray-500 font-medium mb-1 pl-1">Description / Bio</label>
+                        <textarea pInputText formControlName="description" rows="2" class="w-full p-2 bg-white border-1 border-gray-300 border-round-xl text-lg text-gray-800 resize-none"></textarea>
+                    </div>
+                </div>
+
+                <div class="flex justify-content-start mt-1">
+                     <p-button label="Save Changes" type="submit" [loading]="loading" [rounded]="true" [disabled]="profileForm.invalid || !profileForm.dirty" styleClass="px-4 py-2 font-bold shadow-1"></p-button>
+                </div>
+            </form>
+        </div>
+
+        <div class="w-full h-full" *ngIf="activeTab === 'security'">
+             <div class="pb-3 border-bottom-1 border-100 mb-4">
+                <h1 class="m-0 text-2xl font-bold text-gray-800">Account Security</h1>
+                <p class="text-gray-500 m-0 mt-1">Manage your password and security settings.</p>
+             </div>
+              <form [formGroup]="passwordForm" (ngSubmit)="updatePassword()" class="max-w-2xl">
+                  <div class="field mb-3">
+                       <label class="block text-gray-700 font-bold mb-1">Current Password <span class="text-red-500">*</span></label>
+                       <p-password formControlName="currentPassword" [feedback]="false" [toggleMask]="true" styleClass="w-full" inputStyleClass="w-full p-2 border-round-lg" [class.ng-invalid]="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched"></p-password>
+                       <small class="text-red-500 block" *ngIf="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched">Required.</small>
+                  </div>
+                  <div class="field mb-3">
+                       <label class="block text-gray-700 font-bold mb-1">New Password <span class="text-red-500">*</span></label>
+                       <p-password formControlName="newPassword" [toggleMask]="true" [feedback]="false" styleClass="w-full" inputStyleClass="w-full p-2 border-round-lg" [class.ng-invalid]="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched"></p-password>
+                       <small class="text-red-500 block" *ngIf="passwordForm.get('newPassword')?.hasError('required') && passwordForm.get('newPassword')?.touched">Required.</small>
+                       <small class="text-red-500 block" *ngIf="passwordForm.get('newPassword')?.hasError('minlength') && passwordForm.get('newPassword')?.touched">Min 6 characters.</small>
+                  </div>
+                  <div class="field mb-4">
+                       <label class="block text-gray-700 font-bold mb-1">Confirm New Password <span class="text-red-500">*</span></label>
+                       <p-password formControlName="confirmPassword" [feedback]="false" [toggleMask]="true" styleClass="w-full" inputStyleClass="w-full p-2 border-round-lg" [class.ng-invalid]="(passwordForm.get('confirmPassword')?.invalid || passwordForm.hasError('mismatch')) && passwordForm.get('confirmPassword')?.touched"></p-password>
+                       <small class="text-red-500 block" *ngIf="passwordForm.hasError('mismatch') && passwordForm.get('confirmPassword')?.touched">Passwords do not match.</small>
+                  </div>
+                  <p-button label="Change Password" type="submit" [loading]="loading" [rounded]="true" severity="success" [disabled]="passwordForm.invalid" styleClass="px-4 py-2 font-bold shadow-1"></p-button>
+              </form>
+        </div>
+
+        <div class="w-full flex flex-column h-full" *ngIf="activeTab === 'profile'">
+            <h1 class="m-0 text-3xl font-bold text-gray-900 mb-5">Profile Overview</h1>
+            <div class="flex flex-column gap-4 max-w-3xl">
+                <div class="flex align-items-center gap-4 bg-gray-50 p-4 border-round-2xl">
+                    <div style="width: 80px; height: 80px;" class="border-circle overflow-hidden bg-gray-200 border-1 border-gray-300 flex align-items-center justify-content-center">
+                        <img *ngIf="profilePreview" [src]="profilePreview" class="w-full h-full object-cover" />
+                        <i *ngIf="!profilePreview" class="pi pi-user text-3xl text-gray-400"></i>
+                    </div>
+                    <div>
+                        <h2 class="m-0 text-2xl font-bold text-gray-800">{{ userData?.fullName || 'User Name' }}</h2>
+                        <span class="text-gray-500 font-medium">{{ "@" + (userData?.username || 'username') }}</span>
+                    </div>
+                </div>
+                
+                <div class="grid mt-3">
+                    <div class="col-12 md:col-6 mb-3">
+                        <span class="block text-sm text-gray-500 font-bold uppercase mb-1">Email Address</span>
+                        <span class="block text-lg text-gray-900 font-medium">{{ userData?.email || 'N/A' }}</span>
+                    </div>
+                    <div class="col-12 md:col-6 mb-3">
+                        <span class="block text-sm text-gray-500 font-bold uppercase mb-1">Phone Number</span>
+                        <span class="block text-lg text-gray-900 font-medium">{{ userData?.phoneNumber || 'N/A' }}</span>
+                    </div>
+                    <div class="col-12 mb-4">
+                        <span class="block text-sm text-gray-500 font-bold uppercase mb-3">Account Verification Status</span>
+                        <div class="flex flex-column gap-3">
+                            <div *ngFor="let role of userData?.roles" class="bg-gray-50 p-3 border-round-xl border-1 border-100 flex align-items-center justify-content-between">
+                                <div class="flex align-items-center gap-3">
+                                    <div class="bg-green-100 text-green-700 font-bold px-3 py-1 border-round-lg text-sm">
+                                        {{ role }}
                                     </div>
-                                    }
-
-                                    @if(isFarmer) {
-                                    <div
-                                        class="bg-green-50 p-4 border-round-xl border-left-3 border-green-500 shadow-1 hover:shadow-3 transition-all flex flex-column md:flex-row align-items-start md:align-items-center justify-content-between gap-3 mb-2">
-                                        <div class="flex align-items-center gap-4">
-                                            <div class="bg-green-100 p-3 border-round-xl">
-                                                <i class="pi pi-chart-bar text-3xl text-green-600"></i>
-                                            </div>
-                                            <div>
-                                                <h3 class="m-0 font-bold text-900">Farmer Dashboard</h3>
-                                                <p class="m-0 text-700 text-sm mt-1">Manage your crops, stock, and
-                                                    view sale analytics.</p>
-                                            </div>
-                                        </div>
-                                        <p-button label="Go to the dashboard" severity="success" [rounded]="true"
-                                            size="small" styleClass="font-bold shadow-2 hover:shadow-4"
-                                            (onClick)="navigateTo('/farmer/dashboard')"></p-button>
-                                    </div>
-                                    }
-
-                                    @if(isBuyer) {
-                                    <div
-                                        class="bg-blue-50 p-4 border-round-xl border-left-3 border-blue-500 shadow-1 hover:shadow-3 transition-all flex flex-column md:flex-row align-items-start md:align-items-center justify-content-between gap-3 mb-2">
-                                        <div class="flex align-items-center gap-4">
-                                            <div class="bg-blue-100 p-3 border-round-xl">
-                                                <i class="pi pi-shopping-cart text-3xl text-blue-600"></i>
-                                            </div>
-                                            <div>
-                                                <h3 class="m-0 font-bold text-900">Shopping Hub</h3>
-                                                <p class="m-0 text-700 text-sm mt-1">Browse and manage your orders.
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <p-button label="Go to the dashboard" severity="info" [rounded]="true"
-                                            size="small" styleClass="font-bold shadow-2 hover:shadow-4"
-                                            (onClick)="navigateTo('/buyer/dashboard')"></p-button>
-                                    </div>
-                                    }
-
-                                    @if(isDelivery) {
-                                    <div
-                                        class="bg-orange-50 p-4 border-round-xl border-left-3 border-orange-500 shadow-1 hover:shadow-3 transition-all flex flex-column md:flex-row align-items-start md:align-items-center justify-content-between gap-3 mb-2">
-                                        <div class="flex align-items-center gap-4">
-                                            <div class="bg-orange-100 p-3 border-round-xl">
-                                                <i class="pi pi-truck text-3xl text-orange-600"></i>
-                                            </div>
-                                            <div>
-                                                <h3 class="m-0 font-bold text-900">Delivery Portal</h3>
-                                                <p class="m-0 text-700 text-sm mt-1">View assigned deliveries and
-                                                    track transportation status.</p>
-                                            </div>
-                                        </div>
-                                        <p-button label="Go to the dashboard" severity="warn" [rounded]="true"
-                                            size="small" styleClass="font-bold shadow-2 hover:shadow-4"
-                                            (onClick)="navigateTo('/delivery/dashboard')"></p-button>
-                                    </div>
-                                    }
-
-                                    <!-- Registration Prompts for missing roles -->
-                                    @if (!isFarmer || !isBuyer || !isDelivery) {
-                                    <div class="mt-2">
-                                        <h4 class="text-sm font-bold text-500 uppercase mb-3 px-2">Join KrishiYatra
-                                            Network</h4>
-                                        <div class="grid">
-                                            @if(!isFarmer) {
-                                            <div class="col-12 md:col-4 p-2">
-                                                <div class="p-3 border-1 border-200 border-round-xl hover:border-green-500 shadow-1 hover:shadow-3 transition-all cursor-pointer surface-card flex flex-column align-items-center text-center gap-2 h-full"
-                                                    (click)="navigateTo('/farmer/register')">
-                                                    <i
-                                                        class="pi pi-user-plus text-2xl text-green-600 bg-green-50 p-3 border-circle"></i>
-                                                    <span class="font-bold text-800">As Farmer</span>
-                                                    <small class="text-500 font-medium">Sell your crops</small>
-                                                </div>
-                                            </div>
-                                            }
-                                            @if(!isBuyer) {
-                                            <div class="col-12 md:col-4 p-2">
-                                                <div class="p-3 border-1 border-200 border-round-xl hover:border-blue-500 shadow-1 hover:shadow-3 transition-all cursor-pointer surface-card flex flex-column align-items-center text-center gap-2 h-full"
-                                                    (click)="navigateTo('/buyer/register')">
-                                                    <i
-                                                        class="pi pi-shopping-bag text-2xl text-blue-600 bg-blue-50 p-3 border-circle"></i>
-                                                    <span class="font-bold text-800">As Buyer</span>
-                                                    <small class="text-500 font-medium">Buy in bulk</small>
-                                                </div>
-                                            </div>
-                                            }
-                                            @if(!isDelivery) {
-                                            <div class="col-12 md:col-4 p-2">
-                                                <div class="p-3 border-1 border-200 border-round-xl hover:border-orange-500 shadow-1 hover:shadow-3 transition-all cursor-pointer surface-card flex flex-column align-items-center text-center gap-2 h-full"
-                                                    (click)="navigateTo('/delivery/register')">
-                                                    <i
-                                                        class="pi pi-map text-2xl text-orange-600 bg-orange-50 p-3 border-circle"></i>
-                                                    <span class="font-bold text-800">As Linker</span>
-                                                    <small class="text-500 font-medium">Manage logistics</small>
-                                                </div>
-                                            </div>
-                                            }
-                                        </div>
-                                    </div>
-                                    }
-
-                                    <!-- Account Overview Stats (dynamic, not hardcoded) -->
-                                    <div class="mt-2">
-                                        <h4 class="text-sm font-bold text-500 uppercase mb-3 px-2">Account
-                                            Overview</h4>
-                                        <div class="grid">
-                                            <div class="col-12 md:col-4 p-2">
-                                                <div
-                                                    class="surface-ground p-4 border-round-xl border-1 border-200 text-center shadow-1">
-                                                    <div class="flex align-items-center justify-content-center mx-auto mb-3 border-circle bg-green-50"
-                                                        style="width: 48px; height: 48px;">
-                                                        <i class="pi pi-verified text-green-600 text-xl"></i>
-                                                    </div>
-                                                    <span class="block text-2xl font-bold text-900">{{ user.roles.length
-                                                        }}</span>
-                                                    <span class="block text-xs text-500 font-medium mt-1">Active
-                                                        Roles</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 md:col-4 p-2">
-                                                <div
-                                                    class="surface-ground p-4 border-round-xl border-1 border-200 text-center shadow-1">
-                                                    <div class="flex align-items-center justify-content-center mx-auto mb-3 border-circle bg-blue-50"
-                                                        style="width: 48px; height: 48px;">
-                                                        <i class="pi pi-shield text-blue-600 text-xl"></i>
-                                                    </div>
-                                                    <span class="block text-2xl font-bold text-900">
-                                                        @if(isAdmin) { Admin }
-                                                        @else { Standard }
-                                                    </span>
-                                                    <span class="block text-xs text-500 font-medium mt-1">Account
-                                                        Type</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 md:col-4 p-2">
-                                                <div
-                                                    class="surface-ground p-4 border-round-xl border-1 border-200 text-center shadow-1">
-                                                    <div class="flex align-items-center justify-content-center mx-auto mb-3 border-circle bg-orange-50"
-                                                        style="width: 48px; height: 48px;">
-                                                        <i class="pi pi-check-circle text-orange-600 text-xl"></i>
-                                                    </div>
-                                                    <span class="block text-2xl font-bold text-green-600">
-                                                        Active
-                                                    </span>
-                                                    <span class="block text-xs text-500 font-medium mt-1">Account
-                                                        Status</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </p-tabpanel>
-
-                            <p-tabpanel value="1" class="pt-5">
-                                <form [formGroup]="passwordForm" (ngSubmit)="updatePassword()"
-                                    class="flex flex-column gap-5 max-w-lg surface-ground p-5 border-round-2xl border-1 border-200">
-                                    <div>
-                                        <h3 class="m-0 font-bold text-900 text-xl border-bottom-1 border-300 pb-3">
-                                            Change Password</h3>
-                                        <p class="text-sm text-600 mt-3 font-medium line-height-3">Ensure your
-                                            account
-                                            is using a long, random password to stay secure.</p>
-                                    </div>
-
-                                    <div class="flex flex-column gap-4">
-                                        <div class="flex flex-column gap-2">
-                                            <label class="text-sm font-bold text-800">Current Password</label>
-                                            <p-password formControlName="currentPassword" [feedback]="false"
-                                                [toggleMask]="true" styleClass="w-full"
-                                                inputStyleClass="w-full p-3 border-round-lg"></p-password>
-                                        </div>
-
-                                        <p-divider styleClass="m-0"></p-divider>
-
-                                        <div class="flex flex-column gap-2">
-                                            <label class="text-sm font-bold text-800">New Password</label>
-                                            <p-password formControlName="newPassword" [toggleMask]="true"
-                                                styleClass="w-full" inputStyleClass="w-full p-3 border-round-lg"
-                                                placeholder="At least 6 characters"></p-password>
-                                            @if(passwordForm.get('newPassword')?.touched &&
-                                            passwordForm.get('newPassword')?.errors?.['minlength']) {
-                                            <small class="p-error font-bold">
-                                                Password must be at least 6 characters.
-                                            </small>
-                                            }
-                                        </div>
-
-                                        <div class="flex flex-column gap-2">
-                                            <label class="text-sm font-bold text-800">Confirm New Password</label>
-                                            <p-password formControlName="confirmPassword" [feedback]="false"
-                                                [toggleMask]="true" styleClass="w-full"
-                                                inputStyleClass="w-full p-3 border-round-lg"></p-password>
-                                            @if(passwordForm.errors?.['mismatch'] &&
-                                            passwordForm.get('confirmPassword')?.touched) {
-                                            <small class="p-error font-bold">
-                                                Passwords do not match.
-                                            </small>
-                                            }
-                                        </div>
-                                    </div>
-
-                                    <div class="flex justify-content-end mt-2">
-                                        <p-button type="submit" label="Save Changes" [loading]="loading"
-                                            icon="pi pi-check" [rounded]="true" styleClass="px-5 shadow-3"></p-button>
-                                    </div>
-                                </form>
-                            </p-tabpanel>
-                        </p-tabpanels>
-                    </p-tabs>
+                                     <span class="text-gray-800 font-medium">
+                                         {{ (accountService.isRoleVerified(role) || userData?.verifiedRoles?.includes(role)) ? 'Verified Member' : (userData.statusMessages?.[role] || 'Under verification (PENDING)') }}
+                                     </span>
+                                 </div>
+                                 <i class="pi" [ngClass]="(accountService.isRoleVerified(role) || userData?.verifiedRoles?.includes(role)) ? 'pi-check-circle text-green-500' : 'pi-clock text-orange-500'"></i>
+                            </div>
+                            <div *ngIf="!userData?.roles?.length" class="text-gray-500 italic p-2">Standard User (No special roles)</div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <span class="block text-sm text-gray-500 font-bold uppercase mb-1">Bio/Description</span>
+                        <span class="block text-lg text-gray-700 font-medium" style="white-space: pre-line;">{{ userData?.description || 'No description provided.' }}</span>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="w-full flex flex-column align-items-center justify-content-center h-full" *ngIf="activeTab === 'privacy' || activeTab === 'help'">
+             <h2 class="text-2xl font-bold text-gray-700">{{ activeTab === 'privacy' ? 'Privacy Policy' : 'Help Center' }}</h2>
+             <p class="text-gray-500 mt-2">Content coming soon...</p>
+        </div>
+
     </div>
+  </div>
 </div>

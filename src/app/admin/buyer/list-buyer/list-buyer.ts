@@ -16,12 +16,14 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
     selector: 'app-list-buyer',
     standalone: true,
     imports: [CommonModule, DialogModule, FormsModule, TextareaModule, DetailBuyerComponent,
-        TableModule, ButtonModule, TagModule, ProgressSpinnerModule, IconFieldModule, InputIconModule, InputTextModule],
+        TableModule, ButtonModule, TagModule, ProgressSpinnerModule, IconFieldModule, InputIconModule, InputTextModule, TooltipModule, SelectModule],
     templateUrl: './list-buyer.html',
     styleUrls: ['./list-buyer.css']
 })
@@ -43,15 +45,28 @@ export class ListBuyerComponent implements OnInit {
         consumerType: '',
         businessLocation: ''
     };
+
+    consumerTypeOptions = [
+        { label: 'All Types', value: '' },
+        { label: 'Hotel', value: 'HOTEL' },
+        { label: 'Wholesaler', value: 'WHOLESALER' },
+        { label: 'Restaurant', value: 'RESTAURANT' },
+        { label: 'Retailer', value: 'RETAILER' },
+        { label: 'Normal', value: 'NORMAL' },
+        { label: 'Individual', value: 'INDIVIDUAL' },
+        { label: 'Hotel & Restaurant', value: 'HOTEL_RESTAURANT' }
+    ];
+
     private searchSubject = new Subject<void>();
 
     detailDialog = false;
     selectedBuyer: any = null;
     detailLoading = false;
 
-    rejectDialog = false;
+    actionDialog = false;
+    actionType: 'REJECT' | 'BLOCK' = 'REJECT';
     selectedUsername = '';
-    rejectionReason = '';
+    actionReason = '';
 
     constructor(
         private buyerService: BuyerService,
@@ -63,7 +78,9 @@ export class ListBuyerComponent implements OnInit {
     ngOnInit() {
         this.setupSearch();
         if (isPlatformBrowser(this.platformId)) {
-            this.loadBuyers();
+            setTimeout(() => {
+                this.loadBuyers();
+            });
         }
     }
 
@@ -110,11 +127,11 @@ export class ListBuyerComponent implements OnInit {
 
         const requestId = ++this.currentRequestId;
 
-        let verified: boolean | undefined;
-        if (this.activeFilter === 'pending') verified = false;
-        else if (this.activeFilter === 'verified') verified = true;
+        let status: string | undefined;
+        if (this.activeFilter === 'pending') status = 'PENDING';
+        else if (this.activeFilter === 'verified') status = 'VERIFIED';
 
-        this.buyerService.getBuyers(verified, this.page, this.size, this.filters)
+        this.buyerService.getBuyers(status, this.page, this.size, this.filters)
             .pipe(finalize(() => {
                 if (requestId === this.currentRequestId) {
                     this.loading = false;
@@ -152,32 +169,58 @@ export class ListBuyerComponent implements OnInit {
 
     approveBuyer(username: string) {
         this.buyerService.verifyBuyer({ username, approved: true }).subscribe({
-            next: (res) => { this.toastService.successResponse(res); this.loadBuyers(); },
-            error: (err) => this.toastService.errorResponse(err)
+            next: (res: any) => { this.toastService.successResponse(res); this.loadBuyers(); },
+            error: (err: any) => this.toastService.errorResponse(err)
         });
     }
 
-    showRejectDialog(username: string) {
+    showActionDialog(username: string, type: 'REJECT' | 'BLOCK') {
         this.selectedUsername = username;
-        this.rejectionReason = '';
-        this.rejectDialog = true;
+        this.actionType = type;
+        this.actionReason = '';
+        this.actionDialog = true;
     }
 
-    confirmReject() {
-        if (!this.rejectionReason.trim()) {
-            this.toastService.warningResponse('Please provide a reason for rejection.');
+    confirmAction() {
+        if (!this.actionReason.trim()) {
+            this.toastService.warningResponse('Please provide a reason.');
             return;
         }
-        this.buyerService.verifyBuyer({ username: this.selectedUsername, approved: false, reason: this.rejectionReason }).subscribe({
-            next: (res) => { this.toastService.successResponse(res); this.rejectDialog = false; this.loadBuyers(); },
-            error: (err) => this.toastService.errorResponse(err)
-        });
+        if (this.actionType === 'REJECT') {
+            this.buyerService.verifyBuyer({ username: this.selectedUsername, approved: false, reason: this.actionReason }).subscribe({
+                next: (res: any) => { 
+                    this.toastService.successResponse(res); 
+                    this.actionDialog = false; 
+                    this.loadBuyers(); 
+                },
+                error: (err: any) => { 
+                    this.toastService.errorResponse(err); 
+                    this.actionDialog = false; 
+                }
+            });
+        } else {
+            this.buyerService.blockUnblockBuyer(this.selectedUsername, true, this.actionReason).subscribe({
+                next: (res: any) => { 
+                    this.toastService.successResponse(res); 
+                    this.actionDialog = false; 
+                    this.loadBuyers(); 
+                },
+                error: (err: any) => { 
+                    this.toastService.errorResponse(err); 
+                    this.actionDialog = false; 
+                }
+            });
+        }
     }
 
     blockUnblock(username: string, currentlyActive: boolean) {
-        this.buyerService.blockUnblockBuyer(username, currentlyActive).subscribe({
-            next: (res) => { this.toastService.successResponse(res); this.loadBuyers(); },
-            error: (err) => this.toastService.errorResponse(err)
-        });
+        if (currentlyActive) {
+            this.showActionDialog(username, 'BLOCK');
+        } else {
+            this.buyerService.blockUnblockBuyer(username, false).subscribe({
+                next: (res: any) => { this.toastService.successResponse(res); this.loadBuyers(); },
+                error: (err: any) => this.toastService.errorResponse(err)
+            });
+        }
     }
 }

@@ -60,12 +60,12 @@
 
         <!-- Sidebar Footer -->
         <div class="p-3 border-top-1 border-200">
-            <a routerLink="/profile" 
-               class="flex align-items-center justify-content-center gap-2 w-full px-3 py-2 border-round-xl border-1 border-300 bg-white text-700 hover:surface-100 no-underline text-sm font-semibold transition-all transition-duration-200"
-               style="height: 44px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+            <button (click)="goToProfile()" 
+               class="flex align-items-center justify-content-center gap-2 w-full px-3 py-2 border-round-xl border-1 border-300 bg-white text-700 hover:surface-100 no-underline text-sm font-semibold transition-all transition-duration-200 cursor-pointer"
+               style="height: 44px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); outline: none;">
                 <i class="pi pi-user" style="font-size: 14px;"></i>
                 <span>Back to Profile</span>
-            </a>
+            </button>
         </div>
     </aside>
 

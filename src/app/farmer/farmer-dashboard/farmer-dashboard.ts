@@ -6,6 +6,8 @@ import { AccountService } from '../../components/account/account.service';
 import { ButtonModule } from 'primeng/button';
 import { StockService } from '../../stock/stock.service';
 
+import { NavigationService } from '../../util/navigation.service';
+
 @Component({
   selector: 'app-farmer-dashboard',
   standalone: true,
@@ -21,9 +23,17 @@ export class FarmerDashboard implements OnInit {
   constructor(
     private stockService: StockService,
     private accountService: AccountService,
+    private navigationService: NavigationService,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
   ) { }
+  
+  goToProfile() {
+    this.navigationService.isExiting = true;
+    this.router.navigate(['/profile']).then(() => {
+      this.navigationService.isExiting = false;
+    });
+  }
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {

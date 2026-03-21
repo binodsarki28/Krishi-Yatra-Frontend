@@ -11,6 +11,7 @@ import {
     IUserLoginRequest,
     IOtpVerify,
     IOtpRequest,
+    IPasswordUpdate
 } from './IAccount';
 
 @Injectable({
@@ -55,6 +56,27 @@ export class AccountService {
         return '';
     }
 
+    getProfileUrl(): string {
+        if (isPlatformBrowser(this.platformId)) {
+            return localStorage.getItem('profileUrl') || '';
+        }
+        return '';
+    }
+
+    getDescription(): string {
+        if (isPlatformBrowser(this.platformId)) {
+            return localStorage.getItem('description') || '';
+        }
+        return '';
+    }
+
+    getPhoneNumber(): string {
+        if (isPlatformBrowser(this.platformId)) {
+            return localStorage.getItem('phoneNumber') || '';
+        }
+        return '';
+    }
+
     getRoles(): string[] {
         if (isPlatformBrowser(this.platformId)) {
             const roles = localStorage.getItem('roles');
@@ -69,6 +91,17 @@ export class AccountService {
             return roles ? JSON.parse(roles) : [];
         }
         return [];
+    }
+
+    getStatusMessage(role: string): string {
+        if (isPlatformBrowser(this.platformId)) {
+            const msgs = localStorage.getItem('statusMessages');
+            if (msgs) {
+                const map = JSON.parse(msgs);
+                return map[role] || '';
+            }
+        }
+        return '';
     }
 
     hasRole(role: string): boolean {
@@ -126,4 +159,21 @@ export class AccountService {
         return this.http.get<IResponseWithObject>(url);
     }
 
+    /**
+     * PUT /api/v1/user/profile
+     * Updates user profile data
+     */
+    updateProfile(formData: FormData): Observable<IResponseWithObject> {
+        const url: string = GenerateUrlUtils.generateUrl(Endpoint.UPDATE_PROFILE);
+        return this.http.put<IResponseWithObject>(url, formData);
+    }
+
+    /**
+     * PUT /api/v1/user/password
+     * Updates user password
+     */
+    updatePassword(request: IPasswordUpdate): Observable<IResponse> {
+        const url: string = GenerateUrlUtils.generateUrl(Endpoint.UPDATE_PASSWORD);
+        return this.http.put<IResponse>(url, request);
+    }
 }

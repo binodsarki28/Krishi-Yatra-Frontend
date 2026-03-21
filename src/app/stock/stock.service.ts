@@ -55,4 +55,13 @@ export class StockService {
     }
     return this.http.get<IResponseWithObject>(GenerateUrlUtils.generateUrl(url));
   }
+
+  toggleStockStatus(slug: string): Observable<IResponse> {
+    return this.http.put<IResponse>(GenerateUrlUtils.generateUrl(Endpoint.API_VERSION + 'stock/toggle-status/' + slug), {});
+  }
+
+  adjustStockQuantity(slug: string, amount: number): Observable<IResponse> {
+    const url = GenerateUrlUtils.generateUrl(Endpoint.STOCK_ADJUST);
+    return this.http.put<IResponse>(url, null, { params: { slug, amount: amount.toString() } });
+  }
 }

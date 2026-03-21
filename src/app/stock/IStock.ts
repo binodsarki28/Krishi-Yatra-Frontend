@@ -7,6 +7,8 @@ export interface IStockListResponse {
     subCategoryName: string;
     categoryName: string;
     farmerName: string;
+    minQuantity: number;
+    stockImages: string[];
     active: boolean;
 }
 

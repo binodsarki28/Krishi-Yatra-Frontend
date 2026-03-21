@@ -96,6 +96,11 @@ export interface IOtpVerifyAndRegister {
     phoneNumber?: string;
 }
 
+export interface IPasswordUpdate {
+    currentPassword?: string;
+    newPassword?: string;
+}
+
 // ────────────────────────────────────────────────────────────
 // RESPONSE DTOs
 // ────────────────────────────────────────────────────────────
@@ -116,8 +121,12 @@ export interface IJwtResponse {
     username: string;
     fullName: string;
     email: string;
+    phoneNumber?: string;
+    profileUrl?: string;
+    description?: string;
     roles: RoleType[];
     verifiedRoles: RoleType[];
+    statusMessages?: { [key: string]: string };
 }
 
 /**

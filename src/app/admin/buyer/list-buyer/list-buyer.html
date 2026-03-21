@@ -1,185 +1,192 @@
 <div class="fadein animation-duration-300">
-    <div class="flex align-items-center justify-content-between mb-3">
+    <!-- Header Row -->
+    <div class="flex flex-column md:flex-row md:align-items-center justify-content-between mb-3 gap-3">
         <div class="flex align-items-center gap-3">
             <div class="flex align-items-center justify-content-center border-round-xl"
-                style="width:36px; height:36px; background: linear-gradient(135deg, #3b82f6, #2563eb);">
-                <i class="pi pi-shopping-bag text-white" style="font-size: 18px;"></i>
+                style="width:40px; height:40px; background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                <i class="pi pi-shopping-bag text-white" style="font-size: 1.2rem;"></i>
             </div>
             <div>
-                <h2 class="m-0 text-lg font-bold text-900">Buyer Management</h2>
-                <p class="m-0 mt-1 text-xs text-500">View, verify and manage all buyer registrations</p>
+                <h2 class="m-0 text-2xl font-bold text-900">Buyer Management</h2>
+                <p class="m-0 mt-1 text-sm text-500 font-medium">View, verify and manage all buyer registrations</p>
             </div>
         </div>
         <p-button icon="pi pi-refresh" label="Refresh" [outlined]="true" [loading]="loading" severity="secondary"
-            size="small" styleClass="border-round-lg" (onClick)="loadBuyers()"></p-button>
+            styleClass="border-round-xl font-semibold" (onClick)="loadBuyers()"></p-button>
     </div>
 
-    <div class="surface-card border-round-xl border-1 border-200 p-3 mb-3 shadow-1">
-        <div class="grid">
-            <div class="col-12 md:col-3">
-                <p-iconfield>
-                    <p-inputicon styleClass="pi pi-search"></p-inputicon>
+    <!-- Search Input Grid Box -->
+    <div class="surface-card border-round-xl border-1 border-200 p-3 mb-4 shadow-1 bg-white">
+        <div class="grid align-items-center">
+            <div class="col-12 md:col-2">
+                <p-iconField iconPosition="left">
+                    <p-inputIcon styleClass="pi pi-search"></p-inputIcon>
                     <input type="text" pInputText [(ngModel)]="filters.fullName" (input)="onSearch()"
-                        placeholder="Search by name..." class="w-full border-round-lg" />
-                </p-iconfield>
+                        placeholder="Search by name..." class="w-full border-none shadow-none text-sm" />
+                </p-iconField>
             </div>
-            <div class="col-12 md:col-3">
-                <p-iconfield>
-                    <p-inputicon styleClass="pi pi-at"></p-inputicon>
+            <div class="col-12 md:col-2">
+                <p-iconField iconPosition="left">
+                    <p-inputIcon styleClass="pi pi-at"></p-inputIcon>
                     <input type="text" pInputText [(ngModel)]="filters.username" (input)="onSearch()"
-                        placeholder="Search username..." class="w-full border-round-lg" />
-                </p-iconfield>
+                        placeholder="Search username..." class="w-full border-none shadow-none text-sm" />
+                </p-iconField>
             </div>
             <div class="col-12 md:col-2">
-                <p-iconfield>
-                    <p-inputicon styleClass="pi pi-tag"></p-inputicon>
-                    <input type="text" pInputText [(ngModel)]="filters.consumerType" (input)="onSearch()"
-                        placeholder="Consumer type..." class="w-full border-round-lg" />
-                </p-iconfield>
+                <p-select [options]="consumerTypeOptions" [(ngModel)]="filters.consumerType" (onChange)="onSearch(true)"
+                    optionLabel="label" optionValue="value" placeholder="Consumer type..." [showClear]="true"
+                    styleClass="w-full border-none shadow-none text-sm h-full flex align-items-center">
+                </p-select>
             </div>
             <div class="col-12 md:col-2">
-                <p-iconfield>
-                    <p-inputicon styleClass="pi pi-map-marker"></p-inputicon>
+                <p-iconField iconPosition="left">
+                    <p-inputIcon styleClass="pi pi-map-marker"></p-inputIcon>
                     <input type="text" pInputText [(ngModel)]="filters.businessLocation" (input)="onSearch()"
-                        placeholder="Location..." class="w-full border-round-lg" />
-                </p-iconfield>
+                        placeholder="Location..." class="w-full border-none shadow-none text-sm" />
+                </p-iconField>
             </div>
-            <div class="col-12 md:col-2 flex gap-2">
-                <p-button icon="pi pi-search" label="Search" severity="info" styleClass="border-round-lg w-full"
-                    (onClick)="onSearch(true)"></p-button>
-                <p-button icon="pi pi-times" label="Clear" [outlined]="true" severity="secondary"
-                    styleClass="border-round-lg" (onClick)="clearFilters()"></p-button>
+            <div class="col-12 md:col-4 flex gap-2">
+                <button pButton label="Search" icon="pi pi-search"
+                    class="p-button-success flex-grow-1 border-round-xl font-bold" (click)="onSearch(true)"></button>
+                <button pButton label="Clear" icon="pi pi-times" [outlined]="true" severity="secondary"
+                    class="border-round-xl px-3 font-bold" (click)="clearFilters()"></button>
             </div>
         </div>
     </div>
 
-    <div class="flex gap-1 mb-3 surface-200 p-1 border-round-lg" style="width: fit-content;">
-        <p-button [label]="'All Buyers'" icon="pi pi-list" [text]="activeFilter !== 'all'"
-            [styleClass]="'border-round-md text-sm ' + (activeFilter === 'all' ? 'surface-card shadow-1 font-semibold text-900' : 'text-700')"
-            (onClick)="setFilter('all')"></p-button>
-        <p-button label="Pending" icon="pi pi-clock" [text]="activeFilter !== 'pending'"
-            [styleClass]="'border-round-md text-sm ' + (activeFilter === 'pending' ? 'surface-card shadow-1 font-semibold text-orange-600' : '')"
-            (onClick)="setFilter('pending')"></p-button>
-        <p-button label="Verified" icon="pi pi-check-circle" [text]="activeFilter !== 'verified'"
-            [styleClass]="'border-round-md text-sm ' + (activeFilter === 'verified' ? 'surface-card shadow-1 font-semibold text-green-600' : '')"
-            (onClick)="setFilter('verified')"></p-button>
-    </div>
-
-    @if (loading) {
-    <div class="flex flex-column align-items-center justify-content-center py-8 text-500 gap-3">
-        <p-progressSpinner strokeWidth="3" styleClass="w-3rem h-3rem"></p-progressSpinner>
-        <p class="m-0 text-sm">Loading buyers...</p>
-    </div>
-    }
-
-    @if (!loading && buyers.length === 0) {
-    <div class="flex flex-column align-items-center justify-content-center py-8 text-center">
-        <div class="flex align-items-center justify-content-center border-round-2xl bg-blue-50 mb-3"
-            style="width:64px; height:64px;">
-            <i class="pi pi-check-circle text-blue-500" style="font-size: 28px;"></i>
-        </div>
-        <h3 class="m-0 mb-1 text-lg font-bold text-900">No Buyers Found</h3>
-        <p class="m-0 text-sm text-500">No buyers match the current filter.</p>
-    </div>
-    }
-
-    @if (!loading && buyers.length > 0) {
-    <p-table [value]="buyers" [tableStyle]="{'min-width': '60rem'}" styleClass="p-datatable-sm" [rowHover]="true" [scrollable]="true" scrollHeight="calc(100vh - 315px)">
-        <ng-template #header>
-            <tr>
-                <th>Name</th>
-                <th>Consumer Type</th>
-                <th>Location</th>
-                <th>Verified</th>
-                <th>Account</th>
-                <th>Actions</th>
-            </tr>
-        </ng-template>
-        <ng-template #body let-buyer>
-            <tr>
-                <td>
-                    <div class="flex align-items-center gap-3">
-                        <div class="flex align-items-center justify-content-center border-round-lg text-sm font-bold text-white flex-shrink-0"
-                            style="width:36px; height:36px; background: linear-gradient(135deg, #3b82f6, #2563eb);">
-                            {{ buyer.fullName.charAt(0) || 'B' }}
-                        </div>
-                        <div class="flex flex-column">
-                            <span class="font-semibold text-900">{{ buyer.fullName }}</span>
-                            <span class="text-xs text-400">{{ buyer.username }}</span>
-                        </div>
-                    </div>
-                </td>
-                <td class="text-sm text-700">{{ buyer.consumerType || '—' }}</td>
-                <td class="text-sm text-700">{{ buyer.businessLocation || '—' }}</td>
-                <td>
-                    <p-tag [value]="buyer.isVerified ? 'Verified' : 'Pending'"
-                        [severity]="buyer.isVerified ? 'success' : 'warn'"
-                        [icon]="buyer.isVerified ? 'pi pi-check-circle' : 'pi pi-clock'" [rounded]="true"></p-tag>
-                </td>
-                <td>
-                    <p-tag [value]="buyer.isActive ? 'Active' : 'Blocked'"
-                        [severity]="buyer.isActive ? 'success' : 'danger'"
-                        [icon]="buyer.isActive ? 'pi pi-user' : 'pi pi-ban'" [rounded]="true"></p-tag>
-                </td>
-                <td>
-                    <div class="flex align-items-center gap-2">
-                        <p-button icon="pi pi-eye" [rounded]="true" [text]="true" severity="secondary"
-                            (onClick)="viewDetail(buyer.username)"></p-button>
-                        @if (!buyer.isVerified) {
-                        <p-button icon="pi pi-check" label="Verify" severity="success" size="small" [rounded]="true"
-                            (onClick)="approveBuyer(buyer.username)"></p-button>
-                        <p-button icon="pi pi-times" label="Reject" severity="danger" size="small" [outlined]="true"
-                            [rounded]="true" (onClick)="showRejectDialog(buyer.username)"></p-button>
-                        }
-                        @if (buyer.isVerified) {
-                        <p-button [icon]="buyer.isActive ? 'pi pi-ban' : 'pi pi-check-circle'"
-                            [label]="buyer.isActive ? 'Block' : 'Unblock'"
-                            [severity]="buyer.isActive ? 'danger' : 'success'" size="small" [outlined]="true"
-                            [rounded]="true" (onClick)="blockUnblock(buyer.username, buyer.isActive)"></p-button>
-                        }
-                    </div>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
-
-    @if (buyers.length === size || page > 0) {
-    <div class="flex justify-content-between align-items-center p-3 surface-card border-top-1 border-200">
-        <span class="text-sm text-500 font-medium">Page {{ page + 1 }}</span>
-        <div class="flex gap-2">
-            <p-button icon="pi pi-chevron-left" label="Previous" [outlined]="true" severity="secondary" size="small"
-                [disabled]="page === 0" (onClick)="prevPage()"></p-button>
-            <p-button icon="pi pi-chevron-right" iconPos="right" label="Next" [outlined]="true" severity="secondary"
-                size="small" [disabled]="!hasMore" (onClick)="nextPage()"></p-button>
+    <!-- Filter Bar -->
+    <div class="flex mb-4">
+        <div class="flex border-1 border-200 border-round-xl bg-white overflow-hidden p-1 shadow-1">
+            <button pButton label="All Buyers" icon="pi pi-list"
+                class="p-button-text p-button-sm px-4 py-2 font-semibold" [class.bg-gray-100]="activeFilter === 'all'"
+                [class.text-900]="activeFilter === 'all'" (click)="setFilter('all')"></button>
+            <button pButton label="Pending" icon="pi pi-clock"
+                class="p-button-text p-button-sm px-4 py-2 font-semibold text-orange-500"
+                [class.bg-orange-50]="activeFilter === 'pending'" [class.text-orange-700]="activeFilter === 'pending'"
+                (click)="setFilter('pending')"></button>
+            <button pButton label="Verified" icon="pi pi-check-circle"
+                class="p-button-text p-button-sm px-4 py-2 font-semibold text-green-500"
+                [class.bg-green-50]="activeFilter === 'verified'" [class.text-green-700]="activeFilter === 'verified'"
+                (click)="setFilter('verified')"></button>
         </div>
     </div>
-    }
-    }
+
+    <!-- Table -->
+    <div class="surface-card border-1 border-200 border-round-xl shadow-1 overflow-hidden">
+        <p-table [value]="buyers" [loading]="loading" responsiveLayout="scroll" styleClass="p-datatable-sm">
+            <ng-template pTemplate="header">
+                <tr class="surface-50">
+                    <th class="text-700 font-bold text-xs uppercase p-4">Name</th>
+                    <th class="text-700 font-bold text-xs uppercase p-4">Consumer Type</th>
+                    <th class="text-700 font-bold text-xs uppercase p-4">Location</th>
+                    <th class="text-700 font-bold text-xs uppercase p-4 text-center">Verified</th>
+                    <th class="text-700 font-bold text-xs uppercase p-4 text-center">Account</th>
+                    <th class="text-700 font-bold text-xs uppercase p-4 text-center" style="width: 240px">Actions</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-buyer>
+                <tr class="hover:bg-gray-50 transition-all transition-duration-200 border-bottom-1 border-100">
+                    <td class="p-4">
+                        <div class="flex align-items-center gap-3">
+                            <div class="flex align-items-center justify-content-center border-round-lg text-sm font-bold text-white flex-shrink-0"
+                                style="width:36px; height:36px; background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                                {{ buyer.fullName.charAt(0) || 'B' }}
+                            </div>
+                            <div class="flex flex-column text-left">
+                                <span class="text-sm font-semibold text-900">{{ buyer.fullName }}</span>
+                                <span class="text-xs text-500">{{ buyer.username }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4 text-sm text-600">{{ buyer.consumerType }}</td>
+                    <td class="p-4 text-sm text-600">{{ buyer.businessLocation }}</td>
+                    <td class="p-4 text-center">
+                        <p-tag [value]="buyer.status === 'VERIFIED' ? 'Verified' : (buyer.status === 'BLOCKED' ? 'Blocked' : 'Pending')"
+                            [severity]="buyer.status === 'VERIFIED' ? 'success' : (buyer.status === 'BLOCKED' ? 'danger' : 'warn')"
+                            [icon]="buyer.status === 'VERIFIED' ? 'pi pi-check-circle' : (buyer.status === 'BLOCKED' ? 'pi pi-ban' : 'pi pi-clock')"
+                            styleClass="text-xs px-2"></p-tag>
+                    </td>
+                    <td class="p-4 text-center">
+                        <p-tag [value]="buyer.isActive ? 'Active' : 'Blocked'"
+                            [severity]="buyer.isActive ? 'success' : 'danger'"
+                            [icon]="buyer.isActive ? 'pi pi-user' : 'pi pi-ban'" styleClass="text-xs px-2"></p-tag>
+                    </td>
+                    <td class="p-4">
+                        <div class="grid grid-nogutter align-items-center justify-content-center gap-2"
+                            style="width: 240px; margin: 0 auto;">
+                            <!-- Slot 1: View -->
+                            <div class="col-fixed flex justify-content-center" style="width: 40px;">
+                                <button pButton icon="pi pi-eye"
+                                    class="p-button-text p-button-rounded p-button-secondary p-button-sm action-btn"
+                                    pTooltip="View Details" tooltipPosition="bottom"
+                                    (click)="viewDetail(buyer.username)"></button>
+                            </div>
+
+                            <!-- Slot 2: Verify or Block/Unblock -->
+                            <div class="col-fixed flex justify-content-center" style="width: 90px;">
+                                @if (!buyer.isVerified) {
+                                <button pButton label="Verify" icon="pi pi-check"
+                                    class="p-button-sm p-button-success border-round-xl px-2 py-1 w-full"
+                                    (click)="approveBuyer(buyer.username)"></button>
+                                } @else {
+                                <button pButton [label]="buyer.isActive ? 'Block' : 'Unblock'"
+                                    [icon]="buyer.isActive ? 'pi pi-ban' : 'pi pi-check-circle'"
+                                    class="p-button-sm border-round-xl px-2 py-1 w-full"
+                                    [class.p-button-danger]="buyer.isActive" [class.p-button-success]="!buyer.isActive"
+                                    (click)="blockUnblock(buyer.username, buyer.isActive)"></button>
+                                }
+                            </div>
+
+                            <!-- Slot 3: Reject -->
+                            <div class="col-fixed flex justify-content-center" style="width: 90px;">
+                                @if (!buyer.isVerified) {
+                                <button pButton label="Reject" icon="pi pi-times"
+                                    class="p-button-sm p-button-danger border-round-xl px-2 py-1 w-full"
+                                    (click)="showActionDialog(buyer.username, 'REJECT')"></button>
+                                }
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <div class="flex align-items-center justify-content-between p-4 bg-gray-50 border-top-1 border-200">
+            <span class="text-xs text-500 font-medium">Page {{page + 1}}</span>
+            <div class="flex gap-2">
+                <button pButton label="Previous" icon="pi pi-chevron-left"
+                    class="p-button-outlined p-button-secondary p-button-sm border-round-xl" [disabled]="page === 0"
+                    (click)="prevPage()"></button>
+                <button pButton label="Next" icon="pi pi-chevron-right" iconPos="right"
+                    class="p-button-outlined p-button-secondary p-button-sm border-round-xl" [disabled]="!hasMore"
+                    (click)="nextPage()"></button>
+            </div>
+        </div>
+    </div>
 </div>
 
-<p-dialog [(visible)]="detailDialog" [modal]="true" [style]="{ width: '700px' }" [draggable]="false" [resizable]="false"
-    header="Buyer Profile Insights">
+<p-dialog [(visible)]="detailDialog" [modal]="true" [style]="{ width: '750px' }" [draggable]="false" [resizable]="false"
+    header="Buyer Profile" styleClass="detail-dialog border-round-2xl overflow-hidden">
     <app-detail-buyer [buyer]="selectedBuyer" [loading]="detailLoading" (onApprove)="approveBuyer($event)"
-        (onReject)="showRejectDialog($event)" (onBlockToggle)="blockUnblock($event.username, $event.active)">
+        (onReject)="showActionDialog($event, 'REJECT')" (onBlockToggle)="blockUnblock($event.username, $event.active)">
     </app-detail-buyer>
 </p-dialog>
 
-<p-dialog header="Reject Buyer Application" [(visible)]="rejectDialog" [modal]="true" [style]="{ width: '440px' }"
-    [draggable]="false" [resizable]="false">
+<p-dialog [header]="actionType === 'REJECT' ? 'Reject Application' : 'Block Account'" [(visible)]="actionDialog" [modal]="true" [style]="{ width: '440px' }"
+    [draggable]="false" [resizable]="false" styleClass="border-round-2xl overflow-hidden">
     <div class="text-center py-2">
         <div class="flex align-items-center justify-content-center border-round-xl bg-red-50 mx-auto mb-3"
             style="width:52px; height:52px;">
             <i class="pi pi-exclamation-triangle text-red-500" style="font-size: 22px;"></i>
         </div>
-        <p class="text-sm text-500 mb-3">Provide a reason for rejecting this buyer application.</p>
-        <textarea pTextarea [(ngModel)]="rejectionReason" rows="4" placeholder="Enter reason..."
-            class="w-full border-round-lg"></textarea>
+        <p class="text-sm text-500 mb-3">Please provide a reason for {{ actionType === 'REJECT' ? 'rejection' : 'blocking this account' }}.</p>
+        <textarea pTextarea [(ngModel)]="actionReason" rows="4" placeholder="Enter reason..."
+            class="w-full border-round-lg border-1 border-200 p-3"></textarea>
     </div>
     <ng-template pTemplate="footer">
-        <div class="flex gap-2 justify-content-end">
-            <p-button label="Cancel" severity="secondary" [text]="true" (onClick)="rejectDialog = false"></p-button>
-            <p-button label="Confirm Reject" severity="danger" icon="pi pi-times"
-                (onClick)="confirmReject()"></p-button>
+        <div class="flex gap-2 justify-content-end pb-3 pr-3">
+            <p-button label="Cancel" severity="secondary" [text]="true" (onClick)="actionDialog = false"></p-button>
+            <p-button [label]="actionType === 'REJECT' ? 'Confirm Reject' : 'Confirm Block'" severity="danger" class="border-round-xl"
+                (onClick)="confirmAction()"></p-button>
         </div>
     </ng-template>
 </p-dialog>

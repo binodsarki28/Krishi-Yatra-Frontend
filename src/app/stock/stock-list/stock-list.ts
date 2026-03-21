@@ -73,7 +73,11 @@ export class StockListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadInitialData();
+    // Large applications often benefit from pushing initial data loads to the next macro-task
+    // to avoid ExpressionChangedAfterItHasBeenCheckedError during the initial check.
+    setTimeout(() => {
+      this.loadInitialData();
+    });
   }
 
   loadInitialData() {
@@ -85,6 +89,7 @@ export class StockListComponent implements OnInit {
     this.stockService.getCategories().subscribe({
       next: (res) => {
         this.categories = res.response as ICategoryResponse[];
+        this.cdr.markForCheck();
       }
     });
   }
@@ -93,6 +98,7 @@ export class StockListComponent implements OnInit {
     this.stockService.getSubCategories(categoryId).subscribe({
       next: (res) => {
         this.subCategories = res.response as ISubCategoryResponse[];
+        this.cdr.markForCheck();
       }
     });
   }
@@ -186,6 +192,13 @@ export class StockListComponent implements OnInit {
     if (windowHeight + scrollPos >= dirtyHeight - 100) {
       this.loadStocks();
     }
+  }
+
+  getStockImage(stockImages: string[]): string {
+    if (!stockImages || stockImages.length === 0) {
+      return 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=400';
+    }
+    return stockImages[0] || 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=400';
   }
 
   viewDetail(slug: string) {

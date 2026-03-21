@@ -16,17 +16,19 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
     selector: 'app-list-delivery',
     standalone: true,
     imports: [CommonModule, DialogModule, FormsModule, TextareaModule, DetailDeliveryComponent,
-        TableModule, ButtonModule, TagModule, ProgressSpinnerModule, IconFieldModule, InputIconModule, InputTextModule],
+        TableModule, ButtonModule, TagModule, ProgressSpinnerModule, IconFieldModule, InputIconModule, InputTextModule, TooltipModule, SelectModule],
     templateUrl: './list-delivery.html',
     styleUrls: ['./list-delivery.css']
 })
 export class ListDeliveryComponent implements OnInit {
-    partners: IDeliveryListResponse[] = [];
+    deliveries: IDeliveryListResponse[] = [];
     loading = true;
 
     page = 0;
@@ -41,17 +43,33 @@ export class ListDeliveryComponent implements OnInit {
         fullName: '',
         username: '',
         vehicleType: '',
-        vehicleBrand: ''
+        vehicleBrand: '',
+        vehicleNumber: ''
     };
+
+    vehicleTypeOptions = [
+        { label: 'All Types', value: '' },
+        { label: 'Bicycle', value: 'BICYCLE' },
+        { label: 'Auto', value: 'AUTO' },
+        { label: 'Taxi', value: 'TAXI' },
+        { label: 'Jeep', value: 'JEEP' },
+        { label: 'Van', value: 'VAN' },
+        { label: 'Truck', value: 'TRUCK' },
+        { label: 'Tractor', value: 'TRACTOR' },
+        { label: 'Pickup', value: 'PICKUP' },
+        { label: 'Motorcycle', value: 'MOTORCYCLE' }
+    ];
+
     private searchSubject = new Subject<void>();
 
     detailDialog = false;
-    selectedPartner: any = null;
+    selectedDelivery: any = null;
     detailLoading = false;
 
-    rejectDialog = false;
+    actionDialog = false;
+    actionType: 'REJECT' | 'BLOCK' = 'REJECT';
     selectedUsername = '';
-    rejectionReason = '';
+    actionReason = '';
 
     constructor(
         private deliveryService: DeliveryService,
@@ -63,7 +81,9 @@ export class ListDeliveryComponent implements OnInit {
     ngOnInit() {
         this.setupSearch();
         if (isPlatformBrowser(this.platformId)) {
-            this.loadPartners();
+            setTimeout(() => {
+                this.loadDeliveries();
+            });
         }
     }
 
@@ -72,14 +92,14 @@ export class ListDeliveryComponent implements OnInit {
             debounceTime(400)
         ).subscribe(() => {
             this.page = 0;
-            this.loadPartners();
+            this.loadDeliveries();
         });
     }
 
     onSearch(immediate = false) {
         if (immediate) {
             this.page = 0;
-            this.loadPartners();
+            this.loadDeliveries();
         } else {
             this.searchSubject.next();
         }
@@ -90,19 +110,20 @@ export class ListDeliveryComponent implements OnInit {
             fullName: '',
             username: '',
             vehicleType: '',
-            vehicleBrand: ''
+            vehicleBrand: '',
+            vehicleNumber: ''
         };
         this.page = 0;
-        this.loadPartners();
+        this.loadDeliveries();
     }
 
     setFilter(filter: 'all' | 'pending' | 'verified') {
         this.activeFilter = filter;
         this.page = 0;
-        this.loadPartners();
+        this.loadDeliveries();
     }
 
-    loadPartners() {
+    loadDeliveries() {
         if (this.page === 0) {
             this.loading = true;
             this.cdr.markForCheck();
@@ -110,11 +131,11 @@ export class ListDeliveryComponent implements OnInit {
 
         const requestId = ++this.currentRequestId;
 
-        let verified: boolean | undefined;
-        if (this.activeFilter === 'pending') verified = false;
-        else if (this.activeFilter === 'verified') verified = true;
+        let status: string | undefined;
+        if (this.activeFilter === 'pending') status = 'PENDING';
+        else if (this.activeFilter === 'verified') status = 'VERIFIED';
 
-        this.deliveryService.getDeliveries(verified, this.page, this.size, this.filters)
+        this.deliveryService.getDeliveries(status, this.page, this.size, this.filters)
             .pipe(finalize(() => {
                 if (requestId === this.currentRequestId) {
                     this.loading = false;
@@ -124,7 +145,7 @@ export class ListDeliveryComponent implements OnInit {
             .subscribe({
                 next: (data) => {
                     if (requestId === this.currentRequestId) {
-                        this.partners = data || [];
+                        this.deliveries = data || [];
                         this.hasMore = data && data.length === this.size;
                         this.cdr.markForCheck();
                     }
@@ -138,46 +159,72 @@ export class ListDeliveryComponent implements OnInit {
             });
     }
 
-    nextPage() { if (this.hasMore) { this.page++; this.loadPartners(); } }
-    prevPage() { if (this.page > 0) { this.page--; this.loadPartners(); } }
+    nextPage() { if (this.hasMore) { this.page++; this.loadDeliveries(); } }
+    prevPage() { if (this.page > 0) { this.page--; this.loadDeliveries(); } }
 
     viewDetail(username: string) {
         this.detailLoading = true;
         this.detailDialog = true;
         this.deliveryService.getDeliveryDetail(username).subscribe({
-            next: (data) => { this.selectedPartner = data; this.detailLoading = false; },
+            next: (data) => { this.selectedDelivery = data; this.detailLoading = false; },
             error: (err) => { this.toastService.errorResponse(err); this.detailDialog = false; this.detailLoading = false; }
         });
     }
 
-    approvePartner(username: string) {
+    approveDelivery(username: string) {
         this.deliveryService.verifyDelivery({ username, approved: true }).subscribe({
-            next: (res) => { this.toastService.successResponse(res); this.loadPartners(); },
-            error: (err) => this.toastService.errorResponse(err)
+            next: (res: any) => { this.toastService.successResponse(res); this.loadDeliveries(); },
+            error: (err: any) => this.toastService.errorResponse(err)
         });
     }
 
-    showRejectDialog(username: string) {
+    showActionDialog(username: string, type: 'REJECT' | 'BLOCK') {
         this.selectedUsername = username;
-        this.rejectionReason = '';
-        this.rejectDialog = true;
+        this.actionType = type;
+        this.actionReason = '';
+        this.actionDialog = true;
     }
 
-    confirmReject() {
-        if (!this.rejectionReason.trim()) {
-            this.toastService.warningResponse('Please provide a reason for rejection.');
+    confirmAction() {
+        if (!this.actionReason.trim()) {
+            this.toastService.warningResponse('Please provide a reason.');
             return;
         }
-        this.deliveryService.verifyDelivery({ username: this.selectedUsername, approved: false, reason: this.rejectionReason }).subscribe({
-            next: (res) => { this.toastService.successResponse(res); this.rejectDialog = false; this.loadPartners(); },
-            error: (err) => this.toastService.errorResponse(err)
-        });
+        if (this.actionType === 'REJECT') {
+            this.deliveryService.verifyDelivery({ username: this.selectedUsername, approved: false, reason: this.actionReason }).subscribe({
+                next: (res: any) => { 
+                    this.toastService.successResponse(res); 
+                    this.actionDialog = false; 
+                    this.loadDeliveries(); 
+                },
+                error: (err: any) => { 
+                    this.toastService.errorResponse(err); 
+                    this.actionDialog = false; 
+                }
+            });
+        } else {
+            this.deliveryService.blockUnblockDelivery(this.selectedUsername, true, this.actionReason).subscribe({
+                next: (res: any) => { 
+                    this.toastService.successResponse(res); 
+                    this.actionDialog = false; 
+                    this.loadDeliveries(); 
+                },
+                error: (err: any) => { 
+                    this.toastService.errorResponse(err); 
+                    this.actionDialog = false; 
+                }
+            });
+        }
     }
 
     blockUnblock(username: string, currentlyActive: boolean) {
-        this.deliveryService.blockUnblockDelivery(username, currentlyActive).subscribe({
-            next: (res) => { this.toastService.successResponse(res); this.loadPartners(); },
-            error: (err) => this.toastService.errorResponse(err)
-        });
+        if (currentlyActive) {
+            this.showActionDialog(username, 'BLOCK');
+        } else {
+            this.deliveryService.blockUnblockDelivery(username, false).subscribe({
+                next: (res: any) => { this.toastService.successResponse(res); this.loadDeliveries(); },
+                error: (err: any) => this.toastService.errorResponse(err)
+            });
+        }
     }
 }

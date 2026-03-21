@@ -16,12 +16,14 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
     selector: 'app-list-farmer',
     standalone: true,
     imports: [CommonModule, DialogModule, FormsModule, TextareaModule, DetailFarmerComponent,
-        TableModule, ButtonModule, TagModule, ProgressSpinnerModule, IconFieldModule, InputIconModule, InputTextModule],
+        TableModule, ButtonModule, TagModule, ProgressSpinnerModule, IconFieldModule, InputIconModule, InputTextModule, TooltipModule, SelectModule],
     templateUrl: './list-farmer.html',
     styleUrls: ['./list-farmer.css']
 })
@@ -43,15 +45,27 @@ export class ListFarmerComponent implements OnInit {
         farmTypes: '',
         farmLocation: ''
     };
+
+    farmTypeOptions = [
+        { label: 'All Types', value: '' },
+        { label: 'Crop', value: 'CROP' },
+        { label: 'Vegetable', value: 'VEGETABLE' },
+        { label: 'Fruit', value: 'FRUIT' },
+        { label: 'Dairy', value: 'DAIRY' },
+        { label: 'Poultry', value: 'POULTRY' },
+        { label: 'Fishery', value: 'FISHERY' }
+    ];
+
     private searchSubject = new Subject<void>();
 
     detailDialog = false;
     selectedFarmer: any = null;
     detailLoading = false;
 
-    rejectDialog = false;
+    actionDialog = false;
+    actionType: 'REJECT' | 'BLOCK' = 'REJECT';
     selectedUsername = '';
-    rejectionReason = '';
+    actionReason = '';
 
     constructor(
         private farmerService: FarmerService,
@@ -63,7 +77,9 @@ export class ListFarmerComponent implements OnInit {
     ngOnInit() {
         this.setupSearch();
         if (isPlatformBrowser(this.platformId)) {
-            this.loadFarmers();
+            setTimeout(() => {
+                this.loadFarmers();
+            });
         }
     }
 
@@ -110,11 +126,11 @@ export class ListFarmerComponent implements OnInit {
 
         const requestId = ++this.currentRequestId;
 
-        let verified: boolean | undefined;
-        if (this.activeFilter === 'pending') verified = false;
-        else if (this.activeFilter === 'verified') verified = true;
+        let status: string | undefined;
+        if (this.activeFilter === 'pending') status = 'PENDING';
+        else if (this.activeFilter === 'verified') status = 'VERIFIED';
 
-        this.farmerService.getFarmers(verified, this.page, this.size, this.filters)
+        this.farmerService.getFarmers(status, this.page, this.size, this.filters)
             .pipe(finalize(() => {
                 if (requestId === this.currentRequestId) {
                     this.loading = false;
@@ -157,27 +173,53 @@ export class ListFarmerComponent implements OnInit {
         });
     }
 
-    showRejectDialog(username: string) {
+    showActionDialog(username: string, type: 'REJECT' | 'BLOCK') {
         this.selectedUsername = username;
-        this.rejectionReason = '';
-        this.rejectDialog = true;
+        this.actionType = type;
+        this.actionReason = '';
+        this.actionDialog = true;
     }
 
-    confirmReject() {
-        if (!this.rejectionReason.trim()) {
-            this.toastService.warningResponse('Please provide a reason for rejection.');
+    confirmAction() {
+        if (!this.actionReason.trim()) {
+            this.toastService.warningResponse('Please provide a reason.');
             return;
         }
-        this.farmerService.verifyFarmer({ username: this.selectedUsername, approved: false, reason: this.rejectionReason }).subscribe({
-            next: (res) => { this.toastService.successResponse(res); this.rejectDialog = false; this.loadFarmers(); },
-            error: (err) => this.toastService.errorResponse(err)
-        });
+        if (this.actionType === 'REJECT') {
+            this.farmerService.verifyFarmer({ username: this.selectedUsername, approved: false, reason: this.actionReason }).subscribe({
+                next: (res) => { 
+                    this.toastService.successResponse(res); 
+                    this.actionDialog = false; 
+                    this.loadFarmers(); 
+                },
+                error: (err) => { 
+                    this.toastService.errorResponse(err); 
+                    this.actionDialog = false; 
+                }
+            });
+        } else {
+            this.farmerService.blockUnblockFarmer(this.selectedUsername, true, this.actionReason).subscribe({
+                next: (res) => { 
+                    this.toastService.successResponse(res); 
+                    this.actionDialog = false; 
+                    this.loadFarmers(); 
+                },
+                error: (err) => { 
+                    this.toastService.errorResponse(err); 
+                    this.actionDialog = false; 
+                }
+            });
+        }
     }
 
     blockUnblock(username: string, currentlyActive: boolean) {
-        this.farmerService.blockUnblockFarmer(username, currentlyActive).subscribe({
-            next: (res) => { this.toastService.successResponse(res); this.loadFarmers(); },
-            error: (err) => this.toastService.errorResponse(err)
-        });
+        if (currentlyActive) {
+            this.showActionDialog(username, 'BLOCK');
+        } else {
+            this.farmerService.blockUnblockFarmer(username, false).subscribe({
+                next: (res) => { this.toastService.successResponse(res); this.loadFarmers(); },
+                error: (err) => this.toastService.errorResponse(err)
+            });
+        }
     }
 }

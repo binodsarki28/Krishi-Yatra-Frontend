@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { RegisterFarmerComponent } from './register-farmer/register-farmer';
 import { FarmerDashboard } from './farmer-dashboard/farmer-dashboard';
 import { STOCK_ROUTES } from '../stock/stock.route';
+import { farmerGuard } from '../auth/auth.guard';
 
 export const FARMER_ROUTES: Routes = [
   {
@@ -12,6 +13,7 @@ export const FARMER_ROUTES: Routes = [
   {
     path: '',
     component: FarmerDashboard,
+    canActivate: [farmerGuard],
     children: [
       {
         path: 'stocks',

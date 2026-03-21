@@ -13,6 +13,10 @@ export class Endpoint {
     Endpoint.API_VERSION + 'user/resend-otp';
   public static readonly GET_ME: string =
     Endpoint.API_VERSION + 'user/me';
+  public static readonly UPDATE_PROFILE: string =
+    Endpoint.API_VERSION + 'user/profile';
+  public static readonly UPDATE_PASSWORD: string =
+    Endpoint.API_VERSION + 'user/password';
 
   //Farmer
   public static readonly REGISTER_FARMER: string = Endpoint.API_VERSION + 'farmer/register';
@@ -45,6 +49,7 @@ export class Endpoint {
   public static readonly STOCK_DELETE: string = Endpoint.API_VERSION + 'stock/delete/';
   public static readonly STOCK_DETAILS: string = Endpoint.API_VERSION + 'stock/details/';
   public static readonly MY_STOCKS: string = Endpoint.API_VERSION + 'stock/my-stocks';
+  public static readonly STOCK_ADJUST: string = Endpoint.API_VERSION + 'stock/adjust';
   public static readonly CATEGORIES: string = Endpoint.API_VERSION + 'stock/categories';
   public static readonly SUB_CATEGORIES: string = Endpoint.API_VERSION + 'stock/subcategories';
 

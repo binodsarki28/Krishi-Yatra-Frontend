@@ -62,9 +62,11 @@ export class OwnStockListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.setupSearch();
     if (isPlatformBrowser(this.platformId)) {
-        this.loadStocks();
-        this.loadCategories();
-        this.loadSubCategories();
+        setTimeout(() => {
+            this.loadStocks();
+            this.loadCategories();
+            this.loadSubCategories();
+        });
     }
 
     this.routerSubscription = this.router.events.pipe(
@@ -209,6 +211,19 @@ export class OwnStockListComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  adjustQuantity(stock: IStockListResponse, amount: number) {
+    this.stockService.adjustStockQuantity(stock.stockSlug, amount).subscribe({
+      next: (res) => {
+        stock.quantity = Math.max(0, stock.quantity + amount);
+        this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'Stock quantity adjusted!' });
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to adjust quantity' });
+      }
+    });
   }
 
   getSeverity(active: boolean) {
