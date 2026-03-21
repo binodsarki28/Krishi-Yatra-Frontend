@@ -1,6 +1,8 @@
 import { inject, PLATFORM_ID } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
+import { AccountService } from '../components/account/account.service';
+import { ToastService } from '../util/toast.service';
 
 /**
  * authGuard — Protects routes that require authentication.
@@ -83,6 +85,84 @@ export const userGuard: CanActivateFn = () => {
     const roles = localStorage.getItem('roles');
     if (roles && JSON.parse(roles).includes('ADMIN')) {
         router.navigate(['/admin']);
+        return false;
+    }
+
+    return true;
+};
+
+/**
+ * farmerGuard - Protects farmer-only routes. Checks for Farmer role and verification status.
+ */
+export const farmerGuard: CanActivateFn = () => {
+    const router = inject(Router);
+    const toast = inject(ToastService);
+    const account = inject(AccountService);
+    const platformId = inject(PLATFORM_ID);
+
+    if (!isPlatformBrowser(platformId)) return true;
+
+    if (!account.hasRole('FARMER')) {
+        router.navigate(['/farmer/register']);
+        return false;
+    }
+
+    if (!account.isRoleVerified('FARMER')) {
+        const msg = account.getStatusMessage('FARMER') || 'Your Farmer account is under verification.';
+        toast.warningResponse(msg);
+        router.navigate(['/profile']);
+        return false;
+    }
+
+    return true;
+};
+
+/**
+ * buyerGuard - Protects buyer-only routes. Checks for Buyer role and verification status.
+ */
+export const buyerGuard: CanActivateFn = () => {
+    const router = inject(Router);
+    const toast = inject(ToastService);
+    const account = inject(AccountService);
+    const platformId = inject(PLATFORM_ID);
+
+    if (!isPlatformBrowser(platformId)) return true;
+
+    if (!account.hasRole('BUYER')) {
+        router.navigate(['/buyer/register']);
+        return false;
+    }
+
+    if (!account.isRoleVerified('BUYER')) {
+        const msg = account.getStatusMessage('BUYER') || 'Your Buyer account is under verification.';
+        toast.warningResponse(msg);
+        router.navigate(['/profile']);
+        return false;
+    }
+
+    return true;
+};
+
+/**
+ * deliveryGuard - Protects delivery partner routes. Checks for Delivery role and verification status.
+ */
+export const deliveryGuard: CanActivateFn = () => {
+    const router = inject(Router);
+    const toast = inject(ToastService);
+    const account = inject(AccountService);
+    const platformId = inject(PLATFORM_ID);
+
+    if (!isPlatformBrowser(platformId)) return true;
+
+    if (!account.hasRole('DELIVERY')) {
+        router.navigate(['/delivery/register']);
+        return false;
+    }
+
+    if (!account.isRoleVerified('DELIVERY')) {
+        const msg = account.getStatusMessage('DELIVERY') || 'Your Linker account is under verification.';
+        toast.warningResponse(msg);
+        router.navigate(['/profile']);
         return false;
     }
 

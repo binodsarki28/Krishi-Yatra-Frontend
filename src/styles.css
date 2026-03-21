@@ -7,41 +7,36 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: var(--font-family);
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
     background-color: var(--surface-ground);
-    font-size: 18px;
-    /* Increased base font size */
+    font-size: 16px; /* Slightly larger base font */
+    color: #334155;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif !important;
+    color: #0f172a;
 }
 
 /* Custom Overrides for KrishiYatra specific look */
 :root {
     --primary-color: #4caf50;
-    --font-size-base: 1.125rem;
-    /* 18px */
+    --font-family: 'Outfit', sans-serif;
+    --font-size-base: 1rem;
 }
 
 /* Consistent Card Styling for Auth Pages */
-.surface-card {
+.auth-surface-card {
     background-color: var(--surface-card);
     padding: 2.5rem;
     border-radius: 16px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
-/* Make all inputs larger by default */
-input,
-textarea,
-select {
-    font-size: 1.125rem !important;
-}
-
-/* Larger buttons */
-.p-button {
-    font-size: 1.25rem !important;
-    padding: 0.875rem 1.5rem !important;
-}
-
+/* Custom button sizing if needed */
 .p-button-lg {
-    font-size: 1.5rem !important;
-    padding: 1.25rem 2rem !important;
+    font-size: 1.125rem !important;
+    padding: 0.75rem 1.25rem !important;
 }

@@ -12,10 +12,10 @@ export class FarmerService {
 
     constructor(private http: HttpClient) { }
 
-    getFarmers(verified?: boolean, page: number = 0, size: number = 10, filters: any = {}): Observable<IFarmerListResponse[]> {
+    getFarmers(status?: string, page: number = 0, size: number = 10, filters: any = {}): Observable<IFarmerListResponse[]> {
         let url = `${Endpoint.LIST_FARMERS}?page=${page}&size=${size}`;
-        if (verified !== undefined) {
-            url += `&verified=${verified}`;
+        if (status) {
+            url += `&status=${status}`;
         }
 
         // Append filters
@@ -31,8 +31,12 @@ export class FarmerService {
         return this.http.post<IResponse>(GenerateUrlUtils.generateUrl(Endpoint.VERIFY_FARMER), request);
     }
 
-    blockUnblockFarmer(username: string, block: boolean): Observable<IResponse> {
-        return this.http.post<IResponse>(GenerateUrlUtils.generateUrl(`${Endpoint.BLOCK_FARMER}${username}?block=${block}`), {});
+    blockUnblockFarmer(username: string, block: boolean, reason?: string): Observable<IResponse> {
+        let url = `${Endpoint.BLOCK_FARMER}${username}?block=${block}`;
+        if (reason) {
+            url += `&reason=${encodeURIComponent(reason)}`;
+        }
+        return this.http.post<IResponse>(GenerateUrlUtils.generateUrl(url), {});
     }
 
     getFarmerDetail(username: string): Observable<any> {

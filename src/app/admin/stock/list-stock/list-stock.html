@@ -1,0 +1,232 @@
+<div class="fadein animation-duration-300">
+    <!-- Header Row -->
+    <div class="flex flex-column md:flex-row md:align-items-center justify-content-between mb-3 gap-3">
+        <div class="flex align-items-center gap-3">
+            <div class="flex align-items-center justify-content-center border-round-xl"
+                style="width:40px; height:40px; background: linear-gradient(135deg, #a855f7, #9333ea);">
+                <i class="pi pi-box text-white" style="font-size: 1.2rem;"></i>
+            </div>
+            <div>
+                <h2 class="m-0 text-2xl font-bold text-900">Stock Management</h2>
+                <p class="m-0 mt-1 text-sm text-500 font-medium">Manage and monitor all marketplace stocks</p>
+            </div>
+        </div>
+        <p-button icon="pi pi-refresh" label="Refresh" [outlined]="true" [loading]="loading" severity="secondary"
+            styleClass="border-round-xl font-semibold" (onClick)="loadStocks()"></p-button>
+    </div>
+
+    <!-- Search Input Grid Box -->
+    <div class="surface-card border-round-xl border-1 border-200 p-3 mb-4 shadow-1 bg-white">
+        <div class="grid align-items-center">
+            <div class="col-12 md:col-2">
+                <p-iconField iconPosition="left">
+                    <p-inputIcon styleClass="pi pi-search"></p-inputIcon>
+                    <input type="text" pInputText [(ngModel)]="filters.search" (input)="onSearch()"
+                        placeholder="Search stock..." class="w-full border-none shadow-none text-sm" />
+                </p-iconField>
+            </div>
+            <div class="col-12 md:col-2">
+                <p-select [options]="categories" [(ngModel)]="filters.category" (onChange)="onCategoryChange()"
+                    optionLabel="label" optionValue="value" [filter]="true"
+                    placeholder="Category..." [showClear]="true" styleClass="w-full border-none shadow-none text-sm h-full flex align-items-center">
+                </p-select>
+            </div>
+            <div class="col-12 md:col-2">
+                <p-select [options]="subCategories" [(ngModel)]="filters.subCategory" (onChange)="onSearch()"
+                    optionLabel="label" optionValue="value" [filter]="true" [disabled]="!filters.category"
+                    placeholder="Sub-category..." [showClear]="true" styleClass="w-full border-none shadow-none text-sm h-full flex align-items-center">
+                </p-select>
+            </div>
+            <div class="col-12 md:col-2">
+                <p-iconField iconPosition="left">
+                    <p-inputIcon styleClass="pi pi-at"></p-inputIcon>
+                    <input type="text" pInputText [(ngModel)]="filters.farmer" (input)="onSearch()"
+                        placeholder="Farmer..." class="w-full border-none shadow-none text-sm" />
+                </p-iconField>
+            </div>
+            <div class="col-12 md:col-4 flex gap-2">
+                <button pButton label="Search" icon="pi pi-search" class="p-button-success flex-grow-1 border-round-xl font-bold"
+                    (click)="onSearch()"></button>
+                <button pButton label="Clear" icon="pi pi-times" [outlined]="true" severity="secondary"
+                    class="border-round-xl px-3 font-bold" (click)="clearFilters()"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="flex mb-4">
+        <div class="flex border-1 border-200 border-round-xl bg-white overflow-hidden p-1 shadow-1">
+            <button pButton label="All Stocks" icon="pi pi-list" class="p-button-text p-button-sm px-4 py-2 font-semibold"
+                [class.bg-gray-100]="activeFilter === 'all'" [class.text-900]="activeFilter === 'all'"
+                (click)="setFilter('all')"></button>
+            <button pButton label="Active" icon="pi pi-check-circle" class="p-button-text p-button-sm px-4 py-2 font-semibold text-green-500"
+                [class.bg-green-50]="activeFilter === 'active'"
+                [class.text-green-700]="activeFilter === 'active'" (click)="setFilter('active')"></button>
+            <button pButton label="Blocked" icon="pi pi-ban" class="p-button-text p-button-sm px-4 py-2 font-semibold text-red-500"
+                [class.bg-red-50]="activeFilter === 'blocked'"
+                [class.text-red-700]="activeFilter === 'blocked'" (click)="setFilter('blocked')"></button>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="surface-card border-1 border-200 border-round-xl shadow-1 overflow-hidden">
+        <p-table [value]="stocks" [loading]="loading" responsiveLayout="scroll" styleClass="p-datatable-sm">
+            <ng-template pTemplate="header">
+                <tr class="surface-50">
+                    <th class="text-700 font-bold text-xs uppercase p-4">Name</th>
+                    <th class="text-700 font-bold text-xs uppercase p-4">Category</th>
+                    <th class="text-700 font-bold text-xs uppercase p-4">Farmer</th>
+                    <th class="text-700 font-bold text-xs uppercase p-4">Price</th>
+                    <th class="text-700 font-bold text-xs uppercase p-4 text-center">Status</th>
+                    <th class="text-700 font-bold text-xs uppercase p-4 text-center" style="width: 240px">Actions</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-stock>
+                <tr class="hover:bg-gray-50 transition-all transition-duration-200 border-bottom-1 border-100">
+                    <td class="p-4">
+                        <div class="flex align-items-center gap-3">
+                            <div class="flex align-items-center justify-content-center border-round-lg text-sm font-bold text-white flex-shrink-0"
+                                style="width:36px; height:36px; background: linear-gradient(135deg, #10b981, #059669);">
+                                {{ stock.stockName.charAt(0) || 'S' }}
+                            </div>
+                            <div class="flex flex-column text-left">
+                                <span class="text-sm font-semibold text-900">{{ stock.stockName }}</span>
+                                <span class="text-xs text-500">{{ stock.productName }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4 text-sm text-600">
+                        <div class="flex flex-column">
+                            <span>{{ stock.categoryName }}</span>
+                            <span class="text-xs text-400">{{ stock.subCategoryName }}</span>
+                        </div>
+                    </td>
+                    <td class="p-4 text-sm text-600">{{ stock.farmerName }}</td>
+                    <td class="p-4 font-bold text-green-600 text-sm">Rs. {{ stock.pricePerUnit }}</td>
+                    <td class="p-4 text-center">
+                        <p-tag [value]="stock.active ? 'Active' : 'Blocked'"
+                            [severity]="stock.active ? 'success' : 'danger'"
+                            [icon]="stock.active ? 'pi pi-check-circle' : 'pi pi-ban'"
+                            styleClass="text-xs px-2"></p-tag>
+                    </td>
+                    <td class="p-4">
+                        <div class="grid grid-nogutter align-items-center justify-content-center gap-2" style="width: 240px; margin: 0 auto;">
+                            <!-- Slot 1: View -->
+                            <div class="col-fixed flex justify-content-center" style="width: 40px;">
+                                <button pButton icon="pi pi-eye"
+                                    class="p-button-text p-button-rounded p-button-secondary p-button-sm action-btn"
+                                    pTooltip="View Details" tooltipPosition="bottom"
+                                    (click)="viewDetail(stock.stockSlug)"></button>
+                            </div>
+
+                            <!-- Slot 2: Block/Unblock -->
+                            <div class="col-fixed flex justify-content-center" style="width: 90px;">
+                                <button pButton [label]="stock.active ? 'Block' : 'Unblock'"
+                                    [icon]="stock.active ? 'pi pi-ban' : 'pi pi-check-circle'"
+                                    class="p-button-sm border-round-xl px-3 py-1 w-full"
+                                    [class.p-button-danger]="stock.active" [class.p-button-success]="!stock.active"
+                                    (click)="toggleStatus(stock)"></button>
+                            </div>
+
+                            <!-- Slot 3: Empty (Reserved) -->
+                            <div class="col-fixed flex justify-content-center" style="width: 90px;">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="6" class="text-center p-8">
+                        <div class="flex flex-column align-items-center gap-3">
+                            <i class="pi pi-box text-400" style="font-size: 3rem;"></i>
+                            <span class="text-600 font-medium">No stocks found.</span>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <!-- Pagination -->
+        <div class="flex align-items-center justify-content-between p-4 bg-gray-50 border-top-1 border-200">
+            <span class="text-xs text-500 font-medium">Page {{page + 1}}</span>
+            <div class="flex gap-2">
+                <button pButton label="Previous" icon="pi pi-chevron-left"
+                    class="p-button-outlined p-button-secondary p-button-sm border-round-xl"
+                    [disabled]="page === 0" (click)="prevPage()"></button>
+                <button pButton label="Next" icon="pi pi-chevron-right" iconPos="right"
+                    class="p-button-outlined p-button-secondary p-button-sm border-round-xl"
+                    [disabled]="!hasMore" (click)="nextPage()"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stock Details Dialog -->
+<p-dialog [(visible)]="detailDialog" header="Stock Detail" [modal]="true"
+    [style]="{width: '500px'}" [draggable]="false" [resizable]="false"
+    styleClass="p-fluid detail-dialog border-round-2xl overflow-hidden">
+
+    @if (detailLoading) {
+        <div class="flex justify-content-center align-items-center p-8">
+            <p-progressSpinner styleClass="w-3rem h-3rem"></p-progressSpinner>
+        </div>
+    } @else if (selectedStockDetail) {
+        <div class="flex flex-column gap-4 p-2">
+            <!-- Header Info -->
+            <div class="flex align-items-start justify-content-between">
+                <div>
+                    <h1 class="m-0 text-xl font-bold text-900">{{selectedStockDetail.stockName}}</h1>
+                    <p class="m-0 mt-1 text-xs text-500 italic">{{selectedStockDetail.stockSlug}}</p>
+                </div>
+                <p-tag [value]="selectedStockDetail.active ? 'Active' : 'Blocked'"
+                    [severity]="selectedStockDetail.active ? 'success' : 'danger'"
+                    [icon]="selectedStockDetail.active ? 'pi pi-check' : 'pi pi-ban'"></p-tag>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid border-round-xl bg-gray-50 p-3 surface-border border-1 m-0">
+                <div class="col-6 mb-3">
+                    <span class="block text-xs text-500 uppercase font-bold mb-1">Product</span>
+                    <span class="block text-sm font-semibold text-900">{{selectedStockDetail.productName}}</span>
+                </div>
+                <div class="col-6 mb-3">
+                    <span class="block text-xs text-500 uppercase font-bold mb-1">Price</span>
+                    <span class="block text-sm font-semibold text-900">Rs. {{selectedStockDetail.pricePerUnit}}</span>
+                </div>
+                <div class="col-6">
+                    <span class="block text-xs text-500 uppercase font-bold mb-1">Quantity</span>
+                    <span class="block text-sm font-semibold text-900">{{selectedStockDetail.quantity}} units</span>
+                </div>
+                <div class="col-6">
+                    <span class="block text-xs text-500 uppercase font-bold mb-1">Category</span>
+                    <span class="block text-sm font-semibold text-900">{{selectedStockDetail.categoryName}}</span>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div>
+                <span class="block text-xs text-500 uppercase font-bold mb-2">Description</span>
+                <div class="surface-ground p-3 border-round-lg text-sm text-700 line-height-3">
+                    {{selectedStockDetail.description || 'No description provided.'}}
+                </div>
+            </div>
+
+            <!-- Farmer Info -->
+            <div class="flex align-items-center gap-3 p-3 border-1 border-200 border-round-xl">
+                <div class="flex align-items-center justify-content-center bg-green-50 text-green-600 border-round-xl"
+                    style="width: 44px; height: 44px">
+                    <i class="pi pi-user" style="font-size: 1.2rem"></i>
+                </div>
+                <div>
+                    <span class="block text-xs text-500 font-medium">Farmer</span>
+                    <span class="block text-sm font-bold text-900">{{selectedStockDetail.farmerName}}</span>
+                </div>
+            </div>
+
+            <div class="flex justify-content-end mt-2">
+                <p-button label="Close" class="p-button-secondary border-round-xl font-bold px-4" (click)="detailDialog = false"></p-button>
+            </div>
+        </div>
+    }
+</p-dialog>

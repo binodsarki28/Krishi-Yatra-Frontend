@@ -12,17 +12,18 @@ export class DeliveryService {
 
     constructor(private http: HttpClient) { }
 
-    getDeliveries(verified?: boolean, page: number = 0, size: number = 10, filters: any = {}): Observable<IDeliveryListResponse[]> {
+    getDeliveries(status?: string, page: number = 0, size: number = 10, filters: any = {}): Observable<IDeliveryListResponse[]> {
         let url = `${Endpoint.LIST_DELIVERY}?page=${page}&size=${size}`;
-        if (verified !== undefined) {
-            url += `&verified=${verified}`;
+        if (status) {
+            url += `&status=${status}`;
         }
 
         // Append filters
         if (filters.fullName) url += `&fullName=${encodeURIComponent(filters.fullName)}`;
         if (filters.username) url += `&username=${encodeURIComponent(filters.username)}`;
         if (filters.vehicleType) url += `&vehicleType=${encodeURIComponent(filters.vehicleType)}`;
-        if (filters.licenseNumber) url += `&licenseNumber=${encodeURIComponent(filters.licenseNumber)}`;
+        if (filters.vehicleBrand) url += `&vehicleBrand=${encodeURIComponent(filters.vehicleBrand)}`;
+        if (filters.vehicleNumber) url += `&vehicleNumber=${encodeURIComponent(filters.vehicleNumber)}`;
 
         return this.http.get<IDeliveryListResponse[]>(GenerateUrlUtils.generateUrl(url));
     }
@@ -31,8 +32,12 @@ export class DeliveryService {
         return this.http.post<IResponse>(GenerateUrlUtils.generateUrl(Endpoint.VERIFY_DELIVERY), request);
     }
 
-    blockUnblockDelivery(username: string, block: boolean): Observable<IResponse> {
-        return this.http.post<IResponse>(GenerateUrlUtils.generateUrl(`${Endpoint.BLOCK_DELIVERY}${username}?block=${block}`), {});
+    blockUnblockDelivery(username: string, block: boolean, reason?: string): Observable<IResponse> {
+        let url = `${Endpoint.BLOCK_DELIVERY}${username}?block=${block}`;
+        if (reason) {
+            url += `&reason=${encodeURIComponent(reason)}`;
+        }
+        return this.http.post<IResponse>(GenerateUrlUtils.generateUrl(url), {});
     }
 
     getDeliveryDetail(username: string): Observable<any> {

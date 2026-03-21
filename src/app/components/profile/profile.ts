@@ -1,119 +1,246 @@
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { AccountService } from '../account/account.service';
 import { ToastService } from '../../util/toast.service';
-import { TabsModule } from 'primeng/tabs';
-import { DividerModule } from 'primeng/divider';
+import { AccountService } from '../account/account.service';
+import { Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
+import { inject, PLATFORM_ID } from '@angular/core';
+import { IJwtResponse } from '../account/IAccount';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [
-    CommonModule,
-    CardModule,
-    ButtonModule,
-    InputTextModule,
-    PasswordModule,
-    ReactiveFormsModule,
-    TabsModule,
-    DividerModule
-  ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule, PasswordModule],
   templateUrl: './profile.html',
   styleUrls: ['./profile.css']
 })
 export class ProfileComponent implements OnInit {
-  passwordForm: FormGroup;
+  activeTab: string = 'profile';
+  
+  profileForm!: FormGroup;
+  passwordForm!: FormGroup;
+  
+  userData: any = {};
+  
   loading: boolean = false;
-
+  selectedFile: File | null = null;
+  profilePreview: string | null = null;
+  
+  private platformId = inject(PLATFORM_ID);
+  
   constructor(
-    private router: Router,
-    private accountService: AccountService,
     private fb: FormBuilder,
-    private toastService: ToastService
-  ) {
+    public accountService: AccountService,
+    private toastService: ToastService,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    this.initForms();
+    this.loadUserData();
+  }
+
+  initForms() {
+    this.profileForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      username: ['', Validators.required],
+      phone: [''],
+      description: ['']
+    });
+
     this.passwordForm = this.fb.group({
-      currentPassword: ['', [Validators.required]],
+      currentPassword: ['', Validators.required],
       newPassword: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]]
+      confirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
   }
 
-  ngOnInit() { }
+  loadUserData() {
+    if (isPlatformBrowser(this.platformId)) {
+      // Load from local storage immediately for instant UI response
+      this.userData = {
+        fullName: localStorage.getItem('fullName') || 'User Name',
+        username: localStorage.getItem('username') || 'username',
+        email: localStorage.getItem('email') || 'N/A',
+        phoneNumber: localStorage.getItem('phoneNumber') || 'N/A',
+        description: localStorage.getItem('description') || '',
+        roles: this.accountService.getRoles(),
+        profileUrl: localStorage.getItem('profileUrl') || null,
+        statusMessages: JSON.parse(localStorage.getItem('statusMessages') || '{}'),
+        verifiedRoles: this.accountService.getVerifiedRoles()
+      };
+      this.profilePreview = this.userData.profileUrl;
+
+      // Update form immediately with cached data
+      const parts = this.userData.fullName.split(' ');
+      this.profileForm.patchValue({
+        firstName: parts[0] || '',
+        lastName: parts.slice(1).join(' ') || '',
+        username: this.userData.username,
+        phone: this.userData.phoneNumber === 'N/A' ? '' : this.userData.phoneNumber,
+        description: this.userData.description
+      });
+
+      // Then sync with backend for fresh data
+      this.accountService.getCurrentUser().subscribe({
+        next: (res) => {
+          const jwt = res.response as IJwtResponse;
+          if (jwt.roles) localStorage.setItem('roles', JSON.stringify(jwt.roles));
+          if (jwt.verifiedRoles) localStorage.setItem('verifiedRoles', JSON.stringify(jwt.verifiedRoles));
+          if (jwt.statusMessages) localStorage.setItem('statusMessages', JSON.stringify(jwt.statusMessages));
+          if (jwt.profileUrl) localStorage.setItem('profileUrl', jwt.profileUrl);
+          if (jwt.description) localStorage.setItem('description', jwt.description);
+          if (jwt.phoneNumber) localStorage.setItem('phoneNumber', jwt.phoneNumber);
+          if (jwt.fullName) localStorage.setItem('fullName', jwt.fullName);
+          if (jwt.username) localStorage.setItem('username', jwt.username);
+          if (jwt.email) localStorage.setItem('email', jwt.email);
+
+          this.profilePreview = jwt.profileUrl || null;
+          this.userData = jwt;
+
+          const fullName = jwt.fullName || '';
+          const partsSync = fullName.split(' ');
+          this.profileForm.patchValue({
+            firstName: partsSync[0],
+            lastName: partsSync.slice(1).join(' '),
+            username: jwt.username,
+            phone: jwt.phoneNumber,
+            description: jwt.description
+          });
+        },
+        error: (err) => console.error('Failed to sync user data', err)
+      });
+    }
+  }
 
   passwordMatchValidator(g: FormGroup) {
-    return g.get('newPassword')?.value === g.get('confirmPassword')?.value
-      ? null : { 'mismatch': true };
+    return g.get('newPassword')?.value === g.get('confirmPassword')?.value ? null : { 'mismatch': true };
   }
 
-  private platformId = inject(PLATFORM_ID);
-
-  get user() {
-    return {
-      fullName: this.accountService.getFullName(),
-      email: this.accountService.getUserEmail(),
-      username: this.accountService.getUsername(),
-      roles: this.accountService.getRoles()
-    };
-  }
-
-  get isAdmin() { return this.accountService.hasRole('ADMIN'); }
   get isFarmer() { return this.accountService.hasRole('FARMER'); }
-  get isBuyer() { return this.accountService.hasRole('BUYER'); }
-  get isDelivery() { return this.accountService.hasRole('DELIVERY'); }
-
   get isFarmerVerified() { return this.accountService.isRoleVerified('FARMER'); }
+  
+  get isBuyer() { return this.accountService.hasRole('BUYER'); }
   get isBuyerVerified() { return this.accountService.isRoleVerified('BUYER'); }
+  
+  get isDelivery() { return this.accountService.hasRole('DELIVERY'); }
   get isDeliveryVerified() { return this.accountService.isRoleVerified('DELIVERY'); }
 
-  updatePassword() {
-    if (this.passwordForm.invalid) {
-      this.toastService.warningResponse('Please fix form errors.');
+  switchTab(tab: string) {
+    if (tab === 'farmer-dashboard') {
+      if (!this.isFarmer) { this.router.navigate(['/farmer/register']); return; }
+      else if (!this.isFarmerVerified) { 
+        this.toastService.warningResponse(this.accountService.getStatusMessage('FARMER') || 'Your Farmer account is under verification.'); 
+        return; 
+      }
+      else { this.router.navigate(['/farmer/dashboard']); return; }
+    }
+    if (tab === 'buyer-dashboard') {
+      if (!this.isBuyer) { this.router.navigate(['/buyer/register']); return; }
+      else if (!this.isBuyerVerified) { 
+        this.toastService.warningResponse(this.accountService.getStatusMessage('BUYER') || 'Your Buyer account is under verification.'); 
+        return; 
+      }
+      else { this.router.navigate(['/buyer/dashboard']); return; }
+    }
+    if (tab === 'delivery-dashboard') {
+      if (!this.isDelivery) { this.router.navigate(['/delivery/register']); return; }
+      else if (!this.isDeliveryVerified) { 
+        this.toastService.warningResponse(this.accountService.getStatusMessage('DELIVERY') || 'Your Linker account is under verification.'); 
+        return; 
+      }
+      else { this.router.navigate(['/delivery/dashboard']); return; }
+    }
+    this.activeTab = tab;
+  }
+
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      if (file.size > 10 * 1024 * 1024) {
+        this.toastService.warningResponse('File size should not exceed 10MB.');
+        return;
+      }
+      this.selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.profilePreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+      this.toastService.successResponse({ message: 'Profile picture selected! Click "Save Changes" to apply.' });
+    }
+  }
+
+  updateProfile() {
+    if (this.profileForm.invalid) {
+      this.toastService.warningResponse('Please fill the required fields.');
       return;
     }
-
+    
     this.loading = true;
-    // Placeholder for actual API call
-    setTimeout(() => {
-      this.toastService.successResponse({ message: 'Password updated successfully (Demo)' });
-      this.passwordForm.reset();
-      this.loading = false;
-    }, 1500);
+    const formData = new FormData();
+    formData.append('firstName', this.profileForm.get('firstName')?.value || '');
+    formData.append('lastName', this.profileForm.get('lastName')?.value || '');
+    formData.append('phoneNumber', this.profileForm.get('phone')?.value || '');
+    formData.append('description', this.profileForm.get('description')?.value || '');
+    formData.append('currentUsername', this.profileForm.get('username')?.value || '');
+    
+    if (this.selectedFile) {
+      formData.append('profileImage', this.selectedFile);
+    }
+
+    this.accountService.updateProfile(formData).subscribe({
+      next: (res) => {
+        const successMsg = this.selectedFile ? 'Profile picture and info updated!' : 'Profile updated successfully!';
+        this.toastService.successResponse({ message: successMsg });
+        this.loading = false;
+        this.selectedFile = null; // reset file selection
+        this.loadUserData(); // re-sync context
+      },
+      error: (err) => {
+        let msg = err.error?.message || 'Failed to update profile.';
+        if (msg === 'Validation Failed' && err.error?.data) {
+          msg = Object.values(err.error.data)[0] as string;
+        }
+        this.toastService.errorResponse({ message: msg });
+        this.loading = false;
+      }
+    });
   }
 
   logout() {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('username');
-      localStorage.removeItem('fullName');
-      localStorage.removeItem('email');
-      localStorage.removeItem('roles');
+      localStorage.clear();
     }
     this.accountService.updateLoginStatus();
     this.router.navigate(['/account/login']);
   }
 
-  navigateTo(path: string) {
-    if (path.includes('/farmer/') && this.isFarmer && !this.isFarmerVerified) {
-      this.toastService.warningResponse('Your Farmer account is currently under verification. Please wait for admin approval.');
-      return;
-    }
-    if (path.includes('/buyer/') && this.isBuyer && !this.isBuyerVerified) {
-      this.toastService.warningResponse('Your Buyer account is currently under verification. Please wait for admin approval.');
-      return;
-    }
-    if (path.includes('/delivery/') && this.isDelivery && !this.isDeliveryVerified) {
-      this.toastService.warningResponse('Your Delivery Partner account is currently under verification. Please wait for admin approval.');
-      return;
-    }
-    this.router.navigate([path]);
+  updatePassword() {
+      if (this.passwordForm.invalid) {
+          this.toastService.warningResponse('Please fix the errors in password form.');
+          return;
+      }
+      this.loading = true;
+      this.accountService.updatePassword(this.passwordForm.value).subscribe({
+          next: () => {
+              this.loading = false;
+              this.toastService.successResponse({ message: 'Password updated successfully' });
+              this.passwordForm.reset();
+          },
+           error: (err) => {
+               this.loading = false;
+               let msg = err.error?.message || 'Failed to update password.';
+               if (msg === 'Validation Failed' && err.error?.data) {
+                   msg = Object.values(err.error.data)[0] as string;
+               }
+               this.toastService.errorResponse({ message: msg });
+           }
+      });
   }
 }

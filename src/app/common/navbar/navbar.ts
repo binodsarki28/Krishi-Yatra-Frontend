@@ -29,8 +29,11 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.accountService.isLoggedIn$.subscribe((status: boolean) => {
       this.isLoggedIn = status;
+      this.updateNavbarItems();
     });
+  }
 
+  updateNavbarItems() {
     this.items = [
       {
         label: 'Home',
@@ -38,18 +41,18 @@ export class NavbarComponent implements OnInit {
         command: () => this.router.navigate(['/'])
       },
       {
-        label: 'Features',
-        icon: 'pi pi-star'
-      },
-      {
-        label: 'Services',
-        icon: 'pi pi-cog'
-      },
+        label: 'Stocks',
+        icon: 'pi pi-list',
+        command: () => this.router.navigate(['/stocks'])
+      }
+    ];
+
+    this.items.push(
       {
         label: 'Contact',
         icon: 'pi pi-envelope'
       }
-    ];
+    );
   }
 
   navigateToLogin() {
@@ -70,9 +73,7 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('username');
-      localStorage.removeItem('roles');
+      localStorage.clear();
     }
     this.accountService.updateLoginStatus();
     this.router.navigate(['/account/login']);

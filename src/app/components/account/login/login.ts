@@ -84,7 +84,11 @@ export class LoginComponent {
           this.accountService.updateLoginStatus();
           this.toastService.successResponse(res);
           if (jwt.roles.includes(RoleType.ADMIN)) {
-            this.router.navigate(['/admin']);
+            // Log out and show error if an admin tries to login through normal login page
+            localStorage.clear();
+            this.accountService.updateLoginStatus();
+            this.toastService.warningResponse('Invalid username or password');
+            return;
           } else if (jwt.roles.includes(RoleType.FARMER) && jwt.verifiedRoles?.includes(RoleType.FARMER)) {
             this.router.navigate(['/farmer/dashboard']);
           } else if (jwt.roles.includes(RoleType.DELIVERY) && jwt.verifiedRoles?.includes(RoleType.DELIVERY)) {

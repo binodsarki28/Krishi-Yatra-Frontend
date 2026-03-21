@@ -1,186 +1,192 @@
-<div class="farmers-page">
-    <div class="page-header">
-        <div class="header-left">
-            <div class="header-icon buyer-header-icon">
-                <i class="pi pi-shopping-bag"></i>
+<div class="fadein animation-duration-300">
+    <!-- Header Row -->
+    <div class="flex flex-column md:flex-row md:align-items-center justify-content-between mb-3 gap-3">
+        <div class="flex align-items-center gap-3">
+            <div class="flex align-items-center justify-content-center border-round-xl"
+                style="width:40px; height:40px; background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                <i class="pi pi-shopping-bag text-white" style="font-size: 1.2rem;"></i>
             </div>
             <div>
-                <h2 class="page-title">Buyer Management</h2>
-                <p class="page-desc">View, verify and manage all buyer registrations</p>
+                <h2 class="m-0 text-2xl font-bold text-900">Buyer Management</h2>
+                <p class="m-0 mt-1 text-sm text-500 font-medium">View, verify and manage all buyer registrations</p>
             </div>
         </div>
-        <button class="refresh-btn" (click)="loadBuyers()" [disabled]="loading">
-            <i class="pi pi-refresh" [class.spin]="loading"></i>
-            Refresh
-        </button>
+        <p-button icon="pi pi-refresh" label="Refresh" [outlined]="true" [loading]="loading" severity="secondary"
+            styleClass="border-round-xl font-semibold" (onClick)="loadBuyers()"></p-button>
     </div>
 
-    <!-- Search Filters -->
-    <div class="search-filters">
-        <div class="search-group">
-            <i class="pi pi-search"></i>
-            <input type="text" [(ngModel)]="filters.fullName" (input)="onSearch()" placeholder="Search by name...">
+    <!-- Search Input Grid Box -->
+    <div class="surface-card border-round-xl border-1 border-200 p-3 mb-4 shadow-1 bg-white">
+        <div class="grid align-items-center">
+            <div class="col-12 md:col-2">
+                <p-iconField iconPosition="left">
+                    <p-inputIcon styleClass="pi pi-search"></p-inputIcon>
+                    <input type="text" pInputText [(ngModel)]="filters.fullName" (input)="onSearch()"
+                        placeholder="Search by name..." class="w-full border-none shadow-none text-sm" />
+                </p-iconField>
+            </div>
+            <div class="col-12 md:col-2">
+                <p-iconField iconPosition="left">
+                    <p-inputIcon styleClass="pi pi-at"></p-inputIcon>
+                    <input type="text" pInputText [(ngModel)]="filters.username" (input)="onSearch()"
+                        placeholder="Search username..." class="w-full border-none shadow-none text-sm" />
+                </p-iconField>
+            </div>
+            <div class="col-12 md:col-2">
+                <p-select [options]="consumerTypeOptions" [(ngModel)]="filters.consumerType" (onChange)="onSearch(true)"
+                    optionLabel="label" optionValue="value" placeholder="Consumer type..." [showClear]="true"
+                    styleClass="w-full border-none shadow-none text-sm h-full flex align-items-center">
+                </p-select>
+            </div>
+            <div class="col-12 md:col-2">
+                <p-iconField iconPosition="left">
+                    <p-inputIcon styleClass="pi pi-map-marker"></p-inputIcon>
+                    <input type="text" pInputText [(ngModel)]="filters.businessLocation" (input)="onSearch()"
+                        placeholder="Location..." class="w-full border-none shadow-none text-sm" />
+                </p-iconField>
+            </div>
+            <div class="col-12 md:col-4 flex gap-2">
+                <button pButton label="Search" icon="pi pi-search"
+                    class="p-button-success flex-grow-1 border-round-xl font-bold" (click)="onSearch(true)"></button>
+                <button pButton label="Clear" icon="pi pi-times" [outlined]="true" severity="secondary"
+                    class="border-round-xl px-3 font-bold" (click)="clearFilters()"></button>
+            </div>
         </div>
-        <div class="search-group">
-            <i class="pi pi-at"></i>
-            <input type="text" [(ngModel)]="filters.username" (input)="onSearch()" placeholder="Search username...">
-        </div>
-        <div class="search-group">
-            <i class="pi pi-tag"></i>
-            <input type="text" [(ngModel)]="filters.consumerType" (input)="onSearch()"
-                placeholder="Search consumer type...">
-        </div>
-        <div class="search-group">
-            <i class="pi pi-map-marker"></i>
-            <input type="text" [(ngModel)]="filters.businessLocation" (input)="onSearch()"
-                placeholder="Search location...">
-        </div>
-        <button class="btn-search" (click)="onSearch(true)">
-            <i class="pi pi-search"></i> Search
-        </button>
-        <button class="btn-clear" (click)="clearFilters()">
-            <i class="pi pi-times"></i> Clear
-        </button>
     </div>
 
-    <!-- Filter Tabs -->
-    <div class="filter-tabs">
-        <button class="filter-tab" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">
-            <i class="pi pi-list"></i> All Buyers
-        </button>
-        <button class="filter-tab pending-tab" [class.active]="activeFilter === 'pending'"
-            (click)="setFilter('pending')">
-            <i class="pi pi-clock"></i> Pending Verification
-        </button>
-        <button class="filter-tab verified-tab" [class.active]="activeFilter === 'verified'"
-            (click)="setFilter('verified')">
-            <i class="pi pi-check-circle"></i> Verified
-        </button>
+    <!-- Filter Bar -->
+    <div class="flex mb-4">
+        <div class="flex border-1 border-200 border-round-xl bg-white overflow-hidden p-1 shadow-1">
+            <button pButton label="All Buyers" icon="pi pi-list"
+                class="p-button-text p-button-sm px-4 py-2 font-semibold" [class.bg-gray-100]="activeFilter === 'all'"
+                [class.text-900]="activeFilter === 'all'" (click)="setFilter('all')"></button>
+            <button pButton label="Pending" icon="pi pi-clock"
+                class="p-button-text p-button-sm px-4 py-2 font-semibold text-orange-500"
+                [class.bg-orange-50]="activeFilter === 'pending'" [class.text-orange-700]="activeFilter === 'pending'"
+                (click)="setFilter('pending')"></button>
+            <button pButton label="Verified" icon="pi pi-check-circle"
+                class="p-button-text p-button-sm px-4 py-2 font-semibold text-green-500"
+                [class.bg-green-50]="activeFilter === 'verified'" [class.text-green-700]="activeFilter === 'verified'"
+                (click)="setFilter('verified')"></button>
+        </div>
     </div>
-
-    <!-- Loading -->
-    @if (loading) {
-    <div class="loading-state">
-        <div class="loader-ring"></div>
-        <p>Loading buyers...</p>
-    </div>
-    }
-
-    <!-- Empty -->
-    @if (!loading && buyers.length === 0) {
-    <div class="empty-state">
-        <div class="empty-icon"><i class="pi pi-check-circle"></i></div>
-        <h3>No Buyers Found</h3>
-        <p>No buyers match the current filter.</p>
-    </div>
-    }
 
     <!-- Table -->
-    @if (!loading && buyers.length > 0) {
-    <div class="table-card">
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Consumer Type</th>
-                        <th>Location</th>
-                        <th>Verified</th>
-                        <th>Account</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (buyer of buyers; track buyer.username; let i = $index) {
-                    <tr [style.animation-delay]="i * 0.05 + 's'">
-                        <td>
-                            <div class="name-cell">
-                                <div class="user-avatar buyer-avatar">{{ buyer.fullName.charAt(0) || 'B' }}</div>
-                                <div class="name-info">
-                                    <span class="name-text">{{ buyer.fullName }}</span>
-                                    <span class="username-text">{{ buyer.username }}</span>
-                                </div>
+    <div class="surface-card border-1 border-200 border-round-xl shadow-1 overflow-hidden">
+        <p-table [value]="buyers" [loading]="loading" responsiveLayout="scroll" styleClass="p-datatable-sm">
+            <ng-template pTemplate="header">
+                <tr class="surface-50">
+                    <th class="text-700 font-bold text-xs uppercase p-4">Name</th>
+                    <th class="text-700 font-bold text-xs uppercase p-4">Consumer Type</th>
+                    <th class="text-700 font-bold text-xs uppercase p-4">Location</th>
+                    <th class="text-700 font-bold text-xs uppercase p-4 text-center">Verified</th>
+                    <th class="text-700 font-bold text-xs uppercase p-4 text-center">Account</th>
+                    <th class="text-700 font-bold text-xs uppercase p-4 text-center" style="width: 240px">Actions</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-buyer>
+                <tr class="hover:bg-gray-50 transition-all transition-duration-200 border-bottom-1 border-100">
+                    <td class="p-4">
+                        <div class="flex align-items-center gap-3">
+                            <div class="flex align-items-center justify-content-center border-round-lg text-sm font-bold text-white flex-shrink-0"
+                                style="width:36px; height:36px; background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                                {{ buyer.fullName.charAt(0) || 'B' }}
                             </div>
-                        </td>
-                        <td>{{ buyer.consumerType || '—' }}</td>
-                        <td>{{ buyer.businessLocation || '—' }}</td>
-                        <td>
-                            <span [class]="buyer.isVerified ? 'status-verified' : 'status-pending'">
-                                <i [class]="buyer.isVerified ? 'pi pi-check-circle' : 'pi pi-clock'"></i>
-                                {{ buyer.isVerified ? 'Verified' : 'Pending' }}
-                            </span>
-                        </td>
-                        <td>
-                            <span [class]="buyer.isActive ? 'status-verified' : 'status-rejected'">
-                                <i [class]="buyer.isActive ? 'pi pi-user' : 'pi pi-ban'"></i>
-                                {{ buyer.isActive ? 'Active' : 'Blocked' }}
-                            </span>
-                        </td>
-                        <td>
-                            <div class="actions-cell">
-                                <button class="btn-detail" (click)="viewDetail(buyer.username)">
-                                    <i class="pi pi-eye"></i>
-                                </button>
+                            <div class="flex flex-column text-left">
+                                <span class="text-sm font-semibold text-900">{{ buyer.fullName }}</span>
+                                <span class="text-xs text-500">{{ buyer.username }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4 text-sm text-600">{{ buyer.consumerType }}</td>
+                    <td class="p-4 text-sm text-600">{{ buyer.businessLocation }}</td>
+                    <td class="p-4 text-center">
+                        <p-tag [value]="buyer.status === 'VERIFIED' ? 'Verified' : (buyer.status === 'BLOCKED' ? 'Blocked' : 'Pending')"
+                            [severity]="buyer.status === 'VERIFIED' ? 'success' : (buyer.status === 'BLOCKED' ? 'danger' : 'warn')"
+                            [icon]="buyer.status === 'VERIFIED' ? 'pi pi-check-circle' : (buyer.status === 'BLOCKED' ? 'pi pi-ban' : 'pi pi-clock')"
+                            styleClass="text-xs px-2"></p-tag>
+                    </td>
+                    <td class="p-4 text-center">
+                        <p-tag [value]="buyer.isActive ? 'Active' : 'Blocked'"
+                            [severity]="buyer.isActive ? 'success' : 'danger'"
+                            [icon]="buyer.isActive ? 'pi pi-user' : 'pi pi-ban'" styleClass="text-xs px-2"></p-tag>
+                    </td>
+                    <td class="p-4">
+                        <div class="grid grid-nogutter align-items-center justify-content-center gap-2"
+                            style="width: 240px; margin: 0 auto;">
+                            <!-- Slot 1: View -->
+                            <div class="col-fixed flex justify-content-center" style="width: 40px;">
+                                <button pButton icon="pi pi-eye"
+                                    class="p-button-text p-button-rounded p-button-secondary p-button-sm action-btn"
+                                    pTooltip="View Details" tooltipPosition="bottom"
+                                    (click)="viewDetail(buyer.username)"></button>
+                            </div>
+
+                            <!-- Slot 2: Verify or Block/Unblock -->
+                            <div class="col-fixed flex justify-content-center" style="width: 90px;">
                                 @if (!buyer.isVerified) {
-                                <button class="btn-approve" (click)="approveBuyer(buyer.username)">
-                                    <i class="pi pi-check"></i> Verify
-                                </button>
-                                <button class="btn-reject" (click)="showRejectDialog(buyer.username)">
-                                    <i class="pi pi-times"></i> Reject
-                                </button>
-                                }
-                                @if (buyer.isVerified) {
-                                <button [class]="buyer.isActive ? 'btn-reject' : 'btn-approve'"
-                                    (click)="blockUnblock(buyer.username, buyer.isActive)">
-                                    <i [class]="buyer.isActive ? 'pi pi-ban' : 'pi pi-check-circle'"></i>
-                                    {{ buyer.isActive ? 'Block' : 'Unblock' }}
-                                </button>
+                                <button pButton label="Verify" icon="pi pi-check"
+                                    class="p-button-sm p-button-success border-round-xl px-2 py-1 w-full"
+                                    (click)="approveBuyer(buyer.username)"></button>
+                                } @else {
+                                <button pButton [label]="buyer.isActive ? 'Block' : 'Unblock'"
+                                    [icon]="buyer.isActive ? 'pi pi-ban' : 'pi pi-check-circle'"
+                                    class="p-button-sm border-round-xl px-2 py-1 w-full"
+                                    [class.p-button-danger]="buyer.isActive" [class.p-button-success]="!buyer.isActive"
+                                    (click)="blockUnblock(buyer.username, buyer.isActive)"></button>
                                 }
                             </div>
-                        </td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        @if (buyers.length === size || page > 0) {
-        <div class="pagination-controls">
-            <span class="page-info">Page {{ page + 1 }}</span>
-            <div class="page-actions">
-                <button class="page-btn" [disabled]="page === 0" (click)="prevPage()">
-                    <i class="pi pi-chevron-left"></i> Previous
-                </button>
-                <button class="page-btn" [disabled]="!hasMore" (click)="nextPage()">
-                    Next <i class="pi pi-chevron-right"></i>
-                </button>
+
+                            <!-- Slot 3: Reject -->
+                            <div class="col-fixed flex justify-content-center" style="width: 90px;">
+                                @if (!buyer.isVerified) {
+                                <button pButton label="Reject" icon="pi pi-times"
+                                    class="p-button-sm p-button-danger border-round-xl px-2 py-1 w-full"
+                                    (click)="showActionDialog(buyer.username, 'REJECT')"></button>
+                                }
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <div class="flex align-items-center justify-content-between p-4 bg-gray-50 border-top-1 border-200">
+            <span class="text-xs text-500 font-medium">Page {{page + 1}}</span>
+            <div class="flex gap-2">
+                <button pButton label="Previous" icon="pi pi-chevron-left"
+                    class="p-button-outlined p-button-secondary p-button-sm border-round-xl" [disabled]="page === 0"
+                    (click)="prevPage()"></button>
+                <button pButton label="Next" icon="pi pi-chevron-right" iconPos="right"
+                    class="p-button-outlined p-button-secondary p-button-sm border-round-xl" [disabled]="!hasMore"
+                    (click)="nextPage()"></button>
             </div>
         </div>
-        }
     </div>
-    }
 </div>
 
-<!-- Stunning Detail Dialog -->
-<p-dialog [(visible)]="detailDialog" [modal]="true" [style]="{ width: '700px' }" [draggable]="false" [resizable]="false"
-    header="Buyer Profile Insights" class="premium-dialog">
+<p-dialog [(visible)]="detailDialog" [modal]="true" [style]="{ width: '750px' }" [draggable]="false" [resizable]="false"
+    header="Buyer Profile" styleClass="detail-dialog border-round-2xl overflow-hidden">
     <app-detail-buyer [buyer]="selectedBuyer" [loading]="detailLoading" (onApprove)="approveBuyer($event)"
-        (onReject)="showRejectDialog($event)" (onBlockToggle)="blockUnblock($event.username, $event.active)">
+        (onReject)="showActionDialog($event, 'REJECT')" (onBlockToggle)="blockUnblock($event.username, $event.active)">
     </app-detail-buyer>
 </p-dialog>
 
-<!-- Rejection Dialog -->
-<p-dialog header="Reject Buyer Application" [(visible)]="rejectDialog" [modal]="true" [style]="{ width: '440px' }"
-    [draggable]="false" [resizable]="false">
-    <div class="reject-dialog-body">
-        <div class="dialog-icon"><i class="pi pi-exclamation-triangle"></i></div>
-        <p class="dialog-text">Provide a reason for rejecting this buyer application.</p>
-        <textarea pInputTextarea [(ngModel)]="rejectionReason" rows="4" placeholder="Enter reason..."
-            class="reject-textarea"></textarea>
+<p-dialog [header]="actionType === 'REJECT' ? 'Reject Application' : 'Block Account'" [(visible)]="actionDialog" [modal]="true" [style]="{ width: '440px' }"
+    [draggable]="false" [resizable]="false" styleClass="border-round-2xl overflow-hidden">
+    <div class="text-center py-2">
+        <div class="flex align-items-center justify-content-center border-round-xl bg-red-50 mx-auto mb-3"
+            style="width:52px; height:52px;">
+            <i class="pi pi-exclamation-triangle text-red-500" style="font-size: 22px;"></i>
+        </div>
+        <p class="text-sm text-500 mb-3">Please provide a reason for {{ actionType === 'REJECT' ? 'rejection' : 'blocking this account' }}.</p>
+        <textarea pTextarea [(ngModel)]="actionReason" rows="4" placeholder="Enter reason..."
+            class="w-full border-round-lg border-1 border-200 p-3"></textarea>
     </div>
     <ng-template pTemplate="footer">
-        <div class="dialog-actions">
-            <button class="dialog-btn cancel-btn" (click)="rejectDialog = false">Cancel</button>
-            <button class="dialog-btn confirm-reject-btn" (click)="confirmReject()">Confirm Reject</button>
+        <div class="flex gap-2 justify-content-end pb-3 pr-3">
+            <p-button label="Cancel" severity="secondary" [text]="true" (onClick)="actionDialog = false"></p-button>
+            <p-button [label]="actionType === 'REJECT' ? 'Confirm Reject' : 'Confirm Block'" severity="danger" class="border-round-xl"
+                (onClick)="confirmAction()"></p-button>
         </div>
     </ng-template>
 </p-dialog>

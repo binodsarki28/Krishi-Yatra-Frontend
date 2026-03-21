@@ -9,6 +9,20 @@ export const routes: Routes = [
             import('./components/landing/landing').then((l) => l.LandingComponent),
         canActivate: [userGuard],
     },
+    {
+        path: 'stocks',
+        loadComponent: () =>
+            import('./stock/stock-list/stock-list').then((m) => m.StockListComponent),
+        canActivate: [userGuard],
+        data: { breadcrumb: 'Marketplace' }
+    },
+    {
+        path: 'stock-detail/:slug',
+        loadComponent: () =>
+            import('./stock/stock-detail/stock-detail').then((m) => m.StockDetailComponent),
+        canActivate: [userGuard],
+        data: { breadcrumb: 'Stock Details' }
+    },
 
     // ── Account (login / register / verify-otp) ───────────────────
     {
@@ -16,6 +30,16 @@ export const routes: Routes = [
         loadChildren: () =>
             import('./components/account/account.route').then(
                 (a) => a.ACCOUNT_ROUTES
+            ),
+        canActivate: [publicGuard],
+    },
+
+    // ── Admin Login ───────────────────────────────────────────────
+    {
+        path: 'admin-login',
+        loadComponent: () =>
+            import('./admin/login/login').then(
+                (m) => m.AdminLoginComponent
             ),
         canActivate: [publicGuard],
     },

@@ -3,7 +3,7 @@ export interface IBuyerListResponse {
     username: string;
     consumerType: string;
     businessLocation: string;
-    isVerified: boolean;
+    status: string;
     isActive: boolean;
 }
 

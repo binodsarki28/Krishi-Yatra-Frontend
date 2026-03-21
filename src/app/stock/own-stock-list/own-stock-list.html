@@ -1,0 +1,142 @@
+<div class="fadein animation-duration-300">
+    <!-- Page Header -->
+    <div class="flex align-items-center justify-content-between mb-3">
+        <div class="flex align-items-center gap-3">
+            <div class="flex align-items-center justify-content-center border-round-xl"
+                style="width:36px; height:36px; background: linear-gradient(135deg, #22c55e, #16a34a);">
+                <i class="pi pi-box text-white" style="font-size: 18px;"></i>
+            </div>
+            <div>
+                <h2 class="m-0 text-lg font-bold text-900" style="letter-spacing: -0.3px;">My Stock Management</h2>
+                <p class="m-0 mt-1 text-xs text-500">View and manage your farm products</p>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <p-button icon="pi pi-refresh" label="Refresh" [outlined]="true" [loading]="loading" severity="secondary"
+                size="small" styleClass="border-round-lg" (onClick)="loadStocks()"></p-button>
+            <p-button label="Add New Stock" icon="pi pi-plus" [routerLink]="['/farmer/stocks/create']" 
+                severity="success" size="small" styleClass="border-round-lg"></p-button>
+        </div>
+    </div>
+
+    <!-- Search Filters -->
+    <div class="surface-card border-round-xl border-1 border-200 p-3 mb-3 shadow-1">
+        <div class="grid align-items-end">
+            <div class="col-12 md:col-3">
+                <label class="block text-xs font-bold text-500 mb-1 ml-1">STOCK NAME</label>
+                <p-iconfield>
+                    <p-inputicon styleClass="pi pi-box"></p-inputicon>
+                    <input type="text" pInputText [(ngModel)]="filters.stockName" (input)="onSearch()"
+                        placeholder="Search by name..." class="w-full border-round-lg text-sm" />
+                </p-iconfield>
+            </div>
+            <div class="col-12 md:col-3">
+                <label class="block text-xs font-bold text-500 mb-1 ml-1">PRODUCT</label>
+                <p-iconfield>
+                    <p-inputicon styleClass="pi pi-shopping-cart"></p-inputicon>
+                    <input type="text" pInputText [(ngModel)]="filters.productName" (input)="onSearch()"
+                        placeholder="Search product..." class="w-full border-round-lg text-sm" />
+                </p-iconfield>
+            </div>
+            <div class="col-12 md:col-2">
+                <label class="block text-xs font-bold text-500 mb-1 ml-1">CATEGORY</label>
+                <p-select [options]="categories" [(ngModel)]="filters.categoryName" optionLabel="categoryName" optionValue="categoryName"
+                    placeholder="All Categories" (onChange)="onCategoryFilterChange()" [showClear]="true" 
+                    styleClass="w-full border-round-lg text-sm" [filter]="true"></p-select>
+            </div>
+            <div class="col-12 md:col-2">
+                <label class="block text-xs font-bold text-500 mb-1 ml-1">SUB CATEGORY</label>
+                <p-select [options]="subCategoriesFiltered" [(ngModel)]="filters.subCategoryName" optionLabel="subCategoryName" optionValue="subCategoryName"
+                    placeholder="All Sub-cats" [disabled]="!filters.categoryName" (onChange)="onSearch(true)" [showClear]="true" 
+                    styleClass="w-full border-round-lg text-sm" [filter]="true"></p-select>
+            </div>
+            <div class="col-12 md:col-2 flex gap-2">
+                <p-button icon="pi pi-search" label="Search" severity="success" styleClass="border-round-lg w-full text-sm"
+                    (onClick)="onSearch(true)"></p-button>
+                <p-button icon="pi pi-times" [outlined]="true" severity="secondary"
+                    styleClass="border-round-lg text-sm px-3" (onClick)="clearFilters()"></p-button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading -->
+    @if (loading) {
+        <div class="flex flex-column align-items-center justify-content-center py-8 text-500 gap-3 surface-card border-round-xl border-1 border-200 shadow-1">
+            <i class="pi pi-spin pi-spinner text-4xl text-green-500"></i>
+            <p class="m-0 text-sm">Loading stocks...</p>
+        </div>
+    }
+
+    <!-- Table -->
+    @if (!loading) {
+        <div class="surface-card border-round-xl border-1 border-200 shadow-1 overflow-hidden">
+            <p-table [value]="displayStocks" [loading]="loading" responsiveLayout="scroll" 
+                styleClass="p-datatable-sm p-datatable-striped" [rowHover]="true"
+                [scrollable]="true" scrollHeight="calc(100vh - 315px)">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="stockName" style="min-width: 15rem">Stock Name <p-sortIcon field="stockName"></p-sortIcon></th>
+                        <th pSortableColumn="productName">Product <p-sortIcon field="productName"></p-sortIcon></th>
+                        <th pSortableColumn="categoryName">Category <p-sortIcon field="categoryName"></p-sortIcon></th>
+                        <th pSortableColumn="quantity">Quantity <p-sortIcon field="quantity"></p-sortIcon></th>
+                        <th pSortableColumn="pricePerUnit">Price <p-sortIcon field="pricePerUnit"></p-sortIcon></th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-stock>
+                    <tr>
+                        <td>
+                            <div class="font-semibold text-900">{{stock.stockName}}</div>
+                            <div class="text-xs text-500">{{stock.stockSlug}}</div>
+                        </td>
+                        <td class="text-sm font-medium">{{stock.productName}}</td>
+                        <td>
+                            <span class="text-xs text-500 block">{{stock.categoryName}}</span>
+                            <span class="text-sm font-medium text-700">{{stock.subCategoryName}}</span>
+                        </td>
+                        <td class="text-sm">
+                            <span class="font-medium text-900">{{stock.quantity}} Units</span>
+                            <div class="text-xs text-500 mt-1">Min Order: {{stock.minQuantity || 1}}</div>
+                        </td>
+                        <td class="text-sm font-bold text-green-700">Rs. {{stock.pricePerUnit}}</td>
+                        <td>
+                            <p-tag [value]="stock.active ? 'Active' : 'Inactive'" 
+                                [severity]="getSeverity(stock.active)" [rounded]="true" size="small"></p-tag>
+                        </td>
+                        <td>
+                            <div class="flex gap-1">
+                                <p-button icon="pi pi-pencil" [routerLink]="['/farmer/stocks/update', stock.stockSlug]" 
+                                    severity="info" [text]="true" [rounded]="true" size="small"></p-button>
+                                <p-button icon="pi pi-trash" (onClick)="deleteStock(stock.stockSlug)" 
+                                    severity="danger" [text]="true" [rounded]="true" size="small"></p-button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7" class="text-center p-5 text-500">
+                            <i class="pi pi-info-circle mb-2" style="font-size: 2rem;"></i>
+                            <div class="text-lg text-900 font-bold">No Stocks Found</div>
+                            <div class="text-sm">Try adjusting your filters.</div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <!-- Pagination -->
+            <div class="flex justify-content-between align-items-center p-3 border-top-1 border-200 surface-50">
+                <span class="text-sm text-600 font-medium">Page {{ page + 1 }}</span>
+                <div class="flex gap-2">
+                    <p-button icon="pi pi-chevron-left" label="Previous" [outlined]="true" severity="secondary" size="small"
+                        [disabled]="page === 0" (onClick)="prevPage()" styleClass="border-round-lg"></p-button>
+                    <p-button icon="pi pi-chevron-right" iconPos="right" label="Next" [outlined]="true" severity="secondary"
+                        size="small" [disabled]="!hasMore" (onClick)="nextPage()" styleClass="border-round-lg"></p-button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<p-toast></p-toast>

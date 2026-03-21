@@ -1,0 +1,181 @@
+<div class="fadein animation-duration-300">
+    <!-- Header: Explicitly matching Admin Dashboard pattern -->
+    <div class="flex align-items-center justify-content-between mb-4">
+        <div class="flex align-items-center gap-3">
+            <div class="flex align-items-center justify-content-center border-round-xl"
+                style="width:38px; height:38px; background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                <i class="pi pi-pencil text-white" style="font-size: 18px;"></i>
+            </div>
+            <div>
+                <h2 class="m-0 text-xl font-bold text-900">Update Farm Stock</h2>
+                <p class="m-0 mt-1 text-xs text-500">Edit the details of your listed farm product</p>
+            </div>
+        </div>
+        <p-button icon="pi pi-times" label="Cancel" [outlined]="true" severity="secondary"
+            size="small" styleClass="border-round-lg" [routerLink]="['/farmer/stocks/my-stocks']"></p-button>
+    </div>
+
+    <!-- Form -->
+    <div class="surface-card border-round-xl border-1 border-200 p-4 shadow-1 mx-auto" style="max-width: 900px;">
+        @if (loading) {
+            <div class="flex flex-column align-items-center justify-content-center py-8 gap-3">
+                <i class="pi pi-spin pi-spinner text-3xl text-blue-500"></i>
+                <p class="m-0 text-sm text-500 font-medium text-center">Loading stock data...<br><span class="text-xs">Connecting to server</span></p>
+            </div>
+        }
+
+        @if (!loading) {
+            <form [formGroup]="stockForm" (ngSubmit)="onSubmit()">
+                <div class="grid row-gap-4">
+                    <!-- Row 1 -->
+                    <div class="col-12 md:col-4 relative">
+                        <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Stock Name</label>
+                        <div class="field-with-icon">
+                            <i class="pi pi-box"></i>
+                            <input pInputText formControlName="stockName" placeholder="e.g. Fresh Red Tomatoes" 
+                                class="w-full text-sm border-round-lg" />
+                        </div>
+                        @if (stockForm.get('stockName')?.invalid && stockForm.get('stockName')?.touched) {
+                            <small class="validation-error">Required (min 3 chars)</small>
+                        }
+                    </div>
+
+                    <div class="col-12 md:col-4 relative">
+                        <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Product Name</label>
+                        <div class="field-with-icon">
+                            <i class="pi pi-shopping-bag"></i>
+                            <input pInputText formControlName="productName" placeholder="e.g. Tomato" 
+                                class="w-full text-sm border-round-lg" />
+                        </div>
+                        @if (stockForm.get('productName')?.invalid && stockForm.get('productName')?.touched) {
+                            <small class="validation-error">Product name is required</small>
+                        }
+                    </div>
+
+                    <div class="col-12 md:col-4 relative">
+                        <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase flex align-items-center gap-2">
+                            <i class="pi pi-tag text-blue-500"></i>
+                            Category
+                        </label>
+                        <p-select [options]="categories" formControlName="categoryId" optionLabel="categoryName" optionValue="categoryId"
+                            placeholder="Select Category" (onChange)="onCategoryChange()" [filter]="true"
+                            styleClass="w-full border-round-lg shadow-none"></p-select>
+                        @if (stockForm.get('categoryId')?.invalid && stockForm.get('categoryId')?.touched) {
+                            <small class="validation-error">Category is required</small>
+                        }
+                    </div>
+
+                    <!-- Row 2 -->
+                    <div class="col-12 md:col-4 relative">
+                        <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase flex align-items-center gap-2">
+                            <i class="pi pi-tags text-blue-500"></i>
+                            Sub Category
+                        </label>
+                        <p-select [options]="subCategoriesFiltered" formControlName="subCategoryId" optionLabel="subCategoryName" optionValue="subCategoryId"
+                            placeholder="Select Sub Category" [filter]="true"
+                            styleClass="w-full border-round-lg shadow-none"></p-select>
+                        @if (stockForm.get('subCategoryId')?.invalid && stockForm.get('subCategoryId')?.touched) {
+                            <small class="validation-error">Sub-category is required</small>
+                        }
+                    </div>
+
+                    <div class="col-12 md:col-4 relative">
+                        <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Quantity (Units)</label>
+                        <div class="field-with-icon">
+                            <i class="pi pi-info-circle"></i>
+                            <p-inputNumber formControlName="quantity" placeholder="Quantity" 
+                                styleClass="w-full" inputStyleClass="w-full border-round-lg text-sm" inputId="quantity"></p-inputNumber>
+                        </div>
+                        @if (stockForm.get('quantity')?.invalid && stockForm.get('quantity')?.touched) {
+                            <small class="validation-error">Quantity must be at least 1</small>
+                        }
+                    </div>
+
+                    <div class="col-12 md:col-4 relative">
+                        <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Price Per (Rs.)</label>
+                        <div class="field-with-icon">
+                            <i class="pi pi-dollar"></i>
+                            <p-inputNumber formControlName="pricePerUnit" placeholder="Price" 
+                                styleClass="w-full" inputStyleClass="w-full border-round-lg text-sm" inputId="price"></p-inputNumber>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-4 relative">
+                        <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Min Order Quantity</label>
+                        <div class="field-with-icon">
+                            <i class="pi pi-cart-plus"></i>
+                            <p-inputNumber formControlName="minQuantity" placeholder="Min Qty" 
+                                styleClass="w-full" inputStyleClass="w-full border-round-lg text-sm" inputId="minQuantity"></p-inputNumber>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-2">
+                        <label class="block text-xs font-bold text-500 mb-2 ml-1 uppercase flex align-items-center gap-2">
+                            <i class="pi pi-images text-blue-500"></i>
+                            Current Product Photos
+                        </label>
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            @for (img of existingImages; track $index) {
+                                <div class="relative">
+                                    <img [src]="img" class="border-round-lg border-1 border-200" style="width: 80px; height: 80px; object-fit: cover;">
+                                </div>
+                            } @empty {
+                                <div class="p-3 bg-gray-50 border-round-lg border-1 border-200 text-xs text-500 italic">No existing photos</div>
+                            }
+                        </div>
+
+                        <label class="block text-xs font-bold text-500 mb-2 ml-1 uppercase flex align-items-center gap-2">
+                            <i class="pi pi-plus-circle text-blue-500"></i>
+                            Replace with New Photos (Max 5)
+                        </label>
+                        <p-fileupload name="images" [multiple]="true" accept="image/*" [maxFileSize]="5000000" 
+                            [fileLimit]="5" (onSelect)="onFilesSelected($event)"
+                            [showUploadButton]="false" [showCancelButton]="false"
+                            styleClass="w-full border-round-lg shadow-none font-medium"
+                            chooseLabel="Select New Photos" chooseIcon="pi pi-cloud-upload"></p-fileupload>
+                        
+                        <!-- Selected Queue Previews -->
+                        @if (selectedFiles.length > 0) {
+                            <div class="flex flex-wrap gap-2 mt-3 p-3 bg-blue-50 border-round-lg border-1 border-blue-100">
+                                @for (file of selectedFiles; track $index) {
+                                    <div class="relative shadow-2 border-round-lg overflow-hidden" style="width: 70px; height: 70px;">
+                                        <img [src]="file.objectURL" class="w-full h-full" style="object-fit: cover;">
+                                        <div (click)="removeFile($index)" class="absolute top-0 right-0 p-1 bg-red-500 text-white cursor-pointer hover:bg-red-600 transition-colors" 
+                                             style="border-bottom-left-radius: 8px;">
+                                            <i class="pi pi-times" style="font-size: 10px;"></i>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="flex align-items-center ml-2 text-blue-600 font-bold text-xs">
+                                    {{selectedFiles.length}} New Ready
+                                </div>
+                            </div>
+                        }
+                        
+                        <small class="text-xs text-400 mt-1 block px-1 italic">Adding new photos will replace all previous ones.</small>
+                    </div>
+
+                    <div class="col-12 relative pb-2">
+                        <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Detailed Description</label>
+                        <textarea pTextarea formControlName="description" rows="3" placeholder="Tell us more about your stock..." 
+                            class="w-full text-sm border-round-lg shadow-none text-900 border-1 border-300 p-3 bg-white"></textarea>
+                        @if (stockForm.get('description')?.invalid && stockForm.get('description')?.touched) {
+                            <small class="validation-error">Description is required</small>
+                        }
+                    </div>
+                </div>
+
+                <!-- Footer: Actions -->
+                <div class="flex justify-content-end gap-2 mt-5">
+                    <p-button label="Discard" icon="pi pi-times" [outlined]="true" severity="secondary" 
+                        [routerLink]="['/farmer/stocks/my-stocks']" styleClass="border-round-lg px-4"></p-button>
+                    <p-button type="submit" label="Save Changes" icon="pi pi-check" 
+                        [loading]="submitting" [disabled]="stockForm.pristine || stockForm.invalid" 
+                        severity="success" styleClass="border-round-lg px-5"></p-button>
+                </div>
+            </form>
+        }
+    </div>
+</div>
+
+<p-toast></p-toast>

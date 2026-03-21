@@ -16,47 +16,51 @@
     margin: 0 3rem !important;
 }
 
-/* Customize Menu Items - BIGGER Visible Font */
+/* Customize Menu Items - CLASSIC & BIG */
 ::ng-deep .p-menubar .p-menuitem-link {
-    font-size: 1.25rem !important;
+    font-size: 1.6rem !important; /* Larger text */
     font-weight: 600 !important;
-    color: var(--text-color) !important;
-    padding: 0.875rem 1.75rem !important;
-    border-radius: 10px !important;
-    transition: all 0.2s ease !important;
+    font-family: 'Outfit', sans-serif !important;
+    color: #334155 !important;
+    padding: 0.85rem 1.5rem !important;
+    border-radius: 14px !important;
+    transition: all 0.25s ease !important;
 }
 
 ::ng-deep .p-menubar .p-menuitem-link .p-menuitem-text {
-    font-size: 1.25rem !important;
+    font-size: 1.6rem !important;
     font-weight: 600 !important;
 }
 
 ::ng-deep .p-menubar .p-menuitem-link .p-menuitem-icon {
-    font-size: 1.125rem !important;
-    margin-right: 0.5rem !important;
+    font-size: 1.8rem !important; /* Much larger icons */
+    margin-right: 0.85rem !important;
+    color: #0f172a !important;
 }
 
 ::ng-deep .p-menubar .p-menuitem-link:hover {
-    background-color: rgba(76, 175, 80, 0.1) !important;
+    background-color: #f8fafc !important;
+    color: var(--primary-color) !important;
+    transform: translateY(-1px);
+}
+
+::ng-deep .p-menubar .p-menuitem-link:hover .p-menuitem-icon {
     color: var(--primary-color) !important;
 }
 
-::ng-deep .p-menubar .p-menuitem-active>.p-menuitem-link {
-    background-color: rgba(76, 175, 80, 0.15) !important;
-    color: var(--primary-color) !important;
-}
-
-/* Make navbar buttons BIGGER */
+/* Make navbar buttons BIGGER to match Profile style */
 .navbar-btn-text {
-    font-size: 1.375rem !important;
+    font-size: 1.6rem !important;
+    font-weight: 700 !important;
+    font-family: 'Outfit', sans-serif !important;
 }
 
 .navbar-btn-text .p-button-label {
-    font-size: 1.375rem !important;
+    font-size: 1.6rem !important;
 }
 
 .navbar-btn-text .p-button-icon {
-    font-size: 1.25rem !important;
+    font-size: 1.9rem !important;
 }
 
 .hover-scale:hover {

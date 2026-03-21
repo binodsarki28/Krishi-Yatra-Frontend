@@ -1,1 +1,132 @@
-<p>farmer-dashboard works!</p>
+<div class="flex h-screen surface-ground overflow-hidden" style="font-family: 'Inter', 'Segoe UI', sans-serif;">
+    <!-- Sidebar -->
+    <aside class="flex flex-column flex-shrink-0 surface-card border-right-1 border-200"
+        style="width: 272px; box-shadow: 2px 0 12px rgba(0,0,0,0.03);">
+
+        <!-- Sidebar Header -->
+        <div class="p-3 border-bottom-1 border-200">
+            <div class="flex align-items-center gap-3">
+                <div class="flex align-items-center justify-content-center border-round-xl"
+                    style="width:40px; height:40px; background: linear-gradient(135deg, #22c55e, #16a34a);">
+                    <i class="pi pi-home text-white" style="font-size: 18px;"></i>
+                </div>
+                <div>
+                    <h1 class="m-0 text-lg font-bold text-900" style="letter-spacing: -0.3px;">KrishiYatra</h1>
+                    <p class="m-0 mt-1 text-xs text-500 font-medium">Farmer Dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto p-3">
+            <!-- Dashboard -->
+            <a class="flex align-items-center gap-2 px-3 py-2 border-round-lg text-600 no-underline text-sm font-semibold mb-1 nav-item"
+                routerLink="/farmer" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active-nav">
+                <i class="pi pi-th-large" style="font-size: 16px;"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <!-- Stock Management Group -->
+            <div class="mb-1" [class.expanded]="expandedGroup === 'stock'">
+                <button
+                    class="flex align-items-center justify-content-between w-full px-3 py-2 border-round-lg border-none bg-transparent text-700 text-sm font-semibold cursor-pointer nav-group-header"
+                    (click)="toggleGroup('stock')">
+                    <div class="flex align-items-center gap-2">
+                        <div class="flex align-items-center justify-content-center border-round-lg bg-green-50 text-green-600"
+                            style="width:32px; height:32px;">
+                            <i class="pi pi-box" style="font-size: 14px;"></i>
+                        </div>
+                        <span>Stock Management</span>
+                    </div>
+                    <i class="pi pi-chevron-down text-400 group-arrow"
+                        [style.transform]="expandedGroup === 'stock' ? 'rotate(180deg)' : 'none'"
+                        style="font-size: 10px; transition: transform 0.25s ease;"></i>
+                </button>
+                <div class="pl-4 nav-group-items" [style.max-height]="expandedGroup === 'stock' ? '200px' : '0'"
+                    style="overflow: hidden; transition: max-height 0.25s ease;">
+                    <a class="flex align-items-center gap-2 px-3 py-2 border-round-md text-600 no-underline text-xs font-medium my-1 nav-sub-item"
+                        routerLink="/farmer/stocks/my-stocks" routerLinkActive="active-nav">
+                        <i class="pi pi-list" style="font-size: 12px;"></i>
+                        <span>My Stocks</span>
+                    </a>
+                    <a class="flex align-items-center gap-2 px-3 py-2 border-round-md text-600 no-underline text-xs font-medium my-1 nav-sub-item"
+                        routerLink="/farmer/stocks/create" routerLinkActive="active-nav">
+                        <i class="pi pi-plus" style="font-size: 12px;"></i>
+                        <span>Add Stock</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="p-3 border-top-1 border-200">
+            <button (click)="goToProfile()" 
+               class="flex align-items-center justify-content-center gap-2 w-full px-3 py-2 border-round-xl border-1 border-300 bg-white text-700 hover:surface-100 no-underline text-sm font-semibold transition-all transition-duration-200 cursor-pointer"
+               style="height: 44px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); outline: none;">
+                <i class="pi pi-user" style="font-size: 14px;"></i>
+                <span>Back to Profile</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto p-4 md:p-5 surface-ground">
+        <router-outlet></router-outlet>
+
+        @if (isDefaultRoute) {
+        <div class="fadein animation-duration-300">
+            <!-- Stats Row -->
+            <div class="grid mb-4">
+                <div class="col-12 md:col-6 lg:col-3">
+                    <div
+                        class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between hover:shadow-3 transition-all transition-duration-200">
+                        <div class="flex flex-column gap-1">
+                            <span class="text-xs text-500 font-medium">Total Stocks</span>
+                            <span class="text-3xl font-bold text-900" style="letter-spacing: -0.5px; line-height: 1;">{{
+                                totalStocks }}</span>
+                        </div>
+                        <div class="flex align-items-center justify-content-center border-round-xl"
+                            style="width:44px; height:44px; background: linear-gradient(135deg, #22c55e, #16a34a);">
+                            <i class="pi pi-box text-white" style="font-size: 18px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="surface-card border-1 border-200 border-round-xl p-4">
+                <div class="mb-4">
+                    <h3 class="m-0 text-lg font-bold text-900">Stock Quick Actions</h3>
+                    <p class="m-0 mt-1 text-sm text-500">Manage your farm products</p>
+                </div>
+                <div class="flex flex-column gap-2">
+                    <a class="flex align-items-center gap-3 p-3 surface-ground border-1 border-200 border-round-xl no-underline cursor-pointer hover:surface-hover transition-all transition-duration-200 quick-card"
+                        routerLink="/farmer/stocks/my-stocks">
+                        <div class="flex align-items-center justify-content-center border-round-lg flex-shrink-0"
+                            style="width:42px; height:42px; background: linear-gradient(135deg, #22c55e, #16a34a);">
+                            <i class="pi pi-list text-white" style="font-size: 17px;"></i>
+                        </div>
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-900">View My Stocks</span>
+                            <span class="block text-xs text-500 mt-1">Manage existing stock items</span>
+                        </div>
+                        <i class="pi pi-arrow-right text-300" style="font-size: 12px;"></i>
+                    </a>
+                    <a class="flex align-items-center gap-3 p-3 surface-ground border-1 border-200 border-round-xl no-underline cursor-pointer hover:surface-hover transition-all transition-duration-200 quick-card"
+                        routerLink="/farmer/stocks/create">
+                        <div class="flex align-items-center justify-content-center border-round-lg flex-shrink-0"
+                            style="width:42px; height:42px; background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                            <i class="pi pi-plus text-white" style="font-size: 17px;"></i>
+                        </div>
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-900">Add New Stock</span>
+                            <span class="block text-xs text-500 mt-1">List a new product for sale</span>
+                        </div>
+                        <i class="pi pi-arrow-right text-300" style="font-size: 12px;"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        }
+    </main>
+</div>

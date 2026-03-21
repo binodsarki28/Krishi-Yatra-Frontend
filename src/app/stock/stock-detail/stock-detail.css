@@ -1,0 +1,101 @@
+:host {
+    display: block;
+}
+
+.stock-detail-container {
+    background: #f5f5f5;
+}
+
+.classic-price-card {
+    background: #f8faf8;
+    border: 1px solid #e5e7eb;
+}
+
+.custom-carousel {
+    padding: 0.75rem;
+}
+
+.main-image-wrap {
+    position: relative;
+    height: 430px;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-carousel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background: rgba(255, 255, 255, 0.95);
+    color: #111827;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    transition: all 0.2s ease;
+}
+
+.carousel-nav:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.carousel-nav:not(:disabled):hover {
+    background: #16a34a;
+    color: #fff;
+}
+
+.carousel-prev {
+    left: 0.8rem;
+}
+
+.carousel-next {
+    right: 0.8rem;
+}
+
+.thumb-strip {
+    margin-top: 0.75rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.thumb-item {
+    width: 70px;
+    height: 52px;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    padding: 2px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.thumb-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0.4rem;
+    display: block;
+}
+
+.thumb-item.active {
+    border-color: #16a34a;
+    box-shadow: 0 0 0 1px #16a34a inset;
+}

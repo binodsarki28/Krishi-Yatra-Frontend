@@ -3,7 +3,7 @@ export interface IFarmerListResponse {
     username: string;
     farmTypes: string;
     farmLocation: string;
-    isVerified: boolean;
+    status: string;
     isActive: boolean;
 }
 
