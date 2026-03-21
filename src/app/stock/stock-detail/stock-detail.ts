@@ -9,7 +9,6 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ChangeDetectorRef } from '@angular/core';
 import { GenerateUrlUtils } from '../../util/generate-url.utils';
-import { Subscription, timer } from 'rxjs';
 
 @Component({
   selector: 'app-stock-detail',
@@ -22,7 +21,7 @@ export class StockDetailComponent implements OnInit, OnDestroy {
   stock: any;
   images: any[] = [];
   activeIndex: number = 0;
-  private slideSubscription: Subscription | null = null;
+  private autoSlideTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private readonly autoSlideMs = 2000;
   private readonly fallbackImage = 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=800';
 
@@ -69,8 +68,7 @@ export class StockDetailComponent implements OnInit, OnDestroy {
   }
 
   onManualNavigate(): void {
-    this.stopAutoSlide();
-    this.startAutoSlide();
+    this.resetAutoSlideIfNeeded();
   }
 
   nextImage(): void {
@@ -105,17 +103,32 @@ export class StockDetailComponent implements OnInit, OnDestroy {
     if (this.images.length <= 1) {
       return;
     }
-
-    this.slideSubscription = timer(this.autoSlideMs, this.autoSlideMs).subscribe(() => {
-      this.activeIndex = (this.activeIndex + 1) % this.images.length;
-      this.cdr.detectChanges();
-    });
+    this.scheduleNextSlide();
   }
 
   private stopAutoSlide(): void {
-    if (this.slideSubscription) {
-      this.slideSubscription.unsubscribe();
-      this.slideSubscription = null;
+    if (this.autoSlideTimeoutId) {
+      clearTimeout(this.autoSlideTimeoutId);
+      this.autoSlideTimeoutId = null;
+    }
+  }
+
+  private scheduleNextSlide(): void {
+    this.autoSlideTimeoutId = setTimeout(() => {
+      if (this.images.length > 1) {
+        this.activeIndex = (this.activeIndex + 1) % this.images.length;
+        this.cdr.detectChanges();
+        this.scheduleNextSlide();
+      } else {
+        this.stopAutoSlide();
+      }
+    }, this.autoSlideMs);
+  }
+
+  private resetAutoSlideIfNeeded(): void {
+    if (this.images.length > 1) {
+      this.stopAutoSlide();
+      this.startAutoSlide();
     }
   }
 
