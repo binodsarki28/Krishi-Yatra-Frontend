@@ -1,0 +1,134 @@
+<div class="tracking-container" *ngIf="!loading && order">
+    <!-- Left: Map Overview -->
+    <div class="map-view">
+        @if (pickupLoc && dropLoc) {
+            <app-map 
+                [pickupLocation]="pickupLoc" 
+                [dropLocation]="dropLoc" 
+                [pickerMode]="false"
+                [drawRoute]="true"
+                [interactive]="false"
+                [initialCheckpoints]="order.checkpoints"
+                [progress]="progress">
+            </app-map>
+        } @else {
+            <div class="flex flex-column align-items-center justify-content-center h-full bg-gray-50" style="min-height: 400px;">
+                <i class="pi pi-spin pi-spinner text-4xl text-primary mb-3"></i>
+                <span class="text-gray-500 font-medium">Loading map...</span>
+            </div>
+        }
+    </div>
+
+    <!-- Right: Tracking Info and Checkpoints -->
+    <div class="info-sidebar">
+        <div class="sidebar-header">
+            <h3>Delivery Overview</h3>
+            <p-tag [value]="order.orderStatus" severity="success" class="status-tag"></p-tag>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="bg-white border-1 border-200 border-round-xl p-4 mb-4 shadow-1">
+            <h4 class="m-0 mb-3 text-gray-800 font-bold">Order Details</h4>
+            <div class="flex flex-column gap-2">
+                <div class="flex justify-content-between">
+                    <span class="text-gray-500 text-sm">Product</span>
+                    <span class="font-bold text-gray-800">{{order.productName}}</span>
+                </div>
+                <div class="flex justify-content-between">
+                    <span class="text-gray-500 text-sm">Quantity</span>
+                    <span class="font-bold text-gray-800">{{order.orderQuantity}} units</span>
+                </div>
+                <div class="flex justify-content-between">
+                    <span class="text-gray-500 text-sm">Earnings</span>
+                    <span class="font-bold text-green-700 text-lg">Rs. {{order.deliveryFee}}</span>
+                </div>
+            </div>
+            <hr class="border-100 my-3">
+            <div class="flex flex-column gap-3">
+                <div class="flex align-items-start gap-2">
+                    <div class="w-1rem h-1rem border-circle bg-green-500 flex-shrink-0 mt-1"></div>
+                    <div>
+                        <small class="text-gray-400 font-bold uppercase">Pickup</small>
+                        <p class="m-0 text-sm text-gray-800">{{order.pickupAddress}}</p>
+                    </div>
+                </div>
+                <div class="flex align-items-start gap-2">
+                    <div class="w-1rem h-1rem border-circle bg-red-500 flex-shrink-0 mt-1"></div>
+                    <div>
+                        <small class="text-gray-400 font-bold uppercase">Drop-off</small>
+                        <p class="m-0 text-sm text-gray-800">{{order.dropAddress}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checkpoints Timeline -->
+        <div class="bg-white border-1 border-200 border-round-xl p-4 mb-4 shadow-1">
+            <h4 class="m-0 mb-3 text-gray-800 font-bold">
+                <i class="pi pi-flag text-orange-500 mr-2"></i>Journey Checkpoints
+            </h4>
+            <div class="flex flex-column gap-2">
+                @for (cp of checkpointList; track $index) {
+                    <div class="flex align-items-center justify-content-between p-3 border-round-lg transition-all"
+                         [class.bg-green-50]="cp.checked"
+                         [class.bg-gray-50]="!cp.checked"
+                         [class.border-1]="true"
+                         [class.border-green-200]="cp.checked"
+                         [class.border-200]="!cp.checked">
+                        <div class="flex align-items-center gap-3">
+                            <p-checkbox [(ngModel)]="cp.checked" 
+                                        [binary]="true" 
+                                        (onChange)="onCheckpointToggle($index)">
+                            </p-checkbox>
+                            <span class="text-sm font-medium" 
+                                  [class.text-green-800]="cp.checked"
+                                  [class.text-gray-700]="!cp.checked"
+                                  [class.line-through]="cp.checked">
+                                {{cp.label}}
+                            </span>
+                        </div>
+                        <p-tag *ngIf="cp.checked" value="✓ Reached" severity="success" styleClass="text-xs"></p-tag>
+                        <p-tag *ngIf="!cp.checked" value="Pending" severity="warn" styleClass="text-xs"></p-tag>
+                    </div>
+                }
+
+                @if (checkpointList.length === 0) {
+                    <div class="text-center py-4 text-gray-400">
+                        <i class="pi pi-map-marker mb-2" style="font-size: 2rem;"></i>
+                        <p class="m-0">No checkpoints defined for this order.</p>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Complete Delivery -->
+        <div class="mt-auto pt-3">
+            <button pButton 
+                    [label]="canCompleteDelivery ? 'Complete Delivery' : 'Finish All Checkpoints First'" 
+                    icon="pi pi-check-circle" 
+                    [class]="canCompleteDelivery ? 'p-button-success w-full p-3 text-lg font-bold shadow-2 border-round-xl' : 'p-button-secondary w-full p-3 text-lg font-bold shadow-2 border-round-xl'"
+                    [loading]="completing"
+                    [disabled]="!canCompleteDelivery || completing"
+                    (click)="markAsDelivered()">
+            </button>
+            <p class="text-center text-xs text-gray-400 mt-2 m-0" *ngIf="!canCompleteDelivery">
+                You must reach all milestones before completing the job.
+            </p>
+            <p class="text-center text-xs text-gray-400 mt-2 m-0" *ngIf="canCompleteDelivery">
+                Hand over the items and click complete.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="flex flex-column align-items-center justify-content-center p-8" style="min-height: 500px;" *ngIf="loading">
+    <i class="pi pi-spin pi-spinner text-4xl text-primary mb-4"></i>
+    <p class="text-lg text-gray-600">Loading delivery details...</p>
+</div>
+
+<div class="flex flex-column align-items-center justify-content-center p-8" style="min-height: 500px;" *ngIf="!loading && !order">
+    <i class="pi pi-exclamation-triangle text-4xl text-orange-500 mb-4"></i>
+    <p class="text-lg text-gray-600">Order not found or you don't have access.</p>
+    <button pButton label="Back to Dashboard" icon="pi pi-arrow-left" 
+            class="p-button-outlined mt-3" routerLink="/delivery/dashboard"></button>
+</div>

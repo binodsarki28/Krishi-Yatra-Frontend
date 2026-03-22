@@ -1,0 +1,247 @@
+<div class="order-page-container surface-ground">
+    <div class="max-w-7xl mx-auto px-3 py-4">
+
+        <!-- Header -->
+        <div class="flex align-items-center gap-3 mb-4">
+            <button pButton icon="pi pi-arrow-left" label="Back"
+                class="p-button-outlined p-button-secondary border-round-xl px-3 py-2 text-sm font-semibold shadow-1"
+                [routerLink]="stock ? ['/stock-detail', stock.stockSlug] : ['/stocks']"></button>
+            <h1 class="m-0 text-2xl font-bold text-gray-800">Place Your Order</h1>
+        </div>
+
+        @if (loading) {
+            <div class="flex flex-column align-items-center justify-content-center p-8">
+                <p-progressSpinner></p-progressSpinner>
+                <div class="mt-3 text-600">Loading stock details...</div>
+            </div>
+        }
+
+        @if (!loading && stock) {
+            <div class="grid">
+                <!-- Left Side: Map -->
+                <div class="col-12 lg:col-7">
+                    <div class="map-card bg-white border-1 border-200 border-round-2xl shadow-2 overflow-hidden">
+                        <div class="map-header px-4 py-3 border-bottom-1 border-100">
+                            <h3 class="m-0 text-lg font-bold text-gray-800">
+                                <i class="pi pi-map-marker text-green-600 mr-2"></i>
+                                Delivery Route
+                            </h3>
+                            <p class="m-0 mt-1 text-sm text-gray-500">
+                                The optimal delivery route is calculated automatically based on your verified addresses.
+                            </p>
+                        </div>
+                        <div class="map-container overflow-hidden h-30rem">
+                           @if (pickupLoc && dropLoc && mapVisible) {
+                               <app-map [pickupLocation]="pickupLoc" 
+                                        [dropLocation]="dropLoc" 
+                                        [pickerMode]="false"
+                                        [drawRoute]="true"
+                                        [initialCheckpoints]="orderForm.get('checkpoints')?.value"
+                                        (onLocationSelected)="onMapLocationSelected($event)"
+                                        (onDistanceCalculated)="onDistanceCalculated($event)"
+                                        (onCheckpointsCalculated)="onAutoCheckpointsCalculated($event)"></app-map>
+                           } @else {
+                               <div class="flex flex-column align-items-center justify-content-center h-full bg-gray-50">
+                                   <i class="pi pi-spin pi-spinner text-4xl text-primary mb-3"></i>
+                                   <span class="text-gray-500 font-medium">Loading map coordinates...</span>
+                               </div>
+                           }
+                        </div>
+                        
+                        <div class="px-4 py-3 border-top-1 border-100">
+                            <div class="grid">
+                                <div class="col-12 md:col-6">
+                                    <div class="flex align-items-start gap-2">
+                                        <div class="legend-dot pickup-dot"></div>
+                                        <div>
+                                            <span class="text-xs font-bold text-gray-500 uppercase block">Pickup (Farmer)</span>
+                                            <span class="text-sm text-gray-800 font-medium">{{ farmerAddressString || 'Not set' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 md:col-6">
+                                    <div class="flex align-items-start gap-2">
+                                        <div class="legend-dot drop-dot"></div>
+                                        <div>
+                                            <span class="text-xs font-bold text-gray-500 uppercase block">Drop (You)</span>
+                                            <span class="text-sm text-gray-800 font-medium">{{ buyerAddressString || 'Click map to set' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Order Form -->
+                <div class="col-12 lg:col-5">
+                    <div class="bg-white border-1 border-200 border-round-2xl shadow-2 p-4">
+                        <!-- Product Info -->
+                        <div class="flex align-items-center gap-3 mb-4 pb-3 border-bottom-1 border-100">
+                            <div class="product-thumb bg-gray-100 border-round-lg overflow-hidden flex-shrink-0">
+                                <img *ngIf="stock.stockImages?.length" 
+                                     [src]="stock.stockImages[0]" 
+                                     alt="Product" class="w-full h-full object-cover"/>
+                                <i *ngIf="!stock.stockImages?.length" class="pi pi-image text-gray-400 text-3xl flex align-items-center justify-content-center w-full h-full"></i>
+                            </div>
+                            <div>
+                                <h3 class="m-0 text-lg font-bold text-gray-900">{{ stock.productName }}</h3>
+                                <span class="text-sm text-gray-500">{{ stock.stockName }}</span>
+                                <div class="mt-1">
+                                    <span class="text-green-700 font-bold text-lg">Rs. {{ stock.pricePerUnit }}</span>
+                                    <span class="text-gray-400 text-xs"> / unit</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form [formGroup]="orderForm" (ngSubmit)="submitOrder()">
+                            <!-- Quantity -->
+                            <div class="field mb-3">
+                                <label class="block text-gray-600 font-bold mb-1 text-sm">
+                                    Order Quantity <span class="text-red-500">*</span>
+                                </label>
+                                <input pInputText formControlName="orderQuantity" type="number"
+                                    class="w-full p-2 border-round-xl border-1 border-gray-300 text-lg"
+                                    [placeholder]="'Min: ' + (stock.minQuantity || 1) + ' | Max: ' + stock.quantity" />
+                                <small class="text-red-500 block mt-1"
+                                    *ngIf="orderForm.get('orderQuantity')?.hasError('min') && orderForm.get('orderQuantity')?.touched">
+                                    Minimum quantity is {{ stock.minQuantity || 1 }}.
+                                </small>
+                                <small class="text-red-500 block mt-1"
+                                    *ngIf="orderForm.get('orderQuantity')?.hasError('max') && orderForm.get('orderQuantity')?.touched">
+                                    Maximum available is {{ stock.quantity }}.
+                                </small>
+                            </div>
+
+                            <!-- Pickup Address -->
+                            <div class="field mb-3">
+                                <label class="block text-gray-600 font-bold mb-1 text-sm">
+                                    <i class="pi pi-map text-green-600 mr-1"></i>
+                                    Pickup Address <span class="text-red-500">*</span>
+                                </label>
+                                <input pInputText formControlName="pickupAddress"
+                                    class="w-full p-2 border-round-xl border-1 border-gray-300"
+                                    placeholder="Farmer's pickup address" />
+                                <small class="text-gray-500 text-xs mt-1 block" *ngIf="farmerAddress">
+                                    Auto-filled from farmer's profile.
+                                </small>
+                            </div>
+
+                            <!-- Drop Address -->
+                            <div class="field mb-3">
+                                <label class="block text-gray-600 font-bold mb-1 text-sm">
+                                    <i class="pi pi-map-marker text-green-600 mr-1"></i>
+                                    Drop Address <span class="text-red-500">*</span>
+                                </label>
+                                <input pInputText formControlName="dropAddress"
+                                    class="w-full p-2 border-round-xl border-1 border-gray-300 bg-gray-50"
+                                    readonly />
+                                <small class="text-gray-500 text-xs mt-1 block" *ngIf="buyerAddress">
+                                    Auto-filled from your profile.
+                                </small>
+                            </div>
+
+                            <!-- Vehicle Selection -->
+                            <div class="field mb-3">
+                                <label class="block text-gray-600 font-bold mb-1 text-sm">
+                                    <i class="pi pi-truck text-blue-600 mr-1"></i>
+                                    Preferred Vehicle Type <span class="text-red-500">*</span>
+                                </label>
+                                <p-select formControlName="vehicleType" [options]="vehicleTypes" 
+                                    placeholder="Select a vehicle..."
+                                    styleClass="w-full border-round-xl"
+                                    optionLabel="label" optionValue="value">
+                                    <ng-template let-item pTemplate="item">
+                                        <div class="flex align-items-center gap-2">
+                                            <i [class]="item.icon + ' text-gray-600'"></i>
+                                            <span>{{ item.label }}</span>
+                                        </div>
+                                    </ng-template>
+                                </p-select>
+                                <small class="text-red-500 block mt-1"
+                                    *ngIf="orderForm.get('vehicleType')?.invalid && orderForm.get('vehicleType')?.touched">
+                                    Please select a vehicle type for delivery.
+                                </small>
+                            </div>
+
+                            <!-- Checkpoints -->
+                            <div class="field mb-3">
+                                <label class="block text-gray-600 font-bold mb-1 text-sm">
+                                    <i class="pi pi-flag text-orange-500 mr-1"></i>
+                                    Route Checkpoints <span class="text-gray-400 font-normal">(Optional)</span>
+                                </label>
+                                <div class="p-3 border-1 border-200 border-round-xl bg-gray-50">
+                                    <p class="m-0 mb-2 text-xs text-gray-500">
+                                        Add your preferred stops or landmarks along the path. 
+                                    </p>
+                                    <p-autocomplete formControlName="checkpoints"
+                                        [multiple]="true"
+                                        (completeMethod)="searchSuggestions($event)"
+                                        (keydown.enter)="onCheckpointsKeydown($any($event))"
+                                        placeholder="Add up to 3 checkpoints (e.g. Daunne)"
+                                        styleClass="w-full"
+                                        inputStyleClass="text-sm p-2 w-full border-none outline-none bg-transparent">
+                                    </p-autocomplete>
+                                </div>
+                            </div>
+
+                            <!-- Notes -->
+                            <div class="field mb-4">
+                                <label class="block text-gray-600 font-bold mb-1 text-sm">
+                                    Additional Notes <span class="text-red-500">*</span>
+                                </label>
+                                <textarea pTextarea formControlName="notes" rows="2"
+                                    class="w-full p-2 border-round-xl border-1 border-gray-300 resize-none"
+                                    placeholder="Enter additional delivery instructions (Min 5 chars)"></textarea>
+                                <small class="text-red-500 block mt-1"
+                                    *ngIf="orderForm.get('notes')?.invalid && orderForm.get('notes')?.touched">
+                                    Notes are required to help delivery partners find you.
+                                </small>
+                            </div>
+
+                            <!-- Price Summary -->
+                            <div class="price-summary-card p-3 border-round-xl mb-4">
+                                <div class="flex justify-content-between align-items-center mb-2">
+                                    <span class="text-gray-600 text-sm">Items Total</span>
+                                    <span class="text-gray-800 font-medium">Rs. {{ (orderForm.get('orderQuantity')?.value || 0) * stock.pricePerUnit | number:'1.2-2' }}</span>
+                                </div>
+                                
+                                <div class="flex justify-content-between align-items-center mb-2">
+                                    <div class="flex align-items-center gap-1">
+                                        <span class="text-gray-600 text-sm">Delivery Fee</span>
+                                        <i class="pi pi-question-circle text-gray-400 text-xs" 
+                                           pTooltip="Based on distance ({{ deliveryDistance.toFixed(1) }} km) and weight factors."></i>
+                                    </div>
+                                    @if (deliveryFee > 0) {
+                                        <span class="text-gray-800 font-medium">Rs. {{ deliveryFee | number:'1.2-2' }}</span>
+                                    } @else {
+                                        <span class="text-gray-400 text-xs italic">Calculating route...</span>
+                                    }
+                                </div>
+
+                                <div class="price-divider mb-2"></div>
+                                <div class="flex justify-content-between align-items-center">
+                                    <span class="text-gray-900 font-bold text-lg">Total</span>
+                                    <span class="text-green-700 font-bold text-xl">Rs. {{ totalPrice | number:'1.2-2' }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button pButton type="submit" label="Confirm Order" icon="pi pi-check"
+                                class="w-full p-3 border-round-xl text-lg font-bold shadow-2"
+                                [loading]="submitting"
+                                [disabled]="orderForm.invalid || submitting"
+                                style="background: linear-gradient(135deg, #16a34a, #15803d); border: none;">
+                            </button>
+
+                            <p class="text-center text-gray-400 text-xs mt-3 m-0">
+                                <i class="pi pi-info-circle mr-1"></i>
+                                Once confirmed, a delivery partner will be notified.
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

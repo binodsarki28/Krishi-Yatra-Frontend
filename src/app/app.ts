@@ -71,11 +71,13 @@ export class AppComponent {
     this.showNavbar = !isDashboard && !isAuth;
     this.showFooter = !isDashboard && !isAuth;
 
-    // Marketplace & Profile overrides (NEVER show on admin or other dashboards)
-    const isOtherDashboard = ['/farmer', '/buyer', '/delivery'].some(path => url.startsWith(path));
-    if (!isAdmin && !isOtherDashboard && (url.includes('/stocks') || url.includes('/stock-detail') || url.includes('/profile'))) {
-      this.showNavbar = true;
-      this.showFooter = false;
+    // Marketplace, Profile & Journey overrides (Show navbar on these even if URL matches a dashboard prefix)
+    const orderOrTracking = url.includes('/order') || url.includes('/delivery/track') || url.includes('/delivery/dashboard');
+    if (url.includes('/stocks') || url.includes('/stock-detail') || url.includes('/profile') || orderOrTracking) {
+      if (!isAdmin) {
+        this.showNavbar = true;
+        this.showFooter = false;
+      }
     }
   }
 }

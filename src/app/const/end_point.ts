@@ -53,4 +53,18 @@ export class Endpoint {
   public static readonly CATEGORIES: string = Endpoint.API_VERSION + 'stock/categories';
   public static readonly SUB_CATEGORIES: string = Endpoint.API_VERSION + 'stock/subcategories';
 
+  //Address
+  public static readonly ADDRESS_SAVE: string = Endpoint.API_VERSION + 'address/save';
+  public static readonly ADDRESS_ME: string = Endpoint.API_VERSION + 'address/me';
+
+  //Order
+  public static readonly ORDER_CREATE: string = Endpoint.API_VERSION + 'order/create';
+  public static readonly ORDER_PENDING: string = Endpoint.API_VERSION + 'order/pending';
+  public static readonly ORDER_ACCEPT: string = Endpoint.API_VERSION + 'order/delivery/accept/';
+  public static readonly ORDER_ACCEPTED: string = Endpoint.API_VERSION + 'order/linker/accepted';
+  public static readonly ORDER_FARMER_ADDRESS: string = Endpoint.API_VERSION + 'order/farmer-address/';
+  public static readonly ORDER_DETAILS: string = Endpoint.API_VERSION + 'order/detail/';
+  public static readonly ORDER_UPDATE_CHECKPOINTS: string = Endpoint.API_VERSION + 'order/update-checkpoints/';
+  public static readonly ORDER_MARK_AS_DELIVERED: string = Endpoint.API_VERSION + 'order/mark-as-delivered/';
 }
+

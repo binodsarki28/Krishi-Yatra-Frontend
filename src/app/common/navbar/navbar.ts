@@ -47,6 +47,14 @@ export class NavbarComponent implements OnInit {
       }
     ];
 
+    if (this.accountService.isRoleVerified('DELIVERY')) {
+      this.items.push({
+        label: 'Delivery Jobs',
+        icon: 'pi pi-truck',
+        command: () => this.router.navigate(['/delivery/dashboard'])
+      });
+    }
+
     this.items.push(
       {
         label: 'Contact',

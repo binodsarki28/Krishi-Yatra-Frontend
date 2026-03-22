@@ -23,6 +23,12 @@ export const routes: Routes = [
         canActivate: [userGuard],
         data: { breadcrumb: 'Stock Details' }
     },
+    {
+        path: 'order',
+        loadChildren: () =>
+            import('./order/order.route').then((o) => o.ORDER_ROUTES),
+        canActivate: [authGuard, userGuard],
+    },
 
     // ── Account (login / register / verify-otp) ───────────────────
     {

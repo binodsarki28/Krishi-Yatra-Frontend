@@ -1,1 +1,163 @@
-<p>delivery-dashboard works!</p>
+<div class="delivery-dashboard surface-ground min-h-screen p-3 lg:p-4">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="mb-4 flex align-items-center justify-content-between">
+            <div>
+                <h1 class="m-0 text-3xl font-bold text-gray-900">Delivery Dashboard</h1>
+                <p class="text-gray-500 m-0 mt-1">Manage your active and available jobs in one place.</p>
+            </div>
+            <div class="flex gap-2 p-1 bg-white border-round-2xl shadow-1">
+                <button pButton (click)="switchTab('available')" 
+                        [class.p-button-text]="currentTab !== 'available'"
+                        class="p-button-sm border-round-xl px-4" label="Available"></button>
+                <button pButton (click)="switchTab('active')" 
+                        [class.p-button-text]="currentTab !== 'active'"
+                        class="p-button-sm border-round-xl px-4" label="My Jobs"></button>
+            </div>
+        </div>
+
+        @if (loading && currentTab === 'available') {
+            <div class="flex flex-column align-items-center justify-content-center p-8">
+                <p-progressSpinner></p-progressSpinner>
+                <div class="mt-3 text-600">Searching for jobs...</div>
+            </div>
+        } @else {
+            @let orders = currentTab === 'available' ? pendingOrders : acceptedOrders;
+            
+            @if (orders.length === 0) {
+                <div class="text-center py-8 bg-white border-round-2xl shadow-1">
+                    <i class="pi pi-inbox text-4xl text-200 mb-3"></i>
+                    <h3 class="m-0 text-gray-500">No {{ currentTab }} jobs found.</h3>
+                    <p class="text-gray-400">Your mission log is currently clear.</p>
+                </div>
+            } @else {
+                <div class="grid">
+                    <!-- Orders List -->
+                    <div class="col-12 lg:col-4 xl:col-3">
+                        <div class="flex flex-column gap-3 overflow-y-auto pr-2" style="max-height: calc(100vh - 200px);">
+                            @for (order of orders; track order.orderId) {
+                                <div class="order-card p-3 bg-white border-1 border-200 border-round-xl cursor-pointer transition-all shadow-1 hover:shadow-3"
+                                     [class.selected]="selectedOrder?.orderId === order.orderId"
+                                     (click)="selectOrder(order)">
+                                <div class="flex justify-content-between align-items-center mb-2">
+                                    <p-tag [value]="order.productName" severity="success" styleClass="text-xs"></p-tag>
+                                    <span class="text-xs font-bold text-gray-500">#{{ order.orderId.substring(0, 8) }}</span>
+                                </div>
+                                <div class="flex align-items-center gap-2 mb-2">
+                                    <i [class]="getVehicleIcon(order.vehicleType) + ' text-blue-600 text-lg'"></i>
+                                    <span class="text-sm font-bold text-gray-800">{{ order.vehicleType }}</span>
+                                </div>
+                                <div class="text-xs text-gray-500 mb-1">
+                                    <i class="pi pi-map-marker text-red-500 mr-1"></i>
+                                    {{ order.pickupAddress.substring(0, 40) }}...
+                                </div>
+                                <div class="flex justify-content-between align-items-center mt-3 pt-2 border-top-1 border-50">
+                                    <span class="text-green-700 font-bold">Rs. {{ order.deliveryFee | number:'1.2-2' }}</span>
+                                    <span class="text-xs text-gray-400">{{ order.createdAt | date:'shortTime' }}</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Order Detail & Map -->
+                <div class="col-12 lg:col-8 xl:col-9">
+                    @if (selectedOrder) {
+                        <div class="bg-white border-round-2xl shadow-2 overflow-hidden flex flex-column h-full">
+                            <!-- Detail Header -->
+                            <div class="p-4 border-bottom-1 border-100 flex justify-content-between align-items-start bg-gray-50">
+                                <div>
+                                    <h2 class="m-0 text-2xl font-bold text-gray-900">{{ selectedOrder.productName }}</h2>
+                                    <p class="m-0 text-600 text-sm mt-1">Quantity: {{ selectedOrder.orderQuantity }} Units</p>
+                                </div>
+                                
+                                @if (currentTab === 'available') {
+                                    <button pButton icon="pi pi-check" label="Accept Delivery Job" 
+                                            (click)="acceptOrder()"
+                                            [loading]="accepting"
+                                            class="p-button-success p-button-raised border-round-xl px-4 py-3 text-lg font-bold shadow-3"></button>
+                                } @else {
+                                    <button pButton icon="pi pi-map" label="Track Delivery" 
+                                            [routerLink]="['/delivery/track', selectedOrder.orderId]"
+                                            class="p-button-info p-button-raised border-round-xl px-4 py-3 text-lg font-bold shadow-3"></button>
+                                }
+                            </div>
+
+                            <div class="grid m-0 flex-grow-1">
+                                <!-- Info Panel -->
+                                <div class="col-12 md:col-5 p-4 border-right-1 border-100 flex flex-column gap-4 overflow-y-auto" style="max-height: 500px;">
+                                    <div class="info-section">
+                                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Logistics</label>
+                                        <div class="flex align-items-center justify-content-between p-2 bg-blue-50 border-round-lg">
+                                            <div class="flex align-items-center gap-2">
+                                                <i class="pi pi-truck text-blue-600"></i>
+                                                <span class="text-blue-900 font-medium">Vehicle Required</span>
+                                            </div>
+                                            <span class="font-bold text-blue-900">{{ selectedOrder.vehicleType }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="info-section">
+                                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Addresses</label>
+                                        <div class="address-timeline relative pl-4">
+                                            <div class="address-item mb-4 relative">
+                                                <div class="dot pickup"></div>
+                                                <span class="text-xs text-gray-500 font-bold block uppercase">Pickup</span>
+                                                <p class="m-0 text-sm text-gray-800 font-medium">{{ selectedOrder.pickupAddress }}</p>
+                                            </div>
+                                            <div class="address-item relative">
+                                                <div class="dot drop"></div>
+                                                <span class="text-xs text-gray-500 font-bold block uppercase">Drop</span>
+                                                <p class="m-0 text-sm text-gray-800 font-medium">{{ selectedOrder.dropAddress }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @if (selectedOrder.notes) {
+                                        <div class="info-section">
+                                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Customer Instructions</label>
+                                            <div class="p-3 bg-yellow-50 border-round-xl border-left-3 border-yellow-400 text-gray-700 text-sm italic">
+                                                "{{ selectedOrder.notes }}"
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <div class="info-section">
+                                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Earnings</label>
+                                        <div class="flex align-items-center justify-content-between p-3 surface-card border-round-xl border-1 border-200">
+                                            <span class="text-gray-600">Base + Distance Fee</span>
+                                            <span class="text-2xl font-bold text-green-700">Rs. {{ selectedOrder.deliveryFee | number:'1.2-2' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Map Panel -->
+                                <div class="col-12 md:col-7 p-0 relative h-30rem md:h-auto">
+                                    @if (pickupLoc && dropLoc && mapVisible) {
+                                       <app-map [pickupLocation]="pickupLoc" 
+                                                [dropLocation]="dropLoc" 
+                                                [pickerMode]="false"
+                                                [drawRoute]="true"
+                                                [interactive]="false"
+                                                [initialCheckpoints]="selectedOrder.checkpoints"></app-map>
+                                    } @else {
+                                        <div class="flex flex-column align-items-center justify-content-center h-full bg-gray-50">
+                                            <i class="pi pi-spin pi-spinner text-3xl text-primary mb-3"></i>
+                                            <span class="text-gray-500 text-sm">Loading route map...</span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    } @else {
+                        <div class="flex flex-column align-items-center justify-content-center h-full bg-white border-round-2xl border-1 border-dashed border-300 text-gray-400 p-8">
+                            <i class="pi pi-mouse-pointer text-4xl mb-3"></i>
+                            <p class="m-0 font-bold">Select an order from the list to view route details</p>
+                        </div>
+                    }
+                </div>
+            </div>
+            }
+        }
+    </div>
+</div>

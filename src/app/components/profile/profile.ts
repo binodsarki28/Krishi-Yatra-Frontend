@@ -1,24 +1,35 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, PLATFORM_ID, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { finalize } from 'rxjs';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
+import { SelectModule } from 'primeng/select';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastService } from '../../util/toast.service';
 import { AccountService } from '../account/account.service';
-import { Router } from '@angular/router';
-import { isPlatformBrowser } from '@angular/common';
-import { inject, PLATFORM_ID } from '@angular/core';
 import { IJwtResponse } from '../account/IAccount';
+import { AddressService } from '../../address/address.service';
+import { IAddress, IAddressRequest } from '../../address/IAddress';
+import { MapComponent } from '../../common/map/map';
+import { NEPAL_DATA, NepalProvince, NepalDistrict } from '../../address/nepal-data';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule, ButtonModule, PasswordModule],
+  imports: [
+    CommonModule, FormsModule, ReactiveFormsModule, 
+    InputTextModule, ButtonModule, PasswordModule, 
+    ProgressSpinnerModule, SelectModule, MapComponent
+  ],
   templateUrl: './profile.html',
   styleUrls: ['./profile.css']
 })
 export class ProfileComponent implements OnInit {
+  @ViewChild(MapComponent) mapComp!: MapComponent;
+  
   activeTab: string = 'profile';
   
   profileForm!: FormGroup;
@@ -26,17 +37,32 @@ export class ProfileComponent implements OnInit {
   
   userData: any = {};
   
-  loading: boolean = false;
-  selectedFile: File | null = null;
   profilePreview: string | null = null;
   
+  addressForm!: FormGroup;
+  addressLoading: boolean = false;
+  addressSubmitting: boolean = false;
+  
+  // Nepal Data
+  provinces: NepalProvince[] = NEPAL_DATA;
+  districts: NepalDistrict[] = [];
+  municipalities: string[] = [];
+
+  // Map Data
+  userLocation: any = null;
+  
   private platformId = inject(PLATFORM_ID);
+  private cdr = inject(ChangeDetectorRef);
+  private alreadyLoadingAddress = false;
+  selectedFile: File | null = null;
+  loading: boolean = false;
   
   constructor(
     private fb: FormBuilder,
     public accountService: AccountService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private addressService: AddressService
   ) {}
 
   ngOnInit() {
@@ -58,6 +84,33 @@ export class ProfileComponent implements OnInit {
       newPassword: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
+
+    this.addressForm = this.fb.group({
+      province: ['', Validators.required],
+      district: ['', Validators.required],
+      municipality: ['', Validators.required],
+      city: [''],
+      wardNo: [''],
+      streetName: [''],
+      other: ['', Validators.required]
+    });
+  }
+
+  onProvinceChange() {
+    const provinceName = this.addressForm.get('province')?.value;
+    const province = this.provinces.find(p => p.name === provinceName);
+    this.districts = province ? province.districts : [];
+    this.addressForm.patchValue({ district: '', municipality: '' });
+    this.municipalities = [];
+    this.updateMapFromForm();
+  }
+
+  onDistrictChange() {
+    const districtName = this.addressForm.get('district')?.value;
+    const district = this.districts.find(d => d.name === districtName);
+    this.municipalities = district ? district.municipalities : [];
+    this.addressForm.patchValue({ municipality: '' });
+    this.updateMapFromForm();
   }
 
   loadUserData() {
@@ -88,7 +141,7 @@ export class ProfileComponent implements OnInit {
 
       // Then sync with backend for fresh data
       this.accountService.getCurrentUser().subscribe({
-        next: (res) => {
+        next: (res: any) => {
           const jwt = res.response as IJwtResponse;
           if (jwt.roles) localStorage.setItem('roles', JSON.stringify(jwt.roles));
           if (jwt.verifiedRoles) localStorage.setItem('verifiedRoles', JSON.stringify(jwt.verifiedRoles));
@@ -113,7 +166,7 @@ export class ProfileComponent implements OnInit {
             description: jwt.description
           });
         },
-        error: (err) => console.error('Failed to sync user data', err)
+        error: (err: any) => console.error('Failed to sync user data', err)
       });
     }
   }
@@ -157,6 +210,86 @@ export class ProfileComponent implements OnInit {
       else { this.router.navigate(['/delivery/dashboard']); return; }
     }
     this.activeTab = tab;
+    if (tab === 'address') {
+      this.loadAddress();
+      setTimeout(() => this.initAddressMap(), 300);
+    }
+  }
+
+  loadAddress() {
+    if (this.alreadyLoadingAddress) return;
+    this.alreadyLoadingAddress = true;
+    this.addressLoading = true;
+    this.addressService.getMyAddress().pipe(
+      finalize(() => {
+        this.addressLoading = false;
+        this.alreadyLoadingAddress = false;
+        this.cdr.detectChanges();
+      })
+    ).subscribe({
+      next: (res: any) => {
+        if (res.response) {
+          const addr = res.response as IAddress;
+          
+          // Cascading setup
+          const province = this.provinces.find(p => p.name === addr.province);
+          this.districts = province ? province.districts : [];
+          const district = this.districts.find(d => d.name === addr.district);
+          this.municipalities = district ? district.municipalities : [];
+
+          this.addressForm.patchValue({
+            province: addr.province,
+            district: addr.district,
+            municipality: addr.municipality,
+            city: addr.city,
+            wardNo: addr.wardNo,
+            streetName: addr.streetName,
+            other: addr.other
+          });
+          this.updateMapFromForm();
+        }
+      },
+      error: () => {
+        // Safe to ignore 404 as it means no address exists yet
+      }
+    });
+  }
+
+  updateAddress() {
+    if (this.addressForm.invalid) {
+      this.toastService.warningResponse('Please fill the required fields.');
+      return;
+    }
+    this.addressSubmitting = true;
+    this.addressService.saveAddress(this.addressForm.value as IAddressRequest).subscribe({
+      next: (res: any) => {
+        this.toastService.successResponse(res);
+        this.addressSubmitting = false;
+        this.addressForm.markAsPristine();
+      },
+      error: (err: any) => {
+        this.toastService.errorResponse(err);
+        this.addressSubmitting = false;
+      }
+    });
+  }
+
+  private initAddressMap() {
+    // Handled by standalone MapComponent
+  }
+
+  updateMapFromForm() {
+    const val = this.addressForm.value;
+    const addressStr = `${val.municipality || ''}, ${val.district || ''}, ${val.province || ''}, Nepal`;
+    if (!val.municipality && !val.district) return;
+    if (this.mapComp) {
+        this.mapComp.searchLocation(addressStr);
+    }
+  }
+
+  onMapLocationSelected(latlng: any) {
+    this.userLocation = { lat: latlng.lat, lng: latlng.lng, label: 'Selected Location' };
+    // Reverse geocode if needed, but here we probably just keep it
   }
 
   onFileChange(event: any) {
@@ -195,14 +328,14 @@ export class ProfileComponent implements OnInit {
     }
 
     this.accountService.updateProfile(formData).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         const successMsg = this.selectedFile ? 'Profile picture and info updated!' : 'Profile updated successfully!';
         this.toastService.successResponse({ message: successMsg });
         this.loading = false;
         this.selectedFile = null; // reset file selection
         this.loadUserData(); // re-sync context
       },
-      error: (err) => {
+      error: (err: any) => {
         let msg = err.error?.message || 'Failed to update profile.';
         if (msg === 'Validation Failed' && err.error?.data) {
           msg = Object.values(err.error.data)[0] as string;
@@ -233,7 +366,7 @@ export class ProfileComponent implements OnInit {
               this.toastService.successResponse({ message: 'Password updated successfully' });
               this.passwordForm.reset();
           },
-           error: (err) => {
+           error: (err: any) => {
                this.loading = false;
                let msg = err.error?.message || 'Failed to update password.';
                if (msg === 'Validation Failed' && err.error?.data) {

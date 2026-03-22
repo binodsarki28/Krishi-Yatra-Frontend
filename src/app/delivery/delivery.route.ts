@@ -14,5 +14,11 @@ export const DELIVERY_ROUTES: Routes = [
         component: DeliveryDashboard,
         canActivate: [deliveryGuard],
         data: { breadcrumb: 'Delivery Dashboard' }
+    },
+    {
+        path: 'track/:orderId',
+        loadComponent: () => import('./delivery-tracking/delivery-tracking').then(m => m.DeliveryTracking),
+        canActivate: [deliveryGuard],
+        data: { breadcrumb: 'Delivery Tracking' }
     }
 ];
