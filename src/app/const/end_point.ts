@@ -67,6 +67,7 @@ export class Endpoint {
   public static readonly ORDER_DETAILS: string = Endpoint.API_VERSION + 'order/detail/';
   public static readonly ORDER_UPDATE_CHECKPOINTS: string = Endpoint.API_VERSION + 'order/update-checkpoints/';
   public static readonly ORDER_MARK_AS_DELIVERED: string = Endpoint.API_VERSION + 'order/mark-as-delivered/';
+  public static readonly ORDER_PICKED_UP: string = Endpoint.API_VERSION + 'order/mark-as-picked-up/';
 
   // Role-specific order lists
   public static readonly ORDER_BUYER_LIST: string = Endpoint.API_VERSION + 'order/buyer/my-orders';

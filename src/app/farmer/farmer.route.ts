@@ -22,7 +22,12 @@ export const FARMER_ROUTES: Routes = [
       {
         path: 'orders',
         children: [
-          { path: 'my-orders', loadComponent: () => import('../order/farmer-orders/farmer-orders').then(m => m.FarmerOrdersComponent) }
+          { path: 'my-orders', loadComponent: () => import('../order/farmer-orders/farmer-orders').then(m => m.FarmerOrdersComponent) },
+          { 
+            path: 'track/:orderId', 
+            loadComponent: () => import('../order/buyer-tracking/buyer-tracking').then(m => m.BuyerTracking),
+            data: { breadcrumb: 'Order Tracking' }
+          }
         ]
       },
       // Redirect /farmer/dashboard to /farmer for the shell view

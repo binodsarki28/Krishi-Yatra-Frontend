@@ -50,4 +50,8 @@ export class DeliveryAppService {
     markAsDelivered(orderId: string): Observable<IResponse> {
         return this.http.post<IResponse>(GenerateUrlUtils.generateUrl(Endpoint.ORDER_MARK_AS_DELIVERED + orderId), {});
     }
+
+    markAsPickedUp(orderId: string): Observable<IResponse> {
+        return this.http.post<IResponse>(GenerateUrlUtils.generateUrl(Endpoint.ORDER_PICKED_UP + orderId), {});
+    }
 }

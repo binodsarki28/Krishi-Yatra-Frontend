@@ -58,6 +58,12 @@ export class OrderService {
         );
     }
 
+    markAsPickedUp(orderId: string): Observable<IResponse> {
+        return this.http.post<IResponse>(
+            GenerateUrlUtils.generateUrl(Endpoint.ORDER_PICKED_UP + orderId), {}
+        );
+    }
+
     getFarmerAddress(stockSlug: string): Observable<IResponseWithObject> {
         return this.http.get<IResponseWithObject>(
             GenerateUrlUtils.generateUrl(Endpoint.ORDER_FARMER_ADDRESS + stockSlug)
@@ -65,21 +71,24 @@ export class OrderService {
     }
 
     // Role-specific order lists
-    getBuyerOrders(page = 0, size = 20): Observable<IResponseWithObject> {
-        return this.http.get<IResponseWithObject>(
-            GenerateUrlUtils.generateUrl(Endpoint.ORDER_BUYER_LIST) + `?page=${page}&size=${size}&sort=createdAt,desc`
-        );
+    getBuyerOrders(page = 0, size = 20, status?: string | null, search?: string | null): Observable<IResponseWithObject> {
+        let url = GenerateUrlUtils.generateUrl(Endpoint.ORDER_BUYER_LIST) + `?page=${page}&size=${size}&sort=createdAt,desc`;
+        if (status) url += `&status=${status}`;
+        if (search) url += `&search=${search}`;
+        return this.http.get<IResponseWithObject>(url);
     }
 
-    getFarmerOrders(page = 0, size = 20): Observable<IResponseWithObject> {
-        return this.http.get<IResponseWithObject>(
-            GenerateUrlUtils.generateUrl(Endpoint.ORDER_FARMER_LIST) + `?page=${page}&size=${size}&sort=createdAt,desc`
-        );
+    getFarmerOrders(page = 0, size = 20, status?: string | null, search?: string | null): Observable<IResponseWithObject> {
+        let url = GenerateUrlUtils.generateUrl(Endpoint.ORDER_FARMER_LIST) + `?page=${page}&size=${size}&sort=createdAt,desc`;
+        if (status) url += `&status=${status}`;
+        if (search) url += `&search=${search}`;
+        return this.http.get<IResponseWithObject>(url);
     }
 
-    getDeliveryOrders(page = 0, size = 20): Observable<IResponseWithObject> {
-        return this.http.get<IResponseWithObject>(
-            GenerateUrlUtils.generateUrl(Endpoint.ORDER_DELIVERY_LIST) + `?page=${page}&size=${size}&sort=createdAt,desc`
-        );
+    getDeliveryOrders(page = 0, size = 20, status?: string | null, search?: string | null): Observable<IResponseWithObject> {
+        let url = GenerateUrlUtils.generateUrl(Endpoint.ORDER_DELIVERY_LIST) + `?page=${page}&size=${size}&sort=createdAt,desc`;
+        if (status) url += `&status=${status}`;
+        if (search) url += `&search=${search}`;
+        return this.http.get<IResponseWithObject>(url);
     }
 }

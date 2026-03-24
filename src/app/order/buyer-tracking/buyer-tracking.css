@@ -1,0 +1,55 @@
+.tracking-container {
+    background-color: #f8fafc;
+    font-family: 'Inter', sans-serif;
+}
+
+.status-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+}
+
+.custom-marker {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    color: white;
+    font-size: 0.9rem;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.custom-marker:hover {
+    transform: scale(1.1);
+}
+
+.customized-timeline {
+    padding-left: 0.5rem;
+}
+
+.customized-timeline .p-timeline-event-content {
+    line-height: normal;
+}
+
+.customized-timeline .p-timeline-event-opposite {
+    display: none;
+}
+
+.shadow-2 {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Map specific tweaks to ensure it takes space */
+.min-h-30rem {
+    min-height: 30rem;
+}
+
+@media (max-width: 991px) {
+    .min-h-30rem {
+        min-height: 20rem;
+    }
+}

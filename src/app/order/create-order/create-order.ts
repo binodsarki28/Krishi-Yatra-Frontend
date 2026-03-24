@@ -398,7 +398,13 @@ export class CreateOrder implements OnInit, AfterViewInit, OnDestroy {
       next: (res: any) => {
         this.toastService.successResponse(res);
         this.submitting = false;
-        this.router.navigate(['/stocks']);
+        // The backend now returns the orderId in the response object
+        const orderId = res.response || res.data;
+        if (orderId) {
+            this.router.navigate(['/buyer/orders/track', orderId]);
+        } else {
+            this.router.navigate(['/buyer/dashboard']);
+        }
       },
       error: (err: any) => {
         this.toastService.errorResponse(err);

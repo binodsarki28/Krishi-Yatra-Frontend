@@ -219,4 +219,22 @@ export class DeliveryTracking implements OnInit {
       }
     });
   }
+
+  markAsPickedUp() {
+    if (!this.orderId) return;
+    this.completing = true;
+    this.deliveryService.markAsPickedUp(this.orderId).subscribe({
+        next: (res: any) => {
+            this.toastService.successResponse(res);
+            this.order.orderStatus = 'SHIPPING';
+            this.completing = false;
+            this.cdr.detectChanges();
+        },
+        error: (err: any) => {
+            this.toastService.errorResponse(err);
+            this.completing = false;
+            this.cdr.detectChanges();
+        }
+    });
+  }
 }

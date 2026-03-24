@@ -78,6 +78,7 @@
                         <div class="flex align-items-center gap-3">
                             <p-checkbox [(ngModel)]="cp.checked" 
                                         [binary]="true" 
+                                        [disabled]="order.orderStatus === 'ACCEPTED'"
                                         (onChange)="onCheckpointToggle($index)">
                             </p-checkbox>
                             <span class="text-sm font-medium" 
@@ -101,9 +102,21 @@
             </div>
         </div>
 
-        <!-- Complete Delivery -->
+        <!-- Order Status Actions -->
         <div class="mt-auto pt-3">
+            <!-- Mark as Picked Up (If Accepted) -->
             <button pButton 
+                    *ngIf="order.orderStatus === 'ACCEPTED'"
+                    label="Mark as Picked Up" 
+                    icon="pi pi-box" 
+                    class="p-button-info w-full p-3 text-lg font-bold shadow-2 border-round-xl"
+                    [loading]="completing"
+                    (click)="markAsPickedUp()">
+            </button>
+
+            <!-- Complete Delivery (If Shipping) -->
+            <button pButton 
+                    *ngIf="order.orderStatus === 'SHIPPING'"
                     [label]="canCompleteDelivery ? 'Complete Delivery' : 'Finish All Checkpoints First'" 
                     icon="pi pi-check-circle" 
                     [class]="canCompleteDelivery ? 'p-button-success w-full p-3 text-lg font-bold shadow-2 border-round-xl' : 'p-button-secondary w-full p-3 text-lg font-bold shadow-2 border-round-xl'"
@@ -111,10 +124,15 @@
                     [disabled]="!canCompleteDelivery || completing"
                     (click)="markAsDelivered()">
             </button>
-            <p class="text-center text-xs text-gray-400 mt-2 m-0" *ngIf="!canCompleteDelivery">
+
+            <!-- Info text -->
+            <p class="text-center text-xs text-gray-400 mt-2 m-0" *ngIf="order.orderStatus === 'ACCEPTED'">
+                Collect items from the farmer and mark as picked up to start shipping.
+            </p>
+            <p class="text-center text-xs text-gray-400 mt-2 m-0" *ngIf="order.orderStatus === 'SHIPPING' && !canCompleteDelivery">
                 You must reach all milestones before completing the job.
             </p>
-            <p class="text-center text-xs text-gray-400 mt-2 m-0" *ngIf="canCompleteDelivery">
+            <p class="text-center text-xs text-gray-400 mt-2 m-0" *ngIf="order.orderStatus === 'SHIPPING' && canCompleteDelivery">
                 Hand over the items and click complete.
             </p>
         </div>

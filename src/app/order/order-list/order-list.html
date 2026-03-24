@@ -25,12 +25,31 @@
         </div>
     }
 
+    <!-- Filters Bar -->
+    <div class="surface-card border-round-xl border-1 border-200 shadow-1 p-3 mb-4 flex flex-column md:flex-row align-items-center justify-content-between gap-3">
+        <div class="flex flex-grow-1 w-full md:w-auto gap-2">
+            <div class="flex align-items-center bg-white border-round-lg border-1 surface-border px-3 w-full md:w-20rem focus-within:border-primary transition-colors">
+                <i class="pi pi-search text-400 mr-2"></i>
+                <input type="text" pInputText [(ngModel)]="searchText" 
+                    placeholder="Search by ID or Product..." 
+                    class="flex-1 border-none shadow-none p-inputtext-sm focus:ring-0 py-2"
+                    (input)="onFilterChange()" style="outline: none; background: transparent;" />
+            </div>
+            <p-select [options]="statusOptions" [(ngModel)]="selectedStatus" 
+                styleClass="w-12rem border-round-lg p-select-sm" placeholder="Filter Status"
+                (onChange)="onFilterChange()"></p-select>
+        </div>
+        <div class="flex gap-2 text-500 text-xs font-medium bg-gray-50 p-2 border-round-lg">
+            <span>{{ orders.length }} Orders Found</span>
+        </div>
+    </div>
+
     <!-- Table -->
     @if (!loading) {
         <div class="surface-card border-round-xl border-1 border-200 shadow-1 overflow-hidden">
             <p-table [value]="orders" [loading]="loading" responsiveLayout="scroll" 
                 styleClass="p-datatable-sm p-datatable-striped" [rowHover]="true"
-                [scrollable]="true" scrollHeight="calc(100vh - 280px)">
+                [scrollable]="true" scrollHeight="calc(100vh - 350px)">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="min-width: 8rem">Order ID</th>
@@ -50,6 +69,7 @@
                         @if (role !== 'DELIVERY') {
                             <th>Linker</th>
                         }
+                        <th>Action</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-order>
@@ -88,6 +108,20 @@
                                 <div class="text-xs text-500">{{ order.deliveryPhone || '' }}</div>
                             </td>
                         }
+                        <td>
+                            <div class="flex gap-2">
+                                @if ((role === 'BUYER' || role === 'FARMER') && order.orderStatus !== 'DELIVERED' && order.orderStatus !== 'CANCELLED' && order.orderStatus !== 'REJECTED') {
+                                    <p-button icon="pi pi-map-marker" label="Track" severity="info" [outlined]="true" size="small"
+                                        [routerLink]="[role === 'BUYER' ? '/buyer/orders/track' : '/farmer/orders/track', order.orderId]" pTooltip="Real-time Tracking"></p-button>
+                                }
+                                @if (role === 'DELIVERY' && (order.orderStatus === 'ACCEPTED' || order.orderStatus === 'SHIPPING')) {
+                                    <p-button icon="pi pi-directions" label="Manage" severity="warn" [outlined]="true" size="small"
+                                        [routerLink]="['/delivery/track', order.orderId]" pTooltip="Manage Job"></p-button>
+                                }
+                                <p-button icon="pi pi-eye" [outlined]="true" severity="secondary" size="small" 
+                                    pTooltip="View Details" (onClick)="viewStockDetail(order.stockSlug)"></p-button>
+                            </div>
+                        </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
