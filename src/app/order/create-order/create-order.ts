@@ -192,6 +192,10 @@ export class CreateOrder implements OnInit, AfterViewInit, OnDestroy {
     this.addressService.getMyAddress().subscribe({
       next: (res: any) => {
         this.buyerAddress = res.response;
+        if (!this.buyerAddress) {
+          this.handleMissingAddress();
+          return;
+        }
         this.buyerAddressString = this.buyerAddress?.fullAddress || '';
         this.orderForm.patchValue({ dropAddress: this.buyerAddressString });
         // Set temp location to stop "Loading map..." spinner
@@ -200,10 +204,14 @@ export class CreateOrder implements OnInit, AfterViewInit, OnDestroy {
         this.cdr.detectChanges();
       },
       error: () => {
-        this.buyerAddressString = '';
-        this.cdr.detectChanges();
+        this.handleMissingAddress();
       }
     });
+  }
+
+  private handleMissingAddress() {
+    this.toastService.warningResponse('Please set your address in Profile before ordering.');
+    this.router.navigate(['/profile']);
   }
 
   private initMap() {
@@ -351,8 +359,12 @@ export class CreateOrder implements OnInit, AfterViewInit, OnDestroy {
   }
 
   submitOrder() {
-    if (this.orderForm.invalid) {
-      this.toastService.warningResponse('Please fill all required fields.');
+    if (this.orderForm.invalid || !this.buyerAddress) {
+      if (!this.buyerAddress) {
+        this.handleMissingAddress();
+      } else {
+        this.toastService.warningResponse('Please fill all required fields.');
+      }
       return;
     }
 

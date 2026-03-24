@@ -30,9 +30,11 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit
   @Output() onDistanceCalculated = new EventEmitter<number>();
   @Output() onCheckpointsCalculated = new EventEmitter<string>();
   @Output() onCheckpointToggle = new EventEmitter<{index: number, reached: boolean}>();
+  @Output() onAddressFound = new EventEmitter<{ lat: number, lng: number }>();
 
   routeSteps: any[] = [];
   customCheckpoints: string = '';
+  private pendingSearch: string | null = null;
   private routeTimeout: any;
   private leafletReady = false;
 
@@ -145,6 +147,11 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit
       bounds: bounds,
       noWrap: true
     }).addTo(this.map);
+
+    if (this.pendingSearch) {
+        this.searchLocation(this.pendingSearch);
+        this.pendingSearch = null;
+    }
 
     if (this.drawRoute) {
         this.drawRouteLine();
@@ -549,6 +556,10 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit
 
   public searchLocation(address: string) {
     if (!address || !isPlatformBrowser(this.platformId) || !this.L) return;
+    if (!this.map) {
+        this.pendingSearch = address;
+        return;
+    }
     fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address + ', Nepal')}&limit=1`)
       .then(res => res.json())
       .then(data => {

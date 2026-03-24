@@ -15,7 +15,6 @@ import { AccountService } from '../account/account.service';
 import { IJwtResponse } from '../account/IAccount';
 import { AddressService } from '../../address/address.service';
 import { IAddress, IAddressRequest } from '../../address/IAddress';
-import { MapComponent } from '../../common/map/map';
 import { NEPAL_DATA, NepalProvince, NepalDistrict } from '../../address/nepal-data';
 
 @Component({
@@ -24,7 +23,7 @@ import { NEPAL_DATA, NepalProvince, NepalDistrict } from '../../address/nepal-da
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule,
     InputTextModule, ButtonModule, PasswordModule,
-    ProgressSpinnerModule, SelectModule, MapComponent,
+    ProgressSpinnerModule, SelectModule,
     ConfirmDialogModule
   ],
   providers: [ConfirmationService],
@@ -32,7 +31,6 @@ import { NEPAL_DATA, NepalProvince, NepalDistrict } from '../../address/nepal-da
   styleUrls: ['./profile.css']
 })
 export class ProfileComponent implements OnInit {
-  @ViewChild(MapComponent) mapComp!: MapComponent;
 
   activeTab: string = 'profile';
 
@@ -51,9 +49,8 @@ export class ProfileComponent implements OnInit {
   provinces: NepalProvince[] = NEPAL_DATA;
   districts: NepalDistrict[] = [];
   municipalities: string[] = [];
+  wards: number[] = Array.from({ length: 35 }, (_, i) => i + 1);
 
-  // Map Data
-  userLocation: any = null;
 
   private platformId = inject(PLATFORM_ID);
   private cdr = inject(ChangeDetectorRef);
@@ -106,7 +103,6 @@ export class ProfileComponent implements OnInit {
     this.districts = province ? province.districts : [];
     this.addressForm.patchValue({ district: '', municipality: '' });
     this.municipalities = [];
-    this.updateMapFromForm();
   }
 
   onDistrictChange() {
@@ -114,7 +110,6 @@ export class ProfileComponent implements OnInit {
     const district = this.districts.find(d => d.name === districtName);
     this.municipalities = district ? district.municipalities : [];
     this.addressForm.patchValue({ municipality: '' });
-    this.updateMapFromForm();
   }
 
   loadUserData() {
@@ -216,7 +211,6 @@ export class ProfileComponent implements OnInit {
     this.activeTab = tab;
     if (tab === 'address') {
       this.loadAddress();
-      setTimeout(() => this.initAddressMap(), 300);
     }
   }
 
@@ -249,7 +243,6 @@ export class ProfileComponent implements OnInit {
             wardNo: addr.wardNo,
             streetName: addr.streetName,
           });
-          this.updateMapFromForm();
         }
       },
       error: () => {
@@ -257,8 +250,6 @@ export class ProfileComponent implements OnInit {
         this.addressForm.reset();
         this.districts = [];
         this.municipalities = [];
-        this.userLocation = null;
-        if (this.mapComp) this.mapComp.clearMap();
         this.cdr.detectChanges();
       }
     });
@@ -314,8 +305,6 @@ export class ProfileComponent implements OnInit {
             this.addressForm.reset();
             this.districts = [];
             this.municipalities = [];
-            this.userLocation = null;
-            if (this.mapComp) this.mapComp.clearMap();
             this.cdr.detectChanges();
           },
           error: (err: any) => {
@@ -327,32 +316,8 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  private initAddressMap() {
-    // Handled by standalone MapComponent
-  }
 
-  updateMapFromForm() {
-    const val = this.addressForm.value;
-    const parts = [];
-    
-    // We search from Most Specific to Least Specific
-    if (val.municipality) parts.push(val.municipality);
-    if (val.district) parts.push(val.district);
-    if (val.province) parts.push(val.province);
-    parts.push('Nepal');
 
-    const addressStr = parts.join(', ');
-    if (parts.length <= 1) return; // Only 'Nepal' or nothing
-    
-    if (this.mapComp) {
-        this.mapComp.searchLocation(addressStr);
-    }
-  }
-
-  onMapLocationSelected(latlng: any) {
-    this.userLocation = { lat: latlng.lat, lng: latlng.lng, label: 'Selected Location' };
-    // Reverse geocode if needed, but here we probably just keep it
-  }
 
   onFileChange(event: any) {
     const file = event.target.files[0];

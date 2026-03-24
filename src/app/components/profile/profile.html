@@ -232,9 +232,8 @@
                             </div>
                             <div class="col-12 field mb-3">
                                 <label class="block text-gray-700 font-bold mb-1 pl-1">Municipality <span class="text-red-500">*</span></label>
-                                <p-select formControlName="municipality" [options]="municipalities"
-                                    placeholder="Select Municipality" class="w-full" [style]="{'width':'100%'}"
-                                    [invalid]="isFieldInvalid('municipality')" (onChange)="updateMapFromForm()"></p-select>
+                                <p-select formControlName="municipality" [options]="municipalities" [filter]="true" placeholder="Select Municipality"
+                                    [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('municipality')}" class="w-full" [style]="{'width':'100%'}"></p-select>
                                 @if (isFieldInvalid('municipality')) {
                                     <small class="text-red-500 opacity-80 pt-1 block">Municipality is required</small>
                                 }
@@ -242,30 +241,22 @@
 
                             <div class="col-12 md:col-6 field mb-3">
                                 <label class="block text-gray-700 font-bold mb-1 pl-1">Ward No. <span class="text-red-500">*</span></label>
-                                <input pInputText formControlName="wardNo" class="w-full p-2 border-round-xl text-lg text-gray-800"
-                                    [class.ng-invalid]="isFieldInvalid('wardNo')" [class.ng-dirty]="isFieldInvalid('wardNo')"
-                                    placeholder="e.g. 10" (blur)="updateMapFromForm()" (change)="updateMapFromForm()" />
+                                <p-select formControlName="wardNo" [options]="wards" placeholder="Select Ward"
+                                    [filter]="true" class="w-full" [style]="{'width':'100%'}"
+                                    [invalid]="isFieldInvalid('wardNo')"></p-select>
                                 @if (isFieldInvalid('wardNo')) {
-                                    <small class="text-red-500 opacity-80 pt-1 block">Ward number is required (min 1)</small>
+                                    <small class="text-red-500 opacity-80 pt-1 block">Ward number is required</small>
                                 }
                             </div>
                             <div class="col-12 field mb-3">
                                 <label class="block text-gray-700 font-bold mb-1 pl-1">Street Name <span class="text-red-500">*</span></label>
-                                <input pInputText formControlName="streetName" class="w-full p-2 border-round-xl text-lg text-gray-800"
-                                    [class.ng-invalid]="isFieldInvalid('streetName')" [class.ng-dirty]="isFieldInvalid('streetName')"
-                                    placeholder="e.g. Tinkune Marg" (blur)="updateMapFromForm()" (change)="updateMapFromForm()" />
+                                <input type="text" pInputText formControlName="streetName" class="w-full p-2 border-round-xl text-lg text-gray-800"
+                                    [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('streetName')}" placeholder="e.g. Tinkune Marg" />
                                 @if (isFieldInvalid('streetName')) {
                                     <small class="text-red-500 opacity-80 pt-1 block">Street name is required</small>
                                 }
                             </div>
                         </form>
-                    </div>
-                    <div class="col-12 lg:col-7 h-full">
-                        <div class="map-container overflow-hidden h-full min-h-30rem">
-                           <app-map [pickerMode]="true"
-                                    [dropLocation]="userLocation"
-                                    (onLocationSelected)="onMapLocationSelected($event)"></app-map>
-                        </div>
                     </div>
                 </div>
             }
