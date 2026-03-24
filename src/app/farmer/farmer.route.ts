@@ -19,6 +19,12 @@ export const FARMER_ROUTES: Routes = [
         path: 'stocks',
         children: STOCK_ROUTES
       },
+      {
+        path: 'orders',
+        children: [
+          { path: 'my-orders', loadComponent: () => import('../order/farmer-orders/farmer-orders').then(m => m.FarmerOrdersComponent) }
+        ]
+      },
       // Redirect /farmer/dashboard to /farmer for the shell view
       { path: 'dashboard', redirectTo: '', pathMatch: 'full' }
     ]

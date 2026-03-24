@@ -63,4 +63,23 @@ export class OrderService {
             GenerateUrlUtils.generateUrl(Endpoint.ORDER_FARMER_ADDRESS + stockSlug)
         );
     }
+
+    // Role-specific order lists
+    getBuyerOrders(page = 0, size = 20): Observable<IResponseWithObject> {
+        return this.http.get<IResponseWithObject>(
+            GenerateUrlUtils.generateUrl(Endpoint.ORDER_BUYER_LIST) + `?page=${page}&size=${size}&sort=createdAt,desc`
+        );
+    }
+
+    getFarmerOrders(page = 0, size = 20): Observable<IResponseWithObject> {
+        return this.http.get<IResponseWithObject>(
+            GenerateUrlUtils.generateUrl(Endpoint.ORDER_FARMER_LIST) + `?page=${page}&size=${size}&sort=createdAt,desc`
+        );
+    }
+
+    getDeliveryOrders(page = 0, size = 20): Observable<IResponseWithObject> {
+        return this.http.get<IResponseWithObject>(
+            GenerateUrlUtils.generateUrl(Endpoint.ORDER_DELIVERY_LIST) + `?page=${page}&size=${size}&sort=createdAt,desc`
+        );
+    }
 }

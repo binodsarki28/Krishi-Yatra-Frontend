@@ -5,7 +5,7 @@ import { filter } from 'rxjs';
 import { AccountService } from '../../components/account/account.service';
 import { ButtonModule } from 'primeng/button';
 import { StockService } from '../../stock/stock.service';
-
+import { OrderService } from '../../order/order.service';
 import { NavigationService } from '../../util/navigation.service';
 
 @Component({
@@ -17,11 +17,13 @@ import { NavigationService } from '../../util/navigation.service';
 })
 export class FarmerDashboard implements OnInit {
   isDefaultRoute: boolean = true;
-  expandedGroup: string = 'stock'; // Expand stock by default
+  expandedGroup: string = 'stock';
   totalStocks: number = 0;
+  totalOrders: number = 0;
 
   constructor(
     private stockService: StockService,
+    private orderService: OrderService,
     private accountService: AccountService,
     private navigationService: NavigationService,
     private router: Router,
@@ -48,12 +50,15 @@ export class FarmerDashboard implements OnInit {
 
         if (url.includes('/stocks')) {
             this.expandedGroup = 'stock';
+        } else if (url.includes('/orders')) {
+            this.expandedGroup = 'order';
         }
     });
 
     const currentUrl = this.router.url;
     this.isDefaultRoute = currentUrl === '/farmer' || currentUrl === '/farmer/' || currentUrl === '/farmer/dashboard';
     if (currentUrl.includes('/stocks')) this.expandedGroup = 'stock';
+    if (currentUrl.includes('/orders')) this.expandedGroup = 'order';
   }
 
   toggleGroup(group: string) {
@@ -67,6 +72,14 @@ export class FarmerDashboard implements OnInit {
       },
       error: () => {
         this.totalStocks = 0;
+      }
+    });
+    this.orderService.getFarmerOrders(0, 1).subscribe({
+      next: (res: any) => {
+        this.totalOrders = res.response?.totalElements || 0;
+      },
+      error: () => {
+        this.totalOrders = 0;
       }
     });
   }

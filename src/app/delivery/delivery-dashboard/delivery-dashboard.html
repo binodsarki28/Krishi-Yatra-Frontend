@@ -1,163 +1,170 @@
-<div class="delivery-dashboard surface-ground min-h-screen p-3 lg:p-4">
-    <div class="max-w-7xl mx-auto">
-        <!-- Header -->
-        <div class="mb-4 flex align-items-center justify-content-between">
-            <div>
-                <h1 class="m-0 text-3xl font-bold text-gray-900">Delivery Dashboard</h1>
-                <p class="text-gray-500 m-0 mt-1">Manage your active and available jobs in one place.</p>
-            </div>
-            <div class="flex gap-2 p-1 bg-white border-round-2xl shadow-1">
-                <button pButton (click)="switchTab('available')" 
-                        [class.p-button-text]="currentTab !== 'available'"
-                        class="p-button-sm border-round-xl px-4" label="Available"></button>
-                <button pButton (click)="switchTab('active')" 
-                        [class.p-button-text]="currentTab !== 'active'"
-                        class="p-button-sm border-round-xl px-4" label="My Jobs"></button>
+<div class="flex h-screen surface-ground overflow-hidden" style="font-family: 'Inter', 'Segoe UI', sans-serif;">
+    <!-- Sidebar -->
+    <aside class="flex flex-column flex-shrink-0 surface-card border-right-1 border-200"
+        style="width: 272px; box-shadow: 2px 0 12px rgba(0,0,0,0.03);">
+
+        <!-- Sidebar Header -->
+        <div class="p-3 border-bottom-1 border-200">
+            <div class="flex align-items-center gap-3">
+                <div class="flex align-items-center justify-content-center border-round-xl"
+                    style="width:40px; height:40px; background: linear-gradient(135deg, #f59e0b, #d97706);">
+                    <i class="pi pi-truck text-white" style="font-size: 18px;"></i>
+                </div>
+                <div>
+                    <h1 class="m-0 text-lg font-bold text-900" style="letter-spacing: -0.3px;">KrishiYatra</h1>
+                    <p class="m-0 mt-1 text-xs text-500 font-medium">Linker Dashboard</p>
+                </div>
             </div>
         </div>
 
-        @if (loading && currentTab === 'available') {
-            <div class="flex flex-column align-items-center justify-content-center p-8">
-                <p-progressSpinner></p-progressSpinner>
-                <div class="mt-3 text-600">Searching for jobs...</div>
-            </div>
-        } @else {
-            @let orders = currentTab === 'available' ? pendingOrders : acceptedOrders;
-            
-            @if (orders.length === 0) {
-                <div class="text-center py-8 bg-white border-round-2xl shadow-1">
-                    <i class="pi pi-inbox text-4xl text-200 mb-3"></i>
-                    <h3 class="m-0 text-gray-500">No {{ currentTab }} jobs found.</h3>
-                    <p class="text-gray-400">Your mission log is currently clear.</p>
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto p-3">
+            <!-- Dashboard -->
+            <a class="flex align-items-center gap-2 px-3 py-2 border-round-lg text-600 no-underline text-sm font-semibold mb-1 nav-item"
+                routerLink="/delivery/dashboard" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active-nav">
+                <i class="pi pi-th-large" style="font-size: 16px;"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <!-- Order Management Group -->
+            <div class="mb-1" [class.expanded]="expandedGroup === 'order'">
+                <button
+                    class="flex align-items-center justify-content-between w-full px-3 py-2 border-round-lg border-none bg-transparent text-700 text-sm font-semibold cursor-pointer nav-group-header"
+                    (click)="toggleGroup('order')">
+                    <div class="flex align-items-center gap-2">
+                        <div class="flex align-items-center justify-content-center border-round-lg bg-orange-50 text-orange-600"
+                            style="width:32px; height:32px;">
+                            <i class="pi pi-shopping-bag" style="font-size: 14px;"></i>
+                        </div>
+                        <span>Order Management</span>
+                    </div>
+                    <i class="pi pi-chevron-down text-400 group-arrow"
+                        [style.transform]="expandedGroup === 'order' ? 'rotate(180deg)' : 'none'"
+                        style="font-size: 10px; transition: transform 0.25s ease;"></i>
+                </button>
+                <div class="pl-4 nav-group-items" [style.max-height]="expandedGroup === 'order' ? '200px' : '0'"
+                    style="overflow: hidden; transition: max-height 0.25s ease;">
+                    <a class="flex align-items-center gap-2 px-3 py-2 border-round-md text-600 no-underline text-xs font-medium my-1 nav-sub-item"
+                        routerLink="/delivery/orders/my-orders" routerLinkActive="active-nav">
+                        <i class="pi pi-list" style="font-size: 12px;"></i>
+                        <span>My Deliveries</span>
+                    </a>
                 </div>
-            } @else {
-                <div class="grid">
-                    <!-- Orders List -->
-                    <div class="col-12 lg:col-4 xl:col-3">
-                        <div class="flex flex-column gap-3 overflow-y-auto pr-2" style="max-height: calc(100vh - 200px);">
-                            @for (order of orders; track order.orderId) {
-                                <div class="order-card p-3 bg-white border-1 border-200 border-round-xl cursor-pointer transition-all shadow-1 hover:shadow-3"
-                                     [class.selected]="selectedOrder?.orderId === order.orderId"
-                                     (click)="selectOrder(order)">
-                                <div class="flex justify-content-between align-items-center mb-2">
-                                    <p-tag [value]="order.productName" severity="success" styleClass="text-xs"></p-tag>
-                                    <span class="text-xs font-bold text-gray-500">#{{ order.orderId.substring(0, 8) }}</span>
-                                </div>
-                                <div class="flex align-items-center gap-2 mb-2">
-                                    <i [class]="getVehicleIcon(order.vehicleType) + ' text-blue-600 text-lg'"></i>
-                                    <span class="text-sm font-bold text-gray-800">{{ order.vehicleType }}</span>
-                                </div>
-                                <div class="text-xs text-gray-500 mb-1">
-                                    <i class="pi pi-map-marker text-red-500 mr-1"></i>
-                                    {{ order.pickupAddress.substring(0, 40) }}...
-                                </div>
-                                <div class="flex justify-content-between align-items-center mt-3 pt-2 border-top-1 border-50">
-                                    <span class="text-green-700 font-bold">Rs. {{ order.deliveryFee | number:'1.2-2' }}</span>
-                                    <span class="text-xs text-gray-400">{{ order.createdAt | date:'shortTime' }}</span>
-                                </div>
-                            </div>
-                        }
+            </div>
+
+            <!-- Jobs Group -->
+            <div class="mb-1" [class.expanded]="expandedGroup === 'jobs'">
+                <button
+                    class="flex align-items-center justify-content-between w-full px-3 py-2 border-round-lg border-none bg-transparent text-700 text-sm font-semibold cursor-pointer nav-group-header"
+                    (click)="toggleGroup('jobs')">
+                    <div class="flex align-items-center gap-2">
+                        <div class="flex align-items-center justify-content-center border-round-lg bg-green-50 text-green-600"
+                            style="width:32px; height:32px;">
+                            <i class="pi pi-map" style="font-size: 14px;"></i>
+                        </div>
+                        <span>Delivery Jobs</span>
+                    </div>
+                    <i class="pi pi-chevron-down text-400 group-arrow"
+                        [style.transform]="expandedGroup === 'jobs' ? 'rotate(180deg)' : 'none'"
+                        style="font-size: 10px; transition: transform 0.25s ease;"></i>
+                </button>
+                <div class="pl-4 nav-group-items" [style.max-height]="expandedGroup === 'jobs' ? '200px' : '0'"
+                    style="overflow: hidden; transition: max-height 0.25s ease;">
+                    <a class="flex align-items-center gap-2 px-3 py-2 border-round-md text-600 no-underline text-xs font-medium my-1 nav-sub-item"
+                        routerLink="/delivery/jobs/available" routerLinkActive="active-nav">
+                        <i class="pi pi-search" style="font-size: 12px;"></i>
+                        <span>Available Jobs</span>
+                    </a>
+                    <a class="flex align-items-center gap-2 px-3 py-2 border-round-md text-600 no-underline text-xs font-medium my-1 nav-sub-item"
+                        routerLink="/delivery/jobs/active" routerLinkActive="active-nav">
+                        <i class="pi pi-check-circle" style="font-size: 12px;"></i>
+                        <span>Active Jobs</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="p-3 border-top-1 border-200">
+            <button (click)="goToProfile()"
+               class="flex align-items-center justify-content-center gap-2 w-full px-3 py-2 border-round-xl border-1 border-300 bg-white text-700 hover:surface-100 no-underline text-sm font-semibold transition-all transition-duration-200 cursor-pointer"
+               style="height: 44px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); outline: none;">
+                <i class="pi pi-user" style="font-size: 14px;"></i>
+                <span>Back to Profile</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto p-4 md:p-5 surface-ground">
+        <router-outlet></router-outlet>
+
+        @if (isDefaultRoute) {
+        <div class="fadein animation-duration-300">
+            <!-- Stats Row -->
+            <div class="grid mb-4">
+                <div class="col-12 md:col-6 lg:col-3">
+                    <div
+                        class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between hover:shadow-3 transition-all transition-duration-200">
+                        <div class="flex flex-column gap-1">
+                            <span class="text-xs text-500 font-medium">Total Deliveries</span>
+                            <span class="text-3xl font-bold text-900" style="letter-spacing: -0.5px; line-height: 1;">{{
+                                totalOrders }}</span>
+                        </div>
+                        <div class="flex align-items-center justify-content-center border-round-xl"
+                            style="width:44px; height:44px; background: linear-gradient(135deg, #f59e0b, #d97706);">
+                            <i class="pi pi-truck text-white" style="font-size: 18px;"></i>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Order Detail & Map -->
-                <div class="col-12 lg:col-8 xl:col-9">
-                    @if (selectedOrder) {
-                        <div class="bg-white border-round-2xl shadow-2 overflow-hidden flex flex-column h-full">
-                            <!-- Detail Header -->
-                            <div class="p-4 border-bottom-1 border-100 flex justify-content-between align-items-start bg-gray-50">
-                                <div>
-                                    <h2 class="m-0 text-2xl font-bold text-gray-900">{{ selectedOrder.productName }}</h2>
-                                    <p class="m-0 text-600 text-sm mt-1">Quantity: {{ selectedOrder.orderQuantity }} Units</p>
-                                </div>
-                                
-                                @if (currentTab === 'available') {
-                                    <button pButton icon="pi pi-check" label="Accept Delivery Job" 
-                                            (click)="acceptOrder()"
-                                            [loading]="accepting"
-                                            class="p-button-success p-button-raised border-round-xl px-4 py-3 text-lg font-bold shadow-3"></button>
-                                } @else {
-                                    <button pButton icon="pi pi-map" label="Track Delivery" 
-                                            [routerLink]="['/delivery/track', selectedOrder.orderId]"
-                                            class="p-button-info p-button-raised border-round-xl px-4 py-3 text-lg font-bold shadow-3"></button>
-                                }
-                            </div>
-
-                            <div class="grid m-0 flex-grow-1">
-                                <!-- Info Panel -->
-                                <div class="col-12 md:col-5 p-4 border-right-1 border-100 flex flex-column gap-4 overflow-y-auto" style="max-height: 500px;">
-                                    <div class="info-section">
-                                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Logistics</label>
-                                        <div class="flex align-items-center justify-content-between p-2 bg-blue-50 border-round-lg">
-                                            <div class="flex align-items-center gap-2">
-                                                <i class="pi pi-truck text-blue-600"></i>
-                                                <span class="text-blue-900 font-medium">Vehicle Required</span>
-                                            </div>
-                                            <span class="font-bold text-blue-900">{{ selectedOrder.vehicleType }}</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="info-section">
-                                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Addresses</label>
-                                        <div class="address-timeline relative pl-4">
-                                            <div class="address-item mb-4 relative">
-                                                <div class="dot pickup"></div>
-                                                <span class="text-xs text-gray-500 font-bold block uppercase">Pickup</span>
-                                                <p class="m-0 text-sm text-gray-800 font-medium">{{ selectedOrder.pickupAddress }}</p>
-                                            </div>
-                                            <div class="address-item relative">
-                                                <div class="dot drop"></div>
-                                                <span class="text-xs text-gray-500 font-bold block uppercase">Drop</span>
-                                                <p class="m-0 text-sm text-gray-800 font-medium">{{ selectedOrder.dropAddress }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    @if (selectedOrder.notes) {
-                                        <div class="info-section">
-                                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Customer Instructions</label>
-                                            <div class="p-3 bg-yellow-50 border-round-xl border-left-3 border-yellow-400 text-gray-700 text-sm italic">
-                                                "{{ selectedOrder.notes }}"
-                                            </div>
-                                        </div>
-                                    }
-
-                                    <div class="info-section">
-                                        <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Earnings</label>
-                                        <div class="flex align-items-center justify-content-between p-3 surface-card border-round-xl border-1 border-200">
-                                            <span class="text-gray-600">Base + Distance Fee</span>
-                                            <span class="text-2xl font-bold text-green-700">Rs. {{ selectedOrder.deliveryFee | number:'1.2-2' }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Map Panel -->
-                                <div class="col-12 md:col-7 p-0 relative h-30rem md:h-auto">
-                                    @if (pickupLoc && dropLoc && mapVisible) {
-                                       <app-map [pickupLocation]="pickupLoc" 
-                                                [dropLocation]="dropLoc" 
-                                                [pickerMode]="false"
-                                                [drawRoute]="true"
-                                                [interactive]="false"
-                                                [initialCheckpoints]="selectedOrder.checkpoints"></app-map>
-                                    } @else {
-                                        <div class="flex flex-column align-items-center justify-content-center h-full bg-gray-50">
-                                            <i class="pi pi-spin pi-spinner text-3xl text-primary mb-3"></i>
-                                            <span class="text-gray-500 text-sm">Loading route map...</span>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
+            <!-- Quick Actions -->
+            <div class="surface-card border-1 border-200 border-round-xl p-4">
+                <div class="mb-4">
+                    <h3 class="m-0 text-lg font-bold text-900">Quick Actions</h3>
+                    <p class="m-0 mt-1 text-sm text-500">Manage your deliveries and find new jobs</p>
+                </div>
+                <div class="flex flex-column gap-2">
+                    <a class="flex align-items-center gap-3 p-3 surface-ground border-1 border-200 border-round-xl no-underline cursor-pointer hover:surface-hover transition-all transition-duration-200 quick-card"
+                        routerLink="/delivery/orders/my-orders">
+                        <div class="flex align-items-center justify-content-center border-round-lg flex-shrink-0"
+                            style="width:42px; height:42px; background: linear-gradient(135deg, #f59e0b, #d97706);">
+                            <i class="pi pi-list text-white" style="font-size: 17px;"></i>
                         </div>
-                    } @else {
-                        <div class="flex flex-column align-items-center justify-content-center h-full bg-white border-round-2xl border-1 border-dashed border-300 text-gray-400 p-8">
-                            <i class="pi pi-mouse-pointer text-4xl mb-3"></i>
-                            <p class="m-0 font-bold">Select an order from the list to view route details</p>
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-900">My Deliveries</span>
+                            <span class="block text-xs text-500 mt-1">View all your delivery history</span>
                         </div>
-                    }
+                        <i class="pi pi-arrow-right text-300" style="font-size: 12px;"></i>
+                    </a>
+                    <a class="flex align-items-center gap-3 p-3 surface-ground border-1 border-200 border-round-xl no-underline cursor-pointer hover:surface-hover transition-all transition-duration-200 quick-card"
+                        routerLink="/delivery/jobs/available">
+                        <div class="flex align-items-center justify-content-center border-round-lg flex-shrink-0"
+                            style="width:42px; height:42px; background: linear-gradient(135deg, #22c55e, #16a34a);">
+                            <i class="pi pi-search text-white" style="font-size: 17px;"></i>
+                        </div>
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-900">Find Available Jobs</span>
+                            <span class="block text-xs text-500 mt-1">Browse pending delivery requests</span>
+                        </div>
+                        <i class="pi pi-arrow-right text-300" style="font-size: 12px;"></i>
+                    </a>
+                    <a class="flex align-items-center gap-3 p-3 surface-ground border-1 border-200 border-round-xl no-underline cursor-pointer hover:surface-hover transition-all transition-duration-200 quick-card"
+                        routerLink="/delivery/jobs/active">
+                        <div class="flex align-items-center justify-content-center border-round-lg flex-shrink-0"
+                            style="width:42px; height:42px; background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                            <i class="pi pi-check-circle text-white" style="font-size: 17px;"></i>
+                        </div>
+                        <div class="flex-1">
+                            <span class="block text-sm font-semibold text-900">Active Jobs</span>
+                            <span class="block text-xs text-500 mt-1">Track your current deliveries</span>
+                        </div>
+                        <i class="pi pi-arrow-right text-300" style="font-size: 12px;"></i>
+                    </a>
                 </div>
             </div>
-            }
+        </div>
         }
-    </div>
+    </main>
 </div>

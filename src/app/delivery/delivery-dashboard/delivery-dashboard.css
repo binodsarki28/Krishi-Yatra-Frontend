@@ -1,81 +1,54 @@
-.delivery-dashboard {
-    background-color: #f8fafc;
+/* ═════════ Delivery Dashboard — Minimal CSS (PrimeFlex handles layout) ═════════ */
+
+/* Nav items hover & active */
+.nav-item:hover,
+.nav-group-header:hover {
+    background: var(--surface-hover);
 }
 
-.order-card {
-    border-radius: 12px;
-    background: #fff;
+.nav-item.active-nav,
+.nav-sub-item.active-nav {
+    background: #fffbeb;
+    color: #d97706 !important;
+    font-weight: 600;
 }
 
-.order-card.selected {
-    border-color: #3b82f6 !important;
-    background-color: #f0f9ff !important;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15) !important;
+.nav-sub-item:hover {
+    background: var(--surface-hover);
+    color: var(--text-color);
 }
 
-.order-card.selected .text-gray-800 {
-    color: #1e40af !important;
+.nav-group-header {
+    font-family: inherit;
+    transition: background 0.2s ease;
 }
 
-.order-card .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin-top: 4px;
+/* Quick action card hover slide */
+.quick-card:hover {
+    transform: translateX(4px);
 }
 
-.pickup { background-color: #10b981; }
-.drop { background-color: #ef4444; }
-
-.address-timeline::before {
-    content: '';
-    position: absolute;
-    left: 4px;
-    top: 15px;
-    bottom: 5px;
-    width: 2px;
-    background: repeating-linear-gradient(to bottom, #e2e8f0 0, #e2e8f0 4px, transparent 4px, transparent 8px);
+.quick-card:hover .pi-arrow-right {
+    color: var(--text-color-secondary) !important;
+    transform: translateX(2px);
 }
 
-.address-item::before {
-    content: '';
-    position: absolute;
-    left: -16px;
-    top: 5px;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #e2e8f0;
-    border: 2px solid white;
-    z-index: 2;
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.address-item .dot {
-    display: none;
-}
-
-.address-item.mb-4::before { background: #10b981; }
-.address-item:not(.mb-4)::before { background: #ef4444; }
-
-.info-section {
-    position: relative;
-    padding-bottom: 8px;
-}
-
-.info-section label {
-    letter-spacing: 0.05em;
-}
-
-.shadow-3 {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-.transition-all {
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@media (max-width: 1024px) {
-    .grid {
-        flex-direction: column-reverse;
+/* Responsive */
+@media (max-width: 768px) {
+    aside {
+        width: 240px !important;
     }
 }
