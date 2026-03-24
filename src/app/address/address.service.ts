@@ -22,4 +22,10 @@ export class AddressService {
             GenerateUrlUtils.generateUrl(Endpoint.ADDRESS_ME)
         );
     }
+
+    deleteAddress(): Observable<IResponse> {
+        return this.http.delete<IResponse>(
+            GenerateUrlUtils.generateUrl(Endpoint.ADDRESS_DELETE)
+        );
+    }
 }

@@ -19,6 +19,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { TooltipModule } from 'primeng/tooltip';
 
 import { SelectModule } from 'primeng/select';
+import { AccountService } from '../../components/account/account.service';
 
 @Component({
   selector: 'app-create-order',
@@ -83,11 +84,19 @@ export class CreateOrder implements OnInit, AfterViewInit, OnDestroy {
     private orderService: OrderService,
     private addressService: AddressService,
     private toastService: ToastService,
+    private accountService: AccountService,
     @Inject(PLATFORM_ID) private platformId: any,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
+    // SECURITY CHECK: Ensure user is a verified buyer
+    if (!this.accountService.isRoleVerified('BUYER')) {
+        this.toastService.warningResponse('Please register and verify as a Buyer before placing an order.');
+        this.router.navigate(['/buyer/register']);
+        return;
+    }
+
     this.orderForm = this.fb.group({
       orderQuantity: [1, [Validators.required, Validators.min(1)]],
       pickupAddress: [{ value: '', disabled: true }, Validators.required],
@@ -328,8 +337,8 @@ export class CreateOrder implements OnInit, AfterViewInit, OnDestroy {
   calculateDeliveryFee() {
     const qty = this.orderForm.get('orderQuantity')?.value || 0;
     if (this.deliveryDistance > 0 && qty > 0) {
-      const weightFactor = Math.ceil(qty / 100);
-      this.deliveryFee = (this.deliveryDistance * weightFactor * 5) + 50;
+      // Pricing logic: Rs 1 per KG + Rs 10 per KM
+      this.deliveryFee = (qty * 1) + (this.deliveryDistance * 10);
     } else {
       this.deliveryFee = 0;
     }

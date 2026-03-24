@@ -8,6 +8,8 @@ import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { SelectModule } from 'primeng/select';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 import { ToastService } from '../../util/toast.service';
 import { AccountService } from '../account/account.service';
 import { IJwtResponse } from '../account/IAccount';
@@ -20,29 +22,31 @@ import { NEPAL_DATA, NepalProvince, NepalDistrict } from '../../address/nepal-da
   selector: 'app-profile',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, ReactiveFormsModule, 
-    InputTextModule, ButtonModule, PasswordModule, 
-    ProgressSpinnerModule, SelectModule, MapComponent
+    CommonModule, FormsModule, ReactiveFormsModule,
+    InputTextModule, ButtonModule, PasswordModule,
+    ProgressSpinnerModule, SelectModule, MapComponent,
+    ConfirmDialogModule
   ],
+  providers: [ConfirmationService],
   templateUrl: './profile.html',
   styleUrls: ['./profile.css']
 })
 export class ProfileComponent implements OnInit {
   @ViewChild(MapComponent) mapComp!: MapComponent;
-  
+
   activeTab: string = 'profile';
-  
+
   profileForm!: FormGroup;
   passwordForm!: FormGroup;
-  
+
   userData: any = {};
-  
+
   profilePreview: string | null = null;
-  
+
   addressForm!: FormGroup;
   addressLoading: boolean = false;
   addressSubmitting: boolean = false;
-  
+
   // Nepal Data
   provinces: NepalProvince[] = NEPAL_DATA;
   districts: NepalDistrict[] = [];
@@ -50,19 +54,20 @@ export class ProfileComponent implements OnInit {
 
   // Map Data
   userLocation: any = null;
-  
+
   private platformId = inject(PLATFORM_ID);
   private cdr = inject(ChangeDetectorRef);
   private alreadyLoadingAddress = false;
   selectedFile: File | null = null;
   loading: boolean = false;
-  
+
   constructor(
     private fb: FormBuilder,
     public accountService: AccountService,
     private toastService: ToastService,
     private router: Router,
-    private addressService: AddressService
+    private addressService: AddressService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit() {
@@ -90,9 +95,8 @@ export class ProfileComponent implements OnInit {
       district: ['', Validators.required],
       municipality: ['', Validators.required],
       city: [''],
-      wardNo: [''],
-      streetName: [''],
-      other: ['', Validators.required]
+      wardNo: ['', [Validators.required, Validators.min(1)]],
+      streetName: ['', Validators.required]
     });
   }
 
@@ -177,35 +181,35 @@ export class ProfileComponent implements OnInit {
 
   get isFarmer() { return this.accountService.hasRole('FARMER'); }
   get isFarmerVerified() { return this.accountService.isRoleVerified('FARMER'); }
-  
+
   get isBuyer() { return this.accountService.hasRole('BUYER'); }
   get isBuyerVerified() { return this.accountService.isRoleVerified('BUYER'); }
-  
+
   get isDelivery() { return this.accountService.hasRole('DELIVERY'); }
   get isDeliveryVerified() { return this.accountService.isRoleVerified('DELIVERY'); }
 
   switchTab(tab: string) {
     if (tab === 'farmer-dashboard') {
       if (!this.isFarmer) { this.router.navigate(['/farmer/register']); return; }
-      else if (!this.isFarmerVerified) { 
-        this.toastService.warningResponse(this.accountService.getStatusMessage('FARMER') || 'Your Farmer account is under verification.'); 
-        return; 
+      else if (!this.isFarmerVerified) {
+        this.toastService.warningResponse(this.accountService.getStatusMessage('FARMER') || 'Your Farmer account is under verification.');
+        return;
       }
       else { this.router.navigate(['/farmer/dashboard']); return; }
     }
     if (tab === 'buyer-dashboard') {
       if (!this.isBuyer) { this.router.navigate(['/buyer/register']); return; }
-      else if (!this.isBuyerVerified) { 
-        this.toastService.warningResponse(this.accountService.getStatusMessage('BUYER') || 'Your Buyer account is under verification.'); 
-        return; 
+      else if (!this.isBuyerVerified) {
+        this.toastService.warningResponse(this.accountService.getStatusMessage('BUYER') || 'Your Buyer account is under verification.');
+        return;
       }
       else { this.router.navigate(['/buyer/dashboard']); return; }
     }
     if (tab === 'delivery-dashboard') {
       if (!this.isDelivery) { this.router.navigate(['/delivery/register']); return; }
-      else if (!this.isDeliveryVerified) { 
-        this.toastService.warningResponse(this.accountService.getStatusMessage('DELIVERY') || 'Your Linker account is under verification.'); 
-        return; 
+      else if (!this.isDeliveryVerified) {
+        this.toastService.warningResponse(this.accountService.getStatusMessage('DELIVERY') || 'Your Linker account is under verification.');
+        return;
       }
       else { this.router.navigate(['/delivery/dashboard']); return; }
     }
@@ -230,7 +234,7 @@ export class ProfileComponent implements OnInit {
       next: (res: any) => {
         if (res.response) {
           const addr = res.response as IAddress;
-          
+
           // Cascading setup
           const province = this.provinces.find(p => p.name === addr.province);
           this.districts = province ? province.districts : [];
@@ -244,32 +248,81 @@ export class ProfileComponent implements OnInit {
             city: addr.city,
             wardNo: addr.wardNo,
             streetName: addr.streetName,
-            other: addr.other
           });
           this.updateMapFromForm();
         }
       },
       error: () => {
         // Safe to ignore 404 as it means no address exists yet
+        this.addressForm.reset();
+        this.districts = [];
+        this.municipalities = [];
+        this.userLocation = null;
+        if (this.mapComp) this.mapComp.clearMap();
+        this.cdr.detectChanges();
       }
     });
   }
 
   updateAddress() {
     if (this.addressForm.invalid) {
-      this.toastService.warningResponse('Please fill the required fields.');
-      return;
+        this.addressForm.markAllAsTouched();
+        this.toastService.warningResponse('Please fill in all required address fields.');
+        return;
     }
     this.addressSubmitting = true;
-    this.addressService.saveAddress(this.addressForm.value as IAddressRequest).subscribe({
+    const formValue = this.addressForm.value;
+    
+    // Explicitly build payload with correct types
+    const payload = {
+        province: formValue.province,
+        district: formValue.district,
+        municipality: formValue.municipality,
+        wardNo: formValue.wardNo ? Number(formValue.wardNo) : undefined,
+        streetName: formValue.streetName
+    };
+
+    this.addressService.saveAddress(payload).subscribe({
       next: (res: any) => {
         this.toastService.successResponse(res);
         this.addressSubmitting = false;
         this.addressForm.markAsPristine();
       },
       error: (err: any) => {
+        // Pass original error to toastService so it can extract the message correctly
         this.toastService.errorResponse(err);
         this.addressSubmitting = false;
+      }
+    });
+  }
+
+  deleteAddress() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete your address? This action cannot be undone.',
+      header: 'Confirm Deletion',
+      icon: 'pi pi-exclamation-triangle',
+      acceptButtonStyleClass: 'p-button-danger p-button-text',
+      rejectButtonStyleClass: 'p-button-text p-button-secondary',
+      acceptLabel: 'Delete',
+      rejectLabel: 'Cancel',
+      accept: () => {
+        this.addressSubmitting = true;
+        this.addressService.deleteAddress().subscribe({
+          next: (res: any) => {
+            this.toastService.successResponse(res);
+            this.addressSubmitting = false;
+            this.addressForm.reset();
+            this.districts = [];
+            this.municipalities = [];
+            this.userLocation = null;
+            if (this.mapComp) this.mapComp.clearMap();
+            this.cdr.detectChanges();
+          },
+          error: (err: any) => {
+            this.toastService.errorResponse(err);
+            this.addressSubmitting = false;
+          }
+        });
       }
     });
   }
@@ -280,8 +333,17 @@ export class ProfileComponent implements OnInit {
 
   updateMapFromForm() {
     const val = this.addressForm.value;
-    const addressStr = `${val.municipality || ''}, ${val.district || ''}, ${val.province || ''}, Nepal`;
-    if (!val.municipality && !val.district) return;
+    const parts = [];
+    
+    // We search from Most Specific to Least Specific
+    if (val.municipality) parts.push(val.municipality);
+    if (val.district) parts.push(val.district);
+    if (val.province) parts.push(val.province);
+    parts.push('Nepal');
+
+    const addressStr = parts.join(', ');
+    if (parts.length <= 1) return; // Only 'Nepal' or nothing
+    
     if (this.mapComp) {
         this.mapComp.searchLocation(addressStr);
     }
@@ -314,7 +376,7 @@ export class ProfileComponent implements OnInit {
       this.toastService.warningResponse('Please fill the required fields.');
       return;
     }
-    
+
     this.loading = true;
     const formData = new FormData();
     formData.append('firstName', this.profileForm.get('firstName')?.value || '');
@@ -322,7 +384,7 @@ export class ProfileComponent implements OnInit {
     formData.append('phoneNumber', this.profileForm.get('phone')?.value || '');
     formData.append('description', this.profileForm.get('description')?.value || '');
     formData.append('currentUsername', this.profileForm.get('username')?.value || '');
-    
+
     if (this.selectedFile) {
       formData.append('profileImage', this.selectedFile);
     }
@@ -375,5 +437,10 @@ export class ProfileComponent implements OnInit {
                this.toastService.errorResponse({ message: msg });
            }
       });
+  }
+
+  isFieldInvalid(fieldName: string) {
+    const control = this.addressForm.get(fieldName);
+    return control ? control.invalid && (control.dirty || control.touched) : false;
   }
 }

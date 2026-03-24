@@ -47,6 +47,9 @@ export class ToastService {
     else if (isHttpError && (status === 400 || status === 409)) {
       message = err.error?.message || 'Invalid input or record already exists!';
     }
+    else if (isHttpError && err.error?.message === 'Validation Failed' && err.error?.response) {
+      message = Object.values(err.error.response)[0] as string;
+    }
     else if (isHttpError && err.error?.message) {
       message = err.error.message;
     }

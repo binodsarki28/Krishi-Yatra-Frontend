@@ -56,6 +56,7 @@ export class Endpoint {
   //Address
   public static readonly ADDRESS_SAVE: string = Endpoint.API_VERSION + 'address/save';
   public static readonly ADDRESS_ME: string = Endpoint.API_VERSION + 'address/me';
+  public static readonly ADDRESS_DELETE: string = Endpoint.API_VERSION + 'address/delete';
 
   //Order
   public static readonly ORDER_CREATE: string = Endpoint.API_VERSION + 'order/create';

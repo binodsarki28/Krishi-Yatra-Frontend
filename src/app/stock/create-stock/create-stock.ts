@@ -13,11 +13,13 @@ import { ToastModule } from 'primeng/toast';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { StockService } from '../stock.service';
+import { AddressService } from '../../address/address.service';
 import { ICategoryResponse, ISubCategoryResponse } from '../IStock';
 import { Router, RouterModule } from '@angular/router';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { FileUploadModule } from 'primeng/fileupload';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-create-stock',
@@ -38,7 +40,8 @@ import { FileUploadModule } from 'primeng/fileupload';
     InputGroupAddonModule,
     IconFieldModule,
     InputIconModule,
-    FileUploadModule
+    FileUploadModule,
+    ProgressSpinnerModule
   ],
   providers: [MessageService],
   templateUrl: './create-stock.html',
@@ -51,10 +54,14 @@ export class CreateStockComponent implements OnInit {
   subCategoriesFiltered: ISubCategoryResponse[] = [];
   submitting: boolean = false;
   selectedFiles: any[] = [];
+  
+  hasAddress: boolean = false;
+  loadingAddress: boolean = true;
 
   constructor(
     private fb: FormBuilder,
     private stockService: StockService,
+    private addressService: AddressService,
     private messageService: MessageService,
     private router: Router,
     private cdr: ChangeDetectorRef,
@@ -64,8 +71,28 @@ export class CreateStockComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkAddress();
     this.loadCategories();
     this.loadSubCategories();
+  }
+
+  checkAddress() {
+    this.addressService.getMyAddress().subscribe({
+        next: (res: any) => {
+            setTimeout(() => {
+                this.hasAddress = !!res.response;
+                this.loadingAddress = false;
+                this.cdr.detectChanges();
+            });
+        },
+        error: () => {
+            setTimeout(() => {
+                this.hasAddress = false;
+                this.loadingAddress = false;
+                this.cdr.detectChanges();
+            });
+        }
+    });
   }
 
   initForm() {
@@ -86,6 +113,7 @@ export class CreateStockComponent implements OnInit {
     this.stockService.getCategories().subscribe({
       next: (res: any) => {
         this.categories = res.response || [];
+        this.cdr.detectChanges();
       }
     });
   }
@@ -94,6 +122,7 @@ export class CreateStockComponent implements OnInit {
     this.stockService.getSubCategories().subscribe({
       next: (res: any) => {
         this.subCategories = res.response || [];
+        this.cdr.detectChanges();
       }
     });
   }
@@ -147,7 +176,7 @@ export class CreateStockComponent implements OnInit {
     }
 
     const formData = new FormData();
-    const stockData = this.stockForm.value;
+    const stockData = this.stockForm.getRawValue(); // Ensure disabled controls (like subCategoryId) are included
     
     // Send stock data as a JSON blob
     formData.append('stockData', new Blob([JSON.stringify(stockData)], { type: 'application/json' }));
@@ -158,20 +187,16 @@ export class CreateStockComponent implements OnInit {
       formData.append(`image_${index}`, file);
     });
 
-    if (confirm(`You have selected ${this.selectedFiles.length} photos for this new stock. Proceed?`)) {
-      this.submitting = true;
-      this.stockService.createStock(formData).subscribe({
-        next: (res) => {
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
-          setTimeout(() => this.router.navigate(['/farmer/stocks/my-stocks']), 1500);
-        },
-        error: (err) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Failed to create stock' });
-          this.submitting = false;
-        }
-      });
-    } else {
-      this.submitting = false;
-    }
+    this.submitting = true;
+    this.stockService.createStock(formData).subscribe({
+      next: (res) => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
+        setTimeout(() => this.router.navigate(['/farmer/stocks/my-stocks']), 1500);
+      },
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Failed to create stock' });
+        this.submitting = false;
+      }
+    });
   }
 }

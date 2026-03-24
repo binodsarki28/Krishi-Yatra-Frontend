@@ -610,4 +610,34 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit
     // Also fit bounds 
     setTimeout(() => this.fitBounds(), 500);
   }
+
+  public clearMap() {
+    if (this.map) {
+        if (this.pickupMarker) this.map.removeLayer(this.pickupMarker);
+        if (this.dropMarker) this.map.removeLayer(this.dropMarker);
+        if (this.progressMarker) this.map.removeLayer(this.progressMarker);
+        this.checkpointMarkers.forEach(m => this.map.removeLayer(m));
+        
+        if (this.routeLine) {
+            try { this.map.removeControl(this.routeLine); } catch(e) {}
+        }
+        if (this.fallbackLine) {
+            try { this.map.removeLayer(this.fallbackLine); } catch(e) {}
+        }
+    }
+    
+    this.pickupMarker = null;
+    this.dropMarker = null;
+    this.progressMarker = null;
+    this.checkpointMarkers = [];
+    this.checkpointCoords.clear();
+    this.routeSteps = [];
+    this.routeLine = null;
+    this.fallbackLine = null;
+    
+    if (this.map) {
+        this.map.setView([28.3949, 84.1240], 7); // Reset to center of Nepal
+    }
+    this.cdr.detectChanges();
+  }
 }

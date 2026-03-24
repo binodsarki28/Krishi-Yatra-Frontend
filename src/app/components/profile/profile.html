@@ -1,6 +1,6 @@
 <div class="surface-ground p-0 flex justify-content-center overflow-hidden" style="height: calc(100vh - 5rem); margin: 0 !important;">
   <div class="max-w-7xl w-full flex bg-white shadow-2 border-round-3xl overflow-hidden h-full">
-    
+
     <!-- Fixed Sidebar -->
     <div class="w-16rem border-right-1 border-200 flex flex-column bg-white" style="flex-shrink: 0;">
       <div class="p-3 border-bottom-1 border-100 mb-2">
@@ -43,7 +43,7 @@
            <i class="pi pi-lock"></i> <span class="text-sm font-medium">Privacy</span>
         </a>
       </div>
-      
+
       <div class="p-3 mb-8">
         <a class="flex align-items-center gap-2 p-2 border-round-lg cursor-pointer text-red-500 hover:bg-red-50 transition-colors w-full" (click)="logout()">
            <i class="pi pi-sign-out"></i> <span class="text-sm font-bold">Log Out</span>
@@ -54,20 +54,20 @@
     <!-- Right Content Area -->
     <div class="flex-grow-1 p-3 bg-white overflow-y-auto">
         <div class="w-full flex flex-column h-full" *ngIf="activeTab === 'edit-profile'">
-            
+
             <div class="flex align-items-center gap-3 mb-3">
                 <h1 class="m-0 text-3xl font-bold text-gray-900">Edit Profile</h1>
             </div>
 
             <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="flex flex-column h-full">
-                
+
                 <div class="flex align-items-center gap-4 mb-3">
                     <div class="relative cursor-pointer" style="width: 80px; height: 80px;" (click)="fileInput.click()">
                         <div class="w-full h-full border-circle bg-gray-200 flex align-items-center justify-content-center overflow-hidden border-2 border-gray-300">
                            <img *ngIf="profilePreview" [src]="profilePreview" class="w-full h-full object-cover" />
                            <i *ngIf="!profilePreview" class="pi pi-user text-3xl text-gray-400"></i>
                         </div>
-                        <div class="absolute bg-white border-circle shadow-3 flex align-items-center justify-content-center cursor-pointer" 
+                        <div class="absolute bg-white border-circle shadow-3 flex align-items-center justify-content-center cursor-pointer"
                              style="bottom: 0px; right: 0px; width: 25px; height: 25px; border: 1px solid #e5e7eb;">
                            <i class="pi pi-pencil text-gray-700 text-xs"></i>
                         </div>
@@ -91,7 +91,7 @@
                         <label class="block text-gray-500 font-medium mb-1 pl-1">Last Name <span class="text-red-500">*</span></label>
                         <input pInputText formControlName="lastName" class="w-full p-2 bg-white border-1 border-gray-300 border-round-xl text-lg text-gray-800" [class.border-red-500]="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched" />
                     </div>
-                    
+
                     <div class="col-12 field mb-2">
                         <label class="block text-gray-700 font-bold mb-1 pl-1">Username <span class="text-red-500">*</span></label>
                         <input pInputText formControlName="username" class="w-full p-2 bg-white border-1 border-gray-300 border-round-xl text-lg text-gray-800" [class.border-red-500]="profileForm.get('username')?.invalid && profileForm.get('username')?.touched" />
@@ -154,7 +154,7 @@
                         <span class="text-gray-500 font-medium">{{ "@" + (userData?.username || 'username') }}</span>
                     </div>
                 </div>
-                
+
                 <div class="grid mt-3">
                     <div class="col-12 md:col-6 mb-3">
                         <span class="block text-sm text-gray-500 font-bold uppercase mb-1">Email Address</span>
@@ -195,8 +195,12 @@
                     <h1 class="m-0 text-2xl font-bold text-gray-800">Your Address</h1>
                     <p class="text-gray-500 m-0 mt-1">Provide your address for easier deliveries and stock pickup.</p>
                 </div>
-                <p-button label="Save Address" icon="pi pi-save" [loading]="addressSubmitting" 
-                    [disabled]="addressForm.invalid || addressForm.pristine" (onClick)="updateAddress()"></p-button>
+                <div class="flex gap-2">
+                    <p-button label="Delete" icon="pi pi-trash" severity="danger" [outlined]="true" [loading]="addressSubmitting"
+                        [disabled]="addressSubmitting" (onClick)="deleteAddress()"></p-button>
+                    <p-button label="Save Address" icon="pi pi-save" [loading]="addressSubmitting"
+                        [disabled]="addressSubmitting" (onClick)="updateAddress()"></p-button>
+                </div>
             </div>
 
             @if (addressLoading) {
@@ -210,44 +214,55 @@
                         <form [formGroup]="addressForm" class="grid formgrid">
                             <div class="col-12 md:col-6 field mb-3">
                                 <label class="block text-gray-700 font-bold mb-1 pl-1">Province <span class="text-red-500">*</span></label>
-                                <p-select formControlName="province" [options]="provinces" optionLabel="name" optionValue="name" 
+                                <p-select formControlName="province" [options]="provinces" optionLabel="name" optionValue="name"
                                     placeholder="Select Province" class="w-full" [style]="{'width':'100%'}"
-                                    (onChange)="onProvinceChange()"></p-select>
+                                    [invalid]="isFieldInvalid('province')" (onChange)="onProvinceChange()"></p-select>
+                                @if (isFieldInvalid('province')) {
+                                    <small class="text-red-500 opacity-80 pt-1 block">Province is required</small>
+                                }
                             </div>
                             <div class="col-12 md:col-6 field mb-3">
                                 <label class="block text-gray-700 font-bold mb-1 pl-1">District <span class="text-red-500">*</span></label>
-                                <p-select formControlName="district" [options]="districts" optionLabel="name" optionValue="name" 
+                                <p-select formControlName="district" [options]="districts" optionLabel="name" optionValue="name"
                                     placeholder="Select District" class="w-full" [style]="{'width':'100%'}"
-                                    (onChange)="onDistrictChange()"></p-select>
+                                    [invalid]="isFieldInvalid('district')" (onChange)="onDistrictChange()"></p-select>
+                                @if (isFieldInvalid('district')) {
+                                    <small class="text-red-500 opacity-80 pt-1 block">District is required</small>
+                                }
                             </div>
                             <div class="col-12 field mb-3">
                                 <label class="block text-gray-700 font-bold mb-1 pl-1">Municipality <span class="text-red-500">*</span></label>
-                                <p-select formControlName="municipality" [options]="municipalities" 
+                                <p-select formControlName="municipality" [options]="municipalities"
                                     placeholder="Select Municipality" class="w-full" [style]="{'width':'100%'}"
-                                    (onChange)="updateMapFromForm()"></p-select>
+                                    [invalid]="isFieldInvalid('municipality')" (onChange)="updateMapFromForm()"></p-select>
+                                @if (isFieldInvalid('municipality')) {
+                                    <small class="text-red-500 opacity-80 pt-1 block">Municipality is required</small>
+                                }
                             </div>
-                            
+
                             <div class="col-12 md:col-6 field mb-3">
-                                <label class="block text-gray-700 font-bold mb-1 pl-1">City / Locality</label>
-                                <input pInputText formControlName="city" class="w-full p-2 border-round-xl text-lg text-gray-800" placeholder="e.g. Kathmandu Metro" (change)="updateMapFromForm()" />
-                            </div>
-                            <div class="col-12 md:col-6 field mb-3">
-                                <label class="block text-gray-700 font-bold mb-1 pl-1">Ward No.</label>
-                                <input pInputText formControlName="wardNo" class="w-full p-2 border-round-xl text-lg text-gray-800" placeholder="e.g. 10" />
+                                <label class="block text-gray-700 font-bold mb-1 pl-1">Ward No. <span class="text-red-500">*</span></label>
+                                <input pInputText formControlName="wardNo" class="w-full p-2 border-round-xl text-lg text-gray-800"
+                                    [class.ng-invalid]="isFieldInvalid('wardNo')" [class.ng-dirty]="isFieldInvalid('wardNo')"
+                                    placeholder="e.g. 10" (blur)="updateMapFromForm()" (change)="updateMapFromForm()" />
+                                @if (isFieldInvalid('wardNo')) {
+                                    <small class="text-red-500 opacity-80 pt-1 block">Ward number is required (min 1)</small>
+                                }
                             </div>
                             <div class="col-12 field mb-3">
-                                <label class="block text-gray-700 font-bold mb-1 pl-1">Street Name</label>
-                                <input pInputText formControlName="streetName" class="w-full p-2 border-round-xl text-lg text-gray-800" placeholder="e.g. Tinkune Marg" />
-                            </div>
-                            <div class="col-12 field mb-3">
-                                <label class="block text-gray-700 font-bold mb-1 pl-1">Other Details (Home/Landmark) <span class="text-red-500">*</span></label>
-                                <input pInputText formControlName="other" class="w-full p-2 border-round-xl text-lg text-gray-800" placeholder="e.g. Yellow House near Temple" />
+                                <label class="block text-gray-700 font-bold mb-1 pl-1">Street Name <span class="text-red-500">*</span></label>
+                                <input pInputText formControlName="streetName" class="w-full p-2 border-round-xl text-lg text-gray-800"
+                                    [class.ng-invalid]="isFieldInvalid('streetName')" [class.ng-dirty]="isFieldInvalid('streetName')"
+                                    placeholder="e.g. Tinkune Marg" (blur)="updateMapFromForm()" (change)="updateMapFromForm()" />
+                                @if (isFieldInvalid('streetName')) {
+                                    <small class="text-red-500 opacity-80 pt-1 block">Street name is required</small>
+                                }
                             </div>
                         </form>
                     </div>
                     <div class="col-12 lg:col-7 h-full">
                         <div class="map-container overflow-hidden h-full min-h-30rem">
-                           <app-map [pickerMode]="true" 
+                           <app-map [pickerMode]="true"
                                     [dropLocation]="userLocation"
                                     (onLocationSelected)="onMapLocationSelected($event)"></app-map>
                         </div>
@@ -264,3 +279,4 @@
     </div>
   </div>
 </div>
+<p-confirmDialog></p-confirmDialog>
