@@ -55,6 +55,7 @@ export class ProfileComponent implements OnInit {
   private platformId = inject(PLATFORM_ID);
   private cdr = inject(ChangeDetectorRef);
   private alreadyLoadingAddress = false;
+  private addressLoaded = false;
   selectedFile: File | null = null;
   loading: boolean = false;
 
@@ -70,6 +71,9 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     this.initForms();
     this.loadUserData();
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadAddress(); // Background pre-fetch
+    }
   }
 
   initForms() {
@@ -215,26 +219,33 @@ export class ProfileComponent implements OnInit {
   }
 
   loadAddress() {
-    if (this.alreadyLoadingAddress) return;
+    if (this.alreadyLoadingAddress || this.addressLoaded) return;
     this.alreadyLoadingAddress = true;
     this.addressLoading = true;
+    console.time('fetchAddress');
+
     this.addressService.getMyAddress().pipe(
       finalize(() => {
         this.addressLoading = false;
         this.alreadyLoadingAddress = false;
+        console.timeEnd('fetchAddress');
+        this.cdr.markForCheck();
         this.cdr.detectChanges();
       })
     ).subscribe({
       next: (res: any) => {
+        this.addressLoading = false; // Set early to dismiss spinner fast
         if (res.response) {
           const addr = res.response as IAddress;
+          this.addressLoaded = true;
 
-          // Cascading setup
+          // Pre-populate lists BEFORE patching to avoid missing labels
           const province = this.provinces.find(p => p.name === addr.province);
           this.districts = province ? province.districts : [];
           const district = this.districts.find(d => d.name === addr.district);
           this.municipalities = district ? district.municipalities : [];
 
+          // Patch silently to prevent cascading 'onChange' loops
           this.addressForm.patchValue({
             province: addr.province,
             district: addr.district,
@@ -242,7 +253,10 @@ export class ProfileComponent implements OnInit {
             city: addr.city,
             wardNo: addr.wardNo,
             streetName: addr.streetName,
-          });
+          }, { emitEvent: false });
+          
+          this.cdr.detectChanges();
+          console.log('[SpeedCheck] Address data ready and patched.');
         }
       },
       error: () => {
@@ -278,6 +292,7 @@ export class ProfileComponent implements OnInit {
         this.toastService.successResponse(res);
         this.addressSubmitting = false;
         this.addressForm.markAsPristine();
+        this.addressLoaded = false;
       },
       error: (err: any) => {
         // Pass original error to toastService so it can extract the message correctly
@@ -303,6 +318,7 @@ export class ProfileComponent implements OnInit {
             this.toastService.successResponse(res);
             this.addressSubmitting = false;
             this.addressForm.reset();
+            this.addressLoaded = false;
             this.districts = [];
             this.municipalities = [];
             this.cdr.detectChanges();
