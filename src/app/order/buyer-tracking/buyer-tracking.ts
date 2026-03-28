@@ -1,8 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, PLATFORM_ID, Inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { DeliveryAppService } from '../../delivery/delivery.service';
 import { MapComponent } from '../../common/map/map';
+import { ViewChild } from '@angular/core';
 import { TagModule } from 'primeng/tag';
 import { CardModule } from 'primeng/card';
 import { TimelineModule } from 'primeng/timeline';
@@ -22,13 +23,16 @@ import { ToastService } from '../../util/toast.service';
   templateUrl: './buyer-tracking.html',
   styleUrls: ['./buyer-tracking.css']
 })
-export class BuyerTracking implements OnInit {
+export class BuyerTracking implements OnInit, OnDestroy {
   orderId: string | null = null;
   order: any = null;
   pickupLoc: any = null;
   dropLoc: any = null;
   loading: boolean = true;
   checkpointList: any[] = [];
+  currentRole: 'BUYER' | 'FARMER' | 'DELIVERY' | null = null;
+  @ViewChild(MapComponent) mapComponent!: MapComponent;
+  private refreshInterval: any = null;
 
   statusTimeline: any[] = [
     { status: 'Order Created', icon: 'pi pi-shopping-cart', color: '#607D8B', value: 'PENDING' },
@@ -48,14 +52,37 @@ export class BuyerTracking implements OnInit {
 
   ngOnInit() {
     this.orderId = this.route.snapshot.paramMap.get('orderId');
+    const url = this.router.url;
+    if (url.startsWith('/farmer')) this.currentRole = 'FARMER';
+    else if (url.startsWith('/buyer')) this.currentRole = 'BUYER';
+    else if (url.startsWith('/delivery')) this.currentRole = 'DELIVERY';
+
     if (this.orderId) {
       this.loadOrderDetails();
-      // Auto-refresh every 30 seconds for real-time vibe
+      // Auto-refresh every 30 seconds for real-time updates
       if (isPlatformBrowser(this.platformId)) {
-          setInterval(() => {
+          this.refreshInterval = setInterval(() => {
               this.loadOrderDetails(true);
           }, 30000);
       }
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
+    }
+  }
+
+  goBack() {
+    // Determine which dashboard we're in based on the URL
+    const url = this.router.url;
+    if (url.startsWith('/farmer')) {
+      this.router.navigate(['/farmer/orders/my-orders']);
+    } else if (url.startsWith('/buyer')) {
+      this.router.navigate(['/buyer/orders/my-orders']);
+    } else {
+      this.router.navigate(['/']);
     }
   }
 
@@ -84,7 +111,10 @@ export class BuyerTracking implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        if (!silent) this.toastService.errorResponse(err);
+        // Only show error if not silent and not a zero-status (which often happens on page refresh/cancellation)
+        if (!silent && err?.status !== 0) {
+            this.toastService.errorResponse(err);
+        }
         this.loading = false;
         this.cdr.detectChanges();
       }
@@ -149,5 +179,16 @@ export class BuyerTracking implements OnInit {
       const orderIndex = this.statusTimeline.findIndex(s => s.value === orderStatus);
       const targetIndex = this.statusTimeline.findIndex(s => s.value === status);
       return targetIndex <= orderIndex;
+  }
+
+  showContactToast(name: string, phone: string) {
+      if (!phone) return;
+      this.toastService.generalResponse('info', 'Contact Party', `${name}'s number: ${phone}`);
+  }
+
+  redrawMapRoute() {
+      if (this.mapComponent) {
+          this.mapComponent.redrawRoute();
+      }
   }
 }

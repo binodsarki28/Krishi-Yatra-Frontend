@@ -1,55 +1,91 @@
 .tracking-container {
-    background-color: #f8fafc;
-    font-family: 'Inter', sans-serif;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 0;
+    height: calc(100vh - 80px);
+    background: #f8fafc;
+    overflow: hidden;
 }
 
-.status-accent {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
+.map-view {
+    position: relative;
     height: 100%;
 }
 
-.custom-marker {
+.map-view .map-fill {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.map-view ::ng-deep .map-container-wrapper,
+.map-view ::ng-deep .leaflet-map {
+    height: 100% !important;
+    min-height: calc(100vh - 80px) !important;
+    border-radius: 0 !important;
+    border: none !important;
+}
+
+.info-sidebar {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    color: white;
-    font-size: 0.9rem;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    flex-direction: column;
+    padding: 2rem;
+    overflow-y: auto;
+    max-height: calc(100vh - 80px);
+    background: #ffffff;
+    border-left: 1px solid #e2e8f0;
+    box-shadow: -4px 0 15px rgba(0,0,0,0.03);
+    z-index: 5;
 }
 
-.custom-marker:hover {
-    transform: scale(1.1);
+.status-icon-wrap {
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.customized-timeline {
-    padding-left: 0.5rem;
+.status-icon-wrap:hover {
+    transform: scale(1.1) rotate(5deg);
 }
 
-.customized-timeline .p-timeline-event-content {
-    line-height: normal;
+.bg-white:hover {
+    border-color: #3b82f6 !important;
 }
 
-.customized-timeline .p-timeline-event-opposite {
-    display: none;
+/* Custom Scrollbar for Sidebar */
+.info-sidebar::-webkit-scrollbar {
+    width: 6px;
 }
 
-.shadow-2 {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+.info-sidebar::-webkit-scrollbar-track {
+    background: #f1f5f9;
 }
 
-/* Map specific tweaks to ensure it takes space */
-.min-h-30rem {
-    min-height: 30rem;
+.info-sidebar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.info-sidebar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
 }
 
 @media (max-width: 991px) {
-    .min-h-30rem {
-        min-height: 20rem;
+    .tracking-container {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+        height: auto;
+    }
+    
+    .map-view {
+        height: 400px;
+    }
+    
+    .map-view ::ng-deep .leaflet-map {
+        min-height: 400px !important;
+    }
+    
+    .info-sidebar {
+        max-height: none;
+        border-left: none;
+        border-top: 1px solid #e2e8f0;
     }
 }

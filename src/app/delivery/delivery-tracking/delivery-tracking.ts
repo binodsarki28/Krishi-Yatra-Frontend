@@ -237,4 +237,9 @@ export class DeliveryTracking implements OnInit {
         }
     });
   }
+
+  showContactToast(name: string, phone: string) {
+      if (!phone) return;
+      this.toastService.generalResponse('info', 'Contact Party', `${name}: ${phone}`);
+  }
 }

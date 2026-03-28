@@ -1,9 +1,12 @@
 import { inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { tap } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
     const platformId = inject(PLATFORM_ID);
+    const router = inject(Router);
 
     if (isPlatformBrowser(platformId)) {
         const token = localStorage.getItem('token');
@@ -13,7 +16,18 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            return next(cloned);
+            return next(cloned).pipe(
+                tap({
+                    error: (err: any) => {
+                        // If server returns 401 or 403, token is likely expired
+                        if (err instanceof HttpErrorResponse && (err.status === 401 || err.status === 403)) {
+                            // Clear expired session data and redirect to login
+                            localStorage.clear();
+                            router.navigate(['/account/login']);
+                        }
+                    }
+                })
+            );
         }
     }
 

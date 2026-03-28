@@ -25,6 +25,9 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit
   
   @Input() pickupLocation: any = null; // { lat, lng, label }
   @Input() dropLocation: any = null;   // { lat, lng, label }
+  @Input() showHeader: boolean = true;
+  @Input() showTimeline: boolean = true;
+  @Input() mapTitle: string = 'Delivery Route Visualization';
 
   @Output() onLocationSelected = new EventEmitter<{ lat: number, lng: number }>();
   @Output() onDistanceCalculated = new EventEmitter<number>();
@@ -147,6 +150,8 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit
       bounds: bounds,
       noWrap: true
     }).addTo(this.map);
+    
+    L.control.scale({ position: 'bottomright' }).addTo(this.map);
 
     if (this.pendingSearch) {
         this.searchLocation(this.pendingSearch);
@@ -459,19 +464,19 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit
     });
     waypoints.push(L.latLng(this.getNum(this.dropLocation.lat), this.getNum(this.dropLocation.lng)));
 
-    // HIGH VISIBILITY BLUEPRINT LINE (Blue, Solid, then becomes dashed)
-    // This is virtually impossible to miss and works instantly
+    // SUBTLE FALLBACK PATH (Light Grey, Dotted)
+    // Only shows up then is replaced by green road-route when found
     this.fallbackLine = L.polyline(waypoints.map(w => [w.lat, w.lng]), {
-        color: '#3b82f6', 
-        weight: 6, 
-        opacity: 0.7,
-        dashArray: '10, 15'
+        color: '#94a3b8', 
+        weight: 3, 
+        opacity: 0.5,
+        dashArray: '2, 8'
     }).addTo(this.map);
 
     this.distanceInfo = 'Calculating...';
 
     if (!L.Routing) {
-        this.distanceInfo = 'Straight Line Path';
+        this.distanceInfo = 'Straight Path';
         this.cdr.detectChanges();
         return;
     }
@@ -515,7 +520,7 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit
 
         this.routeLine.on('routingerror', (err: any) => {
             console.warn('Routing engine failed, keeping dashed line:', err);
-            this.distanceInfo = 'Route calculated via straight line';
+            this.distanceInfo = 'Straight Path';
             this.cdr.detectChanges();
         });
 
