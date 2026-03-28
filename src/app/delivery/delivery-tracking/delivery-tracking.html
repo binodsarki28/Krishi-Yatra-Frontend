@@ -53,12 +53,12 @@
                         </div>
                         <div>
                             <small class="text-green-600 font-bold uppercase block text-[9px]">Farmer (Pickup)</small>
-                            <span class="font-bold text-gray-800 text-sm">{{order.farmerName || 'Normal User'}}</span>
+                            <span class="font-bold text-gray-800 text-sm">{{order.farmerName || 'Farmer'}}</span>
                         </div>
                     </div>
-                    <div class="flex align-items-center gap-2 text-green-700">
-                        <span class="text-xs font-bold">{{order.farmerPhone}}</span>
-                        <i class="pi pi-phone text-sm opacity-60"></i>
+                    <div class="flex align-items-center gap-2 text-green-700 font-bold">
+                        <span class="text-sm">{{order.farmerPhone}}</span>
+                        <i class="pi pi-phone text-xs opacity-50"></i>
                     </div>
                 </div>
 
@@ -70,14 +70,14 @@
                         </div>
                         <div>
                             <small class="text-blue-600 font-bold uppercase block text-[9px]">Buyer (Drop-off)</small>
-                            <span class="font-bold text-gray-800 text-sm">{{order.buyerName || 'Verified Buyer'}}</span>
+                            <span class="font-bold text-gray-800 text-sm">{{order.buyerName || 'Buyer'}}</span>
                         </div>
                     </div>
-                    <div class="flex align-items-center gap-2 text-blue-700">
-                        <span class="text-xs font-bold">{{order.buyerPhone}}</span>
-                        <i class="pi pi-phone text-sm opacity-60"></i>
+                    <div class="flex align-items-center gap-2 text-blue-700 font-bold">
+                        <span class="text-sm">{{order.buyerPhone}}</span>
+                        <i class="pi pi-phone text-xs opacity-50"></i>
                     </div>
-                 </div>
+                </div>
             </div>
         </div>
 
@@ -189,14 +189,19 @@
     </div>
 </div>
 
-<div class="flex flex-column align-items-center justify-content-center p-8 bg-white h-screen" *ngIf="loading">
+<div class="flex flex-column align-items-center justify-content-center p-8 bg-white h-screen" *ngIf="loading && !order">
     <i class="pi pi-spin pi-spinner text-4xl text-primary mb-4"></i>
     <p class="text-lg text-gray-600 font-medium">Loading delivery route...</p>
 </div>
 
 <div class="flex flex-column align-items-center justify-content-center p-8 bg-white h-screen" *ngIf="!loading && !order">
     <i class="pi pi-exclamation-triangle text-4xl text-orange-500 mb-4"></i>
-    <p class="text-lg text-gray-600">Order not found.</p>
-    <button pButton label="Back to Jobs" icon="pi pi-arrow-left" 
-            class="p-button-outlined mt-3" routerLink="/delivery/jobs/active"></button>
+    <h2 class="m-0 text-xl font-bold text-gray-800">Connection Error</h2>
+    <p class="text-gray-500 text-center mt-2 max-w-20rem">The delivery server could not be reached. We are attempting to reconnect in the background.</p>
+    <div class="flex gap-2 mt-4">
+        <button pButton label="Retry Connection" icon="pi pi-refresh" 
+                class="p-button-info px-4" (click)="loadOrderDetails()"></button>
+        <button pButton label="Back to Jobs" icon="pi pi-arrow-left" 
+                class="p-button-outlined p-button-secondary" routerLink="/delivery/jobs/active"></button>
+    </div>
 </div>

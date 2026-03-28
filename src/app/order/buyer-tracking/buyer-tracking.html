@@ -51,9 +51,9 @@
                             <span class="font-bold text-gray-800 text-sm">{{order.farmerName || 'Farmer'}}</span>
                         </div>
                     </div>
-                    <div class="flex align-items-center gap-2 text-green-700">
-                        <span class="text-xs font-bold">{{order.farmerPhone}}</span>
-                        <i class="pi pi-phone text-sm opacity-60"></i>
+                    <div class="flex align-items-center gap-2 text-green-700 font-bold">
+                        <span class="text-sm">{{order.farmerPhone}}</span>
+                        <i class="pi pi-phone text-xs opacity-50"></i>
                     </div>
                 </div>
 
@@ -68,9 +68,9 @@
                             <span class="font-bold text-gray-800 text-sm">{{order.buyerName || 'Buyer'}}</span>
                         </div>
                     </div>
-                    <div class="flex align-items-center gap-2 text-blue-700">
-                        <span class="text-xs font-bold">{{order.buyerPhone}}</span>
-                        <i class="pi pi-phone text-sm opacity-60"></i>
+                    <div class="flex align-items-center gap-2 text-blue-700 font-bold">
+                        <span class="text-sm">{{order.buyerPhone}}</span>
+                        <i class="pi pi-phone text-xs opacity-50"></i>
                     </div>
                 </div>
 
@@ -85,15 +85,15 @@
                             <span class="font-bold text-gray-800 text-sm">{{order.deliveryName || 'Delivery Rider'}}</span>
                         </div>
                     </div>
-                    <div class="flex align-items-center gap-2 text-orange-700">
-                        <span class="text-xs font-bold">{{order.deliveryPhone}}</span>
-                        <i class="pi pi-phone text-sm opacity-60"></i>
+                    <div class="flex align-items-center gap-2 text-orange-700 font-bold">
+                        <span class="text-sm">{{order.deliveryPhone}}</span>
+                        <i class="pi pi-phone text-xs opacity-50"></i>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Journey Checkpoints (New for Buyer/Farmer) -->
+        <!-- Journey Checkpoints -->
         <div class="bg-white border-1 border-200 border-round-xl p-4 mb-4 shadow-1">
             <h4 class="m-0 mb-3 text-sm text-gray-800 font-bold flex align-items-center gap-2">
                 <i class="pi pi-flag-fill text-orange-500"></i>
@@ -181,14 +181,21 @@
     </div>
 </div>
 
-<div class="flex flex-column align-items-center justify-content-center p-8 bg-white h-screen" *ngIf="loading">
+<!-- Standard Loading State -->
+<div class="flex flex-column align-items-center justify-content-center p-8 bg-white h-screen" *ngIf="loading && !order">
     <i class="pi pi-spin pi-spinner text-4xl text-primary mb-4"></i>
     <p class="text-lg text-gray-600 font-medium">Synchronizing tracking data...</p>
 </div>
 
+<!-- Order Inaccessible / Error State -->
 <div class="flex flex-column align-items-center justify-content-center p-8 bg-white h-screen" *ngIf="!loading && !order">
     <i class="pi pi-exclamation-triangle text-4xl text-orange-500 mb-4"></i>
-    <p class="text-lg text-gray-600">Order inaccessible.</p>
-    <button pButton label="Back to Orders" icon="pi pi-arrow-left" 
-            class="p-button-outlined mt-3" (click)="goBack()"></button>
+    <h2 class="m-0 text-xl font-bold text-gray-800">Tracking Data Unavailable</h2>
+    <p class="text-gray-500 text-center mt-2 max-w-20rem">We couldn't retrieve the tracking details. This may be due to session timeout or temporary network issues.</p>
+    <div class="flex gap-2 mt-4">
+        <button pButton label="Retry Connection" icon="pi pi-refresh" 
+                class="p-button-info px-4" (click)="loadOrderDetails()"></button>
+        <button pButton label="Back to Orders" icon="pi pi-arrow-left" 
+                class="p-button-outlined p-button-secondary" (click)="goBack()"></button>
+    </div>
 </div>

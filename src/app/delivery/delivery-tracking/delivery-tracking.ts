@@ -47,7 +47,7 @@ export class DeliveryTracking implements OnInit {
 
   ngOnInit() {
     this.orderId = this.route.snapshot.paramMap.get('orderId');
-    if (this.orderId) {
+    if (this.orderId && isPlatformBrowser(this.platformId)) {
       this.loadOrderDetails();
     }
   }

@@ -58,12 +58,12 @@ export class BuyerTracking implements OnInit, OnDestroy {
     else if (url.startsWith('/delivery')) this.currentRole = 'DELIVERY';
 
     if (this.orderId) {
-      this.loadOrderDetails();
-      // Auto-refresh every 30 seconds for real-time updates
       if (isPlatformBrowser(this.platformId)) {
-          this.refreshInterval = setInterval(() => {
-              this.loadOrderDetails(true);
-          }, 30000);
+        this.loadOrderDetails();
+        // Auto-refresh every 30 seconds for real-time updates
+        this.refreshInterval = setInterval(() => {
+          this.loadOrderDetails(true);
+        }, 30000);
       }
     }
   }
