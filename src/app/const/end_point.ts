@@ -53,4 +53,28 @@ export class Endpoint {
   public static readonly CATEGORIES: string = Endpoint.API_VERSION + 'stock/categories';
   public static readonly SUB_CATEGORIES: string = Endpoint.API_VERSION + 'stock/subcategories';
 
+  //Address
+  public static readonly ADDRESS_SAVE: string = Endpoint.API_VERSION + 'address/save';
+  public static readonly ADDRESS_ME: string = Endpoint.API_VERSION + 'address/me';
+  public static readonly ADDRESS_DELETE: string = Endpoint.API_VERSION + 'address/delete';
+
+  //Order
+  public static readonly ORDER_CREATE: string = Endpoint.API_VERSION + 'order/create';
+  public static readonly ORDER_PENDING: string = Endpoint.API_VERSION + 'order/pending';
+  public static readonly ORDER_ACCEPT: string = Endpoint.API_VERSION + 'order/delivery/accept/';
+  public static readonly ORDER_ACCEPTED: string = Endpoint.API_VERSION + 'order/linker/accepted';
+  public static readonly ORDER_FARMER_ADDRESS: string = Endpoint.API_VERSION + 'order/farmer-address/';
+  public static readonly ORDER_DETAILS: string = Endpoint.API_VERSION + 'order/detail/';
+  public static readonly ORDER_UPDATE_CHECKPOINTS: string = Endpoint.API_VERSION + 'order/update-checkpoints/';
+  public static readonly ORDER_MARK_AS_DELIVERED: string = Endpoint.API_VERSION + 'order/mark-as-delivered/';
+  public static readonly ORDER_PICKED_UP: string = Endpoint.API_VERSION + 'order/mark-as-picked-up/';
+
+  // Role-specific order lists
+  public static readonly ORDER_BUYER_LIST: string = Endpoint.API_VERSION + 'order/buyer/my-orders';
+  public static readonly ORDER_FARMER_LIST: string = Endpoint.API_VERSION + 'order/farmer/my-orders';
+  public static readonly ORDER_DELIVERY_LIST: string = Endpoint.API_VERSION + 'order/delivery/my-orders';
+  
+  // Global order list (Admin)
+  public static readonly ORDER_LIST: string = Endpoint.API_VERSION + 'order/list';
 }
+

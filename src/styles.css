@@ -2,6 +2,8 @@
 /* Note: PrimeNG 18+ uses a new theming system. We'll set up Aura theme in app.config.ts. */
 @import "primeicons/primeicons.css";
 @import "primeflex/primeflex.css";
+@import "leaflet/dist/leaflet.css";
+@import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 
 /* Global Styles */
 body {

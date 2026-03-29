@@ -10,9 +10,29 @@ export const DELIVERY_ROUTES: Routes = [
         data: { breadcrumb: 'Register as Delivery Partner' }
     },
     {
-        path: 'dashboard',
+        path: '',
         component: DeliveryDashboard,
         canActivate: [deliveryGuard],
-        data: { breadcrumb: 'Delivery Dashboard' }
+        children: [
+            { path: 'dashboard', redirectTo: '', pathMatch: 'full' },
+            {
+                path: 'orders',
+                children: [
+                    { path: 'my-orders', loadComponent: () => import('../order/delivery-orders/delivery-orders').then(m => m.DeliveryOrdersComponent) }
+                ]
+            },
+            {
+                path: 'jobs',
+                children: [
+                    { path: 'available', loadComponent: () => import('./available-jobs/available-jobs').then(m => m.AvailableJobsComponent) },
+                    { path: 'active', loadComponent: () => import('./active-jobs/active-jobs').then(m => m.ActiveJobsComponent) }
+                ]
+            },
+            {
+                path: 'track/:orderId',
+                loadComponent: () => import('./delivery-tracking/delivery-tracking').then(m => m.DeliveryTracking),
+                data: { breadcrumb: 'Delivery Tracking' }
+            }
+        ]
     }
 ];

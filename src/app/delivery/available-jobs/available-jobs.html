@@ -1,0 +1,129 @@
+<div class="fadein animation-duration-300">
+    <!-- Page Header -->
+    <div class="flex align-items-center justify-content-between mb-3">
+        <div class="flex align-items-center gap-3">
+            <div class="flex align-items-center justify-content-center border-round-xl"
+                style="width:36px; height:36px; background: linear-gradient(135deg, #22c55e, #16a34a);">
+                <i class="pi pi-search text-white" style="font-size: 18px;"></i>
+            </div>
+            <div>
+                <h2 class="m-0 text-lg font-bold text-900" style="letter-spacing: -0.3px;">Available Delivery Jobs</h2>
+                <p class="m-0 mt-1 text-xs text-500">Browse and accept pending delivery requests</p>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <p-button icon="pi pi-refresh" label="Refresh" [outlined]="true" [loading]="loading" severity="secondary"
+                size="small" styleClass="border-round-lg" (onClick)="loadPendingOrders()"></p-button>
+        </div>
+    </div>
+
+    @if (loading) {
+        <div class="flex flex-column align-items-center justify-content-center py-8 text-500 gap-3 surface-card border-round-xl border-1 border-200 shadow-1">
+            <i class="pi pi-spin pi-spinner text-4xl text-green-500"></i>
+            <p class="m-0 text-sm">Searching for jobs...</p>
+        </div>
+    } @else if (pendingOrders.length === 0) {
+        <div class="text-center py-8 surface-card border-round-xl border-1 border-200 shadow-1">
+            <i class="pi pi-inbox text-4xl text-200 mb-3"></i>
+            <h3 class="m-0 text-500">No available jobs found.</h3>
+            <p class="text-400">Check back later for new delivery requests.</p>
+        </div>
+    } @else {
+        <div class="grid">
+            <!-- Orders List -->
+            <div class="col-12 lg:col-4">
+                <div class="flex flex-column gap-3 overflow-y-auto pr-2" style="max-height: calc(100vh - 200px);">
+                    @for (order of pendingOrders; track order.orderId) {
+                        <div class="p-3 surface-card border-1 border-200 border-round-xl cursor-pointer transition-all shadow-1 hover:shadow-3"
+                             [class.border-primary]="selectedOrder?.orderId === order.orderId"
+                             [style.border-color]="selectedOrder?.orderId === order.orderId ? '#22c55e' : ''"
+                             (click)="selectOrder(order)">
+                            <div class="flex justify-content-between align-items-center mb-2">
+                                <p-tag [value]="order.productName" severity="success" styleClass="text-xs"></p-tag>
+                                <span class="text-xs font-bold text-500">#{{ order.orderId?.substring(0, 8) }}</span>
+                            </div>
+                            <div class="flex align-items-center gap-2 mb-2">
+                                <i [class]="getVehicleIcon(order.vehicleType) + ' text-blue-600 text-lg'"></i>
+                                <span class="text-sm font-bold text-800">{{ order.vehicleType }}</span>
+                            </div>
+                            <div class="text-xs text-500 mb-1">
+                                <i class="pi pi-map-marker text-red-500 mr-1"></i>
+                                {{ order.pickupAddress?.substring(0, 40) }}...
+                            </div>
+                            <div class="flex justify-content-between align-items-center mt-3 pt-2 border-top-1 border-50">
+                                <span class="text-green-700 font-bold">Rs. {{ order.deliveryFee }}</span>
+                                <span class="text-xs text-400">{{ order.createdAt | date:'shortTime' }}</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Order Detail -->
+            <div class="col-12 lg:col-8">
+                @if (selectedOrder) {
+                    <div class="surface-card border-round-xl shadow-2 overflow-hidden p-4">
+                        <div class="flex justify-content-between align-items-start mb-4">
+                            <div>
+                                <h2 class="m-0 text-2xl font-bold text-900">{{ selectedOrder.productName }}</h2>
+                                <p class="m-0 text-600 text-sm mt-1">Quantity: {{ selectedOrder.orderQuantity }} Units</p>
+                            </div>
+                            <button pButton icon="pi pi-check" label="Accept Delivery Job"
+                                    (click)="acceptOrder()"
+                                    [loading]="accepting"
+                                    class="p-button-success p-button-raised border-round-xl px-4 py-3 text-lg font-bold shadow-3"></button>
+                        </div>
+
+                        <div class="grid">
+                            <div class="col-12 md:col-6">
+                                <label class="block text-xs font-bold text-400 uppercase mb-2">Vehicle Required</label>
+                                <div class="flex align-items-center gap-2 p-2 bg-blue-50 border-round-lg">
+                                    <i class="pi pi-truck text-blue-600"></i>
+                                    <span class="font-bold text-blue-900">{{ selectedOrder.vehicleType }}</span>
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <label class="block text-xs font-bold text-400 uppercase mb-2">Delivery Fee</label>
+                                <div class="flex align-items-center gap-2 p-2 surface-card border-round-lg border-1 border-200">
+                                    <span class="text-2xl font-bold text-green-700">Rs. {{ selectedOrder.deliveryFee }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <label class="block text-xs font-bold text-400 uppercase mb-2">Addresses</label>
+                            <div class="pl-4">
+                                <div class="mb-3">
+                                    <span class="text-xs text-500 font-bold block uppercase">
+                                        <i class="pi pi-circle-fill text-green-500 mr-1" style="font-size: 8px;"></i> Pickup
+                                    </span>
+                                    <p class="m-0 text-sm text-800 font-medium mt-1">{{ selectedOrder.pickupAddress }}</p>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-500 font-bold block uppercase">
+                                        <i class="pi pi-circle-fill text-red-500 mr-1" style="font-size: 8px;"></i> Drop
+                                    </span>
+                                    <p class="m-0 text-sm text-800 font-medium mt-1">{{ selectedOrder.dropAddress }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (selectedOrder.notes) {
+                            <div class="mt-4">
+                                <label class="block text-xs font-bold text-400 uppercase mb-2">Customer Instructions</label>
+                                <div class="p-3 bg-yellow-50 border-round-xl border-left-3 border-yellow-400 text-700 text-sm italic">
+                                    "{{ selectedOrder.notes }}"
+                                </div>
+                            </div>
+                        }
+                    </div>
+                } @else {
+                    <div class="flex flex-column align-items-center justify-content-center h-full surface-card border-round-xl border-1 border-dashed border-300 text-400 p-8">
+                        <i class="pi pi-mouse-pointer text-4xl mb-3"></i>
+                        <p class="m-0 font-bold">Select an order from the list to view details</p>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

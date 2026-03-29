@@ -1,0 +1,71 @@
+.tracking-container {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 0;
+    min-height: calc(100vh - 80px);
+}
+
+.map-view {
+    position: relative;
+    min-height: 500px;
+}
+
+.map-view app-map {
+    display: block;
+    height: 100%;
+}
+
+.map-view ::ng-deep .map-container-wrapper {
+    height: 100% !important;
+    border-radius: 0 !important;
+}
+
+.map-view ::ng-deep .leaflet-map {
+    height: 100% !important;
+    min-height: calc(100vh - 80px) !important;
+}
+
+.info-sidebar {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    overflow-y: auto;
+    max-height: calc(100vh - 80px);
+    background: #f8fafc;
+    border-left: 1px solid #e2e8f0;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #1e293b;
+}
+
+@media (max-width: 768px) {
+    .tracking-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .map-view {
+        min-height: 300px;
+        max-height: 400px;
+    }
+    
+    .map-view ::ng-deep .leaflet-map {
+        min-height: 300px !important;
+    }
+    
+    .info-sidebar {
+        max-height: none;
+        border-left: none;
+        border-top: 1px solid #e2e8f0;
+    }
+}

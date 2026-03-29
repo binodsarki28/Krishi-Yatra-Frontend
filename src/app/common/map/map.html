@@ -1,0 +1,91 @@
+<div class="map-container-wrapper relative w-full border-round-xl overflow-hidden shadow-2 bg-white h-full flex flex-column">
+    <!-- Map Header (Optional) -->
+    <div *ngIf="showHeader" class="map-overlay-header flex justify-content-between align-items-center p-3 border-bottom-1 border-100 bg-white">
+        <div class="flex align-items-center gap-2">
+            <i class="pi pi-map text-primary"></i>
+            <span class="font-bold text-700 text-sm uppercase tracking-tight">{{mapTitle}}</span>
+        </div>
+        <div class="flex gap-2">
+            <button *ngIf="drawRoute" pButton icon="pi pi-directions" 
+                    pTooltip="Timeline"
+                    class="p-button-text p-button-sm p-button-secondary border-1 border-200" 
+                    (click)="toggleDirections()">
+            </button>
+            <button pButton icon="pi pi-compass" 
+                    pTooltip="Reset View"
+                    class="p-button-text p-button-sm p-button-secondary border-1 border-200" 
+                    (click)="fitBounds()">
+            </button>
+            <button *ngIf="drawRoute && pickupLocation && dropLocation" pButton icon="pi pi-refresh" 
+                    label="Redraw"
+                    class="p-button-sm p-button-info shadow-2 ml-2" 
+                    (click)="redrawRoute()">
+            </button>
+        </div>
+    </div>
+
+    <!-- Map View -->
+    <div class="map-view-container relative w-full flex-grow-1" style="min-height: 500px;">
+        <div [id]="mapId" class="leaflet-map w-full h-full" style="min-height: 500px;"></div>
+        
+        <!-- Legend Overlay (Bottom Left) -->
+        <div class="absolute bottom-0 left-0 m-3 z-1000 bg-white-alpha-90 p-2 border-round shadow-2 pointer-events-none border-1 border-100">
+            <div class="flex align-items-center gap-3 mb-2">
+                <div class="w-1rem h-0.5rem bg-green-500 border-round"></div>
+                <span class="text-xs font-bold text-700">Calculated Route</span>
+            </div>
+            <div class="flex align-items-center gap-3 mb-1">
+                <div class="w-1rem h-1rem border-circle bg-green-500 flex align-items-center justify-content-center">
+                    <div class="w-4px h-4px bg-white border-circle"></div>
+                </div>
+                <span class="text-xs font-bold text-700">PICKUP</span>
+            </div>
+            <div class="flex align-items-center gap-3">
+                <div class="w-1rem h-1rem border-circle bg-red-500 flex align-items-center justify-content-center">
+                    <div class="w-4px h-4px bg-white border-circle"></div>
+                </div>
+                <span class="text-xs font-bold text-700">DROP</span>
+            </div>
+        </div>
+
+        <!-- Distance Badge Overlay (Top Right) -->
+        <div *ngIf="distanceInfo" class="distance-badge-overlay absolute top-0 right-0 m-3 z-1000 flex gap-2">
+            <!-- If we have a KM value -->
+            <p-tag *ngIf="distanceInfo.includes('km')" [value]="distanceInfo" severity="success" styleClass="shadow-4 px-3 py-2 text-sm border-round-lg font-bold"></p-tag>
+            <!-- If its a fallback message -->
+            <p-tag *ngIf="!distanceInfo.includes('km') && distanceInfo !== 'Calculating...'" [value]="distanceInfo" severity="warn" styleClass="shadow-4 px-3 py-2 text-xs border-round-lg"></p-tag>
+            <!-- Loading state -->
+            <p-tag *ngIf="distanceInfo === 'Calculating...'" icon="pi pi-spin pi-spinner" [value]="distanceInfo" severity="info" styleClass="shadow-4 px-3 py-2 text-xs border-round-lg"></p-tag>
+        </div>
+    </div>
+
+    <!-- Timeline (Optional) -->
+    <div *ngIf="drawRoute && showTimeline" class="p-3 bg-white border-top-1 border-100">
+        <div class="flex align-items-center gap-2 mb-3">
+            <i class="pi pi-flag-fill text-primary"></i>
+            <span class="text-sm font-bold text-700 uppercase tracking-tight">Timeline & Milestones</span>
+        </div>
+
+        <div class="route-timeline flex flex-column gap-3 pl-2">
+            <div class="flex gap-3">
+                <div class="flex flex-column align-items-center">
+                    <div class="w-1rem h-1rem border-circle bg-green-500 shadow-2"></div>
+                    <div class="w-2px h-full bg-200 mt-1"></div>
+                </div>
+                <div class="flex flex-column pb-2">
+                    <span class="text-xs text-500 font-bold">START</span>
+                    <span class="text-sm font-medium text-700">{{ pickupLocation?.label || 'Farmer Address' }}</span>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <div class="flex flex-column align-items-center">
+                    <div class="w-1rem h-1rem border-circle bg-red-500 shadow-2"></div>
+                </div>
+                <div class="flex flex-column">
+                    <span class="text-xs text-500 font-bold">FINAL DROP</span>
+                    <span class="text-sm font-medium text-700">{{ dropLocation?.label || 'Delivery Address' }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

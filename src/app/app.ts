@@ -39,6 +39,10 @@ export class AppComponent {
           if (!history.state || !history.state.isTrap) {
             history.pushState({ isTrap: true }, '', url);
           }
+        } else if (this.navigationService.isExiting) {
+          // User intentionally left the dashboard (e.g. Back to Profile)
+          this.navigationService.lastDashboardPath = null;
+          this.navigationService.isExiting = false;
         }
       }
     });
@@ -67,15 +71,16 @@ export class AppComponent {
     const isDashboard = isAdmin || ['/farmer', '/buyer', '/delivery'].some(path => url.startsWith(path));
     const isAuth = ['/account', '/register'].some(path => url.startsWith(path));
 
-    // Basic visibility
+    // Basic visibility — hide navbar & footer on dashboards + auth pages
     this.showNavbar = !isDashboard && !isAuth;
     this.showFooter = !isDashboard && !isAuth;
 
-    // Marketplace & Profile overrides (NEVER show on admin or other dashboards)
-    const isOtherDashboard = ['/farmer', '/buyer', '/delivery'].some(path => url.startsWith(path));
-    if (!isAdmin && !isOtherDashboard && (url.includes('/stocks') || url.includes('/stock-detail') || url.includes('/profile'))) {
-      this.showNavbar = true;
-      this.showFooter = false;
+    // Non-dashboard overrides: show navbar on stock/profile/order pages that are NOT inside dashboards
+    if (!isDashboard && !isAuth && !isAdmin) {
+      if (url.includes('/stocks') || url.includes('/stock-detail') || url.includes('/profile') || url.includes('/order')) {
+        this.showNavbar = true;
+        this.showFooter = false;
+      }
     }
   }
 }

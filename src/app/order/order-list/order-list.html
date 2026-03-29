@@ -1,0 +1,150 @@
+<div class="fadein animation-duration-300">
+    <!-- Page Header -->
+    <div class="flex align-items-center justify-content-between mb-3">
+        <div class="flex align-items-center gap-3">
+            <div class="flex align-items-center justify-content-center border-round-xl"
+                [style.background]="getGradient()" style="width:36px; height:36px;">
+                <i class="pi pi-shopping-bag text-white" style="font-size: 18px;"></i>
+            </div>
+            <div>
+                <h2 class="m-0 text-lg font-bold text-900" style="letter-spacing: -0.3px;">My Orders</h2>
+                <p class="m-0 mt-1 text-xs text-500">View and track your orders as {{ getRoleLabel() }}</p>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <p-button icon="pi pi-refresh" label="Refresh" [outlined]="true" [loading]="loading" severity="secondary"
+                size="small" styleClass="border-round-lg" (onClick)="loadOrders()"></p-button>
+        </div>
+    </div>
+
+    <!-- Loading -->
+    @if (loading) {
+        <div class="flex flex-column align-items-center justify-content-center py-8 text-500 gap-3 surface-card border-round-xl border-1 border-200 shadow-1">
+            <i class="pi pi-spin pi-spinner text-4xl text-green-500"></i>
+            <p class="m-0 text-sm">Loading orders...</p>
+        </div>
+    }
+
+    <!-- Filters Bar -->
+    <div class="surface-card border-round-xl border-1 border-200 shadow-1 p-3 mb-4 flex flex-column md:flex-row align-items-center justify-content-between gap-3">
+        <div class="flex flex-grow-1 w-full md:w-auto gap-2">
+            <div class="flex align-items-center bg-white border-round-lg border-1 surface-border px-3 w-full md:w-20rem focus-within:border-primary transition-colors">
+                <i class="pi pi-search text-400 mr-2"></i>
+                <input type="text" pInputText [(ngModel)]="searchText" 
+                    placeholder="Search by ID or Product..." 
+                    class="flex-1 border-none shadow-none p-inputtext-sm focus:ring-0 py-2"
+                    (input)="onFilterChange()" style="outline: none; background: transparent;" />
+            </div>
+            <p-select [options]="statusOptions" [(ngModel)]="selectedStatus" 
+                styleClass="w-12rem border-round-lg p-select-sm" placeholder="Filter Status"
+                (onChange)="onFilterChange()"></p-select>
+        </div>
+        <div class="flex gap-2 text-500 text-xs font-medium bg-gray-50 p-2 border-round-lg">
+            <span>{{ orders.length }} Orders Found</span>
+        </div>
+    </div>
+
+    <!-- Table -->
+    @if (!loading) {
+        <div class="surface-card border-round-xl border-1 border-200 shadow-1 overflow-hidden">
+            <p-table [value]="orders" [loading]="loading" responsiveLayout="scroll" 
+                styleClass="p-datatable-sm p-datatable-striped" [rowHover]="true"
+                [scrollable]="true" scrollHeight="calc(100vh - 350px)">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width: 8rem">Order ID</th>
+                        <th style="min-width: 10rem">Product</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                        <th>Delivery Fee</th>
+                        <th>Status</th>
+                        <th style="min-width: 8rem">Date</th>
+                        @if (role !== 'BUYER') {
+                            <th>Buyer</th>
+                        }
+                        @if (role !== 'FARMER') {
+                            <th>Farmer</th>
+                        }
+                        @if (role !== 'DELIVERY') {
+                            <th>Linker</th>
+                        }
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-order>
+                    <tr>
+                        <td>
+                            <span class="text-xs font-mono font-bold text-500">#{{ order.orderId?.substring(0, 8) }}</span>
+                        </td>
+                        <td>
+                            <div class="font-semibold text-900">{{ order.productName }}</div>
+                            <div class="text-xs text-500">{{ order.stockSlug }}</div>
+                        </td>
+                        <td class="text-sm font-medium">{{ order.orderQuantity }} Units</td>
+                        <td class="text-sm">Rs. {{ order.perUnitPrice }}</td>
+                        <td class="text-sm font-bold text-green-700">Rs. {{ order.totalPrice }}</td>
+                        <td class="text-sm">Rs. {{ order.deliveryFee }}</td>
+                        <td>
+                            <p-tag [value]="getStatusLabel(order.orderStatus)" 
+                                [severity]="getStatusSeverity(order.orderStatus)" [rounded]="true" size="small"></p-tag>
+                        </td>
+                        <td class="text-xs text-500">{{ order.createdAt | date:'medium' }}</td>
+                        @if (role !== 'BUYER') {
+                            <td>
+                                <div class="text-sm font-medium">{{ order.buyerName || 'N/A' }}</div>
+                                <div class="text-xs text-500">{{ order.buyerPhone || '' }}</div>
+                            </td>
+                        }
+                        @if (role !== 'FARMER') {
+                            <td>
+                                <div class="text-sm font-medium">{{ order.farmerName || 'N/A' }}</div>
+                                <div class="text-xs text-500">{{ order.farmerPhone || '' }}</div>
+                            </td>
+                        }
+                        @if (role !== 'DELIVERY') {
+                            <td>
+                                <div class="text-sm font-medium">{{ order.deliveryName || 'Not Assigned' }}</div>
+                                <div class="text-xs text-500">{{ order.deliveryPhone || '' }}</div>
+                            </td>
+                        }
+                        <td>
+                            <div class="flex gap-2">
+                                @if ((role === 'BUYER' || role === 'FARMER') && order.orderStatus !== 'DELIVERED' && order.orderStatus !== 'CANCELLED' && order.orderStatus !== 'REJECTED') {
+                                    <p-button icon="pi pi-map-marker" label="Track" severity="info" [outlined]="true" size="small"
+                                        [routerLink]="[role === 'BUYER' ? '/buyer/orders/track' : '/farmer/orders/track', order.orderId]" pTooltip="Real-time Tracking"></p-button>
+                                }
+                                @if (role === 'DELIVERY' && (order.orderStatus === 'ACCEPTED' || order.orderStatus === 'SHIPPING')) {
+                                    <p-button icon="pi pi-directions" label="Manage" severity="warn" [outlined]="true" size="small"
+                                        [routerLink]="['/delivery/track', order.orderId]" pTooltip="Manage Job"></p-button>
+                                }
+                                <p-button icon="pi pi-eye" [outlined]="true" severity="secondary" size="small" 
+                                    pTooltip="View Details" (onClick)="viewStockDetail(order.stockSlug)"></p-button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="10" class="text-center p-5 text-500">
+                            <i class="pi pi-inbox mb-2" style="font-size: 2rem;"></i>
+                            <div class="text-lg text-900 font-bold">No Orders Found</div>
+                            <div class="text-sm">You don't have any orders yet.</div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <!-- Pagination -->
+            <div class="flex justify-content-between align-items-center p-3 border-top-1 border-200 surface-50">
+                <span class="text-sm text-600 font-medium">Page {{ page + 1 }}</span>
+                <div class="flex gap-2">
+                    <p-button icon="pi pi-chevron-left" label="Previous" [outlined]="true" severity="secondary" size="small"
+                        [disabled]="page === 0" (onClick)="prevPage()" styleClass="border-round-lg"></p-button>
+                    <p-button icon="pi pi-chevron-right" iconPos="right" label="Next" [outlined]="true" severity="secondary"
+                        size="small" [disabled]="!hasMore" (onClick)="nextPage()" styleClass="border-round-lg"></p-button>
+                </div>
+            </div>
+        </div>
+    }
+</div>

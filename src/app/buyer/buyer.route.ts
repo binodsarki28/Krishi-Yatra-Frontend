@@ -10,9 +10,18 @@ export const BUYER_ROUTES: Routes = [
         data: { breadcrumb: 'Register as Buyer' }
     },
     {
-        path: 'dashboard',
+        path: '',
         component: BuyerDashboard,
         canActivate: [buyerGuard],
-        data: { breadcrumb: 'Buyer Dashboard' }
+        children: [
+            { path: 'dashboard', redirectTo: '', pathMatch: 'full' },
+            {
+                path: 'orders',
+                children: [
+                    { path: 'my-orders', loadComponent: () => import('../order/buyer-orders/buyer-orders').then(m => m.BuyerOrdersComponent) },
+                    { path: 'track/:orderId', loadComponent: () => import('../order/buyer-tracking/buyer-tracking').then(m => m.BuyerTracking) }
+                ]
+            }
+        ]
     }
 ];

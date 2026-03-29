@@ -1,0 +1,54 @@
+/* ═════════ Delivery Dashboard — Minimal CSS (PrimeFlex handles layout) ═════════ */
+
+/* Nav items hover & active */
+.nav-item:hover,
+.nav-group-header:hover {
+    background: var(--surface-hover);
+}
+
+.nav-item.active-nav,
+.nav-sub-item.active-nav {
+    background: #fffbeb;
+    color: #d97706 !important;
+    font-weight: 600;
+}
+
+.nav-sub-item:hover {
+    background: var(--surface-hover);
+    color: var(--text-color);
+}
+
+.nav-group-header {
+    font-family: inherit;
+    transition: background 0.2s ease;
+}
+
+/* Quick action card hover slide */
+.quick-card:hover {
+    transform: translateX(4px);
+}
+
+.quick-card:hover .pi-arrow-right {
+    color: var(--text-color-secondary) !important;
+    transform: translateX(2px);
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    aside {
+        width: 240px !important;
+    }
+}

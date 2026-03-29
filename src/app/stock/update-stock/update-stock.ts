@@ -191,7 +191,7 @@ export class UpdateStockComponent implements OnInit {
     }
 
     const formData = new FormData();
-    const stockData = this.stockForm.value;
+    const stockData = this.stockForm.getRawValue();
     
     // Send stock data as a JSON blob
     formData.append('stockData', new Blob([JSON.stringify(stockData)], { type: 'application/json' }));
@@ -205,20 +205,17 @@ export class UpdateStockComponent implements OnInit {
     });
 
     console.log('Frontend: Total files in FormData:', this.selectedFiles.length);
-    if (confirm(`You have selected ${this.selectedFiles.length} photos. Are you sure you want to upload them?`)) {
-      this.submitting = true;
-      this.stockService.updateStock(formData).subscribe({
-        next: (response) => {
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Stock updated successfully' });
-          setTimeout(() => this.router.navigate(['/farmer/stocks']), 1500);
-        },
-        error: (err) => {
-          this.submitting = false;
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update stock' });
-        }
-      });
-    } else {
-      this.submitting = false;
-    }
+    
+    this.submitting = true;
+    this.stockService.updateStock(formData).subscribe({
+      next: (response) => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Stock updated successfully' });
+        setTimeout(() => this.router.navigate(['/farmer/stocks']), 1500);
+      },
+      error: (err) => {
+        this.submitting = false;
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update stock' });
+      }
+    });
   }
 }

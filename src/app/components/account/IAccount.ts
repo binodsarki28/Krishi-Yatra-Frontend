@@ -9,6 +9,7 @@
 
 /** Matches: com.krishiYatra.krishiYatra.common.enums.RoleType */
 export enum RoleType {
+    USER = 'USER',
     FARMER = 'FARMER',
     BUYER = 'BUYER',
     DELIVERY = 'DELIVERY',

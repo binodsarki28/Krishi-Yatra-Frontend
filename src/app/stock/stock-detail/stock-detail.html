@@ -94,7 +94,8 @@
 
                         <div class="flex gap-3">
                             <button pButton label="Order Now" icon="pi pi-shopping-bag" 
-                                class="p-button-success flex-1 p-3 border-round-xl"></button>
+                                class="p-button-success flex-1 p-3 border-round-xl"
+                                [routerLink]="['/order/create', stock.stockSlug]"></button>
                             <button pButton icon="pi pi-comments" 
                                 class="p-button-outlined p-button-secondary p-3 border-round-xl" pTooltip="Contact"></button>
                         </div>

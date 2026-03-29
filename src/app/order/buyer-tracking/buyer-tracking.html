@@ -1,0 +1,201 @@
+<div class="tracking-container" *ngIf="!loading && order">
+    <!-- Left: Map Overview with Integrated Header -->
+    <div class="map-view h-full">
+        @if (pickupLoc && dropLoc) {
+            <app-map 
+                [pickupLocation]="pickupLoc" 
+                [dropLocation]="dropLoc" 
+                [pickerMode]="false"
+                [drawRoute]="true"
+                [interactive]="false"
+                [showHeader]="true"
+                [showTimeline]="false"
+                [initialCheckpoints]="order.checkpoints"
+                mapTitle="Order Tracking: #{{orderId}}"
+                class="map-fill h-full">
+            </app-map>
+        } @else {
+            <div class="flex flex-column align-items-center justify-content-center h-full bg-gray-50 border-round-xl shadow-2" style="min-height: 500px;">
+                <i class="pi pi-spin pi-spinner text-4xl text-primary mb-3"></i>
+                <span class="text-gray-500 font-medium">Resolving route coordinates...</span>
+            </div>
+        }
+    </div>
+
+    <!-- Right: Tracking Info and Milestones (Scrollable) -->
+    <div class="info-sidebar">
+        <!-- Floating Back Button (Top) -->
+        <div class="flex align-items-center justify-content-between mb-4">
+            <button pButton pRipple icon="pi pi-arrow-left" label="Back to Orders" 
+                    class="p-button-text p-button-sm p-button-secondary font-bold" 
+                    (click)="goBack()">
+            </button>
+            <p-tag [value]="order?.orderStatus" [severity]="getStatusSeverity(order?.orderStatus)" class="shadow-1"></p-tag>
+        </div>
+
+        <!-- Party Information -->
+        <div class="bg-white border-1 border-200 border-round-xl px-4 py-3 mb-4 shadow-1">
+            <h4 class="m-0 mb-3 text-sm text-gray-800 font-bold flex align-items-center gap-2">
+                <i class="pi pi-users text-primary"></i>
+                <span>Contact Details</span>
+            </h4>
+            <div class="flex flex-column gap-3">
+                <!-- Farmer Contact -->
+                <div *ngIf="currentRole !== 'FARMER' && order?.farmerPhone" class="flex align-items-center justify-content-between p-3 border-round-lg bg-green-50 border-1 border-green-100">
+                    <div class="flex align-items-center gap-3">
+                        <div class="flex align-items-center justify-content-center border-round bg-green-100 text-green-700" style="width:36px; height:36px;">
+                            <i class="pi pi-home"></i>
+                        </div>
+                        <div>
+                            <small class="text-green-600 font-bold uppercase block text-[9px]">Farmer (Pickup)</small>
+                            <span class="font-bold text-gray-800 text-sm">{{order.farmerName || 'Farmer'}}</span>
+                        </div>
+                    </div>
+                    <div class="flex align-items-center gap-2 text-green-700 font-bold">
+                        <span class="text-sm">{{order.farmerPhone}}</span>
+                        <i class="pi pi-phone text-xs opacity-50"></i>
+                    </div>
+                </div>
+
+                <!-- Buyer Contact -->
+                <div *ngIf="currentRole !== 'BUYER' && order?.buyerPhone" class="flex align-items-center justify-content-between p-3 border-round-lg bg-blue-50 border-1 border-blue-100">
+                    <div class="flex align-items-center gap-3">
+                        <div class="flex align-items-center justify-content-center border-round bg-blue-100 text-blue-700" style="width:36px; height:36px;">
+                            <i class="pi pi-user"></i>
+                        </div>
+                        <div>
+                            <small class="text-blue-600 font-bold uppercase block text-[9px]">Buyer (Drop-off)</small>
+                            <span class="font-bold text-gray-800 text-sm">{{order.buyerName || 'Buyer'}}</span>
+                        </div>
+                    </div>
+                    <div class="flex align-items-center gap-2 text-blue-700 font-bold">
+                        <span class="text-sm">{{order.buyerPhone}}</span>
+                        <i class="pi pi-phone text-xs opacity-50"></i>
+                    </div>
+                </div>
+
+                <!-- Rider Contact -->
+                <div *ngIf="currentRole !== 'DELIVERY' && order?.deliveryPhone" class="flex align-items-center justify-content-between p-3 border-round-lg bg-orange-50 border-1 border-orange-100">
+                    <div class="flex align-items-center gap-3">
+                        <div class="flex align-items-center justify-content-center border-round bg-orange-100 text-orange-700" style="width:36px; height:36px;">
+                            <i class="pi pi-truck"></i>
+                        </div>
+                        <div>
+                            <small class="text-orange-600 font-bold uppercase block text-[9px]">Rider (Verified)</small>
+                            <span class="font-bold text-gray-800 text-sm">{{order.deliveryName || 'Delivery Rider'}}</span>
+                        </div>
+                    </div>
+                    <div class="flex align-items-center gap-2 text-orange-700 font-bold">
+                        <span class="text-sm">{{order.deliveryPhone}}</span>
+                        <i class="pi pi-phone text-xs opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Journey Checkpoints -->
+        <div class="bg-white border-1 border-200 border-round-xl p-4 mb-4 shadow-1">
+            <h4 class="m-0 mb-3 text-sm text-gray-800 font-bold flex align-items-center gap-2">
+                <i class="pi pi-flag-fill text-orange-500"></i>
+                <span>Journey Status & Milestones</span>
+            </h4>
+            <div class="flex flex-column gap-2">
+                @for (cp of checkpointList; track $index) {
+                    <div class="flex align-items-center justify-content-between p-3 border-round-lg"
+                         [class.bg-green-50]="cp.checked"
+                         [class.bg-gray-50]="!cp.checked"
+                         [class.border-1]="true"
+                         [class.border-green-200]="cp.checked"
+                         [class.border-200]="!cp.checked">
+                        <div class="flex align-items-center gap-3">
+                            <i class="pi" [ngClass]="cp.checked ? 'pi-check-circle text-green-600' : 'pi-circle text-gray-300'"></i>
+                            <span class="text-sm font-medium" 
+                                  [class.text-green-800]="cp.checked"
+                                  [class.text-gray-700]="!cp.checked">
+                                {{cp.label}}
+                            </span>
+                        </div>
+                        <p-tag *ngIf="cp.checked" value="✓ Passed" severity="success" styleClass="text-[10px] px-2 py-1"></p-tag>
+                    </div>
+                }
+
+                @if (checkpointList.length === 0) {
+                    <div class="text-center py-2 text-gray-400">
+                        <small>No specific milestones defined for this route.</small>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Order Summary Detail -->
+        <div class="bg-white border-1 border-200 border-round-xl p-4 mb-4 shadow-1">
+            <h4 class="m-0 mb-3 text-sm text-gray-800 font-bold">Order Details</h4>
+            <div class="flex flex-column gap-2">
+                <div class="flex justify-content-between">
+                    <span class="text-gray-500 text-[10px] uppercase font-bold">Product</span>
+                    <span class="font-bold text-gray-800 text-sm">{{order.productName}}</span>
+                </div>
+                <div class="flex justify-content-between">
+                    <span class="text-gray-500 text-[10px] uppercase font-bold">Quantity</span>
+                    <span class="font-bold text-gray-800 text-sm">{{order.orderQuantity}} units</span>
+                </div>
+                <div class="flex justify-content-between">
+                    <span class="text-gray-500 text-[10px] uppercase font-bold">Unit Price</span>
+                    <span class="font-bold text-gray-800 text-sm">Rs. {{order.perUnitPrice}}</span>
+                </div>
+                <div class="flex justify-content-between">
+                    <span class="text-gray-500 text-[10px] uppercase font-bold">Delivery Fee</span>
+                    <span class="font-bold text-gray-800 text-sm">Rs. {{order.deliveryFee}}</span>
+                </div>
+                <hr class="border-100 w-full my-1">
+                <div class="flex justify-content-between mt-1">
+                    <span class="font-bold text-gray-900">Grand Total</span>
+                    <span class="font-bold text-primary text-xl">Rs. {{order.totalPrice}}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Addresses -->
+        <div class="bg-white border-1 border-200 border-round-xl p-4 shadow-1">
+            <div class="flex flex-column gap-3">
+                <div class="flex align-items-start gap-3">
+                    <div class="flex flex-column align-items-center">
+                        <div class="w-1rem h-0.5rem bg-green-500 border-round mb-1"></div>
+                        <div class="w-1px h-2rem bg-200"></div>
+                    </div>
+                    <div>
+                        <small class="text-gray-400 font-bold uppercase text-[9px]">Pickup Source</small>
+                        <p class="m-0 text-xs text-gray-800 font-medium">{{order.pickupAddress}}</p>
+                    </div>
+                </div>
+                <div class="flex align-items-start gap-3">
+                    <div class="w-1rem h-0.5rem bg-red-500 border-round"></div>
+                    <div>
+                        <small class="text-gray-400 font-bold uppercase text-[9px]">Delivery Point</small>
+                        <p class="m-0 text-xs text-gray-800 font-medium">{{order.dropAddress}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Standard Loading State -->
+<div class="flex flex-column align-items-center justify-content-center p-8 bg-white h-screen" *ngIf="loading && !order">
+    <i class="pi pi-spin pi-spinner text-4xl text-primary mb-4"></i>
+    <p class="text-lg text-gray-600 font-medium">Synchronizing tracking data...</p>
+</div>
+
+<!-- Order Inaccessible / Error State -->
+<div class="flex flex-column align-items-center justify-content-center p-8 bg-white h-screen" *ngIf="!loading && !order">
+    <i class="pi pi-exclamation-triangle text-4xl text-orange-500 mb-4"></i>
+    <h2 class="m-0 text-xl font-bold text-gray-800">Tracking Data Unavailable</h2>
+    <p class="text-gray-500 text-center mt-2 max-w-20rem">We couldn't retrieve the tracking details. This may be due to session timeout or temporary network issues.</p>
+    <div class="flex gap-2 mt-4">
+        <button pButton label="Retry Connection" icon="pi pi-refresh" 
+                class="p-button-info px-4" (click)="loadOrderDetails()"></button>
+        <button pButton label="Back to Orders" icon="pi pi-arrow-left" 
+                class="p-button-outlined p-button-secondary" (click)="goBack()"></button>
+    </div>
+</div>

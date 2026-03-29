@@ -32,6 +32,11 @@ export class ToastService {
     const status = isHttpError ? err.status : null;
 
     if (status === 0) {
+      if (isPlatformBrowser(this.platformId) && (window as any).performance.navigation.type === 1) {
+          // If this is a page reload, maybe ignore status 0 errors as they might be cancelled requests
+          this.errorToastShown = false;
+          return;
+      }
       message = 'Server unreachable!';
     }
     else if (status === 401) {
@@ -46,6 +51,9 @@ export class ToastService {
     }
     else if (isHttpError && (status === 400 || status === 409)) {
       message = err.error?.message || 'Invalid input or record already exists!';
+    }
+    else if (isHttpError && err.error?.message === 'Validation Failed' && err.error?.response) {
+      message = Object.values(err.error.response)[0] as string;
     }
     else if (isHttpError && err.error?.message) {
       message = err.error.message;

@@ -1,0 +1,83 @@
+:host {
+    display: block;
+}
+
+.order-page-container {
+    min-height: calc(100vh - 5rem);
+}
+
+.order-map {
+    height: 420px;
+    width: 100%;
+    z-index: 1;
+}
+
+.map-card {
+    transition: box-shadow 0.3s ease;
+}
+
+.map-card:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+}
+
+.pickup-dot {
+    background: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+}
+
+.drop-dot {
+    background: #dc2626;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+}
+
+.product-thumb {
+    width: 70px;
+    height: 70px;
+}
+
+.price-summary-card {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+    border: 1px solid #bbf7d0;
+}
+
+.price-divider {
+    height: 1px;
+    background: #bbf7d0;
+}
+
+/* Leaflet popup override */
+:host ::ng-deep .leaflet-popup-content-wrapper {
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+:host ::ng-deep .leaflet-popup-content {
+    margin: 10px 14px;
+    font-family: inherit;
+    font-size: 13px;
+}
+
+/* Map controls styling */
+:host ::ng-deep .leaflet-control-zoom a {
+    border-radius: 8px !important;
+}
+
+:host ::ng-deep .leaflet-control-zoom {
+    border-radius: 10px !important;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+@media (max-width: 768px) {
+    .order-map {
+        height: 300px;
+    }
+}

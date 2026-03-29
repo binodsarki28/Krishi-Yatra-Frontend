@@ -206,7 +206,6 @@ export class StockListComponent implements OnInit {
   }
 
   orderNow(stock: IStockListResponse) {
-    this.toastService.generalResponse('info', 'Information', 'Ordering feature coming soon!');
-    // Redirect to order page or open dialog
+    this.router.navigate(['/order/create', stock.stockSlug]);
   }
 }
