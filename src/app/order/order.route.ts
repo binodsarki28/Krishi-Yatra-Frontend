@@ -6,5 +6,10 @@ export const ORDER_ROUTES: Routes = [
         path: 'create/:slug',
         component: CreateOrder,
         data: { breadcrumb: 'Place Order' }
+    },
+    {
+        path: 'track/:orderId',
+        loadComponent: () => import('./buyer-tracking/buyer-tracking').then(m => m.BuyerTracking),
+        data: { breadcrumb: 'Tracking' }
     }
 ];

@@ -24,6 +24,13 @@ export const routes: Routes = [
         data: { breadcrumb: 'Stock Details' }
     },
     {
+        path: 'demands',
+        loadComponent: () =>
+            import('./demand/demand-list/demand-list').then((m) => m.DemandListComponent),
+        canActivate: [userGuard],
+        data: { breadcrumb: 'Market Demands' }
+    },
+    {
         path: 'order',
         loadChildren: () =>
             import('./order/order.route').then((o) => o.ORDER_ROUTES),

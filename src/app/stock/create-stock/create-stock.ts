@@ -15,7 +15,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { StockService } from '../stock.service';
 import { AddressService } from '../../address/address.service';
 import { ICategoryResponse, ISubCategoryResponse } from '../IStock';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { FileUploadModule } from 'primeng/fileupload';
@@ -57,6 +57,7 @@ export class CreateStockComponent implements OnInit {
   
   hasAddress: boolean = false;
   loadingAddress: boolean = true;
+  demandId: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -64,6 +65,7 @@ export class CreateStockComponent implements OnInit {
     private addressService: AddressService,
     private messageService: MessageService,
     private router: Router,
+    private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
     private sanitizer: DomSanitizer
   ) {
@@ -74,6 +76,25 @@ export class CreateStockComponent implements OnInit {
     this.checkAddress();
     this.loadCategories();
     this.loadSubCategories();
+    this.checkQueryParams();
+  }
+
+  checkQueryParams() {
+    this.route.queryParams.subscribe(params => {
+        if (params['category']) {
+            this.stockForm.patchValue({ categoryId: params['category'] });
+            this.onCategoryChange();
+        }
+        if (params['subCategory']) {
+            setTimeout(() => {
+                this.stockForm.patchValue({ subCategoryId: params['subCategory'] });
+                this.cdr.detectChanges();
+            }, 500); // give time for subcategories to load and filter
+        }
+        if (params['demandId']) {
+            this.demandId = params['demandId'];
+        }
+    });
   }
 
   checkAddress() {
@@ -176,7 +197,10 @@ export class CreateStockComponent implements OnInit {
     }
 
     const formData = new FormData();
-    const stockData = this.stockForm.getRawValue(); // Ensure disabled controls (like subCategoryId) are included
+    const stockData: any = this.stockForm.getRawValue(); // Ensure disabled controls (like subCategoryId) are included
+    if (this.demandId) {
+        stockData.demandId = this.demandId;
+    }
     
     // Send stock data as a JSON blob
     formData.append('stockData', new Blob([JSON.stringify(stockData)], { type: 'application/json' }));

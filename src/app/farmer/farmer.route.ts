@@ -30,6 +30,10 @@ export const FARMER_ROUTES: Routes = [
           }
         ]
       },
+      {
+        path: 'demands',
+        loadComponent: () => import('../demand/farmer-demand-management').then(m => m.FarmerDemandManagementComponent)
+      },
       // Redirect /farmer/dashboard to /farmer for the shell view
       { path: 'dashboard', redirectTo: '', pathMatch: 'full' }
     ]

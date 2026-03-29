@@ -21,6 +21,10 @@ export const BUYER_ROUTES: Routes = [
                     { path: 'my-orders', loadComponent: () => import('../order/buyer-orders/buyer-orders').then(m => m.BuyerOrdersComponent) },
                     { path: 'track/:orderId', loadComponent: () => import('../order/buyer-tracking/buyer-tracking').then(m => m.BuyerTracking) }
                 ]
+            },
+            {
+                path: 'demands',
+                loadComponent: () => import('../demand/buyer-demand-management').then(m => m.BuyerDemandManagementComponent)
             }
         ]
     }

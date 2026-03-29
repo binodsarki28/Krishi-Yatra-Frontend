@@ -141,29 +141,6 @@
                                 </small>
                             </div>
 
-                            <!-- Vehicle Selection -->
-                            <div class="field mb-3">
-                                <label class="block text-gray-600 font-bold mb-1 text-sm">
-                                    <i class="pi pi-truck text-blue-600 mr-1"></i>
-                                    Preferred Vehicle Type <span class="text-red-500">*</span>
-                                </label>
-                                <p-select formControlName="vehicleType" [options]="vehicleTypes" 
-                                    placeholder="Select a vehicle..."
-                                    styleClass="w-full border-round-xl"
-                                    optionLabel="label" optionValue="value">
-                                    <ng-template let-item pTemplate="item">
-                                        <div class="flex align-items-center gap-2">
-                                            <i [class]="item.icon + ' text-gray-600'"></i>
-                                            <span>{{ item.label }}</span>
-                                        </div>
-                                    </ng-template>
-                                </p-select>
-                                <small class="text-red-500 block mt-1"
-                                    *ngIf="orderForm.get('vehicleType')?.invalid && orderForm.get('vehicleType')?.touched">
-                                    Please select a vehicle type for delivery.
-                                </small>
-                            </div>
-
                             <!-- Checkpoints -->
                             <div class="field mb-3">
                                 <label class="block text-gray-600 font-bold mb-1 text-sm">
@@ -210,7 +187,7 @@
                                     <div class="flex align-items-center gap-1">
                                         <span class="text-gray-600 text-sm">Delivery Fee</span>
                                         <i class="pi pi-question-circle text-gray-400 text-xs" 
-                                           pTooltip="Based on distance ({{ deliveryDistance.toFixed(1) }} km) and weight factors."></i>
+                                           pTooltip="Based on distance ({{ deliveryDistance.toFixed(1) }} km) @ Rs. 5/km and Quantity ({{ orderForm.get('orderQuantity')?.value || 0 }} kg) @ Rs. 2/kg."></i>
                                     </div>
                                     @if (deliveryFee > 0) {
                                         <span class="text-gray-800 font-medium">Rs. {{ deliveryFee | number:'1.2-2' }}</span>

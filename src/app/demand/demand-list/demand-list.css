@@ -1,0 +1,28 @@
+/* Demand List Styles */
+.demand-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.demand-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.status-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 2rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-open { background-color: #e0f2fe; color: #0369a1; }
+.status-accepted { background-color: #f0fdf4; color: #15803d; }
+.status-cancelled { background-color: #fee2e2; color: #b91c1c; }

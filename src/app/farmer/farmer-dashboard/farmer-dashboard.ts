@@ -10,7 +10,6 @@ import { NavigationService } from '../../util/navigation.service';
 
 @Component({
   selector: 'app-farmer-dashboard',
-  standalone: true,
   imports: [CommonModule, RouterModule, ButtonModule],
   templateUrl: './farmer-dashboard.html',
   styleUrls: ['./farmer-dashboard.css']

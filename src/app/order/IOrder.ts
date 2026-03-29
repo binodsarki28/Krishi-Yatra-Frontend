@@ -4,7 +4,6 @@ export interface IOrderCreateRequest {
     pickupAddress: string;
     dropAddress: string;
     deliveryFee: number;
-    vehicleType: string;
     notes: string;
     checkpoints?: string;
 }
@@ -20,8 +19,16 @@ export interface IOrderResponse {
     pickupAddress: string;
     dropAddress: string;
     deliveryFee: number;
-    vehicleType: string;
     notes: string;
     checkpoints?: string;
     createdAt: string;
+    conflictMessage?: string;
+    message?: string;
+    farmerName?: string;
+    farmerPhone?: string;
+    buyerName?: string;
+    buyerPhone?: string;
+    deliveryName?: string;
+    deliveryPhone?: string;
+    stockImages?: string[];
 }

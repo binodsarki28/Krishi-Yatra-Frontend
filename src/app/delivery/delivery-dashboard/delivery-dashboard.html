@@ -101,67 +101,25 @@
 
         @if (isDefaultRoute) {
         <div class="fadein animation-duration-300">
-            <!-- Stats Row -->
-            <div class="grid mb-4">
+            <!-- Basic Data / Stats -->
+            <div class="grid">
                 <div class="col-12 md:col-6 lg:col-3">
-                    <div
-                        class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between hover:shadow-3 transition-all transition-duration-200">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between">
                         <div class="flex flex-column gap-1">
-                            <span class="text-xs text-500 font-medium">Total Deliveries</span>
-                            <span class="text-3xl font-bold text-900" style="letter-spacing: -0.5px; line-height: 1;">{{
-                                totalOrders }}</span>
+                            <span class="text-xs text-500 font-medium uppercase tracking-wider">Total Deliveries</span>
+                            <span class="text-3xl font-bold text-900" style="letter-spacing: -0.5px;">{{ totalOrders }}</span>
                         </div>
-                        <div class="flex align-items-center justify-content-center border-round-xl"
-                            style="width:44px; height:44px; background: linear-gradient(135deg, #f59e0b, #d97706);">
-                            <i class="pi pi-truck text-white" style="font-size: 18px;"></i>
+                        <div class="flex align-items-center justify-content-center border-round-xl bg-orange-50 text-orange-600" style="width:48px; height:48px;">
+                            <i class="pi pi-truck" style="font-size: 20px;"></i>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="surface-card border-1 border-200 border-round-xl p-4">
-                <div class="mb-4">
-                    <h3 class="m-0 text-lg font-bold text-900">Quick Actions</h3>
-                    <p class="m-0 mt-1 text-sm text-500">Manage your deliveries and find new jobs</p>
-                </div>
-                <div class="flex flex-column gap-2">
-                    <a class="flex align-items-center gap-3 p-3 surface-ground border-1 border-200 border-round-xl no-underline cursor-pointer hover:surface-hover transition-all transition-duration-200 quick-card"
-                        routerLink="/delivery/orders/my-orders">
-                        <div class="flex align-items-center justify-content-center border-round-lg flex-shrink-0"
-                            style="width:42px; height:42px; background: linear-gradient(135deg, #f59e0b, #d97706);">
-                            <i class="pi pi-list text-white" style="font-size: 17px;"></i>
-                        </div>
-                        <div class="flex-1">
-                            <span class="block text-sm font-semibold text-900">My Deliveries</span>
-                            <span class="block text-xs text-500 mt-1">View all your delivery history</span>
-                        </div>
-                        <i class="pi pi-arrow-right text-300" style="font-size: 12px;"></i>
-                    </a>
-                    <a class="flex align-items-center gap-3 p-3 surface-ground border-1 border-200 border-round-xl no-underline cursor-pointer hover:surface-hover transition-all transition-duration-200 quick-card"
-                        routerLink="/delivery/jobs/available">
-                        <div class="flex align-items-center justify-content-center border-round-lg flex-shrink-0"
-                            style="width:42px; height:42px; background: linear-gradient(135deg, #22c55e, #16a34a);">
-                            <i class="pi pi-search text-white" style="font-size: 17px;"></i>
-                        </div>
-                        <div class="flex-1">
-                            <span class="block text-sm font-semibold text-900">Find Available Jobs</span>
-                            <span class="block text-xs text-500 mt-1">Browse pending delivery requests</span>
-                        </div>
-                        <i class="pi pi-arrow-right text-300" style="font-size: 12px;"></i>
-                    </a>
-                    <a class="flex align-items-center gap-3 p-3 surface-ground border-1 border-200 border-round-xl no-underline cursor-pointer hover:surface-hover transition-all transition-duration-200 quick-card"
-                        routerLink="/delivery/jobs/active">
-                        <div class="flex align-items-center justify-content-center border-round-lg flex-shrink-0"
-                            style="width:42px; height:42px; background: linear-gradient(135deg, #3b82f6, #2563eb);">
-                            <i class="pi pi-check-circle text-white" style="font-size: 17px;"></i>
-                        </div>
-                        <div class="flex-1">
-                            <span class="block text-sm font-semibold text-900">Active Jobs</span>
-                            <span class="block text-xs text-500 mt-1">Track your current deliveries</span>
-                        </div>
-                        <i class="pi pi-arrow-right text-300" style="font-size: 12px;"></i>
-                    </a>
+                <!-- Future Visualization Placeholder -->
+                <div class="col-12">
+                   <div class="surface-card border-1 border-200 border-round-xl p-8 flex flex-column align-items-center justify-content-center text-500 bg-gray-50 border-dashed">
+                       <i class="pi pi-chart-bar text-4xl mb-3"></i>
+                       <p class="m-0 font-medium">Visualization Analytics Coming Soon</p>
+                   </div>
                 </div>
             </div>
         </div>

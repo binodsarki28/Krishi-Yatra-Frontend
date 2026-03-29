@@ -1,0 +1,75 @@
+<div class="surface-card p-4 border-round-xl border-1 border-200 shadow-1 fadein animation-duration-200">
+    <div class="flex align-items-center gap-3 mb-4">
+        <div class="flex align-items-center justify-content-center border-round-lg bg-primary-100 text-primary w-3rem h-3rem">
+            <i class="pi pi-plus" style="font-size: 1.5rem"></i>
+        </div>
+        <div>
+            <h2 class="m-0 text-xl font-bold text-900">Create New Demand</h2>
+            <p class="m-0 text-xs text-500 font-medium mt-1">Request products if they are currently unavailable.</p>
+        </div>
+    </div>
+
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)" class="flex flex-column gap-4">
+        <div class="grid">
+            <!-- Category Selection -->
+            <div class="col-12 md:col-6 flex flex-column gap-2">
+                <label class="text-xs font-bold text-700 uppercase">Category *</label>
+                <p-select [options]="categories" [(ngModel)]="demand.categoryGuid" name="category" #cat="ngModel" 
+                           (onChange)="onCategoryChange()" optionLabel="categoryName" optionValue="categoryId" 
+                           placeholder="Select Category" styleClass="w-full border-round-lg shadow-none border-1 border-200" 
+                           [required]="true" [showClear]="true" appendTo="body" panelStyleClass="w-full"></p-select>
+                <small class="text-red-500" *ngIf="cat.touched && !demand.categoryGuid">Category is required.</small>
+            </div>
+
+            <!-- Sub Category Selection -->
+            <div class="col-12 md:col-6 flex flex-column gap-2">
+                <label class="text-xs font-bold text-700 uppercase">Sub-Category *</label>
+                <p-select [options]="subCategories" [(ngModel)]="demand.subCategoryGuid" name="subCategory" #subCat="ngModel"
+                           optionLabel="subCategoryName" optionValue="subCategoryId" 
+                           placeholder="Select Sub-Category" styleClass="w-full border-round-lg shadow-none border-1 border-200" 
+                           [required]="true" [showClear]="true" [disabled]="!demand.categoryGuid" appendTo="body" panelStyleClass="w-full"></p-select>
+                <small class="text-red-500" *ngIf="subCat.touched && !demand.subCategoryGuid">Sub-category is required.</small>
+            </div>
+        </div>
+
+        <div class="grid">
+            <!-- Quantity -->
+            <div class="col-12 md:col-6 flex flex-column gap-2">
+                <label class="text-xs font-bold text-700 uppercase">Quantity (Units) *</label>
+                <p-inputNumber [(ngModel)]="demand.quantity" name="quantity" #qty="ngModel"
+                                [min]="1" placeholder="e.g. 50" [showButtons]="true"
+                                buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" 
+                                decrementButtonIcon="pi pi-minus" inputId="qtyinput"
+                                styleClass="w-full" inputStyleClass="w-full border-round-lg border-1 border-200"
+                                [required]="true"></p-inputNumber>
+                <small class="text-red-500" *ngIf="qty.touched && !demand.quantity">Quantity is required.</small>
+            </div>
+
+            <!-- Expected Price -->
+            <div class="col-12 md:col-6 flex flex-column gap-2">
+                <label class="text-xs font-bold text-700 uppercase">Expected Price Per Unit (Rs.) *</label>
+                <p-inputNumber [(ngModel)]="demand.expectedPricePerUnit" name="price" #prc="ngModel"
+                                mode="currency" currency="NPR" locale="en-IN"
+                                placeholder="e.g. 45.00" styleClass="w-full" 
+                                inputStyleClass="w-full border-round-lg border-1 border-200"
+                                [required]="true"></p-inputNumber>
+                <small class="text-red-500" *ngIf="prc.touched && !demand.expectedPricePerUnit">Expected price is required.</small>
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="col-12 flex flex-column gap-2">
+            <label class="text-xs font-bold text-700 uppercase">Description / Notes</label>
+            <textarea pTextarea [(ngModel)]="demand.description" name="description" rows="5" 
+                      placeholder="Add specific details, quality requirements, or delivery notes..."
+                      class="w-full border-1 border-200 border-round-lg p-3 text-sm focus:border-primary transition-colors"
+                      style="outline: none; resize: none;"></textarea>
+        </div>
+
+        <div class="flex justify-content-end gap-2 mt-2">
+            <button pButton type="button" label="Reset Form" icon="pi pi-refresh" class="p-button-text p-button-secondary border-round-lg" (click)="resetForm(f)"></button>
+            <button pButton type="submit" label="Post Demand Request" icon="pi pi-send" iconPos="right" 
+                    class="p-button-primary border-round-lg px-4 shadow-2" [loading]="submitting"></button>
+        </div>
+    </form>
+</div>

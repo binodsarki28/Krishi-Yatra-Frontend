@@ -105,4 +105,17 @@ export class OrderService {
         }
         return this.http.get<IResponseWithObject>(url);
     }
+
+    reportConflict(orderId: string, message: string): Observable<IResponse> {
+        return this.http.post<IResponse>(
+            GenerateUrlUtils.generateUrl(Endpoint.ORDER_REPORT_CONFLICT + orderId),
+            { conflictMessage: message }
+        );
+    }
+
+    resolveConflict(orderId: string): Observable<IResponse> {
+        return this.http.put<IResponse>(
+            GenerateUrlUtils.generateUrl(Endpoint.ORDER_RESOLVE_CONFLICT + orderId), {}
+        );
+    }
 }
