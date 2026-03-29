@@ -105,11 +105,14 @@
                                 [severity]="getSeverity(stock.active)" [rounded]="true" size="small"></p-tag>
                         </td>
                         <td>
-                            <div class="flex gap-1">
+                            <div class="flex gap-1 justify-content-center">
                                 <p-button icon="pi pi-pencil" [routerLink]="['/farmer/stocks/update', stock.stockSlug]" 
-                                    severity="info" [text]="true" [rounded]="true" size="small"></p-button>
-                                <p-button icon="pi pi-trash" (onClick)="deleteStock(stock.stockSlug)" 
-                                    severity="danger" [text]="true" [rounded]="true" size="small"></p-button>
+                                    severity="info" [text]="true" [rounded]="true" size="small" pTooltip="Edit Stock"></p-button>
+                                
+                                <p-button [icon]="stock.active ? 'pi pi-eye-slash' : 'pi pi-eye'" 
+                                    (onClick)="deleteOrUndeleteStock(stock.stockSlug, stock.active)" 
+                                    [severity]="stock.active ? 'warn' : 'success'" [text]="true" [rounded]="true" size="small"
+                                    [pTooltip]="stock.active ? 'Deactivate (Soft Delete)' : 'Activate (Undelete)'"></p-button>
                             </div>
                         </td>
                     </tr>
@@ -139,4 +142,5 @@
     }
 </div>
 
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
 <p-toast></p-toast>

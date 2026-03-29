@@ -77,7 +77,13 @@ export class AppComponent {
 
     // Non-dashboard overrides: show navbar on stock/profile/order pages that are NOT inside dashboards
     if (!isDashboard && !isAuth && !isAdmin) {
-      if (url.includes('/stocks') || url.includes('/stock-detail') || url.includes('/profile') || url.includes('/order')) {
+      if (
+        url.includes('/stocks') || 
+        url.includes('/stock-detail') || 
+        url.includes('/profile') || 
+        url.includes('/order') || 
+        url.includes('/demands')
+      ) {
         this.showNavbar = true;
         this.showFooter = false;
       }

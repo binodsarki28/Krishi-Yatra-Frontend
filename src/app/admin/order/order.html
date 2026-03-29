@@ -105,6 +105,14 @@
                         <div class="flex flex-column text-left">
                             <span class="text-sm font-semibold text-900">{{ order.productName }}</span>
                             <span class="text-xs text-500 selectable-id" [pTooltip]="'Click to copy ID'">ID: {{ order.orderId }}</span>
+                            @if (order.orderStatus === 'CONFLICT' && (order.conflictMessage || order.message)) {
+                                <div class="mt-2 p-2 bg-red-50 border-round-md border-left-3 border-red-500">
+                                    <div class="text-xs font-bold text-red-700 mb-1 flex align-items-center gap-1">
+                                        <i class="pi pi-exclamation-circle"></i> BUYER COMPLAINT:
+                                    </div>
+                                    <p class="m-0 text-xs text-red-600 font-medium italic">"{{ order.conflictMessage || order.message }}"</p>
+                                </div>
+                            }
                         </div>
                     </td>
                     <td class="p-4">
@@ -142,14 +150,19 @@
                         <span class="text-xs text-500">{{ order.createdAt | date:'mediumDate' }}</span>
                     </td>
                     <td class="p-4 text-center">
-                        <button pButton icon="pi pi-map-marker"
-                            class="p-button-text p-button-rounded p-button-success p-button-sm"
-                            pTooltip="Track Journey" tooltipPosition="bottom"
-                            (click)="viewTrack(order.orderId)"></button>
+                        <div class="flex justify-content-center gap-1">
+                            @if (order.orderStatus === 'CONFLICT') {
+                                <button pButton icon="pi pi-check-square"
+                                    class="p-button-text p-button-rounded p-button-info p-button-sm"
+                                    pTooltip="Resolve Conflict" tooltipPosition="bottom"
+                                    (click)="resolveConflict(order.orderId)"></button>
+                            }
+                        </div>
                     </td>
                 </tr>
             </ng-template>
         </p-table>
+        <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
         <div class="flex align-items-center justify-content-between p-4 bg-gray-50 border-top-1 border-200">
             <span class="text-xs text-500 font-medium">Page {{page + 1}}</span>
             <div class="flex gap-2">

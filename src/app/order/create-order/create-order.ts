@@ -17,7 +17,6 @@ import { MapComponent } from '../../common/map/map';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TextareaModule } from 'primeng/textarea';
 import { TooltipModule } from 'primeng/tooltip';
-
 import { SelectModule } from 'primeng/select';
 import { AccountService } from '../../components/account/account.service';
 
@@ -64,18 +63,6 @@ export class CreateOrder implements OnInit, AfterViewInit, OnDestroy {
   checkpointTags: string[] = [];
   mapVisible = true; // For nuclear reset
 
-  vehicleTypes: any[] = [
-    { label: 'Bicycle', value: 'BICYCLE', icon: 'pi pi-directions-bike' },
-    { label: 'Motorcycle', value: 'MOTORCYCLE', icon: 'pi pi-directions-bike' },
-    { label: 'Auto Rickshaw', value: 'AUTO', icon: 'pi pi-truck' },
-    { label: 'Taxi', value: 'TAXI', icon: 'pi pi-car' },
-    { label: 'Jeep', value: 'JEEP', icon: 'pi pi-car' },
-    { label: 'Van', value: 'VAN', icon: 'pi pi-truck' },
-    { label: 'Pickup Truck', value: 'PICKUP', icon: 'pi pi-truck' },
-    { label: 'Mini Truck / Tractor', value: 'TRACTOR', icon: 'pi pi-truck' },
-    { label: 'Big Truck', value: 'TRUCK', icon: 'pi pi-truck' }
-  ];
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -101,9 +88,13 @@ export class CreateOrder implements OnInit, AfterViewInit, OnDestroy {
       orderQuantity: [1, [Validators.required, Validators.min(1)]],
       pickupAddress: [{ value: '', disabled: true }, Validators.required],
       dropAddress: [{ value: '', disabled: true }, Validators.required],
-      vehicleType: [null, Validators.required],
       notes: ['', [Validators.required, Validators.minLength(5)]],
       checkpoints: [[]]
+    });
+
+    // Watch quantity changes to immediately update delivery fee
+    this.orderForm.get('orderQuantity')?.valueChanges.subscribe(() => {
+        this.calculateDeliveryFee();
     });
 
     // Watch checkpoint input: limit to 3
@@ -345,8 +336,8 @@ export class CreateOrder implements OnInit, AfterViewInit, OnDestroy {
   calculateDeliveryFee() {
     const qty = this.orderForm.get('orderQuantity')?.value || 0;
     if (this.deliveryDistance > 0 && qty > 0) {
-      // Pricing logic: Rs 1 per KG + Rs 10 per KM
-      this.deliveryFee = (qty * 1) + (this.deliveryDistance * 10);
+      // Pricing logic: Rs 2 per KG + Rs 5 per KM
+      this.deliveryFee = (qty * 2) + (this.deliveryDistance * 5);
     } else {
       this.deliveryFee = 0;
     }
@@ -389,7 +380,6 @@ export class CreateOrder implements OnInit, AfterViewInit, OnDestroy {
       pickupAddress: this.orderForm.get('pickupAddress')?.value,
       dropAddress: this.orderForm.get('dropAddress')?.value,
       deliveryFee: this.deliveryFee,
-      vehicleType: this.orderForm.get('vehicleType')?.value,
       notes: this.orderForm.get('notes')?.value,
       checkpoints: allCheckpoints
     };

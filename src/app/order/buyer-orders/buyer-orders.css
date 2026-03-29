@@ -1,0 +1,27 @@
+.active-nav {
+    background-color: var(--blue-50);
+    color: var(--blue-600) !important;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+    background: #f8fafc;
+    color: #475569;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    padding: 1rem 0.75rem;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr {
+    transition: background-color 0.2s;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+    background-color: #f1f5f9 !important;
+}
+
+:host ::ng-deep .p-tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+}

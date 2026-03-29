@@ -1,0 +1,17 @@
+/* Demand Form Styles */
+.card {
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+input:focus, textarea:focus {
+    box-shadow: 0 0 0 2px var(--primary-100) !important;
+}
+
+.p-inputtext {
+    border-color: #dee2e6;
+}
+
+.p-inputtext:hover {
+    border-color: var(--primary-color);
+}

@@ -1,0 +1,148 @@
+<div class="fadein animation-duration-300">
+    <!-- Page Header -->
+    <div class="flex align-items-center justify-content-between mb-3">
+        <div class="flex align-items-center gap-3">
+            <div class="flex align-items-center justify-content-center border-round-xl"
+                style="background: linear-gradient(135deg, #3b82f6, #2563eb); width:36px; height:36px;">
+                <i class="pi pi-shopping-bag text-white" style="font-size: 18px;"></i>
+            </div>
+            <div>
+                <h2 class="m-0 text-lg font-bold text-900" style="letter-spacing: -0.3px;">My Orders</h2>
+                <p class="m-0 mt-1 text-xs text-500">View and track your previous purchases</p>
+            </div>
+        </div>
+        <p-button icon="pi pi-refresh" label="Refresh" [outlined]="true" [loading]="loading" severity="secondary"
+            size="small" styleClass="border-round-lg" (onClick)="loadOrders()"></p-button>
+    </div>
+
+    <!-- Search/Filter Bar (Revised UI Pattern) -->
+    <div class="surface-card border-round-xl border-1 border-200 shadow-1 p-3 mb-4">
+        <div class="grid align-items-end">
+            <div class="col-12 md:col-4">
+                <label class="block text-xs font-bold text-500 mb-1 ml-1">SEARCH BY ID OR PRODUCT</label>
+                <p-iconField iconPosition="left">
+                    <p-inputIcon styleClass="pi pi-search"></p-inputIcon>
+                    <input type="text" pInputText [(ngModel)]="searchText" (input)="onFilterChange()"
+                        placeholder="Search product..." class="w-full border-round-lg text-sm" />
+                </p-iconField>
+            </div>
+            <div class="col-12 md:col-3">
+                <label class="block text-xs font-bold text-500 mb-1 ml-1">ORDER STATUS</label>
+                <p-select [options]="statusOptions" [(ngModel)]="selectedStatus" 
+                    placeholder="All Status" styleClass="w-full border-round-lg text-sm"
+                    (onChange)="onFilterChange()" [showClear]="true"></p-select>
+            </div>
+            <div class="col-12 md:col-2 flex align-items-center mb-1">
+                <span class="text-500 text-xs font-medium bg-gray-50 px-3 py-2 border-round-lg w-full text-center border-1 border-200">
+                    {{ totalOrders }} Total Orders
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table (Official PrimeNG styling) -->
+    <div class="surface-card border-round-xl border-1 border-200 shadow-1 overflow-hidden">
+        <p-table [value]="orders" [loading]="loading" responsiveLayout="scroll" 
+            styleClass="p-datatable-sm p-datatable-striped" [rowHover]="true"
+            [scrollable]="true" scrollHeight="calc(100vh - 350px)">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="orderId" style="min-width: 8rem">Order ID <p-sortIcon field="orderId"></p-sortIcon></th>
+                    <th pSortableColumn="productName" style="min-width: 10rem">Product <p-sortIcon field="productName"></p-sortIcon></th>
+                    <th pSortableColumn="orderQuantity">Quantity <p-sortIcon field="orderQuantity"></p-sortIcon></th>
+                    <th pSortableColumn="totalPrice">Total <p-sortIcon field="totalPrice"></p-sortIcon></th>
+                    <th>Status</th>
+                    <th pSortableColumn="createdAt" style="min-width: 10rem">Date <p-sortIcon field="createdAt"></p-sortIcon></th>
+                    <th>Farmer</th>
+                    <th>Linker</th>
+                    <th>Actions</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-order>
+                <tr>
+                    <td>
+                        <span class="text-xs font-mono font-bold text-500">#{{ order.orderId?.substring(0, 8) }}</span>
+                    </td>
+                    <td>
+                        <div class="font-semibold text-900">{{ order.productName }}</div>
+                        <div class="text-xs text-500 italic">{{ order.stockSlug }}</div>
+                    </td>
+                    <td class="text-sm font-medium">{{ order.orderQuantity }} Units</td>
+                    <td class="text-sm font-bold text-green-700">Rs. {{ order.totalPrice | number }}</td>
+                    <td>
+                        <p-tag [value]="getStatusLabel(order.orderStatus)" 
+                            [severity]="getStatusSeverity(order.orderStatus)" [rounded]="true" size="small"></p-tag>
+                    </td>
+                    <td class="text-xs text-500">{{ order.createdAt | date:'medium' }}</td>
+                    <td>
+                        <div class="text-xs font-medium text-900">{{ order.farmerName || 'N/A' }}</div>
+                        <div class="text-xs text-500">{{ order.farmerPhone || '' }}</div>
+                    </td>
+                    <td>
+                        <div class="text-xs font-medium text-blue-600">{{ order.deliveryName || 'Unassigned' }}</div>
+                        <div class="text-xs text-500">{{ order.deliveryPhone || '' }}</div>
+                    </td>
+                    <td>
+                        <div class="flex gap-1">
+                            <!-- Track Button: Now visible after delivery too -->
+                            @if (order.orderStatus !== 'CANCELLED' && order.orderStatus !== 'REJECTED') {
+                                <p-button icon="pi pi-map-marker" [routerLink]="['/buyer/orders/track', order.orderId]" 
+                                    severity="info" [text]="true" [rounded]="true" size="small" pTooltip="Track Journey"></p-button>
+                            }
+
+                            <!-- Conflict Button: Only for Delivered orders -->
+                            @if (order.orderStatus === 'DELIVERED') {
+                                <p-button icon="pi pi-exclamation-triangle" (onClick)="openConflictDialog(order.orderId)" 
+                                    severity="danger" [text]="true" [rounded]="true" size="small" pTooltip="Report Conflict"></p-button>
+                            }
+
+                            <p-button icon="pi pi-eye" severity="secondary" [text]="true" [rounded]="true" size="small" 
+                                pTooltip="Product Detail" (onClick)="viewStockDetail(order.stockSlug)"></p-button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="9" class="text-center p-8 text-500">
+                        <i class="pi pi-inbox mb-3" style="font-size: 3rem; color: #dee2e6;"></i>
+                        <div class="text-xl text-900 font-bold">No Orders Found</div>
+                        <div class="text-sm">You haven't placed any orders matching your criteria.</div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <!-- Pagination -->
+        <div class="flex justify-content-between align-items-center p-3 border-top-1 border-200 surface-50">
+            <span class="text-sm text-600 font-medium font-sans">Page {{ page + 1 }}</span>
+            <div class="flex gap-2">
+                <p-button icon="pi pi-chevron-left" label="Previous" [outlined]="true" severity="secondary" size="small"
+                    [disabled]="page === 0" (onClick)="prevPage()" styleClass="border-round-lg"></p-button>
+                <p-button icon="pi pi-chevron-right" iconPos="right" label="Next" [outlined]="true" severity="secondary"
+                    size="small" [disabled]="!hasMore" (onClick)="nextPage()" styleClass="border-round-lg"></p-button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Conflict Message Dialog -->
+<p-dialog header="Report Conflict" [(visible)]="showConflictDialog" [modal]="true" [style]="{width: '450px'}" 
+    [draggable]="false" [resizable]="false" styleClass="border-round-xl">
+    <div class="flex flex-column gap-3 py-2">
+        <label class="font-semibold text-900">What is the issue with this order?</label>
+        <textarea rows="5" pTextarea [(ngModel)]="conflictMessage" placeholder="E.g. Product damaged, missing items, or delivery issue..." 
+            class="w-full border-round-lg p-3 text-sm surface-ground border-1 border-200 focus:border-primary" style="resize: none;"></textarea>
+        <div class="flex align-items-center gap-2 text-orange-500 bg-orange-50 p-2 border-round-lg">
+            <i class="pi pi-info-circle"></i>
+            <span class="text-xs font-medium">This message will be reviewed by the admin panel for resolution.</span>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button label="Cancel" [text]="true" severity="secondary" (onClick)="showConflictDialog = false" [disabled]="submittingConflict"></p-button>
+        <p-button label="Submit Report" icon="pi pi-send" severity="danger" (onClick)="submitConflict()" [loading]="submittingConflict" 
+            [disabled]="!conflictMessage.trim()" styleClass="border-round-lg font-bold"></p-button>
+    </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>

@@ -9,6 +9,8 @@ import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 import { OrderService } from '../../order/order.service';
 import { ToastService } from '../../util/toast.service';
 import { Router } from '@angular/router';
@@ -30,8 +32,10 @@ import { debounceTime } from 'rxjs/operators';
     TagModule,
     TooltipModule,
     IconFieldModule,
-    InputIconModule
+    InputIconModule,
+    ConfirmDialogModule
   ],
+  providers: [ConfirmationService],
   templateUrl: './order.html',
   styleUrl: './order.css',
 })
@@ -70,6 +74,7 @@ export class Order implements OnInit {
     private toastService: ToastService,
     private router: Router,
     private cdr: ChangeDetectorRef,
+    private confirmationService: ConfirmationService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -152,6 +157,28 @@ export class Order implements OnInit {
   viewTrack(orderId: string) {
     // Admin can view buyer tracking for any order
     this.router.navigate(['/order/track', orderId]);
+  }
+
+  resolveConflict(orderId: string) {
+    this.confirmationService.confirm({
+        message: 'Are you sure you want to mark this conflict as resolved?',
+        header: 'Resolve Conflict',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+            this.loading = true;
+            this.orderService.resolveConflict(orderId).subscribe({
+                next: (res: any) => {
+                    this.toastService.successResponse({ message: 'Conflict resolved successfully.' });
+                    this.loadOrders(true);
+                },
+                error: (err: any) => {
+                    this.toastService.errorResponse(err);
+                    this.loading = false;
+                    this.cdr.markForCheck();
+                }
+            });
+        }
+    });
   }
 
   getStatusSeverity(status: string): "success" | "secondary" | "info" | "warn" | "danger" | "contrast" | undefined {

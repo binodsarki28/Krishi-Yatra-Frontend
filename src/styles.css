@@ -42,3 +42,82 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 1.125rem !important;
     padding: 0.75rem 1.25rem !important;
 }
+
+/* --- Premium KrishiYatra Toast Styling --- */
+/* Use wrapper class and body prefix to beat PrimeNG theme specificity */
+body .p-toast {
+    opacity: 0.98 !important;
+}
+
+body .p-toast .p-toast-message {
+    backdrop-filter: blur(12px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
+    border-radius: 12px !important;
+    border-width: 1px !important;
+    margin-bottom: 0.75rem !important;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08) !important;
+}
+
+/* Success Toast */
+body .p-toast .p-toast-message.p-toast-message-success {
+    background: rgba(240, 253, 244, 0.75) !important;
+    border-color: rgba(34, 197, 94, 0.3) !important;
+    color: #166534 !important;
+}
+
+body .p-toast .p-toast-message.p-toast-message-success .p-toast-message-icon {
+    color: #22c55e !important;
+}
+
+/* Error Toast */
+body .p-toast .p-toast-message.p-toast-message-error {
+    background: rgba(254, 242, 242, 0.75) !important;
+    border-color: rgba(239, 68, 68, 0.3) !important;
+    color: #991b1b !important;
+}
+
+body .p-toast .p-toast-message.p-toast-message-error .p-toast-message-icon {
+    color: #ef4444 !important;
+}
+
+/* Warn Toast */
+body .p-toast .p-toast-message.p-toast-message-warn {
+    background: rgba(255, 251, 235, 0.75) !important;
+    border-color: rgba(245, 158, 11, 0.3) !important;
+    color: #92400e !important;
+}
+
+body .p-toast .p-toast-message.p-toast-message-warn .p-toast-message-icon {
+    color: #f59e0b !important;
+}
+
+body .p-toast .p-toast-message .p-toast-message-content {
+    padding: 1rem !important;
+    gap: 0.75rem !important;
+    align-items: center !important;
+}
+
+body .p-toast .p-toast-message .p-toast-summary {
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    margin-bottom: 0.2rem !important;
+    display: block !important;
+}
+
+body .p-toast .p-toast-message .p-toast-detail {
+    font-weight: 400 !important;
+    font-size: 0.875rem !important;
+    opacity: 0.9 !important;
+}
+
+body .p-toast .p-toast-icon-close {
+    width: 2rem !important;
+    height: 2rem !important;
+    border-radius: 50% !important;
+    transition: background 0.2s !important;
+    color: inherit !important;
+}
+
+body .p-toast .p-toast-icon-close:hover {
+    background: rgba(0, 0, 0, 0.05) !important;
+}

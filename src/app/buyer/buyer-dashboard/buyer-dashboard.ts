@@ -9,7 +9,6 @@ import { NavigationService } from '../../util/navigation.service';
 
 @Component({
   selector: 'app-buyer-dashboard',
-  standalone: true,
   imports: [CommonModule, RouterModule, ButtonModule],
   templateUrl: './buyer-dashboard.html',
   styleUrls: ['./buyer-dashboard.css']
