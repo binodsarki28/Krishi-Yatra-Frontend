@@ -1,273 +1,290 @@
-<div class="surface-ground p-0 flex justify-content-center overflow-hidden" style="height: calc(100vh - 5rem); margin: 0 !important;">
-  <div class="max-w-7xl w-full flex bg-white shadow-2 border-round-3xl overflow-hidden h-full">
+<div class="surface-ground flex overflow-hidden w-full" style="font-family: 'Outfit', sans-serif; height: calc(100vh - 5rem);">
 
-    <!-- Fixed Sidebar -->
-    <div class="w-16rem border-right-1 border-200 flex flex-column bg-white" style="flex-shrink: 0;">
-      <div class="p-3 border-bottom-1 border-100 mb-2">
-        <h2 class="m-0 font-bold" style="font-family: 'Brush Script MT', cursive; font-size: 2rem; color: #15803d;">KrishiYatra</h2>
-      </div>
-
-      <div class="flex-grow-1 overflow-y-auto px-2 pb-3 custom-scrollbar">
-        <div class="text-xs font-bold text-gray-400 uppercase px-3 py-2">Profile</div>
-        <a class="flex align-items-center gap-2 px-3 py-2 border-round-xl cursor-pointer transition-colors transition-duration-200 mb-1"
-           [class.bg-green-50]="activeTab === 'profile'" [class.text-green-700]="activeTab === 'profile'" (click)="switchTab('profile')">
-           <i class="pi pi-user"></i> <span class="text-sm font-medium">Overview</span>
-        </a>
-        <a class="flex align-items-center gap-2 px-3 py-2 border-round-xl cursor-pointer transition-colors transition-duration-200 mb-1"
-           [class.bg-green-50]="activeTab === 'edit-profile'" [class.text-green-700]="activeTab === 'edit-profile'" (click)="switchTab('edit-profile')">
-           <i class="pi pi-user-edit"></i> <span class="text-sm font-medium">Edit Profile</span>
-        </a>
-        <a class="flex align-items-center gap-2 px-3 py-2 border-round-xl cursor-pointer transition-colors transition-duration-200 mb-1"
-           [class.bg-green-50]="activeTab === 'address'" [class.text-green-700]="activeTab === 'address'" (click)="switchTab('address')">
-           <i class="pi pi-map-marker"></i> <span class="text-sm font-medium">Address</span>
-        </a>
-
-        <div class="text-xs font-bold text-gray-400 uppercase px-3 py-2 mt-2">Roles</div>
-        <a class="flex align-items-center gap-2 px-3 py-2 border-round-xl cursor-pointer transition-colors transition-duration-200 mb-1" (click)="switchTab('farmer-dashboard')">
-           <i class="pi pi-chart-line"></i> <span class="text-sm font-medium">{{ isFarmer ? 'Farmer Dashboard' : 'Join as Farmer' }}</span>
-        </a>
-        <a class="flex align-items-center gap-2 px-3 py-2 border-round-xl cursor-pointer transition-colors transition-duration-200 mb-1" (click)="switchTab('buyer-dashboard')">
-           <i class="pi pi-shopping-cart"></i> <span class="text-sm font-medium">{{ isBuyer ? 'Buyer Dashboard' : 'Join as Buyer' }}</span>
-        </a>
-        <a class="flex align-items-center gap-2 px-3 py-2 border-round-xl cursor-pointer transition-colors transition-duration-200 mb-1" (click)="switchTab('delivery-dashboard')">
-           <i class="pi pi-truck"></i> <span class="text-sm font-medium">{{ isDelivery ? 'Linker Dashboard' : 'Join as Linker' }}</span>
-        </a>
-
-        <div class="text-xs font-bold text-gray-400 uppercase px-3 py-2 mt-2">Security</div>
-        <a class="flex align-items-center gap-2 px-3 py-2 border-round-xl cursor-pointer transition-colors transition-duration-200 mb-1"
-           [class.bg-green-50]="activeTab === 'security'" [class.text-green-700]="activeTab === 'security'" (click)="switchTab('security')">
-           <i class="pi pi-shield"></i> <span class="text-sm font-medium">Security</span>
-        </a>
-        <a class="flex align-items-center gap-2 px-3 py-2 border-round-xl cursor-pointer transition-colors transition-duration-200 mb-1"
-           [class.bg-green-50]="activeTab === 'privacy'" [class.text-green-700]="activeTab === 'privacy'" (click)="switchTab('privacy')">
-           <i class="pi pi-lock"></i> <span class="text-sm font-medium">Privacy</span>
-        </a>
-      </div>
-
-      <div class="p-3 mb-8">
-        <a class="flex align-items-center gap-2 p-2 border-round-lg cursor-pointer text-red-500 hover:bg-red-50 transition-colors w-full" (click)="logout()">
-           <i class="pi pi-sign-out"></i> <span class="text-sm font-bold">Log Out</span>
-        </a>
-      </div>
+  <!-- Sidebar (Framed and Static) -->
+  <div class="w-16rem bg-white border-right-1 border-100 flex flex-column flex-shrink-0 shadow-1" style="height: 100%; position: sticky; top: 0;">
+    <!-- Logo area -->
+    <div class="p-3 border-bottom-1 border-50">
+      <h2 class="m-0 select-none sidebar-logo" style="font-family: 'Playfair Display', serif; color: #064e3b; font-size: 1.4rem;">KrishiYatra</h2>
     </div>
 
-    <!-- Right Content Area -->
-    <div class="flex-grow-1 p-3 bg-white overflow-y-auto">
-        <div class="w-full flex flex-column h-full" *ngIf="activeTab === 'edit-profile'">
-
-            <div class="flex align-items-center gap-3 mb-3">
-                <h1 class="m-0 text-3xl font-bold text-gray-900">Edit Profile</h1>
-            </div>
-
-            <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="flex flex-column h-full">
-
-                <div class="flex align-items-center gap-4 mb-3">
-                    <div class="relative cursor-pointer" style="width: 80px; height: 80px;" (click)="fileInput.click()">
-                        <div class="w-full h-full border-circle bg-gray-200 flex align-items-center justify-content-center overflow-hidden border-2 border-gray-300">
-                           <img *ngIf="profilePreview" [src]="profilePreview" class="w-full h-full object-cover" />
-                           <i *ngIf="!profilePreview" class="pi pi-user text-3xl text-gray-400"></i>
-                        </div>
-                        <div class="absolute bg-white border-circle shadow-3 flex align-items-center justify-content-center cursor-pointer"
-                             style="bottom: 0px; right: 0px; width: 25px; height: 25px; border: 1px solid #e5e7eb;">
-                           <i class="pi pi-pencil text-gray-700 text-xs"></i>
-                        </div>
-                    </div>
-                    <input type="file" #fileInput (change)="onFileChange($event)" accept="image/*" class="hidden" />
-
-                    <div class="flex flex-column">
-                        <h2 class="m-0 text-xl font-bold text-gray-900">
-                             {{ profileForm.get('firstName')?.value || 'Your Name' }} {{ profileForm.get('lastName')?.value || '' }}
-                        </h2>
-                        <span class="text-gray-500 mt-1 font-medium">{{ profileForm.get('phone')?.value || 'No phone set' }}</span>
-                    </div>
-                </div>
-
-                <div class="grid formgrid mt-2">
-                    <div class="col-12 md:col-6 field mb-1">
-                        <label class="block text-gray-500 font-medium mb-1 pl-1">First Name <span class="text-red-500">*</span></label>
-                        <input pInputText formControlName="firstName" class="w-full p-2 bg-white border-1 border-gray-300 border-round-xl text-lg text-gray-800" [class.border-red-500]="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched" />
-                    </div>
-                    <div class="col-12 md:col-6 field mb-1">
-                        <label class="block text-gray-500 font-medium mb-1 pl-1">Last Name <span class="text-red-500">*</span></label>
-                        <input pInputText formControlName="lastName" class="w-full p-2 bg-white border-1 border-gray-300 border-round-xl text-lg text-gray-800" [class.border-red-500]="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched" />
-                    </div>
-
-                    <div class="col-12 field mb-2">
-                        <label class="block text-gray-700 font-bold mb-1 pl-1">Username <span class="text-red-500">*</span></label>
-                        <input pInputText formControlName="username" class="w-full p-2 bg-white border-1 border-gray-300 border-round-xl text-lg text-gray-800" [class.border-red-500]="profileForm.get('username')?.invalid && profileForm.get('username')?.touched" />
-                        <small class="text-red-500 block pl-1" *ngIf="profileForm.get('username')?.invalid && profileForm.get('username')?.touched">Username is required.</small>
-                    </div>
-
-                    <div class="col-12 md:col-6 field mb-2">
-                        <label class="block text-gray-500 font-medium mb-1 pl-1">Phone Number</label>
-                        <input pInputText formControlName="phone" class="w-full p-2 bg-white border-1 border-gray-300 border-round-xl text-lg text-gray-800" />
-                    </div>
-
-                    <div class="col-12 field mb-2">
-                        <label class="block text-gray-500 font-medium mb-1 pl-1">Description / Bio</label>
-                        <textarea pInputText formControlName="description" rows="2" class="w-full p-2 bg-white border-1 border-gray-300 border-round-xl text-lg text-gray-800 resize-none"></textarea>
-                    </div>
-                </div>
-
-                <div class="flex justify-content-start mt-1">
-                     <p-button label="Save Changes" type="submit" [loading]="loading" [rounded]="true" [disabled]="profileForm.invalid || !profileForm.dirty" styleClass="px-4 py-2 font-bold shadow-1"></p-button>
-                </div>
-            </form>
+    <!-- Combined Navigation & Logout in one frame -->
+    <div class="flex-grow-1 flex flex-column justify-content-between p-2">
+      <div class="overflow-y-auto custom-scrollbar">
+        <div class="px-2 py-1 text-xs font-bold text-400 uppercase tracking-widest mt-1">Profile</div>
+        <div (click)="switchTab('profile')"
+             class="flex align-items-center gap-2 px-3 py-2 border-round-lg cursor-pointer transition-duration-200 mb-1"
+             [ngClass]="activeTab === 'profile' ? 'bg-green-50 text-green-700 font-bold' : 'text-600 hover:bg-gray-50'">
+          <i class="pi pi-th-large text-sm"></i> <span class="text-sm">Overview</span>
+        </div>
+        <div (click)="switchTab('edit-profile')"
+             class="flex align-items-center gap-2 px-3 py-2 border-round-lg cursor-pointer transition-duration-200 mb-1"
+             [ngClass]="activeTab === 'edit-profile' ? 'bg-green-50 text-green-700 font-bold' : 'text-600 hover:bg-gray-50'">
+          <i class="pi pi-user-edit text-sm"></i> <span class="text-sm">Edit Profile</span>
+        </div>
+        <div (click)="switchTab('address')"
+             class="flex align-items-center gap-2 px-3 py-2 border-round-lg cursor-pointer transition-duration-200 mb-1"
+             [ngClass]="activeTab === 'address' ? 'bg-green-50 text-green-700 font-bold' : 'text-600 hover:bg-gray-50'">
+          <i class="pi pi-map-marker text-sm"></i> <span class="text-sm">Address</span>
         </div>
 
-        <div class="w-full h-full" *ngIf="activeTab === 'security'">
-             <div class="pb-3 border-bottom-1 border-100 mb-4">
-                <h1 class="m-0 text-2xl font-bold text-gray-800">Account Security</h1>
-                <p class="text-gray-500 m-0 mt-1">Manage your password and security settings.</p>
-             </div>
-              <form [formGroup]="passwordForm" (ngSubmit)="updatePassword()" class="max-w-2xl">
-                  <div class="field mb-3">
-                       <label class="block text-gray-700 font-bold mb-1">Current Password <span class="text-red-500">*</span></label>
-                       <p-password formControlName="currentPassword" [feedback]="false" [toggleMask]="true" styleClass="w-full" inputStyleClass="w-full p-2 border-round-lg" [class.ng-invalid]="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched"></p-password>
-                       <small class="text-red-500 block" *ngIf="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched">Required.</small>
-                  </div>
-                  <div class="field mb-3">
-                       <label class="block text-gray-700 font-bold mb-1">New Password <span class="text-red-500">*</span></label>
-                       <p-password formControlName="newPassword" [toggleMask]="true" [feedback]="false" styleClass="w-full" inputStyleClass="w-full p-2 border-round-lg" [class.ng-invalid]="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched"></p-password>
-                       <small class="text-red-500 block" *ngIf="passwordForm.get('newPassword')?.hasError('required') && passwordForm.get('newPassword')?.touched">Required.</small>
-                       <small class="text-red-500 block" *ngIf="passwordForm.get('newPassword')?.hasError('minlength') && passwordForm.get('newPassword')?.touched">Min 6 characters.</small>
-                  </div>
-                  <div class="field mb-4">
-                       <label class="block text-gray-700 font-bold mb-1">Confirm New Password <span class="text-red-500">*</span></label>
-                       <p-password formControlName="confirmPassword" [feedback]="false" [toggleMask]="true" styleClass="w-full" inputStyleClass="w-full p-2 border-round-lg" [class.ng-invalid]="(passwordForm.get('confirmPassword')?.invalid || passwordForm.hasError('mismatch')) && passwordForm.get('confirmPassword')?.touched"></p-password>
-                       <small class="text-red-500 block" *ngIf="passwordForm.hasError('mismatch') && passwordForm.get('confirmPassword')?.touched">Passwords do not match.</small>
-                  </div>
-                  <p-button label="Change Password" type="submit" [loading]="loading" [rounded]="true" severity="success" [disabled]="passwordForm.invalid" styleClass="px-4 py-2 font-bold shadow-1"></p-button>
-              </form>
+        <div class="px-2 py-1 text-xs font-bold text-400 uppercase tracking-widest mt-1">Roles</div>
+        <div (click)="switchTab('farmer-dashboard')"
+             class="flex align-items-center gap-2 px-3 py-2 border-round-lg cursor-pointer transition-duration-200 mb-1 text-600 hover:bg-gray-50">
+          <i class="pi pi-chart-line text-sm"></i> <span class="text-sm">{{ isFarmer ? 'Farmer Dashboard' : 'Join as Farmer' }}</span>
+        </div>
+        <div (click)="switchTab('buyer-dashboard')"
+             class="flex align-items-center gap-2 px-3 py-2 border-round-lg cursor-pointer transition-duration-200 mb-1 text-600 hover:bg-gray-50">
+          <i class="pi pi-shopping-cart text-sm"></i> <span class="text-sm">{{ isBuyer ? 'Buyer Dashboard' : 'Join as Buyer' }}</span>
+        </div>
+        <div (click)="switchTab('delivery-dashboard')"
+             class="flex align-items-center gap-2 px-3 py-2 border-round-lg cursor-pointer transition-duration-200 mb-1 text-600 hover:bg-gray-50">
+          <i class="pi pi-truck text-sm"></i> <span class="text-sm">{{ isDelivery ? 'Linker Dashboard' : 'Join as Linker' }}</span>
         </div>
 
-        <div class="w-full flex flex-column h-full" *ngIf="activeTab === 'profile'">
-            <h1 class="m-0 text-3xl font-bold text-gray-900 mb-5">Profile Overview</h1>
-            <div class="flex flex-column gap-4 max-w-3xl">
-                <div class="flex align-items-center gap-4 bg-gray-50 p-4 border-round-2xl">
-                    <div style="width: 80px; height: 80px;" class="border-circle overflow-hidden bg-gray-200 border-1 border-gray-300 flex align-items-center justify-content-center">
-                        <img *ngIf="profilePreview" [src]="profilePreview" class="w-full h-full object-cover" />
-                        <i *ngIf="!profilePreview" class="pi pi-user text-3xl text-gray-400"></i>
-                    </div>
-                    <div>
-                        <h2 class="m-0 text-2xl font-bold text-gray-800">{{ userData?.fullName || 'User Name' }}</h2>
-                        <span class="text-gray-500 font-medium">{{ "@" + (userData?.username || 'username') }}</span>
-                    </div>
-                </div>
-
-                <div class="grid mt-3">
-                    <div class="col-12 md:col-6 mb-3">
-                        <span class="block text-sm text-gray-500 font-bold uppercase mb-1">Email Address</span>
-                        <span class="block text-lg text-gray-900 font-medium">{{ userData?.email || 'N/A' }}</span>
-                    </div>
-                    <div class="col-12 md:col-6 mb-3">
-                        <span class="block text-sm text-gray-500 font-bold uppercase mb-1">Phone Number</span>
-                        <span class="block text-lg text-gray-900 font-medium">{{ userData?.phoneNumber || 'N/A' }}</span>
-                    </div>
-                    <div class="col-12 mb-4">
-                        <span class="block text-sm text-gray-500 font-bold uppercase mb-3">Account Verification Status</span>
-                        <div class="flex flex-column gap-3">
-                            <div *ngFor="let role of userData?.roles" class="bg-gray-50 p-3 border-round-xl border-1 border-100 flex align-items-center justify-content-between">
-                                <div class="flex align-items-center gap-3">
-                                    <div class="bg-green-100 text-green-700 font-bold px-3 py-1 border-round-lg text-sm">
-                                        {{ role }}
-                                    </div>
-                                     <span class="text-gray-800 font-medium">
-                                         {{ (accountService.isRoleVerified(role) || userData?.verifiedRoles?.includes(role)) ? 'Verified Member' : (userData.statusMessages?.[role] || 'Under verification (PENDING)') }}
-                                     </span>
-                                 </div>
-                                 <i class="pi" [ngClass]="(accountService.isRoleVerified(role) || userData?.verifiedRoles?.includes(role)) ? 'pi-check-circle text-green-500' : 'pi-clock text-orange-500'"></i>
-                            </div>
-                            <div *ngIf="!userData?.roles?.length" class="text-gray-500 italic p-2">Standard User (No special roles)</div>
-                        </div>
-                    </div>
-                    <div class="col-12 mb-3">
-                        <span class="block text-sm text-gray-500 font-bold uppercase mb-1">Bio/Description</span>
-                        <span class="block text-lg text-gray-700 font-medium" style="white-space: pre-line;">{{ userData?.description || 'No description provided.' }}</span>
-                    </div>
-                </div>
-            </div>
+        <div class="px-2 py-1 text-xs font-bold text-400 uppercase tracking-widest mt-1">Security</div>
+        <div (click)="switchTab('security')"
+             class="flex align-items-center gap-2 px-3 py-2 border-round-lg cursor-pointer transition-duration-200 mb-1 text-600 hover:bg-gray-50">
+          <i class="pi pi-shield text-sm"></i> <span class="text-sm">Security</span>
         </div>
-
-        <div class="w-full h-full" *ngIf="activeTab === 'address'">
-            <div class="pb-3 border-bottom-1 border-100 mb-4 flex justify-content-between align-items-center">
-                <div>
-                    <h1 class="m-0 text-2xl font-bold text-gray-800">Your Address</h1>
-                    <p class="text-gray-500 m-0 mt-1">Provide your address for easier deliveries and stock pickup.</p>
-                </div>
-                <div class="flex gap-2">
-                    <p-button label="Delete" icon="pi pi-trash" severity="danger" [outlined]="true" [loading]="addressSubmitting"
-                        [disabled]="addressSubmitting" (onClick)="deleteAddress()"></p-button>
-                    <p-button label="Save Address" icon="pi pi-save" [loading]="addressSubmitting"
-                        [disabled]="addressSubmitting" (onClick)="updateAddress()"></p-button>
-                </div>
-            </div>
-
-            @if (addressLoading) {
-                <div class="flex flex-column align-items-center justify-content-center p-8">
-                    <p-progressSpinner></p-progressSpinner>
-                    <div class="mt-3 text-600">Loading your address...</div>
-                </div>
-            } @else {
-                <div class="grid">
-                    <div class="col-12 lg:col-5">
-                        <form [formGroup]="addressForm" class="grid formgrid">
-                            <div class="col-12 md:col-6 field mb-3">
-                                <label class="block text-gray-700 font-bold mb-1 pl-1">Province <span class="text-red-500">*</span></label>
-                                <p-select formControlName="province" [options]="provinces" optionLabel="name" optionValue="name"
-                                    placeholder="Select Province" class="w-full" [style]="{'width':'100%'}"
-                                    [invalid]="isFieldInvalid('province')" (onChange)="onProvinceChange()"></p-select>
-                                @if (isFieldInvalid('province')) {
-                                    <small class="text-red-500 opacity-80 pt-1 block">Province is required</small>
-                                }
-                            </div>
-                            <div class="col-12 md:col-6 field mb-3">
-                                <label class="block text-gray-700 font-bold mb-1 pl-1">District <span class="text-red-500">*</span></label>
-                                <p-select formControlName="district" [options]="districts" optionLabel="name" optionValue="name"
-                                    placeholder="Select District" class="w-full" [style]="{'width':'100%'}"
-                                    [invalid]="isFieldInvalid('district')" (onChange)="onDistrictChange()"></p-select>
-                                @if (isFieldInvalid('district')) {
-                                    <small class="text-red-500 opacity-80 pt-1 block">District is required</small>
-                                }
-                            </div>
-                            <div class="col-12 field mb-3">
-                                <label class="block text-gray-700 font-bold mb-1 pl-1">Municipality <span class="text-red-500">*</span></label>
-                                <p-select formControlName="municipality" [options]="municipalities" [filter]="true" placeholder="Select Municipality"
-                                    [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('municipality')}" class="w-full" [style]="{'width':'100%'}"></p-select>
-                                @if (isFieldInvalid('municipality')) {
-                                    <small class="text-red-500 opacity-80 pt-1 block">Municipality is required</small>
-                                }
-                            </div>
-
-                            <div class="col-12 md:col-6 field mb-3">
-                                <label class="block text-gray-700 font-bold mb-1 pl-1">Ward No. <span class="text-red-500">*</span></label>
-                                <p-select formControlName="wardNo" [options]="wards" placeholder="Select Ward"
-                                    [filter]="true" class="w-full" [style]="{'width':'100%'}"
-                                    [invalid]="isFieldInvalid('wardNo')"></p-select>
-                                @if (isFieldInvalid('wardNo')) {
-                                    <small class="text-red-500 opacity-80 pt-1 block">Ward number is required</small>
-                                }
-                            </div>
-                            <div class="col-12 field mb-3">
-                                <label class="block text-gray-700 font-bold mb-1 pl-1">Street Name <span class="text-red-500">*</span></label>
-                                <input type="text" pInputText formControlName="streetName" class="w-full p-2 border-round-xl text-lg text-gray-800"
-                                    [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('streetName')}" placeholder="e.g. Tinkune Marg" />
-                                @if (isFieldInvalid('streetName')) {
-                                    <small class="text-red-500 opacity-80 pt-1 block">Street name is required</small>
-                                }
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            }
+        <div (click)="switchTab('privacy')"
+             class="flex align-items-center gap-2 px-3 py-2 border-round-lg cursor-pointer transition-duration-200 mb-1 text-600 hover:bg-gray-50">
+          <i class="pi pi-lock text-sm"></i> <span class="text-sm">Privacy</span>
         </div>
+      </div>
 
-        <div class="w-full flex flex-column align-items-center justify-content-center h-full" *ngIf="activeTab === 'privacy' || activeTab === 'help'">
-             <h2 class="text-2xl font-bold text-gray-700">{{ activeTab === 'privacy' ? 'Privacy Policy' : 'Help Center' }}</h2>
-             <p class="text-gray-500 mt-2">Content coming soon...</p>
-        </div>
-
+      <!-- Logout (Pinned inside the same frame) -->
+      <div (click)="logout()" class="flex align-items-center gap-2 px-3 py-3 border-round-lg cursor-pointer text-red-500 hover:bg-red-50 transition-duration-200 font-bold border-top-1 border-50">
+        <i class="pi pi-sign-out text-sm"></i> <span class="text-sm">Log Out</span>
+      </div>
     </div>
   </div>
+
+  <!-- Main Content Area -->
+  <div class="flex-grow-1 p-3 h-full overflow-y-auto bg-gray-50 shadow-inner">
+
+    <!-- Tab 1: Profile Overview -->
+    @if (activeTab === 'profile') {
+    <div class="fadein animation-duration-400 max-w-7xl mx-auto">
+      <h1 class="m-0 mb-3 profile-title text-900" style="font-family: 'Playfair Display', serif; font-size: 2rem;">Profile Overview</h1>
+
+      <!-- Identity Banner -->
+      <div class="p-4 md:p-5 border-round-3xl shadow-2 mb-4 flex align-items-center gap-5 relative overflow-hidden"
+           style="background: linear-gradient(135deg, #064e3b, #059669); color: white;">
+
+        <div class="relative z-1">
+          <div class="w-6rem h-6rem md:w-7.5rem md:h-7.5rem border-circle overflow-hidden bg-white-alpha-20 border-3 border-white flex align-items-center justify-content-center shadow-3">
+            @if (profilePreview) {
+              <img [ngSrc]="profilePreview" class="w-full h-full object-cover" width="120" height="120" priority alt="Profile Image" />
+            } @else {
+              <i class="pi pi-user text-5xl text-white-alpha-80"></i>
+            }
+          </div>
+        </div>
+
+        <div class="relative z-1">
+          <h2 class="m-0 text-3xl md:text-5xl font-black line-height-1 text-white" style="letter-spacing: -1px;">{{ userData?.fullName || 'Krishi User' }}</h2>
+          <p class="m-0 mt-2 text-white font-bold text-xl opacity-90">&#64;{{ userData?.username || 'username' }}</p>
+
+          <div class="flex flex-wrap gap-2 mt-4">
+             @for (role of userData?.roles; track role) {
+               @if ((role === 'FARMER' && isFarmerVerified) || (role === 'BUYER' && isBuyerVerified) || (role === 'DELIVERY' && isDeliveryVerified)) {
+                 <div class="bg-white text-green-800 px-3 py-1.5 border-round-full flex align-items-center gap-2 text-xs font-bold shadow-2">
+                    <i class="pi pi-check-circle text-green-500"></i>
+                    <span>{{ role }} · Verified</span>
+                 </div>
+               } @else {
+                 <div class="bg-white-alpha-20 text-white px-3 py-1.5 border-round-full border-1 border-white-alpha-30 flex align-items-center gap-2 text-xs font-bold">
+                    <i class="pi pi-clock text-yellow-300"></i>
+                    <span>{{ role }} · Pending</span>
+                 </div>
+               }
+             }
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Grid -->
+      <div class="grid">
+        <div class="col-12 md:col-6 mb-3">
+          <div class="surface-card p-4 border-round-2xl border-1 border-200 shadow-1 h-full">
+            <label class="block text-xs font-bold text-500 uppercase mb-1">Email Address</label>
+            <span class="text-xl text-900 font-bold">{{ userData?.email || 'N/A' }}</span>
+          </div>
+        </div>
+        <div class="col-12 md:col-6 mb-3">
+          <div class="surface-card p-4 border-round-2xl border-1 border-200 shadow-1 h-full">
+            <label class="block text-xs font-bold text-500 uppercase mb-1">Phone Number</label>
+            <span class="text-xl text-900 font-bold">{{ userData?.phoneNumber || '9888888888' }}</span>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="surface-card p-4 border-round-2xl border-1 border-200 shadow-1">
+            <label class="block text-xs font-bold text-500 uppercase mb-1">Bio / Description</label>
+            <p class="m-0 text-800 line-height-3 text-lg font-medium">{{ userData?.description || 'No description provided.' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Tab 2: Edit Profile -->
+    @if (activeTab === 'edit-profile') {
+    <div class="fadein max-w-5xl mx-auto">
+       <h1 class="m-0 mb-3 font-bold text-900 text-2xl">Edit Your Profile</h1>
+       <div class="surface-card p-5 border-round-2xl shadow-1 border-1 border-100">
+          <form [formGroup]="profileForm" (ngSubmit)="updateProfile()" class="grid formgrid align-items-start">
+            <div class="col-12 md:col-3 flex flex-column align-items-center mb-4 md:mb-0">
+              <div class="relative cursor-pointer" (click)="fileInput.click()">
+                <div class="w-9rem h-9rem border-circle bg-gray-50 flex align-items-center justify-content-center overflow-hidden border-2 border-200">
+                  @if (profilePreview) {
+                    <img [ngSrc]="profilePreview" class="w-full h-full object-cover" width="144" height="144" alt="Edit Preview" />
+                  } @else {
+                    <i class="pi pi-camera text-4xl text-300"></i>
+                  }
+                </div>
+                <div class="absolute bg-white border-circle shadow-3 flex align-items-center justify-content-center cursor-pointer"
+                     style="bottom: 5px; right: 5px; width: 35px; height: 35px; border: 1px solid #e5e7eb;">
+                   <i class="pi pi-pencil text-gray-700 text-lg"></i>
+                </div>
+              </div>
+              <input type="file" #fileInput (change)="onFileChange($event)" accept="image/*" class="hidden" />
+            </div>
+
+            <div class="col-12 md:col-9 grid">
+                <div class="col-12 md:col-6 field mb-3">
+                  <label class="block font-bold mb-1 text-800 text-sm">First Name <span class="text-red-500">*</span></label>
+                  <input pInputText formControlName="firstName" class="w-full p-2.5 border-round-xl" />
+                  @if (profileForm.controls['firstName'].invalid && profileForm.controls['firstName'].touched) {
+                    <small class="text-red-500 text-xs mt-1 block">First name is required</small>
+                  }
+                </div>
+                <div class="col-12 md:col-6 field mb-3">
+                  <label class="block font-bold mb-1 text-800 text-sm">Last Name <span class="text-red-500">*</span></label>
+                  <input pInputText formControlName="lastName" class="w-full p-2.5 border-round-xl" />
+                  @if (profileForm.controls['lastName'].invalid && profileForm.controls['lastName'].touched) {
+                    <small class="text-red-500 text-xs mt-1 block">Last name is required</small>
+                  }
+                </div>
+                <div class="col-12 md:col-6 field mb-3">
+                  <label class="block font-bold mb-1 text-800 text-sm">Username <span class="text-red-500">*</span></label>
+                  <input pInputText formControlName="username" class="w-full p-2.5 border-round-xl" />
+                  @if (profileForm.controls['username'].invalid && profileForm.controls['username'].touched) {
+                    <small class="text-red-500 text-xs mt-1 block">Username is required</small>
+                  }
+                </div>
+                <div class="col-12 md:col-6 field mb-3">
+                  <label class="block font-bold mb-1 text-800 text-sm">Phone Number</label>
+                  <input pInputText formControlName="phone" class="w-full p-2.5 border-round-xl" />
+                </div>
+                <div class="col-12 field mb-3">
+                  <label class="block font-bold mb-1 text-800 text-sm">Bio Description</label>
+                  <input pInputText formControlName="description" class="w-full p-2.5 border-round-xl" />
+                </div>
+            </div>
+
+            <div class="col-12 mt-3">
+              <p-button label="Save All Changes" icon="pi pi-check" [loading]="loading" type="submit"
+                [disabled]="profileForm.invalid || !profileForm.dirty" class="w-full p-3 font-bold bg-green-600 border-none"></p-button>
+            </div>
+          </form>
+       </div>
+    </div>
+    }
+
+    <!-- Tab 3: Address -->
+    @if (activeTab === 'address') {
+    <div class="fadein max-w-7xl mx-auto">
+       <div class="flex justify-content-between align-items-center mb-3">
+          <div>
+             <h1 class="m-0 font-bold text-900 text-2xl">Manage Address</h1>
+             <p class="m-0 text-500 text-sm">Create your address to list and stock and buy.</p>
+          </div>
+          <div class="flex gap-2">
+             <p-button label="Delete" icon="pi pi-trash" [outlined]="true" severity="danger" [loading]="addressSubmitting" (onClick)="deleteAddress()" class="border-round-xl"></p-button>
+             <p-button label="Save Address" icon="pi pi-save" [loading]="addressSubmitting" (onClick)="updateAddress()" class="bg-green-600 border-none border-round-xl px-4"></p-button>
+          </div>
+       </div>
+
+       <div class="surface-card p-4 border-round-2xl shadow-1 border-1 border-100 mb-4">
+            <form [formGroup]="addressForm" class="grid formgrid">
+               <div class="col-12 md:col-4 field mb-3">
+                  <label class="block font-bold mb-1 text-700 text-sm">Province <span class="text-red-500">*</span></label>
+                  <p-select [options]="provinces" formControlName="province" optionLabel="name" optionValue="name" class="w-full border-round-xl" placeholder="Select Province" (onChange)="onProvinceChange()"></p-select>
+               </div>
+               <div class="col-12 md:col-4 field mb-3">
+                  <label class="block font-bold mb-1 text-700 text-sm">District <span class="text-red-500">*</span></label>
+                  <p-select [options]="districts" formControlName="district" optionLabel="name" optionValue="name" class="w-full border-round-xl" placeholder="Select District" (onChange)="onDistrictChange()"></p-select>
+               </div>
+               <div class="col-12 md:col-4 field mb-3">
+                  <label class="block font-bold mb-1 text-700 text-sm">Municipality <span class="text-red-500">*</span></label>
+                  <p-select [options]="municipalities" formControlName="municipality" class="w-full border-round-xl" placeholder="Select Municipality"></p-select>
+               </div>
+
+               <div class="col-12 md:col-3 field mb-0">
+                  <label class="block font-bold mb-1 text-700 text-sm">Ward No. <span class="text-red-500">*</span></label>
+                  <p-select [options]="wards" formControlName="wardNo" class="w-full border-round-xl" placeholder="Ward"></p-select>
+               </div>
+               <div class="col-12 md:col-9 field mb-0">
+                  <label class="block font-bold mb-1 text-700 text-sm">Street Name / Landmark <span class="text-red-500">*</span></label>
+                  <input pInputText formControlName="streetName" class="w-full p-2.5 border-round-xl" placeholder="e.g. Near Kalanki Chowk" />
+               </div>
+            </form>
+       </div>
+    </div>
+    }
+
+    <!-- Tab 4: Security -->
+    @if (activeTab === 'security') {
+    <div class="fadein max-w-3xl mx-auto">
+        <h1 class="m-0 mb-3 font-bold text-900 text-2xl">Account Security</h1>
+        <div class="surface-card p-4 border-round-2xl shadow-1 border-1 border-100">
+            <form [formGroup]="passwordForm" (ngSubmit)="updatePassword()">
+                <div class="field mb-3">
+                    <label class="block text-gray-700 font-bold mb-1 text-sm">Current Password <span class="text-red-500">*</span></label>
+                    <p-password formControlName="currentPassword" [feedback]="false" [toggleMask]="true" class="w-full" inputClass="w-full p-2.5 border-round-xl"></p-password>
+                    @if (passwordForm.controls['currentPassword'].invalid && passwordForm.controls['currentPassword'].touched) {
+                      <small class="text-red-500 text-xs mt-1 block">Current password is required</small>
+                    }
+                </div>
+                <div class="field mb-3">
+                    <label class="block text-gray-700 font-bold mb-1 text-sm">New Password <span class="text-red-500">*</span></label>
+                    <p-password formControlName="newPassword" [toggleMask]="true" [feedback]="false" class="w-full" inputClass="w-full p-2.5 border-round-xl"></p-password>
+                    @if (passwordForm.controls['newPassword'].errors?.['required'] && passwordForm.controls['newPassword'].touched) {
+                      <small class="text-red-500 text-xs mt-1 block">New password is required</small>
+                    }
+                    @if (passwordForm.controls['newPassword'].errors?.['pattern'] && !passwordForm.controls['newPassword'].errors?.['required'] && passwordForm.controls['newPassword'].touched) {
+                      <small class="text-red-500 text-xs mt-1 block">Must be 8+ chars with uppercase, lowercase, number &amp; special character</small>
+                    }
+                </div>
+                <div class="field mb-4">
+                    <label class="block text-gray-700 font-bold mb-1 text-sm">Confirm Password <span class="text-red-500">*</span></label>
+                    <p-password formControlName="confirmPassword" [feedback]="false" [toggleMask]="true" class="w-full" inputClass="w-full p-2.5 border-round-xl"></p-password>
+                    @if (passwordForm.controls['confirmPassword'].touched && passwordForm.hasError('mismatch')) {
+                      <small class="text-red-500 text-xs mt-1 block">Passwords do not match</small>
+                    }
+                </div>
+                <p-button label="Update Password" type="submit" [loading]="loading" severity="success" [disabled]="passwordForm.invalid" class="w-full p-3 border-round-xl font-bold"></p-button>
+            </form>
+        </div>
+    </div>
+    }
+
+    <!-- Tab 5: Privacy -->
+    @if (activeTab === 'privacy') {
+    <div class="fadein max-w-3xl mx-auto">
+        <h1 class="m-0 mb-3 font-bold text-900 text-2xl">Privacy Policy</h1>
+        <div class="surface-card p-5 border-round-2xl shadow-1 border-1 border-100 line-height-3 text-700">
+            <p>Your privacy is important to us. KrishiYatra ensures that your personal data, including location and contact details, are only shared with verified partners during order fulfillment.</p>
+            <ul class="pl-4">
+                <li>Data is encrypted at rest and in transit.</li>
+                <li>You can request account deletion at any time.</li>
+                <li>Location data is used only for logistics optimization.</li>
+            </ul>
+        </div>
+    </div>
+    }
+
+  </div>
 </div>
+
 <p-confirmDialog></p-confirmDialog>

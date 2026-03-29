@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, PLATFORM_ID, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { finalize } from 'rxjs';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -24,7 +24,7 @@ import { NEPAL_DATA, NepalProvince, NepalDistrict } from '../../address/nepal-da
     CommonModule, FormsModule, ReactiveFormsModule,
     InputTextModule, ButtonModule, PasswordModule,
     ProgressSpinnerModule, SelectModule,
-    ConfirmDialogModule
+    ConfirmDialogModule, NgOptimizedImage
   ],
   providers: [ConfirmationService],
   templateUrl: './profile.html',
@@ -87,7 +87,7 @@ export class ProfileComponent implements OnInit {
 
     this.passwordForm = this.fb.group({
       currentPassword: ['', Validators.required],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
+      newPassword: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\S+$).{8,}$/)]],
       confirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
 
@@ -396,11 +396,16 @@ export class ProfileComponent implements OnInit {
 
   updatePassword() {
       if (this.passwordForm.invalid) {
+          this.passwordForm.markAllAsTouched();
           this.toastService.warningResponse('Please fix the errors in password form.');
           return;
       }
       this.loading = true;
-      this.accountService.updatePassword(this.passwordForm.value).subscribe({
+      const payload = {
+        currentPassword: this.passwordForm.get('currentPassword')?.value,
+        newPassword: this.passwordForm.get('newPassword')?.value
+      };
+      this.accountService.updatePassword(payload).subscribe({
           next: () => {
               this.loading = false;
               this.toastService.successResponse({ message: 'Password updated successfully' });
@@ -408,11 +413,7 @@ export class ProfileComponent implements OnInit {
           },
            error: (err: any) => {
                this.loading = false;
-               let msg = err.error?.message || 'Failed to update password.';
-               if (msg === 'Validation Failed' && err.error?.data) {
-                   msg = Object.values(err.error.data)[0] as string;
-               }
-               this.toastService.errorResponse({ message: msg });
+               this.toastService.errorResponse(err);
            }
       });
   }

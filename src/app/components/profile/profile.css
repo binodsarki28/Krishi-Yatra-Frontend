@@ -1,1 +1,64 @@
-/* PrimeFlex handles all styling for the profile component */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+
+/* Specific Premium Styles not covered by PrimeFlex */
+.sidebar-logo {
+  font-family: 'Playfair Display', serif !important;
+  color: #064e3b !important;
+}
+
+.profile-title {
+  font-family: 'Playfair Display', serif !important;
+  color: #1e293b !important;
+}
+
+.identity-banner {
+  background: linear-gradient(135deg, #064e3b, #065f46) !important;
+  background-image: radial-gradient(at 88% 10%, rgba(52, 211, 153, 0.15) 0px, transparent 50%),
+                    radial-gradient(at 10% 90%, rgba(5, 150, 105, 0.1) 0px, transparent 50%) !important;
+}
+
+.backdrop-blur {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+/* Deep UI Overrides for PrimeNG Components */
+:host ::ng-deep .p-select {
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: none;
+  background-color: #f8fafc;
+}
+
+:host ::ng-deep .p-select:hover {
+  border-color: #cbd5e1;
+}
+
+:host ::ng-deep .p-inputtext {
+  border-radius: 12px;
+  background-color: #f8fafc;
+}
+
+:host ::ng-deep .p-password input {
+  border-radius: 12px;
+  width: 100%;
+}
+
+:host ::ng-deep .p-button {
+  border-radius: 12px;
+}
+
+/* Ensure single page view (no body scroll, internal scroll only) */
+:host {
+    display: block;
+    height: 100%;
+    overflow: hidden;
+}

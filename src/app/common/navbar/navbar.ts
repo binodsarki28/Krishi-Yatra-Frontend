@@ -62,6 +62,11 @@ export class NavbarComponent implements OnInit {
 
     this.items.push(
       {
+        label: 'Guide',
+        icon: 'pi pi-question-circle',
+        command: () => this.router.navigate(['/guide'])
+      },
+      {
         label: 'Contact',
         icon: 'pi pi-envelope'
       }
