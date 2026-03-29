@@ -4,6 +4,7 @@ import { ListFarmerComponent } from './farmer/list-farmer/list-farmer';
 import { ListBuyerComponent } from './buyer/list-buyer/list-buyer';
 import { ListDeliveryComponent } from './delivery/list-delivery/list-delivery';
 import { ListStockComponent } from './stock/list-stock/list-stock';
+import { Order } from './order/order';
 
 export const ADMIN_ROUTES: Routes = [
     {
@@ -14,6 +15,7 @@ export const ADMIN_ROUTES: Routes = [
             { path: 'buyers', component: ListBuyerComponent },
             { path: 'delivery', component: ListDeliveryComponent },
             { path: 'stocks', component: ListStockComponent },
+            { path: 'orders', component: Order },
             // Legacy redirects
             { path: 'verify-farmer', redirectTo: 'farmers', pathMatch: 'full' },
             { path: 'all-farmers', redirectTo: 'farmers', pathMatch: 'full' },

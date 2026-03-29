@@ -73,5 +73,8 @@ export class Endpoint {
   public static readonly ORDER_BUYER_LIST: string = Endpoint.API_VERSION + 'order/buyer/my-orders';
   public static readonly ORDER_FARMER_LIST: string = Endpoint.API_VERSION + 'order/farmer/my-orders';
   public static readonly ORDER_DELIVERY_LIST: string = Endpoint.API_VERSION + 'order/delivery/my-orders';
+  
+  // Global order list (Admin)
+  public static readonly ORDER_LIST: string = Endpoint.API_VERSION + 'order/list';
 }
 

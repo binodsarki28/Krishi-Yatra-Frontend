@@ -254,7 +254,7 @@ export class ProfileComponent implements OnInit {
             wardNo: addr.wardNo,
             streetName: addr.streetName,
           }, { emitEvent: false });
-          
+
           this.cdr.detectChanges();
           console.log('[SpeedCheck] Address data ready and patched.');
         }
@@ -277,7 +277,7 @@ export class ProfileComponent implements OnInit {
     }
     this.addressSubmitting = true;
     const formValue = this.addressForm.value;
-    
+
     // Explicitly build payload with correct types
     const payload = {
         province: formValue.province,
@@ -331,9 +331,6 @@ export class ProfileComponent implements OnInit {
       }
     });
   }
-
-
-
 
   onFileChange(event: any) {
     const file = event.target.files[0];
@@ -394,7 +391,7 @@ export class ProfileComponent implements OnInit {
       localStorage.clear();
     }
     this.accountService.updateLoginStatus();
-    this.router.navigate(['/account/login']);
+    this.router.navigate(['/account/login']).then(r => console.log('Navigated to login after logout:', r));
   }
 
   updatePassword() {

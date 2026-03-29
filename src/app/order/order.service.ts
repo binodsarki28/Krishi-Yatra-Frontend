@@ -91,4 +91,18 @@ export class OrderService {
         if (search) url += `&search=${search}`;
         return this.http.get<IResponseWithObject>(url);
     }
+
+    getAllOrders(page = 0, size = 20, status?: string | null, search?: string | null, filters?: any): Observable<IResponseWithObject> {
+        let url = GenerateUrlUtils.generateUrl(Endpoint.ORDER_LIST) + `?page=${page}&size=${size}&sort=createdAt,desc`;
+        if (status) url += `&status=${status}`;
+        if (search) url += `&search=${search}`;
+        if (filters) {
+            if (filters.orderId) url += `&orderId=${filters.orderId}`;
+            if (filters.buyer) url += `&buyer=${filters.buyer}`;
+            if (filters.farmer) url += `&farmer=${filters.farmer}`;
+            if (filters.delivery) url += `&delivery=${filters.delivery}`;
+            if (filters.productName) url += `&productName=${filters.productName}`;
+        }
+        return this.http.get<IResponseWithObject>(url);
+    }
 }

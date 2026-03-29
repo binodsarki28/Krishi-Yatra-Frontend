@@ -129,6 +129,32 @@
                     </a>
                 </div>
             </div>
+
+            <!-- Order Management Group -->
+            <div class="mb-1" [class.expanded]="expandedGroup === 'order'">
+                <button
+                    class="flex align-items-center justify-content-between w-full px-3 py-2 border-round-lg border-none bg-transparent text-700 text-sm font-semibold cursor-pointer nav-group-header"
+                    (click)="toggleGroup('order')">
+                    <div class="flex align-items-center gap-2">
+                        <div class="flex align-items-center justify-content-center border-round-lg bg-teal-50 text-teal-600"
+                            style="width:32px; height:32px;">
+                            <i class="pi pi-shopping-cart" style="font-size: 14px;"></i>
+                        </div>
+                        <span>Order Management</span>
+                    </div>
+                    <i class="pi pi-chevron-down text-400 group-arrow"
+                        [style.transform]="expandedGroup === 'order' ? 'rotate(180deg)' : 'none'"
+                        style="font-size: 10px; transition: transform 0.25s ease;"></i>
+                </button>
+                <div class="pl-4 nav-group-items" [style.max-height]="expandedGroup === 'order' ? '200px' : '0'"
+                    style="overflow: hidden; transition: max-height 0.25s ease;">
+                    <a class="flex align-items-center gap-2 px-3 py-2 border-round-md text-600 no-underline text-xs font-medium my-1 nav-sub-item"
+                        routerLink="/admin/orders" routerLinkActive="active-nav">
+                        <i class="pi pi-list" style="font-size: 12px;"></i>
+                        <span>Manage Orders</span>
+                    </a>
+                </div>
+            </div>
         </nav>
 
         <!-- Sidebar Footer -->

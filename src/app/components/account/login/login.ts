@@ -89,7 +89,7 @@ export class LoginComponent {
             this.accountService.updateLoginStatus();
             this.toastService.warningResponse('Invalid username or password');
             return;
-          } else if (jwt.roles.includes(RoleType.FARMER) && jwt.verifiedRoles?.includes(RoleType.FARMER)) {
+          } else if (jwt.roles.includes(RoleType.USER) && jwt.verifiedRoles?.includes(RoleType.FARMER)) {
             this.router.navigate(['/farmer/dashboard']);
           } else if (jwt.roles.includes(RoleType.DELIVERY) && jwt.verifiedRoles?.includes(RoleType.DELIVERY)) {
             this.router.navigate(['/delivery/dashboard']);
