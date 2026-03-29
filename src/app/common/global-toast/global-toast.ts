@@ -30,8 +30,8 @@ export class GlobalToastComponent implements OnInit {
       this.cdr.markForCheck();
       this.cdr.detectChanges();
 
-      // STRICTLY hide: 1.5s for success, 4s for errors
-      const time = toast.type === 'success' ? 1500 : 4000;
+      // 1s for success, 2s for errors
+      const time = toast.type === 'success' ? 1000 : 2000;
 
       setTimeout(() => {
         this.hideToast();
