@@ -66,8 +66,8 @@ export class Endpoint {
     Endpoint.API_VERSION + 'stock/create';
   public static readonly STOCK_UPDATE: string =
     Endpoint.API_VERSION + 'stock/update';
-  public static readonly STOCK_DELETE: string =
-    Endpoint.API_VERSION + 'stock/delete/';
+  public static readonly STOCK_DELETE_OR_UNDELETE: string =
+    Endpoint.API_VERSION + 'stock/delete-or-undelete/';
   public static readonly STOCK_DETAILS: string =
     Endpoint.API_VERSION + 'stock/details/';
   public static readonly MY_STOCKS: string =

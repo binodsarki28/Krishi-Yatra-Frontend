@@ -20,8 +20,8 @@ export class StockService {
     return this.http.put<IResponse>(GenerateUrlUtils.generateUrl(Endpoint.STOCK_UPDATE), stockData);
   }
 
-  deleteStock(slug: string): Observable<IResponse> {
-    return this.http.delete<IResponse>(GenerateUrlUtils.generateUrl(Endpoint.STOCK_DELETE + slug));
+  deleteOrUndeleteStock(slug: string): Observable<IResponse> {
+    return this.http.put<IResponse>(GenerateUrlUtils.generateUrl(Endpoint.STOCK_DELETE_OR_UNDELETE + slug), {});
   }
 
   getStockDetails(slug: string): Observable<IResponseWithObject> {
@@ -54,10 +54,6 @@ export class StockService {
       url += `?categoryId=${categoryId}`;
     }
     return this.http.get<IResponseWithObject>(GenerateUrlUtils.generateUrl(url));
-  }
-
-  toggleStockStatus(slug: string): Observable<IResponse> {
-    return this.http.put<IResponse>(GenerateUrlUtils.generateUrl(Endpoint.API_VERSION + 'stock/toggle-status/' + slug), {});
   }
 
   adjustStockQuantity(slug: string, amount: number): Observable<IResponse> {

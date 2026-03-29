@@ -6,24 +6,41 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
 import { StockService } from '../stock.service';
 import { IStockListResponse, ICategoryResponse, ISubCategoryResponse } from '../IStock';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { SelectModule } from 'primeng/select';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { ToastModule } from 'primeng/toast';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { TooltipModule } from 'primeng/tooltip';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { Subject, filter } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-own-stock-list',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, InputTextModule, TagModule, ToastModule, RouterModule, FormsModule, IconFieldModule, InputIconModule, SelectModule, InputGroupModule, InputGroupAddonModule],
-  providers: [MessageService],
+  imports: [
+    CommonModule, 
+    TableModule, 
+    ButtonModule, 
+    InputTextModule, 
+    TagModule, 
+    ToastModule, 
+    RouterModule, 
+    FormsModule, 
+    IconFieldModule, 
+    InputIconModule, 
+    SelectModule, 
+    InputGroupModule, 
+    InputGroupAddonModule, 
+    ConfirmDialogModule,
+    TooltipModule
+  ],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './own-stock-list.html',
   styleUrls: ['./own-stock-list.css']
 })
@@ -54,6 +71,7 @@ export class OwnStockListComponent implements OnInit, OnDestroy {
   constructor(
     private stockService: StockService,
     private messageService: MessageService,
+    private confirmationService: ConfirmationService,
     private router: Router,
     private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -199,18 +217,23 @@ export class OwnStockListComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteStock(slug: string) {
-    if (confirm('Are you sure you want to delete this stock?')) {
-      this.stockService.deleteStock(slug).subscribe({
-        next: (res) => {
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
-          this.loadStocks();
-        },
-        error: (err) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete stock' });
-        }
-      });
-    }
+  deleteOrUndeleteStock(slug: string, currentStatus: boolean) {
+    this.confirmationService.confirm({
+      message: `Are you sure you want to ${currentStatus ? 'deactivate (soft delete)' : 'activate (undelete)'} this stock?`,
+      header: 'Confirm Change',
+      icon: currentStatus ? 'pi pi-exclamation-triangle' : 'pi pi-info-circle',
+      accept: () => {
+        this.stockService.deleteOrUndeleteStock(slug).subscribe({
+          next: (res: any) => {
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
+            this.loadStocks();
+          },
+          error: (err: any) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update stock status' });
+          }
+        });
+      }
+    });
   }
 
   adjustQuantity(stock: IStockListResponse, amount: number) {

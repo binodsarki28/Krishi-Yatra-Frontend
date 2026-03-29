@@ -194,7 +194,7 @@ export class ListStockComponent implements OnInit {
   }
 
   toggleStatus(stock: IStockListResponse) {
-    this.stockService.toggleStockStatus(stock.stockSlug).subscribe({
+    this.stockService.deleteOrUndeleteStock(stock.stockSlug).subscribe({
       next: (res: any) => {
         this.toastService.successResponse(res);
         this.loadStocks();
