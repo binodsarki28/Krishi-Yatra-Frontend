@@ -36,7 +36,7 @@
                                         [dropLocation]="dropLoc" 
                                         [pickerMode]="false"
                                         [drawRoute]="true"
-                                        [initialCheckpoints]="orderForm.get('checkpoints')?.value"
+                                        [initialCheckpoints]="orderForm.controls['checkpoints']?.value"
                                         (onLocationSelected)="onMapLocationSelected($event)"
                                         (onDistanceCalculated)="onDistanceCalculated($event)"
                                         (onCheckpointsCalculated)="onAutoCheckpointsCalculated($event)"></app-map>
@@ -79,10 +79,11 @@
                         <!-- Product Info -->
                         <div class="flex align-items-center gap-3 mb-4 pb-3 border-bottom-1 border-100">
                             <div class="product-thumb bg-gray-100 border-round-lg overflow-hidden flex-shrink-0">
-                                <img *ngIf="stock.stockImages?.length" 
-                                     [src]="stock.stockImages[0]" 
-                                     alt="Product" class="w-full h-full object-cover"/>
-                                <i *ngIf="!stock.stockImages?.length" class="pi pi-image text-gray-400 text-3xl flex align-items-center justify-content-center w-full h-full"></i>
+                                @if (stock.stockImages?.length) {
+                                  <img [ngSrc]="stock.stockImages[0]" width="80" height="80" alt="Product" class="w-full h-full object-cover"/>
+                                } @else {
+                                  <i class="pi pi-image text-gray-400 text-3xl flex align-items-center justify-content-center w-full h-full"></i>
+                                }
                             </div>
                             <div>
                                 <h3 class="m-0 text-lg font-bold text-gray-900">{{ stock.productName }}</h3>
@@ -103,14 +104,16 @@
                                 <input pInputText formControlName="orderQuantity" type="number"
                                     class="w-full p-2 border-round-xl border-1 border-gray-300 text-lg"
                                     [placeholder]="'Min: ' + (stock.minQuantity || 1) + ' | Max: ' + stock.quantity" />
-                                <small class="text-red-500 block mt-1"
-                                    *ngIf="orderForm.get('orderQuantity')?.hasError('min') && orderForm.get('orderQuantity')?.touched">
+                                @if (orderForm.controls['orderQuantity']?.errors?.['min'] && orderForm.controls['orderQuantity']?.touched) {
+                                <small class="text-red-500 block mt-1">
                                     Minimum quantity is {{ stock.minQuantity || 1 }}.
                                 </small>
-                                <small class="text-red-500 block mt-1"
-                                    *ngIf="orderForm.get('orderQuantity')?.hasError('max') && orderForm.get('orderQuantity')?.touched">
+                                }
+                                @if (orderForm.controls['orderQuantity']?.errors?.['max'] && orderForm.controls['orderQuantity']?.touched) {
+                                <small class="text-red-500 block mt-1">
                                     Maximum available is {{ stock.quantity }}.
                                 </small>
+                                }
                             </div>
 
                             <!-- Pickup Address -->
@@ -122,9 +125,11 @@
                                 <input pInputText formControlName="pickupAddress"
                                     class="w-full p-2 border-round-xl border-1 border-gray-300"
                                     placeholder="Farmer's pickup address" />
-                                <small class="text-gray-500 text-xs mt-1 block" *ngIf="farmerAddress">
+                                @if (farmerAddress) {
+                                <small class="text-gray-500 text-xs mt-1 block">
                                     Auto-filled from farmer's profile.
                                 </small>
+                                }
                             </div>
 
                             <!-- Drop Address -->
@@ -136,9 +141,11 @@
                                 <input pInputText formControlName="dropAddress"
                                     class="w-full p-2 border-round-xl border-1 border-gray-300 bg-gray-50"
                                     readonly />
-                                <small class="text-gray-500 text-xs mt-1 block" *ngIf="buyerAddress">
+                                @if (buyerAddress) {
+                                <small class="text-gray-500 text-xs mt-1 block">
                                     Auto-filled from your profile.
                                 </small>
+                                }
                             </div>
 
                             <!-- Checkpoints -->
@@ -156,8 +163,8 @@
                                         (completeMethod)="searchSuggestions($event)"
                                         (keydown.enter)="onCheckpointsKeydown($any($event))"
                                         placeholder="Add up to 3 checkpoints (e.g. Daunne)"
-                                        styleClass="w-full"
-                                        inputStyleClass="text-sm p-2 w-full border-none outline-none bg-transparent">
+                                        class="w-full submit-autocomplete"
+                                        inputClass="text-sm p-2 w-full border-none outline-none bg-transparent">
                                     </p-autocomplete>
                                 </div>
                             </div>
@@ -170,24 +177,25 @@
                                 <textarea pTextarea formControlName="notes" rows="2"
                                     class="w-full p-2 border-round-xl border-1 border-gray-300 resize-none"
                                     placeholder="Enter additional delivery instructions (Min 5 chars)"></textarea>
-                                <small class="text-red-500 block mt-1"
-                                    *ngIf="orderForm.get('notes')?.invalid && orderForm.get('notes')?.touched">
+                                @if (orderForm.controls['notes']?.invalid && orderForm.controls['notes']?.touched) {
+                                <small class="text-red-500 block mt-1">
                                     Notes are required to help delivery partners find you.
                                 </small>
+                                }
                             </div>
 
                             <!-- Price Summary -->
                             <div class="price-summary-card p-3 border-round-xl mb-4">
                                 <div class="flex justify-content-between align-items-center mb-2">
                                     <span class="text-gray-600 text-sm">Items Total</span>
-                                    <span class="text-gray-800 font-medium">Rs. {{ (orderForm.get('orderQuantity')?.value || 0) * stock.pricePerUnit | number:'1.2-2' }}</span>
+                                    <span class="text-gray-800 font-medium">Rs. {{ (orderForm.controls['orderQuantity']?.value || 0) * stock.pricePerUnit | number:'1.2-2' }}</span>
                                 </div>
                                 
                                 <div class="flex justify-content-between align-items-center mb-2">
                                     <div class="flex align-items-center gap-1">
                                         <span class="text-gray-600 text-sm">Delivery Fee</span>
                                         <i class="pi pi-question-circle text-gray-400 text-xs" 
-                                           pTooltip="Based on distance ({{ deliveryDistance.toFixed(1) }} km) @ Rs. 5/km and Quantity ({{ orderForm.get('orderQuantity')?.value || 0 }} kg) @ Rs. 2/kg."></i>
+                                           pTooltip="Based on distance ({{ deliveryDistance.toFixed(1) }} km) @ Rs. 5/km and Quantity ({{ orderForm.controls['orderQuantity']?.value || 0 }} kg) @ Rs. 2/kg."></i>
                                     </div>
                                     @if (deliveryFee > 0) {
                                         <span class="text-gray-800 font-medium">Rs. {{ deliveryFee | number:'1.2-2' }}</span>

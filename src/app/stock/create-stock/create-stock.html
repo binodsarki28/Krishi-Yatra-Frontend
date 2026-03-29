@@ -12,15 +12,15 @@
             </div>
         </div>
         <p-button icon="pi pi-times" label="Cancel" [outlined]="true" severity="secondary"
-            size="small" styleClass="border-round-lg" [routerLink]="['/farmer/stocks/my-stocks']"></p-button>
+            size="small" class="border-round-lg" [routerLink]="['/farmer/stocks/my-stocks']"></p-button>
     </div>
 
     <!-- Form -->
     <div class="surface-card border-round-xl border-1 border-200 p-4 shadow-1 mx-auto" style="max-width: 900px;">
-        
+
         @if (loadingAddress) {
             <div class="flex flex-column align-items-center justify-content-center p-8">
-                <p-progressSpinner styleClass="w-3rem h-3rem"></p-progressSpinner>
+                <p-progressSpinner class="w-3rem h-3rem"></p-progressSpinner>
                 <div class="mt-3 text-500 font-medium">Checking your address status...</div>
             </div>
         } @else if (!hasAddress) {
@@ -32,7 +32,7 @@
                     <h3 class="m-0 text-xl font-bold text-orange-900">Missing Address Information</h3>
                     <p class="mt-2 text-700 max-w-20rem">You must set your farm's location in your profile before you can list any products. This helps buyers and delivery agents find you.</p>
                 </div>
-                <p-button label="Go to Profile to Add Address" icon="pi pi-user-edit" 
+                <p-button label="Go to Profile to Add Address" icon="pi pi-user-edit"
                     [rounded]="true" severity="warn" [routerLink]="['/profile']" [queryParams]="{tab: 'address'}"></p-button>
             </div>
         } @else {
@@ -43,10 +43,10 @@
                     <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Stock Name</label>
                     <div class="field-with-icon">
                         <i class="pi pi-box"></i>
-                        <input pInputText formControlName="stockName" placeholder="e.g. Fresh Red Tomatoes" 
+                        <input pInputText formControlName="stockName" placeholder="e.g. Fresh Red Tomatoes"
                             class="w-full text-sm border-round-lg" />
                     </div>
-                    @if (stockForm.get('stockName')?.invalid && stockForm.get('stockName')?.touched) {
+                    @if (stockForm.controls['stockName']?.invalid && stockForm.controls['stockName']?.touched) {
                         <small class="validation-error">Required (min 3 chars)</small>
                     }
                 </div>
@@ -55,10 +55,10 @@
                     <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Product Name</label>
                     <div class="field-with-icon">
                         <i class="pi pi-shopping-bag"></i>
-                        <input pInputText formControlName="productName" placeholder="e.g. Tomato" 
+                        <input pInputText formControlName="productName" placeholder="e.g. Tomato"
                             class="w-full text-sm border-round-lg" />
                     </div>
-                    @if (stockForm.get('productName')?.invalid && stockForm.get('productName')?.touched) {
+                    @if (stockForm.controls['productName']?.invalid && stockForm.controls['productName']?.touched) {
                         <small class="validation-error">Product name is required</small>
                     }
                 </div>
@@ -70,8 +70,8 @@
                     </label>
                     <p-select [options]="categories" formControlName="categoryId" optionLabel="categoryName" optionValue="categoryId"
                         placeholder="Select Category" (onChange)="onCategoryChange()" [filter]="true"
-                        styleClass="w-full border-round-lg shadow-none"></p-select>
-                    @if (stockForm.get('categoryId')?.invalid && stockForm.get('categoryId')?.touched) {
+                        class="w-full border-round-lg shadow-none"></p-select>
+                    @if (stockForm.controls['categoryId']?.invalid && stockForm.controls['categoryId']?.touched) {
                         <small class="validation-error">Category is required</small>
                     }
                 </div>
@@ -84,8 +84,8 @@
                     </label>
                     <p-select [options]="subCategoriesFiltered" formControlName="subCategoryId" optionLabel="subCategoryName" optionValue="subCategoryId"
                         placeholder="Select Sub Category" [filter]="true"
-                        styleClass="w-full border-round-lg shadow-none"></p-select>
-                    @if (stockForm.get('subCategoryId')?.invalid && stockForm.get('subCategoryId')?.touched) {
+                        class="w-full border-round-lg shadow-none"></p-select>
+                    @if (stockForm.controls['subCategoryId']?.invalid && stockForm.controls['subCategoryId']?.touched) {
                         <small class="validation-error">Sub-category is required</small>
                     }
                 </div>
@@ -94,10 +94,10 @@
                     <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Quantity (Units)</label>
                     <div class="field-with-icon">
                         <i class="pi pi-info-circle"></i>
-                        <p-inputNumber formControlName="quantity" placeholder="Quantity" 
-                            styleClass="w-full" inputStyleClass="w-full border-round-lg text-sm" inputId="quantity"></p-inputNumber>
+                        <p-inputNumber formControlName="quantity" placeholder="Quantity"
+                            class="w-full" inputClass="w-full border-round-lg text-sm" inputId="quantity"></p-inputNumber>
                     </div>
-                    @if (stockForm.get('quantity')?.invalid && stockForm.get('quantity')?.touched) {
+                    @if (stockForm.controls['quantity']?.invalid && stockForm.controls['quantity']?.touched) {
                         <small class="validation-error">Quantity must be at least 1</small>
                     }
                 </div>
@@ -106,8 +106,8 @@
                     <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Price Per (Rs.)</label>
                     <div class="field-with-icon">
                         <i class="pi pi-dollar"></i>
-                        <p-inputNumber formControlName="pricePerUnit" placeholder="Price" 
-                            styleClass="w-full" inputStyleClass="w-full border-round-lg text-sm" inputId="price"></p-inputNumber>
+                        <p-inputNumber formControlName="pricePerUnit" placeholder="Price"
+                            class="w-full" inputClass="w-full border-round-lg text-sm" inputId="price"></p-inputNumber>
                     </div>
                 </div>
 
@@ -115,8 +115,8 @@
                     <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Min Order Quantity</label>
                     <div class="field-with-icon">
                         <i class="pi pi-cart-plus"></i>
-                        <p-inputNumber formControlName="minQuantity" placeholder="Min Qty" 
-                            styleClass="w-full" inputStyleClass="w-full border-round-lg text-sm" inputId="minQuantity"></p-inputNumber>
+                        <p-inputNumber formControlName="minQuantity" placeholder="Min Qty"
+                            class="w-full" inputClass="w-full border-round-lg text-sm" inputId="minQuantity"></p-inputNumber>
                     </div>
                 </div>
 
@@ -126,10 +126,10 @@
                         <i class="pi pi-images text-green-500"></i>
                         Upload Product Photos (Max 5)
                     </label>
-                        <p-fileupload name="images" [multiple]="true" accept="image/*" [maxFileSize]="5000000" 
+                        <p-fileupload name="images" [multiple]="true" accept="image/*" [maxFileSize]="5000000"
                             [fileLimit]="5" (onSelect)="onFilesSelected($event)"
                             [showUploadButton]="false" [showCancelButton]="false"
-                            styleClass="w-full border-round-lg shadow-none font-medium"
+                            class="w-full border-round-lg shadow-none font-medium"
                             chooseLabel="Select Photos" chooseIcon="pi pi-cloud-upload"></p-fileupload>
 
                         <!-- Selected Queue Previews -->
@@ -137,8 +137,8 @@
                             <div class="flex flex-wrap gap-2 mt-3 p-3 bg-blue-50 border-round-lg border-1 border-blue-100">
                                 @for (file of selectedFiles; track $index) {
                                     <div class="relative shadow-2 border-round-lg overflow-hidden" style="width: 70px; height: 70px;">
-                                        <img [src]="file.objectURL" class="w-full h-full" style="object-fit: cover;">
-                                        <div (click)="removeFile($index)" class="absolute top-0 right-0 p-1 bg-red-500 text-white cursor-pointer hover:bg-red-600 transition-colors" 
+                                        <img [src]="file.objectURL" class="w-full h-full" style="object-fit: cover;" alt="Preview">
+                                        <div (click)="removeFile($index)" class="absolute top-0 right-0 p-1 bg-red-500 text-white cursor-pointer hover:bg-red-600 transition-colors"
                                              style="border-bottom-left-radius: 8px;">
                                             <i class="pi pi-times" style="font-size: 10px;"></i>
                                         </div>
@@ -158,9 +158,9 @@
 
                 <div class="col-12 relative pb-2">
                     <label class="block text-xs font-bold text-500 mb-1 ml-1 uppercase">Detailed Description</label>
-                    <textarea pTextarea formControlName="description" rows="3" placeholder="Tell us more about your stock..." 
+                    <textarea pTextarea formControlName="description" rows="3" placeholder="Tell us more about your stock..."
                         class="w-full text-sm border-round-lg shadow-none text-900 border-1 border-300 p-3 bg-white"></textarea>
-                    @if (stockForm.get('description')?.invalid && stockForm.get('description')?.touched) {
+                    @if (stockForm.controls['description']?.invalid && stockForm.controls['description']?.touched) {
                         <small class="validation-error">Description is required</small>
                     }
                 </div>
@@ -168,11 +168,11 @@
 
             <!-- Footer: Actions -->
             <div class="flex justify-content-end gap-2 mt-5">
-                <p-button label="Discard" icon="pi pi-times" [outlined]="true" severity="secondary" 
-                    [routerLink]="['/farmer/stocks/my-stocks']" styleClass="border-round-lg px-4"></p-button>
-                <p-button type="submit" label="List Stock" icon="pi pi-check" 
-                    [loading]="submitting" [disabled]="stockForm.invalid" 
-                    severity="success" styleClass="border-round-lg px-5"></p-button>
+                <p-button label="Discard" icon="pi pi-times" [outlined]="true" severity="secondary"
+                    [routerLink]="['/farmer/stocks/my-stocks']" class="border-round-lg px-4"></p-button>
+                <p-button type="submit" label="List Stock" icon="pi pi-check"
+                    [loading]="submitting" [disabled]="stockForm.invalid"
+                    severity="success" class="border-round-lg px-5"></p-button>
             </div>
         </form>
         }

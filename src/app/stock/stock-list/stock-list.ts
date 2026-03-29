@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -39,7 +39,8 @@ import { ToastService } from '../../util/toast.service';
     RippleModule,
     TooltipModule,
     DataViewModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    NgOptimizedImage
   ],
   templateUrl: './stock-list.html',
   styleUrls: ['./stock-list.css']

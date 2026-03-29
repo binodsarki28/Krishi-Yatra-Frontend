@@ -1,0 +1,119 @@
+<div class="notification-center-container min-h-screen surface-ground p-4 relative pt-7 md:pt-4">
+    <div class="max-w-4xl mx-auto mb-5">
+        <div class="flex flex-column md:flex-row md:align-items-center justify-content-between gap-3 mb-4">
+            <div class="flex align-items-center gap-3">
+                <div class="flex align-items-center justify-content-center border-round-xl p-3 bg-white shadow-2">
+                    <i class="pi pi-bell text-3xl text-green-600"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-900 m-0">Notification Center</h1>
+                    <p class="text-500 text-sm mt-1 mb-0 font-medium">Keep track of your system activities</p>
+                </div>
+            </div>
+            <div class="flex align-items-center gap-2">
+                @if (unreadCount > 0) {
+                    <button pButton label="Mark All Read" icon="pi pi-check" 
+                        class="p-button-text p-button-success p-button-sm font-bold border-round-xl px-3 surface-card shadow-1 hover:shadow-2"
+                        (click)="markAllAsRead()"></button>
+                }
+                <button pButton icon="pi pi-refresh" [loading]="loading"
+                    class="p-button-text p-button-secondary p-button-rounded p-button-sm surface-card shadow-1 hover:shadow-2"
+                    (click)="loadMockNotifications()"></button>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 mb-4">
+            <p-button label="All Notifications" 
+                class="p-button-sm border-round-xl px-4 py-2 font-bold shadow-1"
+                [severity]="activeFilter === 'all' ? 'success' : 'secondary'"
+                [outlined]="activeFilter !== 'all'"
+                (onClick)="activeFilter = 'all'"></p-button>
+            <p-button label="Unread Only" 
+                class="p-button-sm border-round-xl px-4 py-2 font-bold shadow-1"
+                [severity]="activeFilter === 'unread' ? 'success' : 'secondary'"
+                [outlined]="activeFilter !== 'unread'"
+                (onClick)="activeFilter = 'unread'"
+                [badge]="unreadCount > 0 ? unreadCount.toString() : ''"
+                badgeSeverity="danger"></p-button>
+        </div>
+
+        <div class="notification-list flex flex-column gap-3">
+            @if (loading) {
+                <div class="surface-card p-8 border-round-2xl text-center shadow-2 border-1 border-200">
+                    <i class="pi pi-spin pi-spinner text-4xl text-green-500 mb-3"></i>
+                    <p class="text-600 font-bold">Synchronizing notifications...</p>
+                </div>
+            } @else {
+                @for (notif of filteredNotifications; track notif.id) {
+                    <div class="notification-card surface-card p-3 md:p-4 border-round-2xl shadow-1 border-1 border-200 flex gap-3 md:gap-4 align-items-start transition-all transition-duration-300 hover:shadow-4 hover:surface-hover relative overflow-hidden"
+                         [class.unread-border]="!notif.read">
+                        
+                        <!-- Side Strip for Unread -->
+                        @if (!notif.read) {
+                            <div class="absolute top-0 left-0 h-full w-4px bg-green-500"></div>
+                        }
+
+                        <!-- Icon Section -->
+                        <div class="flex-shrink-0 flex align-items-center justify-content-center border-round-xl bg-gray-50 p-2 shadow-2"
+                             style="width: 48px; height: 48px;">
+                            <i [class]="getIcon(notif.type)" class="text-xl" [class.text-green-600]="notif.severity === 'success'" [class.text-blue-600]="notif.severity === 'info'" [class.text-orange-600]="notif.severity === 'warn'" [class.text-red-600]="notif.severity === 'danger'"></i>
+                        </div>
+
+                        <!-- Content Section -->
+                        <div class="flex-1 cursor-pointer" (click)="handleAction(notif)">
+                            <div class="flex flex-column md:flex-row md:align-items-center justify-content-between gap-1 mb-2">
+                                <div class="flex align-items-center gap-2">
+                                    <h3 class="m-0 text-base font-bold text-900">{{ notif.title }}</h3>
+                                    @if (!notif.read) {
+                                        <p-badge severity="success" class="text-xs"></p-badge>
+                                    }
+                                </div>
+                                <span class="text-xs text-500 font-medium">
+                                    <i class="pi pi-clock mr-1 text-xs"></i>{{ notif.timestamp | date:'shortTime' }}
+                                </span>
+                            </div>
+                            <p class="m-0 text-700 text-sm line-height-3 mb-3">{{ notif.message }}</p>
+                            
+                            <div class="flex align-items-center gap-3">
+                                <p-tag [value]="getTypeLabel(notif.type)" [severity]="notif.severity" class="text-xs font-bold px-2 py-1 shadow-1"></p-tag>
+                                <span class="text-xs text-400 font-medium">{{ notif.timestamp | date:'mediumDate' }}</span>
+                                @if (notif.link) {
+                                  <span class="text-xs font-bold text-green-600 ml-auto hover:underline flex align-items-center">
+                                    View Action <i class="pi pi-arrow-right ml-1 text-xs"></i>
+                                  </span>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Actions Section -->
+                        <div class="flex flex-column gap-2">
+                            @if (!notif.read) {
+                                <button pButton icon="pi pi-check" 
+                                    class="p-button-text p-button-success p-button-rounded p-button-sm border-1 border-200 surface-card" 
+                                    pTooltip="Mark Read" tooltipPosition="left"
+                                    (click)="$event.stopPropagation(); markAsRead(notif.id)"></button>
+                            }
+                            <button pButton icon="pi pi-trash" 
+                                class="p-button-text p-button-danger p-button-rounded p-button-sm border-1 border-200 surface-card" 
+                                pTooltip="Remove" tooltipPosition="left"
+                                (click)="$event.stopPropagation(); deleteNotification(notif.id)"></button>
+                        </div>
+                    </div>
+                } @empty {
+                    <div class="surface-card p-8 border-round-2xl text-center shadow-2 border-1 border-200">
+                        <div class="flex align-items-center justify-content-center mb-4">
+                            <div class="border-circle bg-gray-50 flex align-items-center justify-content-center shadow-1" style="width: 120px; height: 120px;">
+                                <i class="pi pi-bell-slash text-6xl text-300"></i>
+                            </div>
+                        </div>
+                        <h2 class="text-900 font-bold mb-2">No notifications yet</h2>
+                        <p class="text-500 max-w-20rem mx-auto line-height-3">You're all caught up! New activities will appear here as they happen in the KrishiYatra network.</p>
+                        <button pButton label="Go to Dashboard" icon="pi pi-home"
+                                class="p-button-success border-round-xl mt-4 px-5 font-bold shadow-3"
+                                (click)="router.navigate(['/'])"></button>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

@@ -89,6 +89,10 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/profile']);
   }
 
+  navigateToNotifications() {
+    this.router.navigate(['/notifications']);
+  }
+
   logout() {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.clear();

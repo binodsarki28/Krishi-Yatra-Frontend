@@ -1,0 +1,107 @@
+.notification-center-container {
+    background-color: #f8fafc;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.notification-card {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notification-card:hover {
+    transform: translateX(4px);
+    background-color: #ffffff;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.unread-border {
+    border-color: rgba(34, 197, 94, 0.1) !important;
+    background-color: rgba(34, 197, 94, 0.02);
+}
+
+.unread-border::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -4px;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
+}
+
+.w-4px {
+    width: 4px;
+}
+
+.fadein {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.p-button.p-button-sm {
+    font-size: 0.825rem;
+}
+
+.notification-card h3 {
+    letter-spacing: -0.015em;
+}
+
+.notification-card p {
+    letter-spacing: -0.011em;
+    color: #4b5563;
+}
+
+.max-w-20rem {
+    max-width: 20rem;
+}
+
+.surface-hover {
+    background-color: #f1f5f9;
+}
+
+.hover-scale {
+    transition: transform 0.2s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.02);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1;
+}
+
+/* Accessibility and Selectors */
+.notification-card {
+    cursor: default;
+}
+
+.notification-card .flex-1 {
+    cursor: pointer;
+}

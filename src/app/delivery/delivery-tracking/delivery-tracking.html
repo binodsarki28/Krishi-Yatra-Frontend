@@ -1,4 +1,5 @@
-<div class="tracking-container" *ngIf="!loading && order">
+@if (!loading && order) {
+<div class="tracking-container">
     <!-- Left: Map Overview -->
     <div class="map-view h-full">
         @if (pickupLoc && dropLoc) {
@@ -46,7 +47,8 @@
             </h4>
             <div class="flex flex-column gap-3">
                 <!-- Farmer Contact -->
-                <div *ngIf="order?.farmerPhone" class="flex align-items-center justify-content-between p-3 border-round-lg bg-green-50 border-1 border-green-100">
+                @if (order?.farmerPhone) {
+                <div class="flex align-items-center justify-content-between p-3 border-round-lg bg-green-50 border-1 border-green-100">
                     <div class="flex align-items-center gap-3">
                         <div class="flex align-items-center justify-content-center border-round bg-green-100 text-green-700" style="width:36px; height:36px;">
                             <i class="pi pi-home"></i>
@@ -61,9 +63,11 @@
                         <i class="pi pi-phone text-xs opacity-50"></i>
                     </div>
                 </div>
+                }
 
                 <!-- Buyer Contact -->
-                <div *ngIf="order?.buyerPhone" class="flex align-items-center justify-content-between p-3 border-round-lg bg-blue-50 border-1 border-blue-100">
+                @if (order?.buyerPhone) {
+                <div class="flex align-items-center justify-content-between p-3 border-round-lg bg-blue-50 border-1 border-blue-100">
                     <div class="flex align-items-center gap-3">
                         <div class="flex align-items-center justify-content-center border-round bg-blue-100 text-blue-700" style="width:36px; height:36px;">
                             <i class="pi pi-user"></i>
@@ -78,6 +82,7 @@
                         <i class="pi pi-phone text-xs opacity-50"></i>
                     </div>
                 </div>
+                }
             </div>
         </div>
 
@@ -147,8 +152,11 @@
                                 {{cp.label}}
                             </span>
                         </div>
-                        <p-tag *ngIf="cp.checked" value="✓ Reached" severity="success" styleClass="text-[10px] px-2 py-1"></p-tag>
-                        <p-tag *ngIf="!cp.checked" value="Pending" severity="warn" styleClass="text-[10px] px-2 py-1"></p-tag>
+                        @if (cp.checked) {
+                        <p-tag value="✓ Reached" severity="success" class="text-[10px] px-2 py-1"></p-tag>
+                        } @else {
+                        <p-tag value="Pending" severity="warn" class="text-[10px] px-2 py-1"></p-tag>
+                        }
                     </div>
                 }
 
@@ -163,17 +171,21 @@
 
         <!-- Order Status Actions -->
         <div class="mt-auto pt-3">
+            @if (order.orderStatus === 'ACCEPTED') {
             <button pButton 
-                    *ngIf="order.orderStatus === 'ACCEPTED'"
                     label="Mark as Picked Up" 
                     icon="pi pi-box" 
                     class="p-button-info w-full p-3 text-lg font-bold shadow-2 border-round-xl"
                     [loading]="completing"
                     (click)="markAsPickedUp()">
             </button>
+            <p class="text-center text-xs text-gray-400 mt-2 m-0">
+                Collect from farmer and click picked up.
+            </p>
+            }
 
+            @if (order.orderStatus === 'SHIPPING') {
             <button pButton 
-                    *ngIf="order.orderStatus === 'SHIPPING'"
                     [label]="canCompleteDelivery ? 'Complete Delivery' : 'Finish All Checkpoints First'" 
                     icon="pi pi-check-circle" 
                     [class]="canCompleteDelivery ? 'p-button-success w-full p-3 text-lg font-bold shadow-2 border-round-xl' : 'p-button-secondary w-full p-3 text-lg font-bold shadow-1 border-round-xl opacity-80'"
@@ -181,20 +193,21 @@
                     [disabled]="!canCompleteDelivery || completing"
                     (click)="markAsDelivered()">
             </button>
-
-            <p class="text-center text-xs text-gray-400 mt-2 m-0" *ngIf="order.orderStatus === 'ACCEPTED'">
-                Collect from farmer and click picked up.
-            </p>
+            }
         </div>
     </div>
 </div>
+}
 
-<div class="flex flex-column align-items-center justify-content-center p-8 bg-white h-screen" *ngIf="loading && !order">
+@if (loading && !order) {
+<div class="flex flex-column align-items-center justify-content-center p-8 bg-white h-screen">
     <i class="pi pi-spin pi-spinner text-4xl text-primary mb-4"></i>
     <p class="text-lg text-gray-600 font-medium">Loading delivery route...</p>
 </div>
+}
 
-<div class="flex flex-column align-items-center justify-content-center p-8 bg-white h-screen" *ngIf="!loading && !order">
+@if (!loading && !order) {
+<div class="flex flex-column align-items-center justify-content-center p-8 bg-white h-screen">
     <i class="pi pi-exclamation-triangle text-4xl text-orange-500 mb-4"></i>
     <h2 class="m-0 text-xl font-bold text-gray-800">Connection Error</h2>
     <p class="text-gray-500 text-center mt-2 max-w-20rem">The delivery server could not be reached. We are attempting to reconnect in the background.</p>
@@ -205,3 +218,4 @@
                 class="p-button-outlined p-button-secondary" routerLink="/delivery/jobs/active"></button>
     </div>
 </div>
+}

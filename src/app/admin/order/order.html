@@ -12,7 +12,7 @@
             </div>
         </div>
         <p-button icon="pi pi-refresh" label="Refresh" [outlined]="true" [loading]="loading" severity="secondary"
-            styleClass="border-round-xl font-semibold" (onClick)="onSearch(true)"></p-button>
+            class="border-round-xl font-semibold" (onClick)="onSearch(true)"></p-button>
     </div>
 
     <!-- Search Input Grid Box -->
@@ -20,28 +20,28 @@
         <div class="grid align-items-center">
             <div class="col-12 md:col-2">
                 <p-iconField iconPosition="left">
-                    <p-inputIcon styleClass="pi pi-hashtag"></p-inputIcon>
+                    <p-inputIcon class="pi pi-hashtag"></p-inputIcon>
                     <input type="text" pInputText [(ngModel)]="filters.orderId" (input)="onSearch()"
                         placeholder="Order ID..." class="w-full border-none shadow-none text-sm" />
                 </p-iconField>
             </div>
             <div class="col-12 md:col-2">
                 <p-iconField iconPosition="left">
-                    <p-inputIcon styleClass="pi pi-shopping-bag"></p-inputIcon>
+                    <p-inputIcon class="pi pi-shopping-bag"></p-inputIcon>
                     <input type="text" pInputText [(ngModel)]="filters.buyer" (input)="onSearch()"
                         placeholder="Buyer name/user..." class="w-full border-none shadow-none text-sm" />
                 </p-iconField>
             </div>
             <div class="col-12 md:col-2">
                 <p-iconField iconPosition="left">
-                    <p-inputIcon styleClass="pi pi-users"></p-inputIcon>
+                    <p-inputIcon class="pi pi-users"></p-inputIcon>
                     <input type="text" pInputText [(ngModel)]="filters.farmer" (input)="onSearch()"
                         placeholder="Farmer name/user..." class="w-full border-none shadow-none text-sm" />
                 </p-iconField>
             </div>
             <div class="col-12 md:col-2">
                 <p-iconField iconPosition="left">
-                    <p-inputIcon styleClass="pi pi-truck"></p-inputIcon>
+                    <p-inputIcon class="pi pi-truck"></p-inputIcon>
                     <input type="text" pInputText [(ngModel)]="filters.delivery" (input)="onSearch()"
                         placeholder="Rider name/user..." class="w-full border-none shadow-none text-sm" />
                 </p-iconField>
@@ -49,7 +49,7 @@
             <div class="col-12 md:col-2">
                 <p-select [options]="statusOptions" [(ngModel)]="filters.status" (onChange)="onSearch(true)"
                     optionLabel="label" optionValue="value" placeholder="Status..." [showClear]="true"
-                    styleClass="w-full border-none shadow-none text-sm h-full flex align-items-center">
+                    class="w-full border-none shadow-none text-sm h-full flex align-items-center">
                 </p-select>
             </div>
             <div class="col-12 md:col-2 flex gap-2">
@@ -88,7 +88,7 @@
 
     <!-- Table -->
     <div class="surface-card border-1 border-200 border-round-xl shadow-1 overflow-hidden">
-        <p-table [value]="orders" [loading]="loading" responsiveLayout="scroll" styleClass="p-datatable-sm">
+        <p-table [value]="orders" [loading]="loading" responsiveLayout="scroll" class="p-datatable-sm">
             <ng-template pTemplate="header">
                 <tr class="surface-50">
                     <th class="text-700 font-bold text-xs uppercase p-4">Order Info</th>
@@ -118,16 +118,16 @@
                     <td class="p-4">
                         <div class="flex flex-column gap-1">
                             <div class="flex align-items-center gap-2">
-                                <p-tag value="F" severity="success" styleClass="text-xs px-1"></p-tag>
+                                <p-tag value="F" severity="success" class="text-xs px-1"></p-tag>
                                 <span class="text-xs text-700 font-medium">{{ order.farmerName }}</span>
                             </div>
                             <div class="flex align-items-center gap-2">
-                                <p-tag value="B" severity="info" styleClass="text-xs px-1"></p-tag>
+                                <p-tag value="B" severity="info" class="text-xs px-1"></p-tag>
                                 <span class="text-xs text-700 font-medium">{{ order.buyerName }}</span>
                             </div>
                             @if (order.deliveryName) {
                             <div class="flex align-items-center gap-2">
-                                <p-tag value="D" severity="warn" styleClass="text-xs px-1"></p-tag>
+                                <p-tag value="D" severity="warn" class="text-xs px-1"></p-tag>
                                 <span class="text-xs text-700 font-medium text-orange-500">{{ order.deliveryName }}</span>
                             </div>
                             } @else {
@@ -144,7 +144,7 @@
                     <td class="p-4 text-center">
                         <p-tag [value]="order.orderStatus"
                             [severity]="getStatusSeverity(order.orderStatus)"
-                            styleClass="text-xs px-2"></p-tag>
+                            class="text-xs px-2"></p-tag>
                     </td>
                     <td class="p-4 text-center">
                         <span class="text-xs text-500">{{ order.createdAt | date:'mediumDate' }}</span>

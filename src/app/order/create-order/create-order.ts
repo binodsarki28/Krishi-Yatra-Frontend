@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, PLATFORM_ID, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -33,7 +33,8 @@ import { AccountService } from '../../components/account/account.service';
     SelectModule,
     TagModule,
     AutoCompleteModule,
-    TooltipModule
+    TooltipModule,
+    NgOptimizedImage
   ],
   templateUrl: './create-order.html',
   styleUrls: ['./create-order.css']

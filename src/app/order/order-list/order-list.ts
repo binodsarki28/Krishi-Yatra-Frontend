@@ -10,11 +10,12 @@ import { IOrderResponse } from '../IOrder';
 
 import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
+import {Tooltip} from 'primeng/tooltip';
 
 @Component({
   selector: 'app-order-list',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, TagModule, RouterModule, SelectModule, InputTextModule, FormsModule],
+  imports: [CommonModule, TableModule, ButtonModule, TagModule, RouterModule, SelectModule, InputTextModule, FormsModule, Tooltip],
   templateUrl: './order-list.html',
   styleUrls: ['./order-list.css']
 })

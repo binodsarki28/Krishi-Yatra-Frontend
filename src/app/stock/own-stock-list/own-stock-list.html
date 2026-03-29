@@ -14,7 +14,7 @@
         <div class="flex gap-2">
             <p-button icon="pi pi-refresh" label="Refresh" [outlined]="true" [loading]="loading" severity="secondary"
                 size="small" styleClass="border-round-lg" (onClick)="loadStocks()"></p-button>
-            <p-button label="Add New Stock" icon="pi pi-plus" [routerLink]="['/farmer/stocks/create']" 
+            <p-button label="Add New Stock" icon="pi pi-plus" [routerLink]="['/farmer/stocks/create']"
                 severity="success" size="small" styleClass="border-round-lg"></p-button>
         </div>
     </div>
@@ -25,7 +25,7 @@
             <div class="col-12 md:col-3">
                 <label class="block text-xs font-bold text-500 mb-1 ml-1">STOCK NAME</label>
                 <p-iconfield>
-                    <p-inputicon styleClass="pi pi-box"></p-inputicon>
+                    <p-inputicon class="pi pi-box"></p-inputicon>
                     <input type="text" pInputText [(ngModel)]="filters.stockName" (input)="onSearch()"
                         placeholder="Search by name..." class="w-full border-round-lg text-sm" />
                 </p-iconfield>
@@ -33,7 +33,7 @@
             <div class="col-12 md:col-3">
                 <label class="block text-xs font-bold text-500 mb-1 ml-1">PRODUCT</label>
                 <p-iconfield>
-                    <p-inputicon styleClass="pi pi-shopping-cart"></p-inputicon>
+                    <p-inputicon class="pi pi-shopping-cart"></p-inputicon>
                     <input type="text" pInputText [(ngModel)]="filters.productName" (input)="onSearch()"
                         placeholder="Search product..." class="w-full border-round-lg text-sm" />
                 </p-iconfield>
@@ -41,14 +41,14 @@
             <div class="col-12 md:col-2">
                 <label class="block text-xs font-bold text-500 mb-1 ml-1">CATEGORY</label>
                 <p-select [options]="categories" [(ngModel)]="filters.categoryName" optionLabel="categoryName" optionValue="categoryName"
-                    placeholder="All Categories" (onChange)="onCategoryFilterChange()" [showClear]="true" 
-                    styleClass="w-full border-round-lg text-sm" [filter]="true"></p-select>
+                    placeholder="All Categories" (onChange)="onCategoryFilterChange()" [showClear]="true"
+                    class="w-full border-round-lg text-sm" [filter]="true"></p-select>
             </div>
             <div class="col-12 md:col-2">
                 <label class="block text-xs font-bold text-500 mb-1 ml-1">SUB CATEGORY</label>
                 <p-select [options]="subCategoriesFiltered" [(ngModel)]="filters.subCategoryName" optionLabel="subCategoryName" optionValue="subCategoryName"
-                    placeholder="All Sub-cats" [disabled]="!filters.categoryName" (onChange)="onSearch(true)" [showClear]="true" 
-                    styleClass="w-full border-round-lg text-sm" [filter]="true"></p-select>
+                    placeholder="All Sub-cats" [disabled]="!filters.categoryName" (onChange)="onSearch(true)" [showClear]="true"
+                    class="w-full border-round-lg text-sm" [filter]="true"></p-select>
             </div>
             <div class="col-12 md:col-2 flex gap-2">
                 <p-button icon="pi pi-search" label="Search" severity="success" styleClass="border-round-lg w-full text-sm"
@@ -70,8 +70,8 @@
     <!-- Table -->
     @if (!loading) {
         <div class="surface-card border-round-xl border-1 border-200 shadow-1 overflow-hidden">
-            <p-table [value]="displayStocks" [loading]="loading" responsiveLayout="scroll" 
-                styleClass="p-datatable-sm p-datatable-striped" [rowHover]="true"
+            <p-table [value]="displayStocks" [loading]="loading" responsiveLayout="scroll"
+                class="p-datatable-sm p-datatable-striped" [rowHover]="true"
                 [scrollable]="true" scrollHeight="calc(100vh - 315px)">
                 <ng-template pTemplate="header">
                     <tr>
@@ -101,16 +101,16 @@
                         </td>
                         <td class="text-sm font-bold text-green-700">Rs. {{stock.pricePerUnit}}</td>
                         <td>
-                            <p-tag [value]="stock.active ? 'Active' : 'Inactive'" 
-                                [severity]="getSeverity(stock.active)" [rounded]="true" size="small"></p-tag>
+                            <p-tag [value]="stock.active ? 'Active' : 'Inactive'"
+                                   [severity]="getSeverity(stock.active)" [rounded]="true" sizes="small"></p-tag>
                         </td>
                         <td>
                             <div class="flex gap-1 justify-content-center">
-                                <p-button icon="pi pi-pencil" [routerLink]="['/farmer/stocks/update', stock.stockSlug]" 
+                                <p-button icon="pi pi-pencil" [routerLink]="['/farmer/stocks/update', stock.stockSlug]"
                                     severity="info" [text]="true" [rounded]="true" size="small" pTooltip="Edit Stock"></p-button>
-                                
-                                <p-button [icon]="stock.active ? 'pi pi-eye-slash' : 'pi pi-eye'" 
-                                    (onClick)="deleteOrUndeleteStock(stock.stockSlug, stock.active)" 
+
+                                <p-button [icon]="stock.active ? 'pi pi-eye-slash' : 'pi pi-eye'"
+                                    (onClick)="deleteOrUndeleteStock(stock.stockSlug, stock.active)"
                                     [severity]="stock.active ? 'warn' : 'success'" [text]="true" [rounded]="true" size="small"
                                     [pTooltip]="stock.active ? 'Deactivate (Soft Delete)' : 'Activate (Undelete)'"></p-button>
                             </div>

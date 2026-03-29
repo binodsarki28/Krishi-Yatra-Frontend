@@ -8,17 +8,21 @@ import { TagModule } from 'primeng/tag';
 import { CardModule } from 'primeng/card';
 import { TimelineModule } from 'primeng/timeline';
 import { ToastService } from '../../util/toast.service';
+import {ButtonDirective} from 'primeng/button';
+import {Ripple} from 'primeng/ripple';
 
 @Component({
   selector: 'app-buyer-tracking',
   standalone: true,
   imports: [
-    CommonModule, 
-    MapComponent, 
-    TagModule, 
-    CardModule, 
+    CommonModule,
+    MapComponent,
+    TagModule,
+    CardModule,
     TimelineModule,
-    RouterModule
+    RouterModule,
+    ButtonDirective,
+    Ripple
   ],
   templateUrl: './buyer-tracking.html',
   styleUrls: ['./buyer-tracking.css']
@@ -89,7 +93,7 @@ export class BuyerTracking implements OnInit, OnDestroy {
   loadOrderDetails(silent = false) {
     if (!this.orderId) return;
     if (!silent) this.loading = true;
-    
+
     this.deliveryService.getOrderDetails(this.orderId).subscribe({
       next: (res: any) => {
         this.order = res.response || res.data;
@@ -98,14 +102,14 @@ export class BuyerTracking implements OnInit, OnDestroy {
           this.loading = false;
           return;
         }
-        
+
         // Initial temp load
         if (!this.pickupLoc) {
             this.pickupLoc = { lat: 27.7, lng: 85.3, label: 'Farmer Location' };
             this.dropLoc = { lat: 27.71, lng: 85.32, label: 'Your Location' };
             this.geocodeLocations();
         }
-        
+
         this.parseCheckpoints(this.order.checkpoints);
         this.loading = false;
         this.cdr.detectChanges();
@@ -136,7 +140,7 @@ export class BuyerTracking implements OnInit, OnDestroy {
     if (queries.length === 0) return;
     const query = queries.shift()!;
     const photonUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=1`;
-    
+
     fetch(photonUrl)
       .then(res => res.json())
       .then(data => {
