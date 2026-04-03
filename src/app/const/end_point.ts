@@ -136,5 +136,15 @@ export class Endpoint {
     Endpoint.API_VERSION + 'demand/cancel/';
   public static readonly DEMAND_ACCEPT: string =
     Endpoint.API_VERSION + 'demand/accept/';
+
+  // Notification
+  public static readonly NOTIFICATION_LIST: string =
+    Endpoint.API_VERSION + 'notification/list';
+  public static readonly NOTIFICATION_READ: string =
+    Endpoint.API_VERSION + 'notification/';
+  public static readonly NOTIFICATION_FCM_TOKEN: string =
+    Endpoint.API_VERSION + 'notification/fcm-token';
+  public static readonly NOTIFICATION_UNREAD_COUNT: string =
+    Endpoint.API_VERSION + 'notification/unread-count';
 }
 

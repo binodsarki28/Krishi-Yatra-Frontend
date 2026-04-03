@@ -60,7 +60,9 @@
                             <a class="link-secondary">Forgot password?</a>
                         </div>
 
-                        <p-button label="Sign In" [loading]="loading" type="submit" class="submit-btn"></p-button>
+                        <p-button [loading]="loading" type="submit" class="submit-btn" [style]="{'padding': '0'}">
+                          <span class="p-button-label">Sign In</span>
+                        </p-button>
                     </form>
                 </div>
             </div>

@@ -12,10 +12,18 @@
         <ng-template pTemplate="end">
             <div class="flex align-items-center gap-4">
                 @if (isLoggedIn) {
-                 <button pButton icon="pi pi-bell"
-                    class="p-button-rounded p-button-text p-button-plain text-xl"
-                    style="color: #64748b;"
-                    (click)="navigateToNotifications()"></button>
+                 <div class="relative">
+                    <button pButton icon="pi pi-bell"
+                        class="p-button-rounded p-button-text p-button-plain text-xl"
+                        style="color: #64748b;"
+                        (click)="navigateToNotifications()"></button>
+                    @if (unreadCount > 0) {
+                        <span class="absolute top-0 right-0 border-circle bg-red-500 text-white flex align-items-center justify-content-center" 
+                              style="min-width: 1.2rem; height: 1.2rem; font-size: 0.7rem; transform: translate(25%, -25%); border: 2px solid white;">
+                            {{ unreadCount > 99 ? '99+' : unreadCount }}
+                        </span>
+                    }
+                 </div>
                 <button pButton pRipple label="Profile" icon="pi pi-user"
                     class="p-button-success font-bold border-round-3xl px-4 py-2 shadow-2 transition-transform hover-scale text-sm"
                     (click)="navigateToProfile()"></button>
