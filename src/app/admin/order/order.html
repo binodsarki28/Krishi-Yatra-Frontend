@@ -157,6 +157,16 @@
                                     pTooltip="Resolve Conflict" tooltipPosition="bottom"
                                     (click)="resolveConflict(order.orderId)"></button>
                             }
+                            @if (order.orderStatus !== 'DELIVERED' && order.orderStatus !== 'SHIPPING' && order.orderStatus !== 'RESOLVED' && order.orderStatus !== 'CANCELLED') {
+                                <button pButton icon="pi pi-times-circle"
+                                    class="p-button-text p-button-rounded p-button-danger p-button-sm"
+                                    pTooltip="Cancel Order" tooltipPosition="bottom"
+                                    (click)="cancelOrder(order.orderId)"></button>
+                            }
+                            <button pButton icon="pi pi-info-circle"
+                                class="p-button-text p-button-rounded p-button-primary p-button-sm"
+                                pTooltip="Order Details" tooltipPosition="bottom"
+                                (click)="viewOrderDetail(order.orderId)"></button>
                         </div>
                     </td>
                 </tr>

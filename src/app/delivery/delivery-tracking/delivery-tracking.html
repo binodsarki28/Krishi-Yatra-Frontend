@@ -26,13 +26,34 @@
 
     <!-- Right: Tracking Info and Checkpoints -->
     <div class="info-sidebar">
+        <!-- Conflict/Resolution Banner (Simplified UI) -->
+        @if (order.orderStatus == 'CONFLICT' || order.orderStatus == 'RESOLVED') {
+        <div class="mb-4 p-3 border-round-xl shadow-1 border-1 border-100" 
+             [style.background-color]="order.orderStatus == 'CONFLICT' ? '#fef2f2' : '#f0fdf4'">
+            <div class="flex align-items-center gap-2 mb-2">
+                <i class="pi" [ngClass]="order.orderStatus == 'CONFLICT' ? 'pi-exclamation-triangle text-red-600' : 'pi-check-circle text-green-600'"></i>
+                <span class="font-bold text-sm" [ngClass]="order.orderStatus == 'CONFLICT' ? 'text-red-800' : 'text-green-800'">
+                    {{ order.orderStatus == 'CONFLICT' ? 'Order Conflict' : 'Issue Resolved' }}
+                </span>
+            </div>
+            <div class="text-xs text-gray-700 italic px-2 mb-2">
+                "{{ order.conflictMessage || 'No specific details provided.' }}"
+            </div>
+            @if (order.conflictRaisedAt) {
+                <div class="px-2 text-gray-400 font-bold" style="font-size: 9px; text-transform: uppercase;">
+                    Status Update: {{ order.conflictRaisedAt | date:'medium' }}
+                </div>
+            }
+        </div>
+        }
+
         <!-- Floating Back Button & Status -->
         <div class="flex align-items-center justify-content-between mb-4">
             <button pButton pRipple icon="pi pi-arrow-left" label="Back to Jobs" 
                     class="p-button-text p-button-sm p-button-secondary font-bold" 
                     routerLink="/delivery/jobs/active">
             </button>
-            <p-tag [value]="order.orderStatus" severity="success" class="shadow-1"></p-tag>
+            <p-tag [value]="getStatusLabel(order?.orderStatus)" [severity]="getStatusSeverity(order?.orderStatus)" class="shadow-1"></p-tag>
         </div>
 
         <div class="sidebar-header mb-4">

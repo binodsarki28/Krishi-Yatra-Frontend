@@ -110,6 +110,8 @@ export class Endpoint {
     Endpoint.API_VERSION + 'order/report-conflict/';
   public static readonly ORDER_RESOLVE_CONFLICT: string =
     Endpoint.API_VERSION + 'order/resolve-conflict/';
+  public static readonly ORDER_CANCEL: string =
+    Endpoint.API_VERSION + 'order/cancel/';
 
   // Role-specific order lists
   public static readonly ORDER_BUYER_LIST: string =

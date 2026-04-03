@@ -16,6 +16,10 @@ export const ADMIN_ROUTES: Routes = [
             { path: 'delivery', component: ListDeliveryComponent },
             { path: 'stocks', component: ListStockComponent },
             { path: 'orders', component: Order },
+            { 
+                path: 'orders/detail/:orderId', 
+                loadComponent: () => import('../order/order-detail/order-detail').then(m => m.OrderDetailComponent) 
+            },
             // Legacy redirects
             { path: 'verify-farmer', redirectTo: 'farmers', pathMatch: 'full' },
             { path: 'all-farmers', redirectTo: 'farmers', pathMatch: 'full' },

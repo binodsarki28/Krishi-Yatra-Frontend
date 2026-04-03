@@ -197,43 +197,35 @@ export class NotificationComponent implements OnInit {
   handleAction(notification: INotification) {
     this.markAsRead(notification);
     
+    // Priority 1: Use direct Action URL from backend (New & Robust system)
+    if (notification.actionUrl) {
+      this.router.navigate([notification.actionUrl]);
+      return;
+    }
+
+    // Priority 2: Fallback logic for legacy notifications (Legacy & Fragile)
     let link = '';
     const roles = this.accountService.getRoles();
-    const isRider = roles.includes('DELIVERY');
+    const isVerifiedRider = this.accountService.isRoleVerified('DELIVERY');
 
     if (notification.category.startsWith('ORDER')) {
-      // Logic for extracting order ID if needed, but for now redirecting to relevant list or track
-      // If the body contains "ID: GUID", we can try to extract it
       const match = notification.body.match(/ID: ([a-f0-9-]{36})/i);
       const orderId = match ? match[1] : '';
 
       if (orderId) {
-        if (this.accountService.isRoleVerified('DELIVERY')) {
-          link = '/delivery/jobs/available';
-        } else if (this.accountService.isRoleVerified('FARMER')) {
-          link = `/farmer/orders/track/${orderId}`;
-        } else if (this.accountService.isRoleVerified('BUYER')) {
-          link = `/buyer/orders/track/${orderId}`;
-        } else {
-          link = `/order/track/${orderId}`;
-        }
+        if (isVerifiedRider) link = '/delivery/jobs/available';
+        else if (this.accountService.isRoleVerified('FARMER')) link = `/farmer/orders/track/${orderId}`;
+        else if (this.accountService.isRoleVerified('BUYER')) link = `/buyer/orders/track/${orderId}`;
+        else link = `/order/track/${orderId}`;
       } else {
-        if (this.accountService.isRoleVerified('DELIVERY')) {
-          link = '/delivery/jobs/available';
-        } else if (this.accountService.isRoleVerified('FARMER')) {
-          link = '/farmer/orders/my-orders';
-        } else if (this.accountService.isRoleVerified('BUYER')) {
-          link = '/buyer/orders/my-orders';
-        } else {
-          link = '/order/list';
-        }
+        if (isVerifiedRider) link = '/delivery/jobs/available';
+        else if (this.accountService.isRoleVerified('FARMER')) link = '/farmer/orders/my-orders';
+        else if (this.accountService.isRoleVerified('BUYER')) link = '/buyer/orders/my-orders';
       }
     } else if (notification.category.startsWith('DEMAND')) {
         link = this.accountService.isRoleVerified('FARMER') ? '/farmer/demands' : '/demands';
-    } else if (notification.category === 'STOCK_LOW' && this.accountService.isRoleVerified('FARMER')) {
+    } else if (notification.category === 'STOCK_LOW') {
         link = '/farmer/stocks/my-stocks';
-    } else {
-        link = '/profile';
     }
 
     if (link) {

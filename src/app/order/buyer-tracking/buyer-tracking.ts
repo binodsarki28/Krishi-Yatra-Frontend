@@ -174,8 +174,26 @@ export class BuyerTracking implements OnInit, OnDestroy {
       case 'ACCEPTED': return 'info';
       case 'SHIPPING': return 'info';
       case 'DELIVERED': return 'success';
+      case 'CONFLICT': return 'danger';
+      case 'RESOLVED': return 'success';
+      case 'REJECTED': return 'danger';
+      case 'CANCELLED': return 'danger';
       default: return 'secondary';
     }
+  }
+
+  getStatusLabel(status: string): string {
+    const map: any = {
+      'PENDING': 'Waiting for Rider',
+      'ACCEPTED': 'Rider Accepted',
+      'SHIPPING': 'Shipping',
+      'DELIVERED': 'Delivered',
+      'REJECTED': 'Rejected',
+      'CANCELLED': 'Cancelled',
+      'CONFLICT': 'Conflict (Reported)',
+      'RESOLVED': 'Resolved'
+    };
+    return map[status] || status;
   }
 
   isStatusReached(status: string): boolean {

@@ -13,7 +13,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { OrderService } from '../../order/order.service';
 import { ToastService } from '../../util/toast.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Subject } from 'rxjs';
@@ -33,7 +33,8 @@ import { debounceTime } from 'rxjs/operators';
     TooltipModule,
     IconFieldModule,
     InputIconModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    RouterModule
   ],
   providers: [ConfirmationService],
   templateUrl: './order.html',
@@ -154,9 +155,8 @@ export class Order implements OnInit {
     }
   }
 
-  viewTrack(orderId: string) {
-    // Admin can view buyer tracking for any order
-    this.router.navigate(['/order/track', orderId]);
+  viewOrderDetail(orderId: string) {
+    this.router.navigate(['/admin/orders/detail', orderId]);
   }
 
   resolveConflict(orderId: string) {
@@ -169,6 +169,28 @@ export class Order implements OnInit {
             this.orderService.resolveConflict(orderId).subscribe({
                 next: (res: any) => {
                     this.toastService.successResponse({ message: 'Conflict resolved successfully.' });
+                    this.loadOrders(true);
+                },
+                error: (err: any) => {
+                    this.toastService.errorResponse(err);
+                    this.loading = false;
+                    this.cdr.markForCheck();
+                }
+            });
+        }
+    });
+  }
+
+  cancelOrder(orderId: string) {
+    this.confirmationService.confirm({
+        message: 'Are you sure you want to cancel this order? This action cannot be undone.',
+        header: 'Cancel Order',
+        icon: 'pi pi-times-circle',
+        accept: () => {
+            this.loading = true;
+            this.orderService.cancelOrder(orderId).subscribe({
+                next: (res: any) => {
+                    this.toastService.successResponse({ message: 'Order cancelled successfully.' });
                     this.loadOrders(true);
                 },
                 error: (err: any) => {

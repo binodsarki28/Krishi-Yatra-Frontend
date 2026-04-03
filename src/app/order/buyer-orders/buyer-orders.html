@@ -98,6 +98,9 @@
 
                             <p-button icon="pi pi-eye" severity="secondary" [text]="true" [rounded]="true" size="small" 
                                 pTooltip="Product Detail" (onClick)="viewStockDetail(order.stockSlug)"></p-button>
+
+                            <p-button icon="pi pi-file" severity="primary" [text]="true" [rounded]="true" size="small" 
+                                pTooltip="Order Details" [routerLink]="['/order/detail', order.orderId]"></p-button>
                         </div>
                     </td>
                 </tr>

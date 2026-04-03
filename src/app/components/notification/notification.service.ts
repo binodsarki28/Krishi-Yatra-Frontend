@@ -9,8 +9,10 @@ export interface INotification {
   id: number;
   title: string;
   body: string;
-  category: string;
+  type: string;
   read: boolean;
+  category: string;
+  actionUrl?: string;
   createdAt: string;
 }
 
