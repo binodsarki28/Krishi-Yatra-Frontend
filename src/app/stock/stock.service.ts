@@ -55,9 +55,4 @@ export class StockService {
     }
     return this.http.get<IResponseWithObject>(GenerateUrlUtils.generateUrl(url));
   }
-
-  adjustStockQuantity(slug: string, amount: number): Observable<IResponse> {
-    const url = GenerateUrlUtils.generateUrl(Endpoint.STOCK_ADJUST);
-    return this.http.put<IResponse>(url, null, { params: { slug, amount: amount.toString() } });
-  }
 }

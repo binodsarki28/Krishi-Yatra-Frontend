@@ -81,13 +81,15 @@ export class CreateStockComponent implements OnInit {
 
   checkQueryParams() {
     this.route.queryParams.subscribe(params => {
-        if (params['category']) {
-            this.stockForm.patchValue({ categoryId: params['category'] });
+        if (params['categoryId']) {
+            const catId = Number(params['categoryId']);
+            this.stockForm.patchValue({ categoryId: catId });
             this.onCategoryChange();
         }
-        if (params['subCategory']) {
+        if (params['subCategoryId']) {
             setTimeout(() => {
-                this.stockForm.patchValue({ subCategoryId: params['subCategory'] });
+                const subCatId = Number(params['subCategoryId']);
+                this.stockForm.patchValue({ subCategoryId: subCatId });
                 this.cdr.detectChanges();
             }, 500); // give time for subcategories to load and filter
         }
@@ -133,7 +135,8 @@ export class CreateStockComponent implements OnInit {
   loadCategories() {
     this.stockService.getCategories().subscribe({
       next: (res: any) => {
-        this.categories = res.response || [];
+        const list = res.response || [];
+        this.categories = list.filter((c: ICategoryResponse) => c.active !== false);
         this.cdr.detectChanges();
       }
     });
@@ -142,7 +145,8 @@ export class CreateStockComponent implements OnInit {
   loadSubCategories() {
     this.stockService.getSubCategories().subscribe({
       next: (res: any) => {
-        this.subCategories = res.response || [];
+        const list = res.response || [];
+        this.subCategories = list.filter((s: ISubCategoryResponse) => s.active !== false);
         this.cdr.detectChanges();
       }
     });

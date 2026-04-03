@@ -55,8 +55,8 @@ export class StockListComponent implements OnInit {
   
   // Filters
   searchTerm: string = '';
-  selectedCategoryId: string | null = null;
-  selectedSubCategoryId: string | null = null;
+  selectedCategoryId: number | null = null;
+  selectedSubCategoryId: number | null = null;
   
   // Pagination
   page = 0;
@@ -95,8 +95,8 @@ export class StockListComponent implements OnInit {
     });
   }
 
-  loadSubCategories(categoryId: string) {
-    this.stockService.getSubCategories(categoryId).subscribe({
+  loadSubCategories(categoryId: number) {
+    this.stockService.getSubCategories(categoryId.toString()).subscribe({
       next: (res) => {
         this.subCategories = res.response as ISubCategoryResponse[];
         this.cdr.markForCheck();
@@ -158,7 +158,7 @@ export class StockListComponent implements OnInit {
     this.loadStocks(true);
   }
 
-  selectCategory(id: string | null) {
+  selectCategory(id: number | null) {
     this.selectedCategoryId = id;
     this.selectedSubCategoryId = null;
     this.subCategories = [];
@@ -168,7 +168,7 @@ export class StockListComponent implements OnInit {
     this.loadStocks(true);
   }
 
-  selectSubCategory(id: string | null) {
+  selectSubCategory(id: number | null) {
     this.selectedSubCategoryId = id;
     this.loadStocks(true);
   }

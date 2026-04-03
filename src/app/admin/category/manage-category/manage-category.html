@@ -1,0 +1,69 @@
+<div class="fadein animation-duration-300">
+    <!-- Header -->
+    <div class="mb-4">
+        <h2 class="text-2xl font-bold text-900 m-0">Category Management</h2>
+        <p class="text-500 mt-1 mb-0">Manage and organize your main categories</p>
+    </div>
+
+    <div class="grid">
+        <!-- Add Category Form -->
+        <div class="col-12 md:col-4">
+            <div class="surface-card p-4 border-round-xl border-1 border-200">
+                <h5 class="text-lg font-bold mb-3 mt-0 text-900"><i class="pi pi-folder-plus text-green-500 mr-2"></i>Add New Category</h5>
+                <div class="flex flex-column gap-3">
+                    <div class="flex flex-column gap-1">
+                        <label for="catName" class="text-sm font-medium text-700">Category Name</label>
+                        <input id="catName" type="text" pInputText [(ngModel)]="newCategoryName" placeholder="e.g. Vegetables">
+                    </div>
+                    <p-button label="Create Category" icon="pi pi-check" 
+                        [loading]="isAddingCategory" (onClick)="createCategory()" 
+                        [disabled]="!newCategoryName" styleClass="w-full mt-2 p-button-success"></p-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Table -->
+        <div class="col-12 md:col-8">
+            <div class="surface-card p-4 border-round-xl border-1 border-200 h-full">
+                <div class="flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+                    <h5 class="text-lg font-bold m-0 text-900">Categories List</h5>
+                    <div class="flex align-items-center gap-2">
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Search by name" class="p-inputtext-sm" style="min-width: 200px;" />
+                        </span>
+                        <p-button icon="pi pi-refresh" [text]="true" [rounded]="true" (onClick)="loadCategories()"></p-button>
+                    </div>
+                </div>
+                <p-table #dt [value]="categories" [globalFilterFields]="['categoryName']" [paginator]="true" [rows]="10" styleClass="p-datatable-sm p-datatable-striped" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th class="text-right">Action</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-cat>
+                        <tr>
+                            <td><span class="text-500 font-medium">#{{cat.categoryId}}</span></td>
+                            <td class="font-semibold">{{cat.categoryName}}</td>
+                            <td>
+                                <p-tag [severity]="cat.active ? 'success' : 'danger'" [value]="cat.active ? 'Active' : 'Inactive'"></p-tag>
+                            </td>
+                            <td class="text-right">
+                                <p-button icon="pi pi-trash" severity="danger" [text]="true" [rounded]="true" (onClick)="deleteCategory(cat.categoryId)"></p-button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                        <tr><td colspan="4" class="text-center p-4 text-500">No categories found.</td></tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '450px'}" acceptButtonStyleClass="p-button-danger" rejectButtonStyleClass="p-button-text"></p-confirmDialog>

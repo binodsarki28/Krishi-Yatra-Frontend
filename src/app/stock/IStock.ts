@@ -5,7 +5,9 @@ export interface IStockListResponse {
     quantity: number;
     pricePerUnit: number;
     subCategoryName: string;
+    subCategoryId: number;
     categoryName: string;
+    categoryId: number;
     farmerName: string;
     minQuantity: number;
     stockImages: string[];
@@ -13,13 +15,15 @@ export interface IStockListResponse {
 }
 
 export interface ICategoryResponse {
-    categoryId: string;
+    categoryId: number;
     categoryName: string;
+    active: boolean;
 }
 
 export interface ISubCategoryResponse {
-    subCategoryId: string;
+    subCategoryId: number;
     subCategoryName: string;
-    categoryId: string;
+    categoryId: number;
     categoryName: string;
+    active: boolean;
 }

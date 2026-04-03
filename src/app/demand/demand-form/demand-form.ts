@@ -24,8 +24,8 @@ export class DemandFormComponent implements OnInit {
   subCategories: any[] = [];
   
   demand = {
-    categoryGuid: '',
-    subCategoryGuid: '',
+    categoryId: null as number | null,
+    subCategoryId: null as number | null,
     quantity: null,
     expectedPricePerUnit: null,
     description: ''
@@ -51,9 +51,9 @@ export class DemandFormComponent implements OnInit {
   }
 
   onCategoryChange() {
-    this.demand.subCategoryGuid = '';
-    if (this.demand.categoryGuid) {
-      this.stockService.getSubCategories(this.demand.categoryGuid).subscribe((res: any) => {
+    this.demand.subCategoryId = null;
+    if (this.demand.categoryId) {
+      this.stockService.getSubCategories(this.demand.categoryId.toString()).subscribe((res: any) => {
         this.subCategories = res.response || [];
       });
     } else {
@@ -62,7 +62,7 @@ export class DemandFormComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    if (!this.demand.categoryGuid || !this.demand.subCategoryGuid || !this.demand.quantity || !this.demand.expectedPricePerUnit) {
+    if (!this.demand.categoryId || !this.demand.subCategoryId || !this.demand.quantity || !this.demand.expectedPricePerUnit) {
       this.toastService.generalResponse('warning', 'Missing Information', 'Please fill in all mandatory fields.');
       return;
     }
@@ -87,8 +87,8 @@ export class DemandFormComponent implements OnInit {
       form.resetForm();
     }
     this.demand = {
-      categoryGuid: '',
-      subCategoryGuid: '',
+      categoryId: null,
+      subCategoryId: null,
       quantity: null,
       expectedPricePerUnit: null,
       description: ''

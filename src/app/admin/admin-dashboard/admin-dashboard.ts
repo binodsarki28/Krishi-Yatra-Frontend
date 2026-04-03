@@ -57,6 +57,8 @@ export class AdminDashboardComponent implements OnInit {
                 this.expandedGroup = 'stock';
             } else if (url.includes('/orders')) {
                 this.expandedGroup = 'order';
+            } else if (url.includes('/category')) {
+                this.expandedGroup = 'category';
             }
         });
 
@@ -68,6 +70,7 @@ export class AdminDashboardComponent implements OnInit {
         else if (currentUrl.includes('/delivery')) this.expandedGroup = 'delivery';
         else if (currentUrl.includes('/stocks')) this.expandedGroup = 'stock';
         else if (currentUrl.includes('/orders')) this.expandedGroup = 'order';
+        else if (currentUrl.includes('/category')) this.expandedGroup = 'category';
     }
 
     toggleGroup(group: string) {

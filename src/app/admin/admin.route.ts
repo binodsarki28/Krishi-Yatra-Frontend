@@ -20,6 +20,10 @@ export const ADMIN_ROUTES: Routes = [
                 path: 'orders/detail/:orderId', 
                 loadComponent: () => import('../order/order-detail/order-detail').then(m => m.OrderDetailComponent) 
             },
+            {
+                path: 'category',
+                loadChildren: () => import('./category/category.route').then(m => m.CATEGORY_ROUTES)
+            },
             // Legacy redirects
             { path: 'verify-farmer', redirectTo: 'farmers', pathMatch: 'full' },
             { path: 'all-farmers', redirectTo: 'farmers', pathMatch: 'full' },

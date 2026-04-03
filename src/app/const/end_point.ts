@@ -72,8 +72,6 @@ export class Endpoint {
     Endpoint.API_VERSION + 'stock/details/';
   public static readonly MY_STOCKS: string =
     Endpoint.API_VERSION + 'stock/my-stocks';
-  public static readonly STOCK_ADJUST: string =
-    Endpoint.API_VERSION + 'stock/adjust';
   public static readonly CATEGORIES: string =
     Endpoint.API_VERSION + 'stock/categories';
   public static readonly SUB_CATEGORIES: string =

@@ -14,11 +14,11 @@
             <!-- Category Selection -->
             <div class="col-12 md:col-6 flex flex-column gap-2">
                 <label class="text-xs font-bold text-700 uppercase">Category *</label>
-                <p-select [options]="categories" [(ngModel)]="demand.categoryGuid" name="category" #cat="ngModel" 
+                <p-select [options]="categories" [(ngModel)]="demand.categoryId" name="category" #cat="ngModel" 
                            (onChange)="onCategoryChange()" optionLabel="categoryName" optionValue="categoryId" 
                            placeholder="Select Category" class="w-full border-round-lg shadow-none border-1 border-200" 
                            [required]="true" [showClear]="true" appendTo="body" panelClass="w-full"></p-select>
-                @if (cat.touched && !demand.categoryGuid) {
+                @if (cat.touched && !demand.categoryId) {
                 <small class="text-red-500">Category is required.</small>
                 }
             </div>
@@ -26,11 +26,11 @@
             <!-- Sub Category Selection -->
             <div class="col-12 md:col-6 flex flex-column gap-2">
                 <label class="text-xs font-bold text-700 uppercase">Sub-Category *</label>
-                <p-select [options]="subCategories" [(ngModel)]="demand.subCategoryGuid" name="subCategory" #subCat="ngModel"
+                <p-select [options]="subCategories" [(ngModel)]="demand.subCategoryId" name="subCategory" #subCat="ngModel"
                            optionLabel="subCategoryName" optionValue="subCategoryId" 
                            placeholder="Select Sub-Category" class="w-full border-round-lg shadow-none border-1 border-200" 
-                           [required]="true" [showClear]="true" [disabled]="!demand.categoryGuid" appendTo="body" panelClass="w-full"></p-select>
-                @if (subCat.touched && !demand.subCategoryGuid) {
+                           [required]="true" [showClear]="true" [disabled]="!demand.categoryId" appendTo="body" panelClass="w-full"></p-select>
+                @if (subCat.touched && !demand.subCategoryId) {
                 <small class="text-red-500">Sub-category is required.</small>
                 }
             </div>
