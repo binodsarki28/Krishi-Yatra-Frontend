@@ -10,6 +10,7 @@ import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { firebaseConfig } from './util/firebase.config';
 import { NotificationService } from './components/notification/notification.service';
+import { AccountService } from './components/account/account.service';
 
 @Component({
   selector: 'app-root',
@@ -27,10 +28,22 @@ export class AppComponent {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private navigationService: NavigationService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private accountService: AccountService
   ) {
     this.updateVisibility(this.router.url);
-    this.initializeFirebase();
+    
+    // Initialize Firebase once if already logged in, otherwise wait for login event
+    if (this.accountService.getUsername()) {
+        this.initializeFirebase();
+    }
+
+    this.accountService.isLoggedIn$.subscribe((loggedIn: boolean) => {
+        if (loggedIn) {
+            this.initializeFirebase();
+        }
+    });
+
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
@@ -107,7 +120,8 @@ export class AppComponent {
           .then((currentToken) => {
             if (currentToken) {
               console.log('FCM Token received:', currentToken);
-              this.notificationService.saveFcmToken(currentToken, navigator.userAgent).subscribe({
+              const username = this.accountService.getUsername();
+              this.notificationService.saveFcmToken(username, currentToken, navigator.userAgent).subscribe({
                 next: () => console.log('FCM Token saved to backend'),
                 error: (err) => console.error('Error saving FCM Token:', err)
               });

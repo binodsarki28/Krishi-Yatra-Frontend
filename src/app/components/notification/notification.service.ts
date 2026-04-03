@@ -61,8 +61,8 @@ export class NotificationService {
     return this.http.delete<IResponse>(url);
   }
 
-  saveFcmToken(fcmToken: string, deviceName: string): Observable<IResponse> {
+  saveFcmToken(username: string, fcmToken: string, deviceName: string): Observable<IResponse> {
     const url = GenerateUrlUtils.generateUrl(Endpoint.NOTIFICATION_FCM_TOKEN);
-    return this.http.post<IResponse>(url, { fcmToken, deviceName });
+    return this.http.post<IResponse>(url, { username, fcmToken, deviceName });
   }
 }

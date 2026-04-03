@@ -6,6 +6,7 @@ import { BadgeModule } from 'primeng/badge';
 import { TooltipModule } from 'primeng/tooltip';
 import { PaginatorModule } from 'primeng/paginator';
 import { Router } from '@angular/router';
+import { AccountService } from '../account/account.service';
 import { NotificationService, INotification } from './notification.service';
 import { finalize, fromEvent, debounceTime } from 'rxjs';
 import { ToastService } from '../../util/toast.service';
@@ -49,10 +50,11 @@ export class NotificationComponent implements OnInit {
   private platformId = inject(PLATFORM_ID);
 
   constructor(
-    public router: Router,
-    private cdr: ChangeDetectorRef,
     private notificationService: NotificationService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private cdr: ChangeDetectorRef,
+    public router: Router,
+    private accountService: AccountService
   ) {}
 
   ngOnInit() {
@@ -176,9 +178,6 @@ export class NotificationComponent implements OnInit {
 
     this.notifications = this.notifications.filter(n => n.id !== id);
     this.updateUnreadCount();
-    
-    // Also notify the service to refresh the count (BehaviorSubject)
-    this.notificationService.getUnreadCount().subscribe();
 
     this.notificationService.deleteNotification(id).subscribe({
       next: (res) => {
@@ -199,12 +198,42 @@ export class NotificationComponent implements OnInit {
     this.markAsRead(notification);
     
     let link = '';
+    const roles = this.accountService.getRoles();
+    const isRider = roles.includes('DELIVERY');
+
     if (notification.category.startsWith('ORDER')) {
-        link = '/order/list';
+      // Logic for extracting order ID if needed, but for now redirecting to relevant list or track
+      // If the body contains "ID: GUID", we can try to extract it
+      const match = notification.body.match(/ID: ([a-f0-9-]{36})/i);
+      const orderId = match ? match[1] : '';
+
+      if (orderId) {
+        if (this.accountService.isRoleVerified('DELIVERY')) {
+          link = '/delivery/jobs/available';
+        } else if (this.accountService.isRoleVerified('FARMER')) {
+          link = `/farmer/orders/track/${orderId}`;
+        } else if (this.accountService.isRoleVerified('BUYER')) {
+          link = `/buyer/orders/track/${orderId}`;
+        } else {
+          link = `/order/track/${orderId}`;
+        }
+      } else {
+        if (this.accountService.isRoleVerified('DELIVERY')) {
+          link = '/delivery/jobs/available';
+        } else if (this.accountService.isRoleVerified('FARMER')) {
+          link = '/farmer/orders/my-orders';
+        } else if (this.accountService.isRoleVerified('BUYER')) {
+          link = '/buyer/orders/my-orders';
+        } else {
+          link = '/order/list';
+        }
+      }
     } else if (notification.category.startsWith('DEMAND')) {
-        link = '/demands';
-    } else if (notification.category === 'STOCK_LOW') {
+        link = this.accountService.isRoleVerified('FARMER') ? '/farmer/demands' : '/demands';
+    } else if (notification.category === 'STOCK_LOW' && this.accountService.isRoleVerified('FARMER')) {
         link = '/farmer/stocks/my-stocks';
+    } else {
+        link = '/profile';
     }
 
     if (link) {
