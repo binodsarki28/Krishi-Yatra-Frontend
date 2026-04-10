@@ -24,7 +24,7 @@ import { NEPAL_DATA, NepalProvince, NepalDistrict } from '../../address/nepal-da
     CommonModule, FormsModule, ReactiveFormsModule,
     InputTextModule, ButtonModule, PasswordModule,
     ProgressSpinnerModule, SelectModule,
-    ConfirmDialogModule, NgOptimizedImage
+    ConfirmDialogModule,
   ],
   providers: [ConfirmationService],
   templateUrl: './profile.html',
@@ -361,7 +361,7 @@ export class ProfileComponent implements OnInit {
         this.profilePreview = reader.result as string;
       };
       reader.readAsDataURL(file);
-      this.toastService.successResponse({ message: 'Profile picture selected! Click "Save Changes" to apply.' });
+      this.toastService.successResponse({ message: 'Profile picture added successfully.' });
     }
   }
 
