@@ -164,6 +164,10 @@ export class UpdateStockComponent implements OnInit {
       this.selectedFiles.push(file);
     });
 
+    if (this.selectedFiles.length > 0) {
+      this.stockForm.markAsDirty();
+    }
+
     if (this.selectedFiles.length > 5) {
       this.selectedFiles = this.selectedFiles.slice(0, 5);
       this.messageService.add({ severity: 'warn', summary: 'Limit Reached', detail: 'Maximum 5 images allowed' });
@@ -172,6 +176,7 @@ export class UpdateStockComponent implements OnInit {
 
   removeFile(index: number) {
     this.selectedFiles.splice(index, 1);
+    this.stockForm.markAsDirty();
   }
 
   ngOnDestroy() {
@@ -208,7 +213,7 @@ export class UpdateStockComponent implements OnInit {
     this.stockService.updateStock(formData).subscribe({
       next: (response) => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Stock updated successfully' });
-        setTimeout(() => this.router.navigate(['/farmer/stock/my-stocks']), 1500);
+        setTimeout(() => this.router.navigate(['/farmer/stocks/my-stocks']), 1500);
       },
       error: (err) => {
         this.submitting = false;

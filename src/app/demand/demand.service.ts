@@ -19,8 +19,8 @@ export class DemandService {
 
     getDemands(page = 0, size = 3, filters: any = {}): Observable<IResponseWithObject> {
         let url = GenerateUrlUtils.generateUrl(Endpoint.DEMAND_LIST) + `?page=${page}&size=${size}`;
-        if (filters.categoryGuid) url += `&categoryGuid=${filters.categoryGuid}`;
-        if (filters.subCategoryGuid) url += `&subCategoryGuid=${filters.subCategoryGuid}`;
+        if (filters.categoryId) url += `&categoryId=${filters.categoryId}`;
+        if (filters.subCategoryId) url += `&subCategoryId=${filters.subCategoryId}`;
         if (filters.status) url += `&status=${filters.status}`;
         return this.http.get<IResponseWithObject>(url);
     }
