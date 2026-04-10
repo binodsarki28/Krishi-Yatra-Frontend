@@ -24,15 +24,15 @@ import { FileUploadModule } from 'primeng/fileupload';
   selector: 'app-update-stock',
   standalone: true,
   imports: [
-    CommonModule, 
-    FormsModule, 
-    ReactiveFormsModule, 
-    CardModule, 
-    InputTextModule, 
-    InputNumberModule, 
-    TextareaModule, 
-    SelectModule, 
-    ButtonModule, 
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CardModule,
+    InputTextModule,
+    InputNumberModule,
+    TextareaModule,
+    SelectModule,
+    ButtonModule,
     ToastModule,
     RouterModule,
     InputGroupModule,
@@ -93,14 +93,14 @@ export class UpdateStockComponent implements OnInit {
       next: (res: any) => {
         this.categories = res.categories.response || [];
         this.subCategories = res.subCategories.response || [];
-        
+
         const data = res.details.response;
         if (data) {
           // Images are now a List from the backend
           this.existingImages = data.stockImages || [];
-          
+
           this.stockForm.patchValue(data);
-          
+
           const catId = data.categoryId;
           const subCatControl = this.stockForm.get('subCategoryId');
           if (catId) {
@@ -144,7 +144,7 @@ export class UpdateStockComponent implements OnInit {
   onCategoryChange(clearSub: boolean = true) {
     const categoryId = this.stockForm.get('categoryId')?.value;
     const subCatControl = this.stockForm.get('subCategoryId');
-    
+
     if (categoryId) {
       this.subCategoriesFiltered = this.subCategories.filter(s => s.categoryId === categoryId);
       subCatControl?.enable();
@@ -164,6 +164,10 @@ export class UpdateStockComponent implements OnInit {
       this.selectedFiles.push(file);
     });
 
+    if (this.selectedFiles.length > 0) {
+      this.stockForm.markAsDirty();
+    }
+
     if (this.selectedFiles.length > 5) {
       this.selectedFiles = this.selectedFiles.slice(0, 5);
       this.messageService.add({ severity: 'warn', summary: 'Limit Reached', detail: 'Maximum 5 images allowed' });
@@ -172,6 +176,7 @@ export class UpdateStockComponent implements OnInit {
 
   removeFile(index: number) {
     this.selectedFiles.splice(index, 1);
+    this.stockForm.markAsDirty();
   }
 
   ngOnDestroy() {
@@ -192,10 +197,10 @@ export class UpdateStockComponent implements OnInit {
 
     const formData = new FormData();
     const stockData = this.stockForm.getRawValue();
-    
+
     // Send stock data as a JSON blob
     formData.append('stockData', new Blob([JSON.stringify(stockData)], { type: 'application/json' }));
-    
+
     // Add images
     console.log('Frontend: Total files to send:', this.selectedFiles.length);
     // Unique keys to prevent any 'duplicate key' issues in transit
@@ -204,13 +209,11 @@ export class UpdateStockComponent implements OnInit {
       formData.append(`image_${index}`, file);
     });
 
-    console.log('Frontend: Total files in FormData:', this.selectedFiles.length);
-    
     this.submitting = true;
     this.stockService.updateStock(formData).subscribe({
       next: (response) => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Stock updated successfully' });
-        setTimeout(() => this.router.navigate(['/farmer/stocks']), 1500);
+        setTimeout(() => this.router.navigate(['/farmer/stocks/my-stocks']), 1500);
       },
       error: (err) => {
         this.submitting = false;

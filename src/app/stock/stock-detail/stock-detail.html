@@ -21,11 +21,14 @@
                                     <i class="pi pi-angle-left"></i>
                                 </button>
 
+                                @if (images[activeIndex]) {
                                 <img
-                                    [src]="images[activeIndex]?.itemImageSrc"
-                                    [alt]="images[activeIndex]?.alt || 'Stock image'"
+                                    [ngSrc]="images[activeIndex].itemImageSrc"
+                                    width="600" height="400"
+                                    [alt]="images[activeIndex].alt || 'Stock image'"
                                     class="main-carousel-image"
                                 />
+                                }
 
                                 <button
                                     type="button"
@@ -45,7 +48,7 @@
                                         [class.active]="activeIndex === $index"
                                         (click)="selectImage($index)"
                                         [attr.aria-label]="'Select image ' + ($index + 1)">
-                                        <img [src]="item.thumbnailImageSrc" [alt]="item.alt || 'Thumbnail'" />
+                                        <img [ngSrc]="item.thumbnailImageSrc" width="60" height="40" [alt]="item.alt || 'Thumbnail'" />
                                     </button>
                                 }
                             </div>

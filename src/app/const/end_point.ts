@@ -72,8 +72,6 @@ export class Endpoint {
     Endpoint.API_VERSION + 'stock/details/';
   public static readonly MY_STOCKS: string =
     Endpoint.API_VERSION + 'stock/my-stocks';
-  public static readonly STOCK_ADJUST: string =
-    Endpoint.API_VERSION + 'stock/adjust';
   public static readonly CATEGORIES: string =
     Endpoint.API_VERSION + 'stock/categories';
   public static readonly SUB_CATEGORIES: string =
@@ -110,6 +108,8 @@ export class Endpoint {
     Endpoint.API_VERSION + 'order/report-conflict/';
   public static readonly ORDER_RESOLVE_CONFLICT: string =
     Endpoint.API_VERSION + 'order/resolve-conflict/';
+  public static readonly ORDER_CANCEL: string =
+    Endpoint.API_VERSION + 'order/cancel/';
 
   // Role-specific order lists
   public static readonly ORDER_BUYER_LIST: string =
@@ -136,5 +136,15 @@ export class Endpoint {
     Endpoint.API_VERSION + 'demand/cancel/';
   public static readonly DEMAND_ACCEPT: string =
     Endpoint.API_VERSION + 'demand/accept/';
+
+  // Notification
+  public static readonly NOTIFICATION_LIST: string =
+    Endpoint.API_VERSION + 'notification/list';
+  public static readonly NOTIFICATION_READ: string =
+    Endpoint.API_VERSION + 'notification/';
+  public static readonly NOTIFICATION_FCM_TOKEN: string =
+    Endpoint.API_VERSION + 'notification/fcm-token';
+  public static readonly NOTIFICATION_UNREAD_COUNT: string =
+    Endpoint.API_VERSION + 'notification/unread-count';
 }
 

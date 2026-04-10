@@ -15,11 +15,12 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import {Tooltip} from 'primeng/tooltip';
 
 @Component({
   selector: 'app-farmer-orders',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, TagModule, RouterModule, SelectModule, InputTextModule, FormsModule, IconFieldModule, InputIconModule, ToastModule],
+  imports: [CommonModule, TableModule, ButtonModule, TagModule, RouterModule, SelectModule, InputTextModule, FormsModule, IconFieldModule, InputIconModule, ToastModule, Tooltip],
   providers: [MessageService],
   templateUrl: './farmer-orders.html',
   styleUrls: ['./farmer-orders.css']

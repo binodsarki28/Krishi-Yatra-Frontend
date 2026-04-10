@@ -46,6 +46,13 @@ export const routes: Routes = [
 
     // ── Account (login / register / verify-otp) ───────────────────
     {
+        path: 'notifications',
+        loadComponent: () =>
+            import('./components/notification/notification').then((m) => m.NotificationComponent),
+        canActivate: [authGuard, userGuard],
+        data: { breadcrumb: 'Notifications' }
+    },
+    {
         path: 'account',
         loadChildren: () =>
             import('./components/account/account.route').then(

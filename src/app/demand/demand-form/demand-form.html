@@ -14,21 +14,25 @@
             <!-- Category Selection -->
             <div class="col-12 md:col-6 flex flex-column gap-2">
                 <label class="text-xs font-bold text-700 uppercase">Category *</label>
-                <p-select [options]="categories" [(ngModel)]="demand.categoryGuid" name="category" #cat="ngModel" 
+                <p-select [options]="categories" [(ngModel)]="demand.categoryId" name="category" #cat="ngModel" 
                            (onChange)="onCategoryChange()" optionLabel="categoryName" optionValue="categoryId" 
-                           placeholder="Select Category" styleClass="w-full border-round-lg shadow-none border-1 border-200" 
-                           [required]="true" [showClear]="true" appendTo="body" panelStyleClass="w-full"></p-select>
-                <small class="text-red-500" *ngIf="cat.touched && !demand.categoryGuid">Category is required.</small>
+                           placeholder="Select Category" class="w-full border-round-lg shadow-none border-1 border-200" 
+                           [required]="true" [showClear]="true" appendTo="body" panelClass="w-full"></p-select>
+                @if (cat.touched && !demand.categoryId) {
+                <small class="text-red-500">Category is required.</small>
+                }
             </div>
 
             <!-- Sub Category Selection -->
             <div class="col-12 md:col-6 flex flex-column gap-2">
                 <label class="text-xs font-bold text-700 uppercase">Sub-Category *</label>
-                <p-select [options]="subCategories" [(ngModel)]="demand.subCategoryGuid" name="subCategory" #subCat="ngModel"
+                <p-select [options]="subCategories" [(ngModel)]="demand.subCategoryId" name="subCategory" #subCat="ngModel"
                            optionLabel="subCategoryName" optionValue="subCategoryId" 
-                           placeholder="Select Sub-Category" styleClass="w-full border-round-lg shadow-none border-1 border-200" 
-                           [required]="true" [showClear]="true" [disabled]="!demand.categoryGuid" appendTo="body" panelStyleClass="w-full"></p-select>
-                <small class="text-red-500" *ngIf="subCat.touched && !demand.subCategoryGuid">Sub-category is required.</small>
+                           placeholder="Select Sub-Category" class="w-full border-round-lg shadow-none border-1 border-200" 
+                           [required]="true" [showClear]="true" [disabled]="!demand.categoryId" appendTo="body" panelClass="w-full"></p-select>
+                @if (subCat.touched && !demand.subCategoryId) {
+                <small class="text-red-500">Sub-category is required.</small>
+                }
             </div>
         </div>
 
@@ -40,9 +44,11 @@
                                 [min]="1" placeholder="e.g. 50" [showButtons]="true"
                                 buttonLayout="horizontal" incrementButtonIcon="pi pi-plus" 
                                 decrementButtonIcon="pi pi-minus" inputId="qtyinput"
-                                styleClass="w-full" inputStyleClass="w-full border-round-lg border-1 border-200"
+                                class="w-full" inputClass="w-full border-round-lg border-1 border-200"
                                 [required]="true"></p-inputNumber>
-                <small class="text-red-500" *ngIf="qty.touched && !demand.quantity">Quantity is required.</small>
+                @if (qty.touched && !demand.quantity) {
+                <small class="text-red-500">Quantity is required.</small>
+                }
             </div>
 
             <!-- Expected Price -->
@@ -50,10 +56,12 @@
                 <label class="text-xs font-bold text-700 uppercase">Expected Price Per Unit (Rs.) *</label>
                 <p-inputNumber [(ngModel)]="demand.expectedPricePerUnit" name="price" #prc="ngModel"
                                 mode="currency" currency="NPR" locale="en-IN"
-                                placeholder="e.g. 45.00" styleClass="w-full" 
-                                inputStyleClass="w-full border-round-lg border-1 border-200"
+                                placeholder="e.g. 45.00" class="w-full" 
+                                inputClass="w-full border-round-lg border-1 border-200"
                                 [required]="true"></p-inputNumber>
-                <small class="text-red-500" *ngIf="prc.touched && !demand.expectedPricePerUnit">Expected price is required.</small>
+                @if (prc.touched && !demand.expectedPricePerUnit) {
+                <small class="text-red-500">Expected price is required.</small>
+                }
             </div>
         </div>
 

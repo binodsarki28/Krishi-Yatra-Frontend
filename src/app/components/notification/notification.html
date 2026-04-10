@@ -1,0 +1,104 @@
+<div class="surface-ground min-h-screen p-4 pt-8 md:pt-4">
+    <div class="mx-auto" style="max-width: 900px;">
+        <div class="flex flex-column md:flex-row md:align-items-center justify-content-between gap-3 mb-5 mt-4 md:mt-0">
+            <div class="flex align-items-center gap-3">
+                <div class="flex align-items-center justify-content-center border-round-xl p-3 surface-card shadow-1">
+                    <i class="pi pi-bell text-3xl text-green-600"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-900 m-0">Notifications</h1>
+                    <p class="text-500 text-sm mt-1 mb-0">Stay updated with your latest activities</p>
+                </div>
+            </div>
+            <div class="flex align-items-center gap-2">
+                <button pButton icon="pi pi-refresh" [loading]="loading"
+                    class="p-button-text p-button-secondary p-button-rounded"
+                    (click)="fetchNotifications()"></button>
+                @if (unreadCountManual > 0) {
+                    <button pButton label="Mark All Read" icon="pi pi-check" 
+                        class="p-button-outlined p-button-success p-button-sm border-round-2xl font-bold"
+                        (click)="$event.stopPropagation(); markAllAsRead()"></button>
+                }
+            </div>
+        </div>
+
+        <div class="flex flex-column gap-3 fadein pb-8">
+            @if (loading && notifications.length === 0) {
+                <div class="surface-card p-8 border-round-2xl text-center shadow-1 border-1 border-200">
+                    <i class="pi pi-spin pi-spinner text-4xl text-green-500 mb-3"></i>
+                    <p class="text-600">Loading notifications...</p>
+                </div>
+            }
+
+            @for (notif of notifications; track notif.id) {
+                    <div class="notification-card surface-card p-3 md:p-4 border-round-2xl shadow-1 border-1 border-200 flex gap-3 md:gap-4 align-items-start transition-all transition-duration-200 hover:shadow-2 hover:surface-100 flex align-items-center cursor-pointer"
+                         [class.opacity-60]="notif.read"
+                         (click)="handleAction(notif)">
+                        
+                        <!-- Icon Section -->
+                        <div class="flex-shrink-0 flex align-items-center justify-content-center border-round-xl surface-100 p-2"
+                             style="width: 52px; height: 52px;">
+                            <i [class]="getIcon(notif.category)" class="text-2xl" [class.text-green-600]="getSeverity(notif.category) === 'success'" [class.text-blue-600]="getSeverity(notif.category) === 'info'" [class.text-orange-600]="getSeverity(notif.category) === 'warn'" [class.text-red-600]="getSeverity(notif.category) === 'danger'"></i>
+                        </div>
+
+                        <!-- Content Section -->
+                        <div class="flex-1">
+                            <div class="flex flex-column md:flex-row md:align-items-center justify-content-between gap-1 mb-2">
+                                <div class="flex align-items-center gap-2">
+                                    <h3 class="m-0 text-base font-bold text-900 line-height-2">{{ notif.title }}</h3>
+                                    @if (!notif.read) {
+                                        <i class="pi pi-circle-fill text-green-500 text-xs shadow-1" pTooltip="Unread"></i>
+                                    } @else {
+                                        <i class="pi pi-eye text-300 text-xs" pTooltip="Read"></i>
+                                    }
+                                </div>
+                                <span class="text-xs text-500 font-medium">
+                                    {{ notif.createdAt | date:'shortTime' }}
+                                </span>
+                            </div>
+                            <p class="m-0 text-700 text-sm line-height-3 mb-3">{{ notif.body }}</p>
+                            
+                            <div class="flex align-items-center justify-content-between">
+                                <div class="flex align-items-center gap-3">
+                                    <p-tag [value]="notif.category" [severity]="getSeverity(notif.category)" class="text-xs font-bold" [rounded]="true"></p-tag>
+                                    <span class="text-xs text-400 font-medium">{{ notif.createdAt | date:'mediumDate' }}</span>
+                                </div>
+                                
+                                <div class="flex gap-1">
+                                    <button pButton icon="pi pi-trash" 
+                                        class="p-button-text p-button-danger p-button-rounded p-button-sm" 
+                                        (click)="$event.stopPropagation(); deleteNotification(notif.id)"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                } @empty {
+                    @if (!loading && isBrowser) {
+                        <div class="surface-card p-8 border-round-2xl text-center border-1 border-200">
+                            <div class="flex align-items-center justify-content-center mb-4">
+                                <i class="pi pi-bell-slash text-6xl text-300"></i>
+                            </div>
+                            <h2 class="text-900 font-bold mb-2">No notifications yet</h2>
+                            <p class="text-500 mx-auto line-height-3" style="max-width: 300px;">You're all caught up! New activities will appear here.</p>
+                            <button pButton label="Go Home" icon="pi pi-home"
+                                    class="p-button-success border-round-3xl mt-4 px-5 font-bold"
+                                    (click)="router.navigate(['/'])"></button>
+                        </div>
+                    }
+                }
+
+                <!-- Bottom Loading Spinner for Infinite Scroll -->
+                @if (loading && notifications.length > 0) {
+                    <div class="p-4 text-center">
+                        <i class="pi pi-spin pi-spinner text-2xl text-green-500"></i>
+                    </div>
+                }
+            
+            @if (!hasMore && notifications.length > 0) {
+                <div class="p-4 text-center text-400 text-sm italic font-medium">
+                    You've reached the end of your notifications.
+                </div>
+            }
+        </div>
+    </div>
+</div>

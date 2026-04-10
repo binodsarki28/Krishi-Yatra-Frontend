@@ -1,4 +1,5 @@
-<div class="tracking-container" *ngIf="!loading && order">
+@if (!loading && order) {
+<div class="tracking-container">
     <!-- Left: Map Overview with Integrated Header -->
     <div class="map-view h-full">
         @if (pickupLoc && dropLoc) {
@@ -24,13 +25,34 @@
 
     <!-- Right: Tracking Info and Milestones (Scrollable) -->
     <div class="info-sidebar">
+        <!-- Conflict/Resolution Banner (Simplified UI) -->
+        @if (order.orderStatus == 'CONFLICT' || order.orderStatus == 'RESOLVED') {
+        <div class="mb-4 p-3 border-round-xl shadow-1 border-1 border-100" 
+             [style.background-color]="order.orderStatus == 'CONFLICT' ? '#fef2f2' : '#f0fdf4'">
+            <div class="flex align-items-center gap-2 mb-2">
+                <i class="pi" [ngClass]="order.orderStatus == 'CONFLICT' ? 'pi-exclamation-triangle text-red-600' : 'pi-check-circle text-green-600'"></i>
+                <span class="font-bold text-sm" [ngClass]="order.orderStatus == 'CONFLICT' ? 'text-red-800' : 'text-green-800'">
+                    {{ order.orderStatus == 'CONFLICT' ? 'Order Conflict' : 'Issue Resolved' }}
+                </span>
+            </div>
+            <div class="text-xs text-gray-700 italic px-2 mb-2">
+                "{{ order.conflictMessage || 'No specific details provided.' }}"
+            </div>
+            @if (order.conflictRaisedAt) {
+                <div class="px-2 text-gray-400 font-bold" style="font-size: 9px; text-transform: uppercase;">
+                    Status Update: {{ order.conflictRaisedAt | date:'medium' }}
+                </div>
+            }
+        </div>
+        }
+
         <!-- Floating Back Button (Top) -->
         <div class="flex align-items-center justify-content-between mb-4">
             <button pButton pRipple icon="pi pi-arrow-left" label="Back to Orders" 
                     class="p-button-text p-button-sm p-button-secondary font-bold" 
                     (click)="goBack()">
             </button>
-            <p-tag [value]="order?.orderStatus" [severity]="getStatusSeverity(order?.orderStatus)" class="shadow-1"></p-tag>
+            <p-tag [value]="getStatusLabel(order?.orderStatus)" [severity]="getStatusSeverity(order?.orderStatus)" class="shadow-1"></p-tag>
         </div>
 
         <!-- Party Information -->
@@ -41,7 +63,8 @@
             </h4>
             <div class="flex flex-column gap-3">
                 <!-- Farmer Contact -->
-                <div *ngIf="currentRole !== 'FARMER' && order?.farmerPhone" class="flex align-items-center justify-content-between p-3 border-round-lg bg-green-50 border-1 border-green-100">
+                @if (currentRole !== 'FARMER' && order?.farmerPhone) {
+                <div class="flex align-items-center justify-content-between p-3 border-round-lg bg-green-50 border-1 border-green-100">
                     <div class="flex align-items-center gap-3">
                         <div class="flex align-items-center justify-content-center border-round bg-green-100 text-green-700" style="width:36px; height:36px;">
                             <i class="pi pi-home"></i>
@@ -56,9 +79,11 @@
                         <i class="pi pi-phone text-xs opacity-50"></i>
                     </div>
                 </div>
+                }
 
                 <!-- Buyer Contact -->
-                <div *ngIf="currentRole !== 'BUYER' && order?.buyerPhone" class="flex align-items-center justify-content-between p-3 border-round-lg bg-blue-50 border-1 border-blue-100">
+                @if (currentRole !== 'BUYER' && order?.buyerPhone) {
+                <div class="flex align-items-center justify-content-between p-3 border-round-lg bg-blue-50 border-1 border-blue-100">
                     <div class="flex align-items-center gap-3">
                         <div class="flex align-items-center justify-content-center border-round bg-blue-100 text-blue-700" style="width:36px; height:36px;">
                             <i class="pi pi-user"></i>
@@ -73,9 +98,11 @@
                         <i class="pi pi-phone text-xs opacity-50"></i>
                     </div>
                 </div>
+                }
 
                 <!-- Rider Contact -->
-                <div *ngIf="currentRole !== 'DELIVERY' && order?.deliveryPhone" class="flex align-items-center justify-content-between p-3 border-round-lg bg-orange-50 border-1 border-orange-100">
+                @if (currentRole !== 'DELIVERY' && order?.deliveryPhone) {
+                <div class="flex align-items-center justify-content-between p-3 border-round-lg bg-orange-50 border-1 border-orange-100">
                     <div class="flex align-items-center gap-3">
                         <div class="flex align-items-center justify-content-center border-round bg-orange-100 text-orange-700" style="width:36px; height:36px;">
                             <i class="pi pi-truck"></i>
@@ -90,6 +117,7 @@
                         <i class="pi pi-phone text-xs opacity-50"></i>
                     </div>
                 </div>
+                }
             </div>
         </div>
 
@@ -115,7 +143,9 @@
                                 {{cp.label}}
                             </span>
                         </div>
-                        <p-tag *ngIf="cp.checked" value="✓ Passed" severity="success" styleClass="text-[10px] px-2 py-1"></p-tag>
+                        @if (cp.checked) {
+                        <p-tag value="✓ Passed" severity="success" class="text-[10px] px-2 py-1"></p-tag>
+                        }
                     </div>
                 }
 
@@ -180,15 +210,19 @@
 
     </div>
 </div>
+}
 
 <!-- Standard Loading State -->
-<div class="flex flex-column align-items-center justify-content-center p-8 bg-white h-screen" *ngIf="loading && !order">
+@if (loading && !order) {
+<div class="flex flex-column align-items-center justify-content-center p-8 bg-white h-screen">
     <i class="pi pi-spin pi-spinner text-4xl text-primary mb-4"></i>
     <p class="text-lg text-gray-600 font-medium">Synchronizing tracking data...</p>
 </div>
+}
 
 <!-- Order Inaccessible / Error State -->
-<div class="flex flex-column align-items-center justify-content-center p-8 bg-white h-screen" *ngIf="!loading && !order">
+@if (!loading && !order) {
+<div class="flex flex-column align-items-center justify-content-center p-8 bg-white h-screen">
     <i class="pi pi-exclamation-triangle text-4xl text-orange-500 mb-4"></i>
     <h2 class="m-0 text-xl font-bold text-gray-800">Tracking Data Unavailable</h2>
     <p class="text-gray-500 text-center mt-2 max-w-20rem">We couldn't retrieve the tracking details. This may be due to session timeout or temporary network issues.</p>
@@ -199,3 +233,4 @@
                 class="p-button-outlined p-button-secondary" (click)="goBack()"></button>
     </div>
 </div>
+}

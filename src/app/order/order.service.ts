@@ -118,4 +118,16 @@ export class OrderService {
             GenerateUrlUtils.generateUrl(Endpoint.ORDER_RESOLVE_CONFLICT + orderId), {}
         );
     }
+
+    cancelOrder(orderId: string): Observable<IResponse> {
+        return this.http.put<IResponse>(
+            GenerateUrlUtils.generateUrl(Endpoint.ORDER_CANCEL + orderId), {}
+        );
+    }
+
+    getOrderById(orderId: string): Observable<IResponseWithObject> {
+        return this.http.get<IResponseWithObject>(
+            GenerateUrlUtils.generateUrl(Endpoint.ORDER_DETAILS + orderId)
+        );
+    }
 }

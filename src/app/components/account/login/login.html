@@ -32,21 +32,23 @@
                                 <label for="username">Email or Username</label>
                                 <input id="username" type="text" pInputText formControlName="username"
                                     placeholder="Enter your email or username">
-                                <small class="error-message"
-                                    *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+                                @if (loginForm.controls['username']?.invalid && loginForm.controls['username']?.touched) {
+                                <small class="error-message">
                                     Username is required
                                 </small>
+                                }
                             </div>
 
                             <div class="form-group">
                                 <label for="password">Password</label>
                                 <p-password id="password" [toggleMask]="true" [feedback]="false"
                                     formControlName="password" placeholder="Enter your password"
-                                    styleClass="w-full"></p-password>
-                                <small class="error-message"
-                                    *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                                    class="w-full"></p-password>
+                                @if (loginForm.controls['password']?.invalid && loginForm.controls['password']?.touched) {
+                                <small class="error-message">
                                     Password is required
                                 </small>
+                                }
                             </div>
                         </div>
 
@@ -58,7 +60,9 @@
                             <a class="link-secondary">Forgot password?</a>
                         </div>
 
-                        <p-button label="Sign In" [loading]="loading" type="submit" styleClass="submit-btn"></p-button>
+                        <p-button [loading]="loading" type="submit" class="submit-btn" [style]="{'padding': '0'}">
+                          <span class="p-button-label">Sign In</span>
+                        </p-button>
                     </form>
                 </div>
             </div>

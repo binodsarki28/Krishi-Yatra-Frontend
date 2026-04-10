@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -39,7 +39,8 @@ import { ToastService } from '../../util/toast.service';
     RippleModule,
     TooltipModule,
     DataViewModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    NgOptimizedImage
   ],
   templateUrl: './stock-list.html',
   styleUrls: ['./stock-list.css']
@@ -54,8 +55,8 @@ export class StockListComponent implements OnInit {
   
   // Filters
   searchTerm: string = '';
-  selectedCategoryId: string | null = null;
-  selectedSubCategoryId: string | null = null;
+  selectedCategoryId: number | null = null;
+  selectedSubCategoryId: number | null = null;
   
   // Pagination
   page = 0;
@@ -94,8 +95,8 @@ export class StockListComponent implements OnInit {
     });
   }
 
-  loadSubCategories(categoryId: string) {
-    this.stockService.getSubCategories(categoryId).subscribe({
+  loadSubCategories(categoryId: number) {
+    this.stockService.getSubCategories(categoryId.toString()).subscribe({
       next: (res) => {
         this.subCategories = res.response as ISubCategoryResponse[];
         this.cdr.markForCheck();
@@ -157,7 +158,7 @@ export class StockListComponent implements OnInit {
     this.loadStocks(true);
   }
 
-  selectCategory(id: string | null) {
+  selectCategory(id: number | null) {
     this.selectedCategoryId = id;
     this.selectedSubCategoryId = null;
     this.subCategories = [];
@@ -167,7 +168,7 @@ export class StockListComponent implements OnInit {
     this.loadStocks(true);
   }
 
-  selectSubCategory(id: string | null) {
+  selectSubCategory(id: number | null) {
     this.selectedSubCategoryId = id;
     this.loadStocks(true);
   }

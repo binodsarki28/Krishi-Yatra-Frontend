@@ -6,6 +6,11 @@ import { FooterComponent } from './common/footer/footer';
 import { GlobalToastComponent } from './common/global-toast/global-toast';
 import { filter } from 'rxjs';
 import { NavigationService } from './util/navigation.service';
+import { initializeApp } from 'firebase/app';
+import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { firebaseConfig } from './util/firebase.config';
+import { NotificationService } from './components/notification/notification.service';
+import { AccountService } from './components/account/account.service';
 
 @Component({
   selector: 'app-root',
@@ -22,9 +27,23 @@ export class AppComponent {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private notificationService: NotificationService,
+    private accountService: AccountService
   ) {
     this.updateVisibility(this.router.url);
+    
+    // Initialize Firebase once if already logged in, otherwise wait for login event
+    if (this.accountService.getUsername()) {
+        this.initializeFirebase();
+    }
+
+    this.accountService.isLoggedIn$.subscribe((loggedIn: boolean) => {
+        if (loggedIn) {
+            this.initializeFirebase();
+        }
+    });
+
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
@@ -82,10 +101,45 @@ export class AppComponent {
         url.includes('/stock-detail') || 
         url.includes('/profile') || 
         url.includes('/order') || 
-        url.includes('/demands')
+        url.includes('/demands') ||
+        url.includes('/notifications')
       ) {
         this.showNavbar = true;
         this.showFooter = false;
+      }
+    }
+  }
+
+  private initializeFirebase() {
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        const app = initializeApp(firebaseConfig);
+        const messaging = getMessaging(app);
+
+        getToken(messaging, { vapidKey: firebaseConfig.vapidKey })
+          .then((currentToken) => {
+            if (currentToken) {
+              console.log('FCM Token received:', currentToken);
+              const username = this.accountService.getUsername();
+              this.notificationService.saveFcmToken(username, currentToken, navigator.userAgent).subscribe({
+                next: () => console.log('FCM Token saved to backend'),
+                error: (err) => console.error('Error saving FCM Token:', err)
+              });
+            } else {
+              console.warn('No registration token available. Request permission to generate one.');
+            }
+          })
+          .catch((err) => {
+             // Silently fail if VAPID key is placeholder or user denies permission
+             console.log('Firebase registration skipped or failed:', err.message);
+          });
+
+        onMessage(messaging, (payload) => {
+          console.log('Foreground message received:', payload);
+          // You could trigger a toast here if needed
+        });
+      } catch (e) {
+        console.error('Firebase initialization error:', e);
       }
     }
   }

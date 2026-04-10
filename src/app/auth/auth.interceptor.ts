@@ -20,8 +20,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
                 tap({
                     error: (err: any) => {
                         // If server returns 401 or 403, token is likely expired
-                        if (err instanceof HttpErrorResponse && (err.status === 401 || err.status === 403)) {
-                            // Clear expired session data and redirect to login
+                        if (err instanceof HttpErrorResponse && err.status === 401) {
+                            // Clear expired session data and redirect to login only on 401
                             localStorage.clear();
                             router.navigate(['/account/login']);
                         }

@@ -31,20 +31,22 @@
                                     <label for="fullName">Full Name</label>
                                     <input id="fullName" type="text" pInputText formControlName="fullName"
                                         placeholder="John Doe">
-                                    <small class="error-message"
-                                        *ngIf="registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched">
+                                    @if (registerForm.controls['fullName']?.invalid && registerForm.controls['fullName']?.touched) {
+                                    <small class="error-message">
                                         Name must be 5-20 characters
                                     </small>
+                                    }
                                 </div>
 
                                 <div class="form-group">
                                     <label for="username">Username</label>
                                     <input id="username" type="text" pInputText formControlName="username"
                                         placeholder="johndoe">
-                                    <small class="error-message"
-                                        *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+                                    @if (registerForm.controls['username']?.invalid && registerForm.controls['username']?.touched) {
+                                    <small class="error-message">
                                         Username is required
                                     </small>
+                                    }
                                 </div>
                             </div>
 
@@ -53,20 +55,22 @@
                                     <label for="email">Email Address</label>
                                     <input id="email" type="email" pInputText formControlName="email"
                                         placeholder="john@example.com">
-                                    <small class="error-message"
-                                        *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+                                    @if (registerForm.controls['email']?.invalid && registerForm.controls['email']?.touched) {
+                                    <small class="error-message">
                                         Invalid email address
                                     </small>
+                                    }
                                 </div>
 
                                 <div class="form-group">
                                     <label for="phone">Phone Number</label>
                                     <input id="phone" type="tel" pInputText formControlName="phoneNumber"
                                         placeholder="+977 9800000000">
-                                    <small class="error-message"
-                                        *ngIf="registerForm.get('phoneNumber')?.invalid && registerForm.get('phoneNumber')?.touched">
+                                    @if (registerForm.controls['phoneNumber']?.invalid && registerForm.controls['phoneNumber']?.touched) {
+                                    <small class="error-message">
                                         Use a valid Nepal number
                                     </small>
+                                    }
                                 </div>
                             </div>
 
@@ -74,31 +78,31 @@
                                 <div class="form-group">
                                     <label for="password">Password</label>
                                     <p-password id="password" [toggleMask]="true" formControlName="password"
-                                        placeholder="••••••••" styleClass="w-full" [feedback]="false"></p-password>
-                                    <small class="error-message"
-                                        *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+                                        placeholder="••••••••" class="w-full" [feedback]="false"></p-password>
+                                    @if (registerForm.controls['password']?.invalid && registerForm.controls['password']?.touched) {
+                                    <small class="error-message">
                                         Must be 8+ characters
                                     </small>
+                                    }
                                 </div>
 
                                 <div class="form-group">
                                     <label for="confirmPassword">Confirm Password</label>
                                     <p-password id="confirmPassword" [toggleMask]="true"
                                         formControlName="confirmPassword" placeholder="••••••••" [feedback]="false"
-                                        styleClass="w-full"></p-password>
+                                        class="w-full"></p-password>
                                 </div>
                             </div>
                         </div>
 
-                        <small class="error-message"
-                            *ngIf="registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched">
+                        @if (registerForm.hasError('mismatch') && registerForm.controls['confirmPassword']?.touched) {
+                        <small class="error-message">
                             Passwords do not match
                         </small>
-
-
+                        }
 
                         <p-button label="Create Account" [loading]="loading" (onClick)="onSubmit()"
-                            styleClass="submit-btn"></p-button>
+                            class="submit-btn"></p-button>
 
                         <p class="signin-link">Already have an account? <a routerLink="/account/login"
                                 class="link-primary">Sign in</a></p>

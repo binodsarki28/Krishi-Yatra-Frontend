@@ -45,8 +45,8 @@ export class DemandListComponent implements OnInit {
   subCategories: any[] = [];
 
   filters = {
-    categoryGuid: null,
-    subCategoryGuid: null,
+    categoryId: null as number | null,
+    subCategoryId: null as number | null,
     status: 'OPEN'
   };
 
@@ -126,9 +126,9 @@ export class DemandListComponent implements OnInit {
   }
 
   onCategoryChange() {
-    this.filters.subCategoryGuid = null;
-    if (this.filters.categoryGuid) {
-      this.stockService.getSubCategories(this.filters.categoryGuid).subscribe((res: any) => {
+    this.filters.subCategoryId = null;
+    if (this.filters.categoryId) {
+      this.stockService.getSubCategories(this.filters.categoryId.toString()).subscribe((res: any) => {
           setTimeout(() => {
               this.subCategories = res.response || [];
               this.cdr.detectChanges();
@@ -177,8 +177,8 @@ export class DemandListComponent implements OnInit {
         this.toastService.generalResponse('success', 'Accepted', 'Demand accepted! Redirecting to list stock page.');
         this.router.navigate(['/farmer/stocks/create'], {
           queryParams: {
-            category: demand.categoryGuid,
-            subCategory: demand.subCategoryGuid,
+            categoryId: demand.categoryId,
+            subCategoryId: demand.subCategoryId,
             demandId: demand.demandId
           }
         });

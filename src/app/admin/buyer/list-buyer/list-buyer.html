@@ -20,14 +20,14 @@
         <div class="grid align-items-center">
             <div class="col-12 md:col-2">
                 <p-iconField iconPosition="left">
-                    <p-inputIcon styleClass="pi pi-search"></p-inputIcon>
+                    <p-inputIcon class="pi pi-search"></p-inputIcon>
                     <input type="text" pInputText [(ngModel)]="filters.fullName" (input)="onSearch()"
                         placeholder="Search by name..." class="w-full border-none shadow-none text-sm" />
                 </p-iconField>
             </div>
             <div class="col-12 md:col-2">
                 <p-iconField iconPosition="left">
-                    <p-inputIcon styleClass="pi pi-at"></p-inputIcon>
+                    <p-inputIcon class="pi pi-at"></p-inputIcon>
                     <input type="text" pInputText [(ngModel)]="filters.username" (input)="onSearch()"
                         placeholder="Search username..." class="w-full border-none shadow-none text-sm" />
                 </p-iconField>
@@ -35,12 +35,12 @@
             <div class="col-12 md:col-2">
                 <p-select [options]="consumerTypeOptions" [(ngModel)]="filters.consumerType" (onChange)="onSearch(true)"
                     optionLabel="label" optionValue="value" placeholder="Consumer type..." [showClear]="true"
-                    styleClass="w-full border-none shadow-none text-sm h-full flex align-items-center">
+                    class="w-full border-none shadow-none text-sm h-full flex align-items-center">
                 </p-select>
             </div>
             <div class="col-12 md:col-2">
                 <p-iconField iconPosition="left">
-                    <p-inputIcon styleClass="pi pi-map-marker"></p-inputIcon>
+                    <p-inputIcon class="pi pi-map-marker"></p-inputIcon>
                     <input type="text" pInputText [(ngModel)]="filters.businessLocation" (input)="onSearch()"
                         placeholder="Location..." class="w-full border-none shadow-none text-sm" />
                 </p-iconField>
@@ -104,7 +104,7 @@
                         <p-tag [value]="buyer.status === 'VERIFIED' ? 'Verified' : (buyer.status === 'BLOCKED' ? 'Blocked' : 'Pending')"
                             [severity]="buyer.status === 'VERIFIED' ? 'success' : (buyer.status === 'BLOCKED' ? 'danger' : 'warn')"
                             [icon]="buyer.status === 'VERIFIED' ? 'pi pi-check-circle' : (buyer.status === 'BLOCKED' ? 'pi pi-ban' : 'pi pi-clock')"
-                            styleClass="text-xs px-2"></p-tag>
+                            class="text-xs px-2"></p-tag>
                     </td>
                     <td class="p-4 text-center">
                         <p-tag [value]="buyer.isActive ? 'Active' : 'Blocked'"
@@ -124,22 +124,24 @@
 
                             <!-- Slot 2: Verify or Block/Unblock -->
                             <div class="col-fixed flex justify-content-center" style="width: 90px;">
-                                @if (!buyer.isVerified) {
+                                @if (buyer.status === 'PENDING') {
                                 <button pButton label="Verify" icon="pi pi-check"
                                     class="p-button-sm p-button-success border-round-xl px-2 py-1 w-full"
                                     (click)="approveBuyer(buyer.username)"></button>
-                                } @else {
-                                <button pButton [label]="buyer.isActive ? 'Block' : 'Unblock'"
-                                    [icon]="buyer.isActive ? 'pi pi-ban' : 'pi pi-check-circle'"
-                                    class="p-button-sm border-round-xl px-2 py-1 w-full"
-                                    [class.p-button-danger]="buyer.isActive" [class.p-button-success]="!buyer.isActive"
-                                    (click)="blockUnblock(buyer.username, buyer.isActive)"></button>
+                                } @else if (buyer.status === 'VERIFIED') {
+                                <button pButton label="Block" icon="pi pi-ban"
+                                    class="p-button-sm p-button-danger border-round-xl px-2 py-1 w-full"
+                                    (click)="blockUnblock(buyer.username, true)"></button>
+                                } @else if (buyer.status === 'BLOCKED') {
+                                <button pButton label="Unblock" icon="pi pi-check-circle"
+                                    class="p-button-sm p-button-warning border-round-xl px-2 py-1 w-full"
+                                    (click)="blockUnblock(buyer.username, false)"></button>
                                 }
                             </div>
 
                             <!-- Slot 3: Reject -->
                             <div class="col-fixed flex justify-content-center" style="width: 90px;">
-                                @if (!buyer.isVerified) {
+                                @if (buyer.status === 'PENDING') {
                                 <button pButton label="Reject" icon="pi pi-times"
                                     class="p-button-sm p-button-danger border-round-xl px-2 py-1 w-full"
                                     (click)="showActionDialog(buyer.username, 'REJECT')"></button>

@@ -23,6 +23,7 @@ export interface IOrderResponse {
     checkpoints?: string;
     createdAt: string;
     conflictMessage?: string;
+    conflictRaisedAt?: string;
     message?: string;
     farmerName?: string;
     farmerPhone?: string;
@@ -31,4 +32,8 @@ export interface IOrderResponse {
     deliveryName?: string;
     deliveryPhone?: string;
     stockImages?: string[];
+    categoryName?: string;
+    acceptedAt?: string;
+    pickedUpAt?: string;
+    deliveredAt?: string;
 }

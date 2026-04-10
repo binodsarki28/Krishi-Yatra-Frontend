@@ -1,28 +1,34 @@
 <div class="map-container-wrapper relative w-full border-round-xl overflow-hidden shadow-2 bg-white h-full flex flex-column">
     <!-- Map Header (Optional) -->
-    <div *ngIf="showHeader" class="map-overlay-header flex justify-content-between align-items-center p-3 border-bottom-1 border-100 bg-white">
+    @if (showHeader) {
+    <div class="map-overlay-header flex justify-content-between align-items-center p-3 border-bottom-1 border-100 bg-white">
         <div class="flex align-items-center gap-2">
             <i class="pi pi-map text-primary"></i>
             <span class="font-bold text-700 text-sm uppercase tracking-tight">{{mapTitle}}</span>
         </div>
         <div class="flex gap-2">
-            <button *ngIf="drawRoute" pButton icon="pi pi-directions" 
+            @if (drawRoute) {
+            <button pButton icon="pi pi-directions" 
                     pTooltip="Timeline"
                     class="p-button-text p-button-sm p-button-secondary border-1 border-200" 
                     (click)="toggleDirections()">
             </button>
+            }
             <button pButton icon="pi pi-compass" 
                     pTooltip="Reset View"
                     class="p-button-text p-button-sm p-button-secondary border-1 border-200" 
                     (click)="fitBounds()">
             </button>
-            <button *ngIf="drawRoute && pickupLocation && dropLocation" pButton icon="pi pi-refresh" 
+            @if (drawRoute && pickupLocation && dropLocation) {
+            <button pButton icon="pi pi-refresh" 
                     label="Redraw"
                     class="p-button-sm p-button-info shadow-2 ml-2" 
                     (click)="redrawRoute()">
             </button>
+            }
         </div>
     </div>
+    }
 
     <!-- Map View -->
     <div class="map-view-container relative w-full flex-grow-1" style="min-height: 500px;">
@@ -49,18 +55,27 @@
         </div>
 
         <!-- Distance Badge Overlay (Top Right) -->
-        <div *ngIf="distanceInfo" class="distance-badge-overlay absolute top-0 right-0 m-3 z-1000 flex gap-2">
+        @if (distanceInfo) {
+        <div class="distance-badge-overlay absolute top-0 right-0 m-3 z-1000 flex gap-2">
             <!-- If we have a KM value -->
-            <p-tag *ngIf="distanceInfo.includes('km')" [value]="distanceInfo" severity="success" styleClass="shadow-4 px-3 py-2 text-sm border-round-lg font-bold"></p-tag>
+             @if (distanceInfo.includes('km')) {
+            <p-tag [value]="distanceInfo" severity="success" class="shadow-4 px-3 py-2 text-sm border-round-lg font-bold"></p-tag>
+             }
             <!-- If its a fallback message -->
-            <p-tag *ngIf="!distanceInfo.includes('km') && distanceInfo !== 'Calculating...'" [value]="distanceInfo" severity="warn" styleClass="shadow-4 px-3 py-2 text-xs border-round-lg"></p-tag>
+            @if (!distanceInfo.includes('km') && distanceInfo !== 'Calculating...') {
+            <p-tag [value]="distanceInfo" severity="warn" class="shadow-4 px-3 py-2 text-xs border-round-lg"></p-tag>
+            }
             <!-- Loading state -->
-            <p-tag *ngIf="distanceInfo === 'Calculating...'" icon="pi pi-spin pi-spinner" [value]="distanceInfo" severity="info" styleClass="shadow-4 px-3 py-2 text-xs border-round-lg"></p-tag>
+            @if (distanceInfo === 'Calculating...') {
+            <p-tag icon="pi pi-spin pi-spinner" [value]="distanceInfo" severity="info" class="shadow-4 px-3 py-2 text-xs border-round-lg"></p-tag>
+            }
         </div>
+        }
     </div>
 
     <!-- Timeline (Optional) -->
-    <div *ngIf="drawRoute && showTimeline" class="p-3 bg-white border-top-1 border-100">
+    @if (drawRoute && showTimeline) {
+    <div class="p-3 bg-white border-top-1 border-100">
         <div class="flex align-items-center gap-2 mb-3">
             <i class="pi pi-flag-fill text-primary"></i>
             <span class="text-sm font-bold text-700 uppercase tracking-tight">Timeline & Milestones</span>
@@ -88,4 +103,5 @@
             </div>
         </div>
     </div>
+    }
 </div>

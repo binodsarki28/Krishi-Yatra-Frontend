@@ -40,10 +40,11 @@ export class ToastService {
       message = 'Server unreachable!';
     }
     else if (status === 401) {
-      // Check if user was actually logged in before showing logout message
+      if (!isPlatformBrowser(this.platformId)) {
+        return; // Skip SSR toast
+      }
       const isLoggedIn = !!localStorage.getItem('token');
       if (!isLoggedIn) {
-        // Just show why login failed
         message = err.error?.message || 'Invalid username or password!';
       } else {
         message = 'You have been logged out. Please log in again.';

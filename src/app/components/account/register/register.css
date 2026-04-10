@@ -239,7 +239,7 @@
     margin-top: 1.25rem;
 }
 
-::ng-deep .register-page .submit-btn {
+::ng-deep .register-page .submit-btn .p-button {
     width: 100% !important;
     background: linear-gradient(135deg, #064e3b, #047857) !important;
     border: none !important;
@@ -247,6 +247,7 @@
     padding: 0.9rem !important;
     font-size: 1rem !important;
     font-weight: 700 !important;
+    color: #fff !important;
     transition: all 0.3s ease !important;
     box-shadow: 0 4px 16px rgba(4, 120, 87, 0.2) !important;
     margin-top: 0.75rem;

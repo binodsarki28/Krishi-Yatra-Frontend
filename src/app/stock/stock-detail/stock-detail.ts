@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { StockService } from '../stock.service';
 import { ButtonModule } from 'primeng/button';
@@ -13,7 +13,7 @@ import { GenerateUrlUtils } from '../../util/generate-url.utils';
 @Component({
   selector: 'app-stock-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonModule, CardModule, TagModule, TooltipModule, ProgressSpinnerModule],
+  imports: [CommonModule, RouterModule, ButtonModule, CardModule, TagModule, TooltipModule, ProgressSpinnerModule, NgOptimizedImage],
   templateUrl: './stock-detail.html',
   styleUrls: ['./stock-detail.css']
 })

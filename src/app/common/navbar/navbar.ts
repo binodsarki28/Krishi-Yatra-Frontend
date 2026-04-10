@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
@@ -8,6 +7,7 @@ import { Router } from '@angular/router';
 import { inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { AccountService } from '../../components/account/account.service';
+import { NotificationService } from '../../components/notification/notification.service';
 
 @Component({
   selector: 'app-navbar',
@@ -19,18 +19,32 @@ import { AccountService } from '../../components/account/account.service';
 export class NavbarComponent implements OnInit {
   items: MenuItem[] | undefined;
   isLoggedIn: boolean = false;
+  unreadCount: number = 0;
   private platformId = inject(PLATFORM_ID);
 
   constructor(
     private router: Router,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit() {
     this.accountService.isLoggedIn$.subscribe((status: boolean) => {
       this.isLoggedIn = status;
       this.updateNavbarItems();
+      if (status) {
+        this.fetchUnreadCount();
+      }
     });
+
+    // Subscribe to notification service for real-time count updates
+    this.notificationService.unreadCount$.subscribe(count => {
+      this.unreadCount = count;
+    });
+  }
+
+  fetchUnreadCount() {
+    this.notificationService.getUnreadCount().subscribe();
   }
 
   updateNavbarItems() {
@@ -87,6 +101,10 @@ export class NavbarComponent implements OnInit {
 
   navigateToProfile() {
     this.router.navigate(['/profile']);
+  }
+
+  navigateToNotifications() {
+    this.router.navigate(['/notifications']);
   }
 
   logout() {

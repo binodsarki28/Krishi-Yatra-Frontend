@@ -1,6 +1,6 @@
 export interface IDemandCreateRequest {
-    categoryGuid: string;
-    subCategoryGuid: string;
+    categoryId: number;
+    subCategoryId: number;
     quantity: number;
     expectedPricePerUnit: number;
     description: string;
@@ -9,9 +9,9 @@ export interface IDemandCreateRequest {
 export interface IDemandResponse {
     demandId: string;
     categoryName: string;
-    categoryGuid: string;
+    categoryId: number;
     subCategoryName: string;
-    subCategoryGuid: string;
+    subCategoryId: number;
     quantity: number;
     expectedPricePerUnit: number;
     description: string;

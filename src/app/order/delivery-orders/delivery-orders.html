@@ -21,15 +21,15 @@
             <div class="col-12 md:col-4">
                 <label class="block text-xs font-bold text-500 mb-1 ml-1">SEARCH BY ID OR AREA</label>
                 <p-iconField iconPosition="left">
-                    <p-inputIcon styleClass="pi pi-search"></p-inputIcon>
+                    <p-inputIcon class="pi pi-search"></p-inputIcon>
                     <input type="text" pInputText [(ngModel)]="searchText" (input)="onFilterChange()"
                         placeholder="Search deliveries..." class="w-full border-round-lg text-sm" />
                 </p-iconField>
             </div>
             <div class="col-12 md:col-3">
                 <label class="block text-xs font-bold text-500 mb-1 ml-1">STATUS</label>
-                <p-select [options]="statusOptions" [(ngModel)]="selectedStatus" 
-                    placeholder="All Status" styleClass="w-full border-round-lg text-sm"
+                <p-select [options]="statusOptions" [(ngModel)]="selectedStatus"
+                    placeholder="All Status" class="w-full border-round-lg text-sm"
                     (onChange)="onFilterChange()" [showClear]="true"></p-select>
             </div>
             <div class="col-12 md:col-2 flex align-items-center mb-1">
@@ -42,8 +42,8 @@
 
     <!-- Table -->
     <div class="surface-card border-round-xl border-1 border-200 shadow-1 overflow-hidden">
-        <p-table [value]="orders" [loading]="loading" responsiveLayout="scroll" 
-            styleClass="p-datatable-sm p-datatable-striped" [rowHover]="true"
+        <p-table [value]="orders" [loading]="loading" responsiveLayout="scroll"
+            class="p-datatable-sm p-datatable-striped" [rowHover]="true"
             [scrollable]="true" scrollHeight="calc(100vh - 350px)">
             <ng-template pTemplate="header">
                 <tr>
@@ -68,8 +68,8 @@
                     </td>
                     <td class="text-sm font-bold text-orange-600">Rs. {{ order.deliveryFee | number }}</td>
                     <td>
-                        <p-tag [value]="getStatusLabel(order.orderStatus)" 
-                            [severity]="getStatusSeverity(order.orderStatus)" [rounded]="true" size="small"></p-tag>
+                        <p-tag [value]="getStatusLabel(order.orderStatus)"
+                               [severity]="getStatusSeverity(order.orderStatus)" [rounded]="true" sizes="small"></p-tag>
                     </td>
                     <td class="text-xs text-500">{{ order.createdAt | date:'medium' }}</td>
                     <td>
@@ -82,11 +82,14 @@
                     </td>
                     <td>
                         <div class="flex gap-1">
-                            <p-button icon="pi pi-map-marker" [routerLink]="['/delivery/track', order.orderId]" 
+                            <p-button icon="pi pi-map-marker" [routerLink]="['/delivery/track', order.orderId]"
                                 severity="warn" [text]="true" [rounded]="true" size="small" pTooltip="Track Journey"></p-button>
 
-                            <p-button icon="pi pi-eye" severity="secondary" [text]="true" [rounded]="true" size="small" 
+                            <p-button icon="pi pi-eye" severity="secondary" [text]="true" [rounded]="true" size="small"
                                 pTooltip="Product Detail" (onClick)="viewStockDetail(order.stockSlug)"></p-button>
+
+                            <p-button icon="pi pi-file" severity="primary" [text]="true" [rounded]="true" size="small" 
+                                pTooltip="Order Details" [routerLink]="['/order/detail', order.orderId]"></p-button>
                         </div>
                     </td>
                 </tr>

@@ -24,19 +24,19 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-own-stock-list',
   standalone: true,
   imports: [
-    CommonModule, 
-    TableModule, 
-    ButtonModule, 
-    InputTextModule, 
-    TagModule, 
-    ToastModule, 
-    RouterModule, 
-    FormsModule, 
-    IconFieldModule, 
-    InputIconModule, 
-    SelectModule, 
-    InputGroupModule, 
-    InputGroupAddonModule, 
+    CommonModule,
+    TableModule,
+    ButtonModule,
+    InputTextModule,
+    TagModule,
+    ToastModule,
+    RouterModule,
+    FormsModule,
+    IconFieldModule,
+    InputIconModule,
+    SelectModule,
+    InputGroupModule,
+    InputGroupAddonModule,
     ConfirmDialogModule,
     TooltipModule
   ],
@@ -49,11 +49,11 @@ export class OwnStockListComponent implements OnInit, OnDestroy {
   filteredStocks: IStockListResponse[] = [];
   displayStocks: IStockListResponse[] = [];
   loading: boolean = true;
-  
+
   categories: ICategoryResponse[] = [];
   subCategories: ISubCategoryResponse[] = [];
   subCategoriesFiltered: ISubCategoryResponse[] = [];
-  
+
   page = 0;
   size = 10;
   hasMore = false;
@@ -154,7 +154,7 @@ export class OwnStockListComponent implements OnInit, OnDestroy {
   applyFilters() {
     this.page = 0;
     const f = this.filters;
-    
+
     if (!f.stockName && !f.productName && !f.categoryName && !f.subCategoryName) {
       this.filteredStocks = [...this.stocks];
     } else {
@@ -201,11 +201,11 @@ export class OwnStockListComponent implements OnInit, OnDestroy {
   loadStocks() {
     this.loading = true;
     this.cdr.markForCheck();
-    
+
     this.stockService.getFarmerStocks().subscribe({
       next: (res: any) => {
         this.stocks = res.response || [];
-        this.applyFilters(); 
+        this.applyFilters();
         this.loading = false;
         this.cdr.markForCheck();
       },
@@ -232,19 +232,6 @@ export class OwnStockListComponent implements OnInit, OnDestroy {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update stock status' });
           }
         });
-      }
-    });
-  }
-
-  adjustQuantity(stock: IStockListResponse, amount: number) {
-    this.stockService.adjustStockQuantity(stock.stockSlug, amount).subscribe({
-      next: (res) => {
-        stock.quantity = Math.max(0, stock.quantity + amount);
-        this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'Stock quantity adjusted!' });
-        this.cdr.markForCheck();
-      },
-      error: (err) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to adjust quantity' });
       }
     });
   }
