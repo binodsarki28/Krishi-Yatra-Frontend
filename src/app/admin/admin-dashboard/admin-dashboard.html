@@ -205,49 +205,61 @@
             <!-- Stats Row -->
             @if (dashboard) {
             <div class="grid mb-4">
-                <div class="col-12 md:col-6 lg:col-3">
-                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1">
+                <div class="col-12 md:col-6 lg:col-4 xl:col">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1 h-full">
                         <div class="flex flex-column gap-1">
                             <span class="text-xs text-500 font-bold uppercase tracking-wider">Total Users</span>
                             <span class="text-3xl font-bold text-900">{{ dashboard.totalUsers }}</span>
                         </div>
-                        <div class="flex align-items-center justify-content-center border-round-xl bg-blue-50 text-blue-600" style="width:48px; height:48px;">
+                        <div class="flex align-items-center justify-content-center border-round-xl bg-blue-50 text-blue-600" style="width:48px; height:48px; min-width:48px;">
                             <i class="pi pi-users" style="font-size: 20px;"></i>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-12 md:col-6 lg:col-3">
-                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1">
+                <div class="col-12 md:col-6 lg:col-4 xl:col">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1 h-full">
                         <div class="flex flex-column gap-1">
                             <span class="text-xs text-500 font-bold uppercase tracking-wider">Platform Revenue</span>
-                            <span class="text-3xl font-bold text-green-600">NPR {{ dashboard.platformRevenue | number:'1.0-2' }}</span>
+                            <span class="text-3xl font-bold text-green-600 truncate max-w-7rem">NPR {{ dashboard.platformRevenue | number:'1.0-1' }}</span>
                         </div>
-                        <div class="flex align-items-center justify-content-center border-round-xl bg-green-50 text-green-600" style="width:48px; height:48px;">
+                        <div class="flex align-items-center justify-content-center border-round-xl bg-green-50 text-green-600" style="width:48px; height:48px; min-width:48px;">
                             <i class="pi pi-dollar" style="font-size: 20px;"></i>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-12 md:col-6 lg:col-3">
-                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1">
+                <div class="col-12 md:col-6 lg:col-4 xl:col">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1 h-full">
+                        <div class="flex flex-column gap-1">
+                            <span class="text-xs text-500 font-bold uppercase tracking-wider">Active Demands</span>
+                            <span class="text-3xl font-bold text-900">{{ dashboard.activeDemands }}</span>
+                        </div>
+                        <div class="flex align-items-center justify-content-center border-round-xl bg-cyan-50 text-cyan-600" style="width:48px; height:48px; min-width:48px;">
+                            <i class="pi pi-megaphone" style="font-size: 20px;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-6 lg:col-4 xl:col">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1 h-full">
                         <div class="flex flex-column gap-1">
                             <span class="text-xs text-500 font-bold uppercase tracking-wider">Total Orders</span>
                             <span class="text-3xl font-bold text-900">{{ dashboard.totalOrders }}</span>
                         </div>
-                        <div class="flex align-items-center justify-content-center border-round-xl bg-orange-50 text-orange-600" style="width:48px; height:48px;">
+                        <div class="flex align-items-center justify-content-center border-round-xl bg-orange-50 text-orange-600" style="width:48px; height:48px; min-width:48px;">
                             <i class="pi pi-shopping-cart" style="font-size: 20px;"></i>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-12 md:col-6 lg:col-3">
-                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1">
+                <div class="col-12 md:col-6 lg:col-4 xl:col">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1 h-full">
                         <div class="flex flex-column gap-1">
                             <span class="text-xs text-500 font-bold uppercase tracking-wider">Active Stocks</span>
                             <span class="text-3xl font-bold text-900">{{ dashboard.activeStocks }}</span>
                         </div>
-                        <div class="flex align-items-center justify-content-center border-round-xl bg-purple-50 text-purple-600" style="width:48px; height:48px;">
+                        <div class="flex align-items-center justify-content-center border-round-xl bg-purple-50 text-purple-600" style="width:48px; height:48px; min-width:48px;">
                             <i class="pi pi-box" style="font-size: 20px;"></i>
                         </div>
                     </div>
