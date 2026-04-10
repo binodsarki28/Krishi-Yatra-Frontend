@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
@@ -6,11 +6,14 @@ import { AccountService } from '../../components/account/account.service';
 import { ButtonModule } from 'primeng/button';
 import { OrderService } from '../../order/order.service';
 import { NavigationService } from '../../util/navigation.service';
+import { ChartModule } from 'primeng/chart';
+import { DashboardService } from '../../common/dashboard.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-delivery-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonModule],
+  imports: [CommonModule, RouterModule, ButtonModule, ChartModule],
   templateUrl: './delivery-dashboard.html',
   styleUrls: ['./delivery-dashboard.css']
 })
@@ -19,11 +22,20 @@ export class DeliveryDashboard implements OnInit {
   expandedGroup: string = 'order';
   totalOrders: number = 0;
 
+  dashboard: any = null;
+  loading: boolean = true;
+  
+  // Chart Data
+  earningsChartData: any;
+  earningsChartOptions: any;
+
   constructor(
     private orderService: OrderService,
     private accountService: AccountService,
     private navigationService: NavigationService,
+    private dashboardService: DashboardService,
     private router: Router,
+    private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
@@ -37,6 +49,7 @@ export class DeliveryDashboard implements OnInit {
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.loadStats();
+      this.loadDashboardData();
     }
 
     this.router.events.pipe(
@@ -50,6 +63,7 @@ export class DeliveryDashboard implements OnInit {
       } else if (url.includes('/jobs')) {
         this.expandedGroup = 'jobs';
       }
+      this.cdr.detectChanges();
     });
 
     const currentUrl = this.router.url;
@@ -66,11 +80,102 @@ export class DeliveryDashboard implements OnInit {
     this.orderService.getDeliveryOrders(0, 1).subscribe({
       next: (res: any) => {
         this.totalOrders = res.response?.totalElements || 0;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.totalOrders = 0;
+        this.cdr.detectChanges();
       }
     });
+  }
+
+  loadDashboardData() {
+    this.loading = true;
+    this.dashboardService.getDeliveryDashboard()
+      .pipe(finalize(() => {
+          this.loading = false;
+          this.cdr.detectChanges();
+      }))
+      .subscribe({
+        next: (res: any) => {
+          this.dashboard = res.response;
+          this.initCharts();
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+            console.error('Delivery dashboard error:', err);
+            this.cdr.detectChanges();
+        }
+      });
+  }
+
+  initCharts() {
+    if (!this.dashboard) return;
+
+    const documentStyle = getComputedStyle(document.documentElement);
+    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary') || '#6c757d';
+    const surfaceBorder = documentStyle.getPropertyValue('--surface-border') || '#dfe7ef';
+
+    const monthOrder = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    // Generate last 6 months
+    const currentDate = new Date();
+    const last6Months: string[] = [];
+    for (let i = 5; i >= 0; i--) {
+        const d = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+        last6Months.push(monthOrder[d.getMonth()]);
+    }
+
+    // Earnings Trend
+    const rawEarnings = this.dashboard.earningsTrend || {};
+    const earningsLabels = last6Months;
+    const earningsValues = earningsLabels.map(label => rawEarnings[label] || 0);
+
+    this.earningsChartData = {
+      labels: earningsLabels.length ? earningsLabels : ['Jan', 'Feb', 'Mar', 'Apr'],
+      datasets: [
+        {
+          label: 'Monthly Earnings (NPR)',
+          data: earningsValues.length ? earningsValues : [0, 0, 0, 0],
+          fill: true,
+          borderColor: '#f59e0b',
+          tension: 0.4,
+          backgroundColor: 'rgba(245, 158, 11, 0.1)',
+          pointBackgroundColor: '#f59e0b',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: '#f59e0b'
+        }
+      ]
+    };
+
+    this.earningsChartOptions = {
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+          padding: 12,
+          cornerRadius: 8
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: textColorSecondary, font: { weight: '500' } },
+          grid: { display: false }
+        },
+        y: {
+          ticks: {
+            color: textColorSecondary,
+            callback: (value: any) => 'NPR ' + value
+          },
+          grid: { color: surfaceBorder, drawBorder: false, borderDash: [5, 5] }
+        }
+      }
+    };
   }
 
   logout() {

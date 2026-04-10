@@ -204,7 +204,7 @@ export class ProfileComponent implements OnInit {
         this.toastService.warningResponse(statusF || 'Your Farmer account is under verification.');
         return;
       }
-      else { this.router.navigate(['/farmer/dashboard']); return; }
+      else { this.router.navigate(['/farmer']); return; }
     }
     if (tab === 'buyer-dashboard') {
       if (!this.isBuyer || (!this.isBuyerVerified && !statusB)) {
@@ -215,7 +215,7 @@ export class ProfileComponent implements OnInit {
         this.toastService.warningResponse(statusB || 'Your Buyer account is under verification.');
         return;
       }
-      else { this.router.navigate(['/buyer/dashboard']); return; }
+      else { this.router.navigate(['/buyer']); return; }
     }
     if (tab === 'delivery-dashboard') {
       if (!this.isDelivery || (!this.isDeliveryVerified && !statusD)) {
@@ -226,7 +226,7 @@ export class ProfileComponent implements OnInit {
         this.toastService.warningResponse(statusD || 'Your Linker account is under verification.');
         return;
       }
-      else { this.router.navigate(['/delivery/dashboard']); return; }
+      else { this.router.navigate(['/delivery']); return; }
     }
     this.activeTab = tab;
     if (tab === 'address') {

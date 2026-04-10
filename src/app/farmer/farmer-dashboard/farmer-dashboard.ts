@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
@@ -7,10 +7,14 @@ import { ButtonModule } from 'primeng/button';
 import { StockService } from '../../stock/stock.service';
 import { OrderService } from '../../order/order.service';
 import { NavigationService } from '../../util/navigation.service';
+import { ChartModule } from 'primeng/chart';
+import { DashboardService } from '../../common/dashboard.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-farmer-dashboard',
-  imports: [CommonModule, RouterModule, ButtonModule],
+  standalone: true,
+  imports: [CommonModule, RouterModule, ButtonModule, ChartModule],
   templateUrl: './farmer-dashboard.html',
   styleUrls: ['./farmer-dashboard.css']
 })
@@ -20,12 +24,23 @@ export class FarmerDashboard implements OnInit {
   totalStocks: number = 0;
   totalOrders: number = 0;
 
+  dashboard: any = null;
+  loading: boolean = true;
+  
+  // Chart Data
+  revenueChartData: any;
+  revenueChartOptions: any;
+  categoryChartData: any;
+  categoryChartOptions: any;
+
   constructor(
     private stockService: StockService,
     private orderService: OrderService,
     private accountService: AccountService,
     private navigationService: NavigationService,
+    private dashboardService: DashboardService,
     private router: Router,
+    private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object
   ) { }
   
@@ -38,7 +53,7 @@ export class FarmerDashboard implements OnInit {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-        this.loadStats();
+        this.loadDashboardData();
     }
 
     this.router.events.pipe(
@@ -52,6 +67,7 @@ export class FarmerDashboard implements OnInit {
         } else if (url.includes('/orders')) {
             this.expandedGroup = 'order';
         }
+        this.cdr.detectChanges();
     });
 
     const currentUrl = this.router.url;
@@ -64,23 +80,120 @@ export class FarmerDashboard implements OnInit {
     this.expandedGroup = this.expandedGroup === group ? '' : group;
   }
 
-  loadStats() {
-    this.stockService.getFarmerStocks().subscribe({
-      next: (res: any) => {
-        this.totalStocks = res.totalItems || 0;
-      },
-      error: () => {
-        this.totalStocks = 0;
-      }
-    });
-    this.orderService.getFarmerOrders(0, 1).subscribe({
-      next: (res: any) => {
-        this.totalOrders = res.response?.totalElements || 0;
-      },
-      error: () => {
-        this.totalOrders = 0;
-      }
-    });
+  loadDashboardData() {
+    this.loading = true;
+    this.dashboardService.getFarmerDashboard()
+      .pipe(finalize(() => {
+          this.loading = false;
+          this.cdr.detectChanges();
+      }))
+      .subscribe({
+        next: (res: any) => {
+          this.dashboard = res.response;
+          this.initCharts();
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Farmer dashboard error:', err);
+          this.cdr.detectChanges();
+        }
+      });
+  }
+
+  initCharts() {
+    if (!this.dashboard) return;
+
+    const documentStyle = getComputedStyle(document.documentElement);
+    const textColor = documentStyle.getPropertyValue('--text-color') || '#495057';
+    const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary') || '#6c757d';
+    const surfaceBorder = documentStyle.getPropertyValue('--surface-border') || '#dfe7ef';
+
+    const monthOrder = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    // Generate last 6 months
+    const currentDate = new Date();
+    const last6Months: string[] = [];
+    for (let i = 5; i >= 0; i--) {
+        const d = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+        last6Months.push(monthOrder[d.getMonth()]);
+    }
+
+    // Revenue Trend Line Chart
+    const rawRevenue = this.dashboard.revenueByMonth || {};
+    const revenueLabels = last6Months;
+    const revenueValues = revenueLabels.map(label => rawRevenue[label] || 0);
+
+    this.revenueChartData = {
+      labels: revenueLabels.length ? revenueLabels : ['Jan', 'Feb', 'Mar', 'Apr'],
+      datasets: [
+        {
+          label: 'Monthly Revenue (NPR)',
+          data: revenueValues.length ? revenueValues : [0, 0, 0, 0],
+          fill: true,
+          borderColor: '#10b981',
+          tension: 0.4,
+          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          pointBackgroundColor: '#10b981',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: '#10b981'
+        }
+      ]
+    };
+
+    this.revenueChartOptions = {
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                mode: 'index',
+                intersect: false,
+                padding: 12,
+                cornerRadius: 8
+            }
+        },
+        scales: {
+            x: {
+                ticks: { color: textColorSecondary, font: { weight: '500' } },
+                grid: { display: false }
+            },
+            y: {
+                ticks: { 
+                    color: textColorSecondary,
+                    callback: (value: any) => 'NPR ' + value
+                },
+                grid: { color: surfaceBorder, drawBorder: false, borderDash: [5, 5] }
+            }
+        }
+    };
+
+    // Category Distribution Pie Chart
+    const rawCategories = this.dashboard.stocksByCategory || {};
+    const categoryLabels = Object.keys(rawCategories);
+    const categoryValues = Object.values(rawCategories);
+
+    this.categoryChartData = {
+      labels: categoryLabels.length ? categoryLabels : ['No Stocks'],
+      datasets: [
+        {
+          data: categoryValues.length ? categoryValues : [1],
+          backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'],
+          hoverOffset: 20,
+          borderWidth: 0
+        }
+      ]
+    };
+
+    this.categoryChartOptions = {
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { usePointStyle: true, color: textColor }
+            }
+        }
+    };
   }
 
   logout() {

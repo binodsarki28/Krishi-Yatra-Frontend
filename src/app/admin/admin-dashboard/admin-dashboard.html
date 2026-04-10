@@ -203,114 +203,114 @@
         @if (isDefaultRoute) {
         <div class="fadein animation-duration-300">
             <!-- Stats Row -->
+            @if (dashboard) {
             <div class="grid mb-4">
                 <div class="col-12 md:col-6 lg:col-3">
-                    <div
-                        class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between hover:shadow-3 transition-all transition-duration-200">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1">
                         <div class="flex flex-column gap-1">
-                            <span class="text-xs text-500 font-medium">Pending Farmers</span>
-                            <span class="text-3xl font-bold text-900" style="letter-spacing: -0.5px; line-height: 1;">{{
-                                pendingFarmers }}</span>
+                            <span class="text-xs text-500 font-bold uppercase tracking-wider">Total Users</span>
+                            <span class="text-3xl font-bold text-900">{{ dashboard.totalUsers }}</span>
                         </div>
-                        <div class="flex align-items-center justify-content-center border-round-xl"
-                            style="width:44px; height:44px; background: linear-gradient(135deg, #22c55e, #16a34a);">
-                            <i class="pi pi-users text-white" style="font-size: 18px;"></i>
+                        <div class="flex align-items-center justify-content-center border-round-xl bg-blue-50 text-blue-600" style="width:48px; height:48px;">
+                            <i class="pi pi-users" style="font-size: 20px;"></i>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-12 md:col-6 lg:col-3">
-                    <div
-                        class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between hover:shadow-3 transition-all transition-duration-200">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1">
                         <div class="flex flex-column gap-1">
-                            <span class="text-xs text-500 font-medium">Pending Buyers</span>
-                            <span class="text-3xl font-bold text-900" style="letter-spacing: -0.5px; line-height: 1;">{{
-                                pendingBuyers }}</span>
+                            <span class="text-xs text-500 font-bold uppercase tracking-wider">Platform Revenue</span>
+                            <span class="text-3xl font-bold text-green-600">NPR {{ dashboard.platformRevenue | number:'1.0-2' }}</span>
                         </div>
-                        <div class="flex align-items-center justify-content-center border-round-xl"
-                            style="width:44px; height:44px; background: linear-gradient(135deg, #3b82f6, #2563eb);">
-                            <i class="pi pi-shopping-bag text-white" style="font-size: 18px;"></i>
+                        <div class="flex align-items-center justify-content-center border-round-xl bg-green-50 text-green-600" style="width:48px; height:48px;">
+                            <i class="pi pi-dollar" style="font-size: 20px;"></i>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-12 md:col-6 lg:col-3">
-                    <div
-                        class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between hover:shadow-3 transition-all transition-duration-200">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1">
                         <div class="flex flex-column gap-1">
-                            <span class="text-xs text-500 font-medium">Pending Delivery</span>
-                            <span class="text-3xl font-bold text-900" style="letter-spacing: -0.5px; line-height: 1;">{{
-                                pendingDelivery }}</span>
+                            <span class="text-xs text-500 font-bold uppercase tracking-wider">Total Orders</span>
+                            <span class="text-3xl font-bold text-900">{{ dashboard.totalOrders }}</span>
                         </div>
-                        <div class="flex align-items-center justify-content-center border-round-xl"
-                            style="width:44px; height:44px; background: linear-gradient(135deg, #f59e0b, #d97706);">
-                            <i class="pi pi-truck text-white" style="font-size: 18px;"></i>
+                        <div class="flex align-items-center justify-content-center border-round-xl bg-orange-50 text-orange-600" style="width:48px; height:48px;">
+                            <i class="pi pi-shopping-cart" style="font-size: 20px;"></i>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-12 md:col-6 lg:col-3">
-                    <div
-                        class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between hover:shadow-3 transition-all transition-duration-200">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1">
                         <div class="flex flex-column gap-1">
-                            <span class="text-xs text-500 font-medium">Total Pending</span>
-                            <span class="text-3xl font-bold text-900" style="letter-spacing: -0.5px; line-height: 1;">{{
-                                pendingFarmers + pendingBuyers +
-                                pendingDelivery }}</span>
+                            <span class="text-xs text-500 font-bold uppercase tracking-wider">Active Stocks</span>
+                            <span class="text-3xl font-bold text-900">{{ dashboard.activeStocks }}</span>
                         </div>
-                        <div class="flex align-items-center justify-content-center border-round-xl"
-                            style="width:44px; height:44px; background: linear-gradient(135deg, #ef4444, #dc2626);">
-                            <i class="pi pi-exclamation-triangle text-white" style="font-size: 18px;"></i>
+                        <div class="flex align-items-center justify-content-center border-round-xl bg-purple-50 text-purple-600" style="width:48px; height:48px;">
+                            <i class="pi pi-box" style="font-size: 20px;"></i>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization Row -->
+            <div class="grid mb-4">
+                <div class="col-12 lg:col-8">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 shadow-1 h-full">
+                        <div class="flex align-items-center justify-content-between mb-4">
+                            <div>
+                                <h3 class="m-0 text-900 font-bold text-lg">Monthly User Trend</h3>
+                                <p class="m-0 text-xs text-500 mt-1 font-medium">New registrations over the last 6 months</p>
+                            </div>
+                            <div class="flex align-items-center justify-content-center border-round-md bg-blue-50 text-blue-600" style="width:32px; height:32px;">
+                                <i class="pi pi-chart-line" style="font-size: 14px;"></i>
+                            </div>
+                        </div>
+                        <p-chart type="line" [data]="growthChartData" [options]="growthChartOptions" height="300px"></p-chart>
+                    </div>
+                </div>
+                <div class="col-12 lg:col-4">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 shadow-1 h-full">
+                        <div class="flex align-items-center justify-content-between mb-4">
+                            <h3 class="m-0 text-900 font-bold text-lg">Order Status</h3>
+                            <i class="pi pi-chart-pie text-500"></i>
+                        </div>
+                        <p-chart type="pie" [data]="orderChartData" [options]="orderChartOptions" height="250px"></p-chart>
                     </div>
                 </div>
             </div>
 
             <!-- Quick Actions -->
-            <div class="surface-card border-1 border-200 border-round-xl p-4">
-                <div class="mb-4">
-                    <h3 class="m-0 text-lg font-bold text-900">Quick Actions</h3>
-                    <p class="m-0 mt-1 text-sm text-500">Jump to verification pages</p>
+            <div class="surface-card border-1 border-200 border-round-xl p-4 shadow-1">
+                <div class="flex align-items-center justify-content-between mb-4">
+                    <div>
+                        <h3 class="m-0 text-lg font-bold text-900">Verification Pipeline</h3>
+                        <p class="m-0 mt-1 text-sm text-500">Applications awaiting review</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <span class="p-badge p-badge-warning">{{ pendingFarmers }} Farmer</span>
+                        <span class="p-badge p-badge-info">{{ pendingBuyers }} Buyer</span>
+                        <span class="p-badge p-badge-success">{{ pendingDelivery }} Delivery</span>
+                    </div>
                 </div>
-                <div class="flex flex-column gap-2">
-                    <a class="flex align-items-center gap-3 p-3 surface-ground border-1 border-200 border-round-xl no-underline cursor-pointer hover:surface-hover transition-all transition-duration-200 quick-card"
-                        routerLink="/admin/farmers">
-                        <div class="flex align-items-center justify-content-center border-round-lg flex-shrink-0"
-                            style="width:42px; height:42px; background: linear-gradient(135deg, #22c55e, #16a34a);">
-                            <i class="pi pi-users text-white" style="font-size: 17px;"></i>
-                        </div>
-                        <div class="flex-1">
-                            <span class="block text-sm font-semibold text-900">Manage Farmers</span>
-                            <span class="block text-xs text-500 mt-1">{{ pendingFarmers }} pending verification</span>
-                        </div>
-                        <i class="pi pi-arrow-right text-300" style="font-size: 12px;"></i>
-                    </a>
-                    <a class="flex align-items-center gap-3 p-3 surface-ground border-1 border-200 border-round-xl no-underline cursor-pointer hover:surface-hover transition-all transition-duration-200 quick-card"
-                        routerLink="/admin/buyers">
-                        <div class="flex align-items-center justify-content-center border-round-lg flex-shrink-0"
-                            style="width:42px; height:42px; background: linear-gradient(135deg, #3b82f6, #2563eb);">
-                            <i class="pi pi-shopping-bag text-white" style="font-size: 17px;"></i>
-                        </div>
-                        <div class="flex-1">
-                            <span class="block text-sm font-semibold text-900">Manage Buyers</span>
-                            <span class="block text-xs text-500 mt-1">{{ pendingBuyers }} pending verification</span>
-                        </div>
-                        <i class="pi pi-arrow-right text-300" style="font-size: 12px;"></i>
-                    </a>
-                    <a class="flex align-items-center gap-3 p-3 surface-ground border-1 border-200 border-round-xl no-underline cursor-pointer hover:surface-hover transition-all transition-duration-200 quick-card"
-                        routerLink="/admin/delivery">
-                        <div class="flex align-items-center justify-content-center border-round-lg flex-shrink-0"
-                            style="width:42px; height:42px; background: linear-gradient(135deg, #f59e0b, #d97706);">
-                            <i class="pi pi-truck text-white" style="font-size: 17px;"></i>
-                        </div>
-                        <div class="flex-1">
-                            <span class="block text-sm font-semibold text-900">Manage Delivery Partners</span>
-                            <span class="block text-xs text-500 mt-1">{{ pendingDelivery }} pending verification</span>
-                        </div>
-                        <i class="pi pi-arrow-right text-300" style="font-size: 12px;"></i>
-                    </a>
+                <div class="grid">
+                    <div class="col-12 md:col-4">
+                        <button pButton icon="pi pi-users" label="Review Farmers" class="p-button-outlined w-full" routerLink="/admin/farmers"></button>
+                    </div>
+                    <div class="col-12 md:col-4">
+                        <button pButton icon="pi pi-shopping-bag" label="Review Buyers" class="p-button-outlined w-full" routerLink="/admin/buyers"></button>
+                    </div>
+                    <div class="col-12 md:col-4">
+                        <button pButton icon="pi pi-truck" label="Review Delivery" class="p-button-outlined w-full" routerLink="/admin/delivery"></button>
+                    </div>
                 </div>
             </div>
+            } @else {
+                <div class="flex align-items-center justify-content-center py-8">
+                    <i class="pi pi-spin pi-spinner text-4xl text-green-500"></i>
+                </div>
+            }
         </div>
         }
     </main>

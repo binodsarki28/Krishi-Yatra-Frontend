@@ -104,26 +104,65 @@
         @if (isDefaultRoute) {
         <div class="fadein animation-duration-300">
             <!-- Basic Data / Stats -->
-            <div class="grid">
-                <div class="col-12 md:col-6 lg:col-3">
-                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between">
+            @if (dashboard) {
+            <div class="grid mb-4">
+                <div class="col-12 md:col-6 lg:col-4">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1">
                         <div class="flex flex-column gap-1">
-                            <span class="text-xs text-500 font-medium uppercase tracking-wider">Total Orders</span>
-                            <span class="text-3xl font-bold text-900" style="letter-spacing: -0.5px;">{{ totalOrders }}</span>
+                            <span class="text-xs text-500 font-bold uppercase tracking-wider">Total Orders</span>
+                            <span class="text-3xl font-bold text-900">{{ dashboard.totalOrders }}</span>
                         </div>
                         <div class="flex align-items-center justify-content-center border-round-xl bg-blue-50 text-blue-600" style="width:48px; height:48px;">
                             <i class="pi pi-shopping-bag" style="font-size: 20px;"></i>
                         </div>
                     </div>
                 </div>
-                <!-- Future Visualization Placeholder -->
-                <div class="col-12">
-                   <div class="surface-card border-1 border-200 border-round-xl p-8 flex flex-column align-items-center justify-content-center text-500 bg-gray-50 border-dashed">
-                       <i class="pi pi-chart-bar text-4xl mb-3"></i>
-                       <p class="m-0 font-medium">Visualization Analytics Coming Soon</p>
-                   </div>
+                <div class="col-12 md:col-6 lg:col-4">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1">
+                        <div class="flex flex-column gap-1">
+                            <span class="text-xs text-500 font-bold uppercase tracking-wider">Pending Orders</span>
+                            <span class="text-3xl font-bold text-orange-500">{{ dashboard.pendingOrders }}</span>
+                        </div>
+                        <div class="flex align-items-center justify-content-center border-round-xl bg-orange-50 text-orange-600" style="width:48px; height:48px;">
+                            <i class="pi pi-clock" style="font-size: 20px;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 md:col-6 lg:col-4">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1">
+                        <div class="flex flex-column gap-1">
+                            <span class="text-xs text-500 font-bold uppercase tracking-wider">Total Spent</span>
+                            <span class="text-3xl font-bold text-green-600">NPR {{ dashboard.totalSpent | number:'1.0-2' }}</span>
+                        </div>
+                        <div class="flex align-items-center justify-content-center border-round-xl bg-green-50 text-green-600" style="width:48px; height:48px;">
+                            <i class="pi pi-wallet" style="font-size: 20px;"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <!-- Visualization Row -->
+            <div class="grid">
+                <div class="col-12">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 shadow-1">
+                        <div class="flex align-items-center justify-content-between mb-4">
+                            <div>
+                                <h3 class="m-0 text-900 font-bold text-lg">Spending Performance</h3>
+                                <p class="m-0 text-xs text-500 mt-1 font-medium">Monthly spending trends for the current year</p>
+                            </div>
+                            <div class="flex align-items-center justify-content-center border-round-md bg-blue-50 text-blue-600" style="width:32px; height:32px;">
+                                <i class="pi pi-chart-line" style="font-size: 14px;"></i>
+                            </div>
+                        </div>
+                        <p-chart type="line" [data]="spentChartData" [options]="spentChartOptions" height="300px"></p-chart>
+                    </div>
+                </div>
+            </div>
+            } @else {
+               <div class="flex align-items-center justify-content-center py-8">
+                   <i class="pi pi-spin pi-spinner text-4xl text-blue-500"></i>
+               </div>
+            }
         </div>
         }
     </main>
