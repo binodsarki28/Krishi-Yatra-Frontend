@@ -63,18 +63,7 @@ export class NavbarComponent implements OnInit {
         label: 'Demands',
         icon: 'pi pi-megaphone',
         command: () => this.router.navigate(['/demands'])
-      }
-    ];
-
-    if (this.accountService.isRoleVerified('DELIVERY')) {
-      this.items.push({
-        label: 'Delivery Jobs',
-        icon: 'pi pi-truck',
-        command: () => this.router.navigate(['/delivery/dashboard'])
-      });
-    }
-
-    this.items.push(
+      },
       {
         label: 'Guide',
         icon: 'pi pi-question-circle',
@@ -85,7 +74,7 @@ export class NavbarComponent implements OnInit {
         icon: 'pi pi-envelope',
         command: () => this.router.navigate(['/contact'])
       }
-    );
+    ];
   }
 
   navigateToLogin() {

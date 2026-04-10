@@ -5,9 +5,10 @@
 
     <div class="login-container shadow-8 border-round-2xl overflow-hidden flex flex-column md:flex-row">
         <!-- Brand Section -->
-        <div class="brand-section bg-green-700 text-white p-6 flex flex-column justify-content-center align-items-center md:w-5">
-            <div class="bg-white-alpha-20 border-circle p-4 mb-4">
-                <i class="pi pi-compass text-6xl"></i>
+        <div
+            class="brand-section bg-green-700 text-white p-6 flex flex-column justify-content-center align-items-center md:w-5">
+            <div class="inline-flex bg-white border-round-xl overflow-hidden mb-4 shadow-3">
+                <img src="/logo.png" alt="Logo" style="height: 140px; width: auto; object-fit: contain; display: block;">
             </div>
             <h1 class="text-4xl font-bold m-0 mb-2">KrishiYatra</h1>
             <p class="text-green-100 text-center line-height-3 m-0">Secure Administrator Dashboard</p>
@@ -24,35 +25,35 @@
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-4">
                 <div class="flex flex-column gap-2">
                     <label for="username" class="font-bold text-sm text-gray-700 ml-1">Email or Username</label>
-                    <input pInputText id="username" formControlName="username" 
-                           placeholder="Enter your email" 
-                           class="p-3 border-round-xl w-full surface-50 border-1 border-200 transition-all focus:border-green-500 shadow-none"/>
+                    <input pInputText id="username" formControlName="username" placeholder="Enter your email"
+                        class="p-3 border-round-xl w-full surface-50 border-1 border-200 transition-all focus:border-green-500 shadow-none" />
                     @if (loginForm.controls['username']?.invalid && loginForm.controls['username']?.touched) {
-                        <small class="text-red-500 font-bold ml-1">Username is required</small>
+                    <small class="text-red-500 font-bold ml-1">Username is required</small>
                     }
                 </div>
 
                 <div class="flex flex-column gap-2">
                     <label for="password" class="font-bold text-sm text-gray-700 ml-1">Password</label>
-                    <p-password id="password" [toggleMask]="true" [feedback]="false"
-                               formControlName="password" placeholder="Enter your password"
-                               class="w-full" [inputStyleClass]="'p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none'"></p-password>
+                    <p-password id="password" [toggleMask]="true" [feedback]="false" formControlName="password"
+                        placeholder="Enter your password" class="w-full"
+                        [inputStyleClass]="'p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none'"></p-password>
                     @if (loginForm.controls['password']?.invalid && loginForm.controls['password']?.touched) {
-                        <small class="text-red-500 font-bold ml-1">Password is required</small>
+                    <small class="text-red-500 font-bold ml-1">Password is required</small>
                     }
                 </div>
 
                 <div class="flex align-items-center justify-content-between mb-2">
                     <div class="flex align-items-center gap-2">
                         <p-checkbox id="remember" [binary]="true" formControlName="rememberMe"></p-checkbox>
-                        <label for="remember" class="text-sm font-medium text-gray-600 cursor-pointer">Remember me</label>
+                        <label for="remember" class="text-sm font-medium text-gray-600 cursor-pointer">Remember
+                            me</label>
                     </div>
-                    <a class="text-sm font-bold text-green-600 hover:text-green-700 cursor-pointer no-underline">Forgot password?</a>
+                    <a class="text-sm font-bold text-green-600 hover:text-green-700 cursor-pointer no-underline">Forgot
+                        password?</a>
                 </div>
 
-                <p-button type="submit" [label]="loading ? 'Verifying...' : 'Sign In'" 
-                          [loading]="loading"
-                          styleClass="p-button-success w-full p-3 border-round-xl font-bold text-lg shadow-2"></p-button>
+                <p-button type="submit" [label]="loading ? 'Verifying...' : 'Sign In'" [loading]="loading"
+                    styleClass="p-button-success w-full p-3 border-round-xl font-bold text-lg shadow-2"></p-button>
             </form>
         </div>
     </div>
