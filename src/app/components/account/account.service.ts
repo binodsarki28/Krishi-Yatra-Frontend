@@ -11,7 +11,8 @@ import {
     IUserLoginRequest,
     IOtpVerify,
     IOtpRequest,
-    IPasswordUpdate
+    IPasswordUpdate,
+    IResetPassword
 } from './IAccount';
 
 @Injectable({
@@ -175,5 +176,15 @@ export class AccountService {
     updatePassword(request: IPasswordUpdate): Observable<IResponse> {
         const url: string = GenerateUrlUtils.generateUrl(Endpoint.UPDATE_PASSWORD);
         return this.http.put<IResponse>(url, request);
+    }
+
+    forgotPassword(request: IOtpRequest): Observable<IResponse> {
+        const url: string = GenerateUrlUtils.generateUrl(Endpoint.FORGOT_PASSWORD);
+        return this.http.post<IResponse>(url, request);
+    }
+
+    resetPassword(request: IResetPassword): Observable<IResponse> {
+        const url: string = GenerateUrlUtils.generateUrl(Endpoint.RESET_PASSWORD);
+        return this.http.post<IResponse>(url, request);
     }
 }

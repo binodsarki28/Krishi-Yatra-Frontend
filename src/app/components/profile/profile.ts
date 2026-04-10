@@ -180,34 +180,50 @@ export class ProfileComponent implements OnInit {
 
   get isFarmer() { return this.accountService.hasRole('FARMER'); }
   get isFarmerVerified() { return this.accountService.isRoleVerified('FARMER'); }
+  get hasFarmerApplied() { return !!this.accountService.getStatusMessage('FARMER'); }
 
   get isBuyer() { return this.accountService.hasRole('BUYER'); }
   get isBuyerVerified() { return this.accountService.isRoleVerified('BUYER'); }
+  get hasBuyerApplied() { return !!this.accountService.getStatusMessage('BUYER'); }
 
   get isDelivery() { return this.accountService.hasRole('DELIVERY'); }
   get isDeliveryVerified() { return this.accountService.isRoleVerified('DELIVERY'); }
+  get hasDeliveryApplied() { return !!this.accountService.getStatusMessage('DELIVERY'); }
 
   switchTab(tab: string) {
+    const statusF = this.accountService.getStatusMessage('FARMER');
+    const statusB = this.accountService.getStatusMessage('BUYER');
+    const statusD = this.accountService.getStatusMessage('DELIVERY');
+
     if (tab === 'farmer-dashboard') {
-      if (!this.isFarmer) { this.router.navigate(['/farmer/register']); return; }
+      if (!this.isFarmer || (!this.isFarmerVerified && !statusF)) {
+        this.router.navigate(['/farmer/register']);
+        return;
+      }
       else if (!this.isFarmerVerified) {
-        this.toastService.warningResponse(this.accountService.getStatusMessage('FARMER') || 'Your Farmer account is under verification.');
+        this.toastService.warningResponse(statusF || 'Your Farmer account is under verification.');
         return;
       }
       else { this.router.navigate(['/farmer/dashboard']); return; }
     }
     if (tab === 'buyer-dashboard') {
-      if (!this.isBuyer) { this.router.navigate(['/buyer/register']); return; }
+      if (!this.isBuyer || (!this.isBuyerVerified && !statusB)) {
+        this.router.navigate(['/buyer/register']);
+        return;
+      }
       else if (!this.isBuyerVerified) {
-        this.toastService.warningResponse(this.accountService.getStatusMessage('BUYER') || 'Your Buyer account is under verification.');
+        this.toastService.warningResponse(statusB || 'Your Buyer account is under verification.');
         return;
       }
       else { this.router.navigate(['/buyer/dashboard']); return; }
     }
     if (tab === 'delivery-dashboard') {
-      if (!this.isDelivery) { this.router.navigate(['/delivery/register']); return; }
+      if (!this.isDelivery || (!this.isDeliveryVerified && !statusD)) {
+        this.router.navigate(['/delivery/register']);
+        return;
+      }
       else if (!this.isDeliveryVerified) {
-        this.toastService.warningResponse(this.accountService.getStatusMessage('DELIVERY') || 'Your Linker account is under verification.');
+        this.toastService.warningResponse(statusD || 'Your Linker account is under verification.');
         return;
       }
       else { this.router.navigate(['/delivery/dashboard']); return; }

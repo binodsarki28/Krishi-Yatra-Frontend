@@ -38,6 +38,13 @@ export const routes: Routes = [
         data: { breadcrumb: 'User Guide' }
     },
     {
+        path: 'contact',
+        loadComponent: () =>
+            import('./components/contact/contact').then((m) => m.Contact),
+        canActivate: [userGuard],
+        data: { breadcrumb: 'Contact Us' }
+    },
+    {
         path: 'order',
         loadChildren: () =>
             import('./order/order.route').then((o) => o.ORDER_ROUTES),

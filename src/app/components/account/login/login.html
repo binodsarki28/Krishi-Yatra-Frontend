@@ -1,71 +1,113 @@
-<div class="login-page">
-    <a routerLink="/" class="back-btn-minimal" title="Back to Home">
+<div class="login-page flex align-items-center justify-content-center min-vh-100 p-3">
+    <a routerLink="/" class="back-btn" title="Back to Home">
         <i class="pi pi-arrow-left"></i>
     </a>
 
-    <div class="login-wrapper">
-        <div class="login-card">
-            <!-- Left Panel - Modern Green Gradient -->
-            <div class="left-panel">
-                <div class="left-panel-inner">
-                    <div class="logo-section">
-                        <i class="pi pi-compass"></i>
-                    </div>
-                    <p class="hello-text">Hello</p>
-                    <h1 class="welcome-text">Farmer</h1>
-                    <p class="tagline">Empowering farmers through technology and community</p>
-                </div>
+    <div class="login-container shadow-8 border-round-2xl overflow-hidden flex flex-column md:flex-row">
+        <!-- Brand Section -->
+        <div class="brand-section bg-green-700 text-white p-6 flex flex-column justify-content-center align-items-center md:w-5">
+            <div class="bg-white-alpha-20 border-circle p-4 mb-4">
+                <i class="pi pi-compass text-6xl"></i>
+            </div>
+            <h1 class="text-4xl font-bold m-0 mb-2">Hello Farmer</h1>
+            <p class="text-green-100 text-center line-height-3 m-0">Empowering farmers through technology and community</p>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section bg-white p-6 md:w-7">
+            <div class="mb-5">
+                <h2 class="text-3xl font-bold text-gray-900 m-0 mb-2">Sign In</h2>
+                <p class="text-gray-500 font-medium">Don't have an account? <a routerLink="/account/register" class="text-green-600 font-bold no-underline hover:underline">Create one</a></p>
             </div>
 
-            <!-- Right Panel - Login Form -->
-            <div class="right-panel">
-                <div class="form-container">
-                    <div class="form-header">
-                        <h2>Sign In</h2>
-                        <p>Don't have an account? <a routerLink="/account/register" class="link-primary">Create one</a>
-                        </p>
-                    </div>
-
-                    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                        <div class="form-group-wrapper">
-                            <div class="form-group">
-                                <label for="username">Email or Username</label>
-                                <input id="username" type="text" pInputText formControlName="username"
-                                    placeholder="Enter your email or username">
-                                @if (loginForm.controls['username']?.invalid && loginForm.controls['username']?.touched) {
-                                <small class="error-message">
-                                    Username is required
-                                </small>
-                                }
-                            </div>
-
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <p-password id="password" [toggleMask]="true" [feedback]="false"
-                                    formControlName="password" placeholder="Enter your password"
-                                    class="w-full"></p-password>
-                                @if (loginForm.controls['password']?.invalid && loginForm.controls['password']?.touched) {
-                                <small class="error-message">
-                                    Password is required
-                                </small>
-                                }
-                            </div>
-                        </div>
-
-                        <div class="form-options">
-                            <div class="checkbox-wrapper">
-                                <p-checkbox id="remember" [binary]="true" formControlName="rememberMe"></p-checkbox>
-                                <label for="remember">Remember me</label>
-                            </div>
-                            <a class="link-secondary">Forgot password?</a>
-                        </div>
-
-                        <p-button [loading]="loading" type="submit" class="submit-btn" [style]="{'padding': '0'}">
-                          <span class="p-button-label">Sign In</span>
-                        </p-button>
-                    </form>
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-4">
+                <div class="flex flex-column gap-2">
+                    <label for="username" class="font-bold text-sm text-gray-700 ml-1">Email or Username</label>
+                    <input pInputText id="username" formControlName="username" 
+                           placeholder="Enter your email or username" 
+                           class="p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none"/>
+                    @if (loginForm.controls['username']?.invalid && loginForm.controls['username']?.touched) {
+                        <small class="text-red-500 font-bold ml-1">Username is required</small>
+                    }
                 </div>
-            </div>
+
+                <div class="flex flex-column gap-2">
+                    <label for="password" class="font-bold text-sm text-gray-700 ml-1">Password</label>
+                    <p-password id="password" [toggleMask]="true" [feedback]="false"
+                               formControlName="password" placeholder="Enter your password"
+                               class="w-full" [inputStyleClass]="'p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none'"></p-password>
+                    @if (loginForm.controls['password']?.invalid && loginForm.controls['password']?.touched) {
+                        <small class="text-red-500 font-bold ml-1">Password is required</small>
+                    }
+                </div>
+
+                <div class="flex align-items-center justify-content-between mb-2">
+                    <div class="flex align-items-center gap-2">
+                        <p-checkbox id="remember" [binary]="true" formControlName="rememberMe"></p-checkbox>
+                        <label for="remember" class="text-sm font-medium text-gray-600 cursor-pointer">Remember me</label>
+                    </div>
+                    <a (click)="openForgotModal()" class="text-sm font-bold text-green-600 hover:text-green-700 cursor-pointer no-underline">Forgot password?</a>
+                </div>
+
+                <p-button type="submit" [label]="loading ? 'Verifying...' : 'Sign In'" 
+                          [loading]="loading"
+                          styleClass="p-button-success w-full p-3 border-round-xl font-bold text-lg shadow-2"></p-button>
+            </form>
         </div>
     </div>
 </div>
+
+<p-dialog [(visible)]="showForgotModal" [modal]="true" [header]="'Reset Password'" [style]="{width: '450px'}" 
+          [draggable]="false" [resizable]="false" styleClass="forgot-password-modal">
+    
+    <div class="p-3">
+        <!-- Step 1: Email -->
+        @if (forgotStep === 1) {
+            <div class="flex flex-column gap-3">
+                <p class="m-0 text-gray-600 line-height-3">Enter your email address and we'll send you a code to reset your password.</p>
+                <div class="flex flex-column gap-2">
+                    <label class="font-bold text-sm text-gray-700">Email Address</label>
+                    <input pInputText [(ngModel)]="forgotEmail" placeholder="e.g. farmer@example.com" class="p-3 border-round-xl w-full surface-50"/>
+                </div>
+                <p-button label="Send Code" [loading]="forgotLoading" (onClick)="requestForgotOtp()" 
+                          styleClass="p-button-success w-full p-3 border-round-xl font-bold"></p-button>
+            </div>
+        }
+
+        <!-- Step 2: OTP -->
+        @if (forgotStep === 2) {
+            <div class="flex flex-column gap-3 text-center">
+                <p class="m-0 text-gray-600 line-height-3">We've sent a 6-digit code to <br><b class="text-900">{{ forgotEmail }}</b></p>
+                <div class="flex flex-column gap-2 text-left">
+                    <label class="font-bold text-sm text-gray-700 text-center">Verification Code</label>
+                    <input pInputText [(ngModel)]="forgotOtp" maxLength="6" placeholder="123456" 
+                           class="p-4 text-center text-3xl font-bold border-round-xl w-full surface-50 tracking-widest"/>
+                </div>
+                <p-button label="Verify Code" (onClick)="verifyForgotOtp()" 
+                          styleClass="p-button-success w-full p-3 border-round-xl font-bold"></p-button>
+                <a (click)="requestForgotOtp()" class="text-sm font-bold text-green-600 cursor-pointer hover:underline">Resend code</a>
+            </div>
+        }
+
+        <!-- Step 3: New Password -->
+        @if (forgotStep === 3) {
+            <div class="flex flex-column gap-3">
+                <p class="m-0 text-gray-600">Verification successful! Choose a strong new password.</p>
+                <div class="flex flex-column gap-2">
+                    <label class="font-bold text-sm text-gray-700">New Password</label>
+                    <p-password [(ngModel)]="newPassword" [toggleMask]="true" [feedback]="false" 
+                                placeholder="At least 8 characters" class="w-full"
+                                [inputStyleClass]="'p-3 border-round-xl w-full surface-50'"></p-password>
+                </div>
+                <div class="flex flex-column gap-2">
+                    <label class="font-bold text-sm text-gray-700">Confirm New Password</label>
+                    <p-password [(ngModel)]="confirmPassword" [toggleMask]="true" [feedback]="false"
+                                placeholder="Repeat password" class="w-full"
+                                [inputStyleClass]="'p-3 border-round-xl w-full surface-50'"></p-password>
+                </div>
+                <p-button label="Reset Password" [loading]="forgotLoading" (onClick)="submitResetPassword()" 
+                          styleClass="p-button-success w-full p-3 border-round-xl font-bold shadow-2 mt-2"></p-button>
+            </div>
+        }
+    </div>
+</p-dialog>

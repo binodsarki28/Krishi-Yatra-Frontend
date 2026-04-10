@@ -1,114 +1,89 @@
-<div class="register-page">
-    <a routerLink="/" class="back-btn-minimal" title="Back to Home">
+<div class="register-page flex align-items-center justify-content-center min-vh-100 p-3">
+    <a routerLink="/" class="back-btn" title="Back to Home">
         <i class="pi pi-arrow-left"></i>
     </a>
 
-    <div class="register-wrapper">
-        <div class="register-card">
-            <!-- Left Panel - Modern Green Gradient -->
-            <div class="left-panel">
-                <div class="left-panel-inner">
-                    <div class="logo-section">
-                        <i class="pi pi-leaf"></i>
-                    </div>
-                    <p class="hello-text">Hello</p>
-                    <h1 class="welcome-text">Friend</h1>
-                    <p class="tagline">Connect with farmers, access markets, and grow your agricultural business</p>
-                </div>
+    <div class="register-container shadow-8 border-round-2xl overflow-hidden flex flex-column md:flex-row">
+        <!-- Brand Section -->
+        <div class="brand-section bg-green-700 text-white p-6 flex flex-column justify-content-center align-items-center md:w-5">
+            <div class="bg-white-alpha-20 border-circle p-4 mb-4">
+                <i class="pi pi-leaf text-6xl"></i>
+            </div>
+            <h1 class="text-4xl font-bold m-0 mb-2 text-center">Hello Friend</h1>
+            <p class="text-green-100 text-center line-height-3 m-0">Connect with farmers, access markets, and grow your agricultural business</p>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section bg-white p-6 md:w-7">
+            <div class="mb-5">
+                <h2 class="text-3xl font-bold text-gray-900 m-0 mb-2">Create Account</h2>
+                <p class="text-gray-500 font-medium">Already have an account? <a routerLink="/account/login" class="text-green-600 font-bold no-underline hover:underline">Sign in</a></p>
             </div>
 
-            <!-- Right Panel - Register Form -->
-            <div class="right-panel">
-                <div class="form-container">
-                    <div class="form-header">
-                        <h2>Create Account</h2>
-                    </div>
-
-                    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-                        <div class="form-group-wrapper">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="fullName">Full Name</label>
-                                    <input id="fullName" type="text" pInputText formControlName="fullName"
-                                        placeholder="John Doe">
-                                    @if (registerForm.controls['fullName']?.invalid && registerForm.controls['fullName']?.touched) {
-                                    <small class="error-message">
-                                        Name must be 5-20 characters
-                                    </small>
-                                    }
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="username">Username</label>
-                                    <input id="username" type="text" pInputText formControlName="username"
-                                        placeholder="johndoe">
-                                    @if (registerForm.controls['username']?.invalid && registerForm.controls['username']?.touched) {
-                                    <small class="error-message">
-                                        Username is required
-                                    </small>
-                                    }
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="email">Email Address</label>
-                                    <input id="email" type="email" pInputText formControlName="email"
-                                        placeholder="john@example.com">
-                                    @if (registerForm.controls['email']?.invalid && registerForm.controls['email']?.touched) {
-                                    <small class="error-message">
-                                        Invalid email address
-                                    </small>
-                                    }
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="phone">Phone Number</label>
-                                    <input id="phone" type="tel" pInputText formControlName="phoneNumber"
-                                        placeholder="+977 9800000000">
-                                    @if (registerForm.controls['phoneNumber']?.invalid && registerForm.controls['phoneNumber']?.touched) {
-                                    <small class="error-message">
-                                        Use a valid Nepal number
-                                    </small>
-                                    }
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <p-password id="password" [toggleMask]="true" formControlName="password"
-                                        placeholder="••••••••" class="w-full" [feedback]="false"></p-password>
-                                    @if (registerForm.controls['password']?.invalid && registerForm.controls['password']?.touched) {
-                                    <small class="error-message">
-                                        Must be 8+ characters
-                                    </small>
-                                    }
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="confirmPassword">Confirm Password</label>
-                                    <p-password id="confirmPassword" [toggleMask]="true"
-                                        formControlName="confirmPassword" placeholder="••••••••" [feedback]="false"
-                                        class="w-full"></p-password>
-                                </div>
-                            </div>
-                        </div>
-
-                        @if (registerForm.hasError('mismatch') && registerForm.controls['confirmPassword']?.touched) {
-                        <small class="error-message">
-                            Passwords do not match
-                        </small>
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-4">
+                <div class="grid p-0 m-0">
+                    <div class="col-12 md:col-6 p-2">
+                        <label for="fullName" class="font-bold text-sm text-gray-700 ml-1 block mb-2">Full Name</label>
+                        <input pInputText id="fullName" formControlName="fullName" placeholder="John Doe" 
+                               class="p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none"/>
+                        @if (registerForm.controls['fullName']?.invalid && registerForm.controls['fullName']?.touched) {
+                            <small class="text-red-500 font-bold ml-1">5-20 characters required</small>
                         }
+                    </div>
 
-                        <p-button label="Create Account" [loading]="loading" (onClick)="onSubmit()"
-                            class="submit-btn"></p-button>
+                    <div class="col-12 md:col-6 p-2">
+                        <label for="username" class="font-bold text-sm text-gray-700 ml-1 block mb-2">Username</label>
+                        <input pInputText id="username" formControlName="username" placeholder="johndoe" 
+                               class="p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none"/>
+                        @if (registerForm.controls['username']?.invalid && registerForm.controls['username']?.touched) {
+                            <small class="text-red-500 font-bold ml-1">Username is required</small>
+                        }
+                    </div>
 
-                        <p class="signin-link">Already have an account? <a routerLink="/account/login"
-                                class="link-primary">Sign in</a></p>
-                    </form>
+                    <div class="col-12 md:col-6 p-2">
+                        <label for="email" class="font-bold text-sm text-gray-700 ml-1 block mb-2">Email Address</label>
+                        <input pInputText id="email" type="email" formControlName="email" placeholder="john@example.com" 
+                               class="p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none"/>
+                        @if (registerForm.controls['email']?.invalid && registerForm.controls['email']?.touched) {
+                            <small class="text-red-500 font-bold ml-1">Invalid email address</small>
+                        }
+                    </div>
+
+                    <div class="col-12 md:col-6 p-2">
+                        <label for="phone" class="font-bold text-sm text-gray-700 ml-1 block mb-2">Phone Number</label>
+                        <input pInputText id="phone" type="tel" formControlName="phoneNumber" placeholder="+977 9800..." 
+                               class="p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none"/>
+                        @if (registerForm.controls['phoneNumber']?.invalid && registerForm.controls['phoneNumber']?.touched) {
+                            <small class="text-red-500 font-bold ml-1">Use a valid Nepal number</small>
+                        }
+                    </div>
+
+                    <div class="col-12 md:col-6 p-2">
+                        <label for="password" class="font-bold text-sm text-gray-700 ml-1 block mb-2">Password</label>
+                        <p-password id="password" [toggleMask]="true" [feedback]="false"
+                                   formControlName="password" placeholder="••••••••"
+                                   class="w-full" [inputStyleClass]="'p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none'"></p-password>
+                        @if (registerForm.controls['password']?.invalid && registerForm.controls['password']?.touched) {
+                            <small class="text-red-500 font-bold ml-1">Must be 8+ characters</small>
+                        }
+                    </div>
+
+                    <div class="col-12 md:col-6 p-2">
+                        <label for="confirmPassword" class="font-bold text-sm text-gray-700 ml-1 block mb-2">Confirm Password</label>
+                        <p-password id="confirmPassword" [toggleMask]="true" [feedback]="false"
+                                   formControlName="confirmPassword" placeholder="••••••••"
+                                   class="w-full" [inputStyleClass]="'p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none'"></p-password>
+                    </div>
                 </div>
-            </div>
+
+                @if (registerForm.hasError('mismatch') && registerForm.controls['confirmPassword']?.touched) {
+                    <small class="text-red-500 font-bold ml-3 mt--3">Passwords do not match</small>
+                }
+
+                <p-button type="submit" [label]="loading ? 'Creating Account...' : 'Create Account'" 
+                          [loading]="loading"
+                          styleClass="p-button-success w-full p-3 border-round-xl font-bold text-lg shadow-2 mt-2"></p-button>
+            </form>
         </div>
     </div>
 </div>

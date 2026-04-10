@@ -145,17 +145,6 @@
             </div>
           </div>
 
-          @if (order.orderStatus !== 'CANCELLED' && order.orderStatus !== 'PENDING') {
-            <div class="surface-card p-4 border-round-xl shadow-1 border-1 border-100 flex flex-column align-items-center text-center">
-                <div class="w-3rem h-3rem bg-primary-50 text-primary border-round-circle flex align-items-center justify-content-center mb-3">
-                    <i class="pi pi-map-marker text-xl"></i>
-                </div>
-                <h4 class="m-0 mb-2 font-bold text-gray-800">Track Shipment</h4>
-                <p class="text-xs text-500 mb-4 px-3">View live progress and expected delivery timeline on the map.</p>
-                <button pButton label="Go to Live Track" icon="pi pi-directions" size="small"
-                        [routerLink]="['/order/track', order.orderId]" class="w-full border-round-lg shadow-2 py-2 font-bold"></button>
-            </div>
-          }
         </div>
       </div>
     }

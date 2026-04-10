@@ -102,6 +102,12 @@ export interface IPasswordUpdate {
     newPassword?: string;
 }
 
+export interface IResetPassword {
+    email: string;
+    otpCode: string;
+    newPassword: string;
+}
+
 // ────────────────────────────────────────────────────────────
 // RESPONSE DTOs
 // ────────────────────────────────────────────────────────────

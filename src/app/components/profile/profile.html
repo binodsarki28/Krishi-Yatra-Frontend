@@ -30,15 +30,15 @@
         <div class="px-2 py-1 text-xs font-bold text-400 uppercase tracking-widest mt-1">Roles</div>
         <div (click)="switchTab('farmer-dashboard')"
              class="flex align-items-center gap-2 px-3 py-2 border-round-lg cursor-pointer transition-duration-200 mb-1 text-600 hover:bg-gray-50">
-          <i class="pi pi-chart-line text-sm"></i> <span class="text-sm">{{ isFarmer ? 'Farmer Dashboard' : 'Join as Farmer' }}</span>
+          <i class="pi pi-chart-line text-sm"></i> <span class="text-sm">{{ (isFarmerVerified || hasFarmerApplied) ? 'Farmer Dashboard' : 'Join as Farmer' }}</span>
         </div>
         <div (click)="switchTab('buyer-dashboard')"
              class="flex align-items-center gap-2 px-3 py-2 border-round-lg cursor-pointer transition-duration-200 mb-1 text-600 hover:bg-gray-50">
-          <i class="pi pi-shopping-cart text-sm"></i> <span class="text-sm">{{ isBuyer ? 'Buyer Dashboard' : 'Join as Buyer' }}</span>
+          <i class="pi pi-shopping-cart text-sm"></i> <span class="text-sm">{{ (isBuyerVerified || hasBuyerApplied) ? 'Buyer Dashboard' : 'Join as Buyer' }}</span>
         </div>
         <div (click)="switchTab('delivery-dashboard')"
              class="flex align-items-center gap-2 px-3 py-2 border-round-lg cursor-pointer transition-duration-200 mb-1 text-600 hover:bg-gray-50">
-          <i class="pi pi-truck text-sm"></i> <span class="text-sm">{{ isDelivery ? 'Linker Dashboard' : 'Join as Linker' }}</span>
+          <i class="pi pi-truck text-sm"></i> <span class="text-sm">{{ (isDeliveryVerified || hasDeliveryApplied) ? 'Linker Dashboard' : 'Join as Linker' }}</span>
         </div>
 
         <div class="px-2 py-1 text-xs font-bold text-400 uppercase tracking-widest mt-1">Security</div>
@@ -86,18 +86,47 @@
           <p class="m-0 mt-2 text-white font-bold text-xl opacity-90">&#64;{{ userData?.username || 'username' }}</p>
 
           <div class="flex flex-wrap gap-2 mt-4">
-             @for (role of userData?.roles; track role) {
-               @if ((role === 'FARMER' && isFarmerVerified) || (role === 'BUYER' && isBuyerVerified) || (role === 'DELIVERY' && isDeliveryVerified)) {
-                 <div class="bg-white text-green-800 px-3 py-1.5 border-round-full flex align-items-center gap-2 text-xs font-bold shadow-2">
-                    <i class="pi pi-check-circle text-green-500"></i>
-                    <span>{{ role }} · Verified</span>
-                 </div>
-               } @else {
-                 <div class="bg-white-alpha-20 text-white px-3 py-1.5 border-round-full border-1 border-white-alpha-30 flex align-items-center gap-2 text-xs font-bold">
-                    <i class="pi pi-clock text-yellow-300"></i>
-                    <span>{{ role }} · Pending</span>
-                 </div>
-               }
+             @if (isFarmerVerified) {
+                <div class="bg-white text-green-800 px-3 py-1.5 border-round-full flex align-items-center gap-2 text-xs font-bold shadow-2">
+                   <i class="pi pi-check-circle text-green-500"></i>
+                   <span>FARMER · Verified</span>
+                </div>
+             } @else if (hasFarmerApplied) {
+                <div class="bg-white-alpha-20 text-white px-3 py-1.5 border-round-full border-1 border-white-alpha-30 flex align-items-center gap-2 text-xs font-bold">
+                   <i class="pi pi-clock text-yellow-300"></i>
+                   <span>FARMER · Pending</span>
+                </div>
+             }
+
+             @if (isBuyerVerified) {
+                <div class="bg-white text-blue-800 px-3 py-1.5 border-round-full flex align-items-center gap-2 text-xs font-bold shadow-2">
+                   <i class="pi pi-check-circle text-blue-500"></i>
+                   <span>BUYER · Verified</span>
+                </div>
+             } @else if (hasBuyerApplied) {
+                <div class="bg-white-alpha-20 text-white px-3 py-1.5 border-round-full border-1 border-white-alpha-30 flex align-items-center gap-2 text-xs font-bold">
+                   <i class="pi pi-clock text-yellow-300"></i>
+                   <span>BUYER · Pending</span>
+                </div>
+             }
+
+             @if (isDeliveryVerified) {
+                <div class="bg-white text-orange-800 px-3 py-1.5 border-round-full flex align-items-center gap-2 text-xs font-bold shadow-2">
+                   <i class="pi pi-check-circle text-orange-500"></i>
+                   <span>LINKER · Verified</span>
+                </div>
+             } @else if (hasDeliveryApplied) {
+                <div class="bg-white-alpha-20 text-white px-3 py-1.5 border-round-full border-1 border-white-alpha-30 flex align-items-center gap-2 text-xs font-bold">
+                   <i class="pi pi-clock text-yellow-300"></i>
+                   <span>LINKER · Pending</span>
+                </div>
+             }
+
+             @if (userData?.roles?.includes('ADMIN')) {
+                <div class="bg-white text-purple-800 px-3 py-1.5 border-round-full flex align-items-center gap-2 text-xs font-bold shadow-2">
+                   <i class="pi pi-shield text-purple-500"></i>
+                   <span>ADMINISTRATOR</span>
+                </div>
              }
           </div>
         </div>
@@ -182,9 +211,10 @@
                 </div>
             </div>
 
-            <div class="col-12 mt-3">
-              <p-button label="Save All Changes" icon="pi pi-check" [loading]="loading" type="submit"
-                [disabled]="profileForm.invalid || !profileForm.dirty" class="w-full p-3 font-bold bg-green-600 border-none"></p-button>
+            <div class="col-12 mt-4">
+              <p-button label="Save Changes" [loading]="loading" type="submit"
+                [disabled]="profileForm.invalid || !profileForm.dirty" 
+                styleClass="p-button-success w-full p-3 border-round-xl font-bold text-lg shadow-2"></p-button>
             </div>
           </form>
        </div>
@@ -194,15 +224,9 @@
     <!-- Tab 3: Address -->
     @if (activeTab === 'address') {
     <div class="fadein max-w-7xl mx-auto">
-       <div class="flex justify-content-between align-items-center mb-3">
-          <div>
+       <div class="flex flex-column mb-3">
              <h1 class="m-0 font-bold text-900 text-2xl">Manage Address</h1>
-             <p class="m-0 text-500 text-sm">Create your address to list and stock and buy.</p>
-          </div>
-          <div class="flex gap-2">
-             <p-button label="Delete" icon="pi pi-trash" [outlined]="true" severity="danger" [loading]="addressSubmitting" (onClick)="deleteAddress()" class="border-round-xl"></p-button>
-             <p-button label="Save Address" icon="pi pi-save" [loading]="addressSubmitting" (onClick)="updateAddress()" class="bg-green-600 border-none border-round-xl px-4"></p-button>
-          </div>
+             <p class="m-0 text-500 text-sm mt-1">Keep your location details updated for accurate logistics.</p>
        </div>
 
        <div class="surface-card p-4 border-round-2xl shadow-1 border-1 border-100 mb-4">
@@ -227,6 +251,15 @@
                <div class="col-12 md:col-9 field mb-0">
                   <label class="block font-bold mb-1 text-700 text-sm">Street Name / Landmark <span class="text-red-500">*</span></label>
                   <input pInputText formControlName="streetName" class="w-full p-2.5 border-round-xl" placeholder="e.g. Near Kalanki Chowk" />
+               </div>
+
+               <div class="col-12 mt-4 flex gap-3">
+                  <p-button label="Delete Address" icon="pi pi-trash" [outlined]="true" severity="danger" 
+                            [loading]="addressSubmitting" (onClick)="deleteAddress()" 
+                            styleClass="p-button-danger border-round-xl font-bold flex-1 p-3"></p-button>
+                  <p-button label="Save Address" icon="pi pi-save" [loading]="addressSubmitting" (onClick)="updateAddress()" 
+                            [disabled]="addressForm.invalid"
+                            styleClass="p-button-success border-round-xl font-bold flex-1 p-3"></p-button>
                </div>
             </form>
        </div>

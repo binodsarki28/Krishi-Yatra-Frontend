@@ -1,96 +1,71 @@
 @if (buyer) {
 <div class="p-4 surface-card border-round-2xl">
-    <div class="flex justify-content-between align-items-center mb-5 border-bottom-1 border-200 pb-4">
-        <div class="flex gap-3 align-items-center">
-            <div class="flex align-items-center justify-content-center border-circle text-white text-xl font-bold"
-                style="width:60px; height:60px; background: linear-gradient(135deg, #3b82f6, #2563eb);">
+    <div class="flex flex-column md:flex-row justify-content-between align-items-start md:align-items-center mb-5 border-bottom-1 border-200 pb-4 gap-3">
+        <div class="flex gap-4 align-items-center">
+            <div class="flex align-items-center justify-content-center border-round-xl text-white text-2xl font-bold shadow-2"
+                style="width:70px; height:70px; background: linear-gradient(135deg, #3b82f6, #2563eb);">
                 {{ buyer.businessName.charAt(0) }}
             </div>
             <div>
-                <h2 class="m-0 text-xl font-bold text-900">{{ buyer.businessName }}</h2>
-                <p class="m-0 mt-1 text-500 font-medium">&#64;{{ buyer.username }}</p>
-                <p-tag [value]="buyer.verified ? 'Verified Buyer' : 'Pending Verification'"
-                    [severity]="buyer.verified ? 'success' : 'warn'"
-                    [icon]="buyer.verified ? 'pi pi-check-circle' : 'pi pi-clock'" [rounded]="true"
-                    class="" lass="mt-2"></p-tag>
+                <h2 class="m-0 text-2xl font-bold text-900">{{ buyer.businessName }}</h2>
+                <p class="m-0 mt-1 text-600 font-medium">@{{ buyer.username }}</p>
+                <div class="flex gap-2 mt-2">
+                    <p-tag [value]="buyer.verified ? 'Verified Buyer' : 'Pending Verification'"
+                        [severity]="buyer.verified ? 'success' : 'warn'"
+                        [icon]="buyer.verified ? 'pi pi-check-circle' : 'pi pi-clock'" [rounded]="true"></p-tag>
+                    <p-tag [value]="buyer.active ? 'Active' : 'Account Blocked'"
+                        [severity]="buyer.active ? 'success' : 'danger'"
+                        [icon]="buyer.active ? 'pi pi-user' : 'pi pi-ban'" [rounded]="true"></p-tag>
+                </div>
             </div>
-        </div>
-        <div class="flex gap-2">
-            @if (!buyer.verified) {
-            <p-button icon="pi pi-check" label="Approve" severity="success" size="small" [rounded]="true"
-                (onClick)="onApprove.emit(buyer.username)"></p-button>
-            <p-button icon="pi pi-times" label="Reject" severity="danger" size="small" [outlined]="true"
-                [rounded]="true" (onClick)="onReject.emit(buyer.username)"></p-button>
-            }
-            <p-button [icon]="buyer.active ? 'pi pi-lock' : 'pi pi-lock-open'"
-                [label]="buyer.active ? 'Block Account' : 'Unblock Account'"
-                [severity]="buyer.active ? 'danger' : 'success'" size="small" [outlined]="true" [rounded]="true"
-                (onClick)="onBlockToggle.emit({username: buyer.username, active: buyer.active})"></p-button>
         </div>
     </div>
 
     <div class="grid">
         <div class="col-12 md:col-6">
-            <div class="surface-ground p-4 border-round-xl border-1 border-200 h-full">
-                <h3 class="mt-0 text-base text-600 flex align-items-center gap-2 mb-4">
-                    <i class="pi pi-briefcase"></i> Business Details
+            <div class="bg-gray-50 p-4 border-round-xl border-1 border-200 h-full">
+                <h3 class="mt-0 text-sm font-bold text-500 uppercase tracking-wider flex align-items-center gap-2 mb-4">
+                    <i class="pi pi-briefcase text-blue-500"></i> Business Information
                 </h3>
-                <div class="flex justify-content-between py-2 border-bottom-1 border-100">
-                    <span class="text-500 text-sm">Business Name:</span>
-                    <span class="font-semibold text-800">{{ buyer.businessName }}</span>
+                <div class="flex justify-content-between py-3 border-bottom-1 border-100">
+                    <span class="text-600 text-sm">Legal Name:</span>
+                    <span class="font-bold text-900">{{ buyer.businessName }}</span>
                 </div>
-                <div class="flex justify-content-between py-2 border-bottom-1 border-100">
-                    <span class="text-500 text-sm">Location:</span>
-                    <span class="font-semibold text-800">{{ buyer.businessLocation }}</span>
+                <div class="flex justify-content-between py-3 border-bottom-1 border-100">
+                    <span class="text-600 text-sm">Business Location:</span>
+                    <span class="font-bold text-900">{{ buyer.businessLocation }}</span>
                 </div>
-                <div class="flex justify-content-between py-2">
-                    <span class="text-500 text-sm">Consumer Type:</span>
+                <div class="flex justify-content-between py-3">
+                    <span class="text-600 text-sm">Consumer Category:</span>
                     <p-tag [value]="buyer.consumerType" severity="info" [rounded]="true"></p-tag>
                 </div>
             </div>
         </div>
 
         <div class="col-12 md:col-6">
-            <div class="surface-ground p-4 border-round-xl border-1 border-200 h-full">
-                <h3 class="mt-0 text-base text-600 flex align-items-center gap-2 mb-4">
-                    <i class="pi pi-user"></i> Primary Contact
+            <div class="bg-gray-50 p-4 border-round-xl border-1 border-200 h-full">
+                <h3 class="mt-0 text-sm font-bold text-500 uppercase tracking-wider flex align-items-center gap-2 mb-4">
+                    <i class="pi pi-user text-blue-500"></i> Primary Contact
                 </h3>
-                <div class="flex justify-content-between py-2 border-bottom-1 border-100">
-                    <span class="text-500 text-sm">Full Name:</span>
-                    <span class="font-semibold text-800">{{ buyer.fullName }}</span>
+                <div class="flex justify-content-between py-3 border-bottom-1 border-100">
+                    <span class="text-600 text-sm">Contact Name:</span>
+                    <span class="font-bold text-900">{{ buyer.fullName }}</span>
                 </div>
-                <div class="flex justify-content-between py-2 border-bottom-1 border-100">
-                    <span class="text-500 text-sm">Email:</span>
-                    <span class="font-semibold text-800">{{ buyer.email }}</span>
+                <div class="flex justify-content-between py-3 border-bottom-1 border-100">
+                    <span class="text-600 text-sm">Email Address:</span>
+                    <span class="font-bold text-900">{{ buyer.email }}</span>
                 </div>
-                <div class="flex justify-content-between py-2">
-                    <span class="text-500 text-sm">Phone:</span>
-                    <span class="font-semibold text-800">{{ buyer.phoneNumber }}</span>
+                <div class="flex justify-content-between py-3">
+                    <span class="text-600 text-sm">Phone Number:</span>
+                    <span class="font-bold text-900">{{ buyer.phoneNumber }}</span>
                 </div>
             </div>
         </div>
 
         <div class="col-12">
-            <div class="surface-ground p-4 border-round-xl border-1 border-200">
-                <h3 class="mt-0 text-base text-600 flex align-items-center gap-2 mb-4">
-                    <i class="pi pi-shield"></i> Safety & Status
-                </h3>
-                <div class="flex justify-content-around text-center">
-                    <div class="flex flex-column">
-                        <span class="text-xl font-bold" [class]="buyer.active ? 'text-green-600' : 'text-700'">
-                            {{ buyer.active ? 'ACTIVE' : 'INACTIVE' }}
-                        </span>
-                        <span class="text-xs text-400 uppercase font-bold mt-1">Network Status</span>
-                    </div>
-                    <div class="flex flex-column">
-                        <span class="text-xl font-bold text-700">{{ buyer.verified ? 'HIGH' : 'LOW' }}</span>
-                        <span class="text-xs text-400 uppercase font-bold mt-1">Trust Index</span>
-                    </div>
-                    <div class="flex flex-column">
-                        <span class="text-xl font-bold text-700">{{ buyer.createdAt | date:'shortDate' }}</span>
-                        <span class="text-xs text-400 uppercase font-bold mt-1">Member Since</span>
-                    </div>
-                </div>
+            <div class="bg-blue-50 p-3 border-round-lg border-1 border-blue-100 text-center">
+                <span class="text-blue-600 text-xs font-bold uppercase tracking-widest mr-2">Member Since:</span>
+                <span class="text-blue-900 font-bold text-sm">{{ buyer.createdAt | date:'longDate' }}</span>
             </div>
         </div>
     </div>

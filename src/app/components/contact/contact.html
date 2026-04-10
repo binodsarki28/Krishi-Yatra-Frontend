@@ -1,0 +1,63 @@
+<div class="contact-page">
+    <div class="contact-container shadow-8 border-round-2xl overflow-hidden flex flex-column md:flex-row max-w-4xl w-full">
+        <!-- Brand Section -->
+        <div class="brand-section bg-green-700 text-white p-6 flex flex-column justify-content-center align-items-center md:w-5">
+            <div class="bg-white-alpha-20 border-circle p-4 mb-4">
+                <i class="pi pi-envelope text-6xl"></i>
+            </div>
+            <h1 class="text-4xl font-bold m-0 mb-2">Contact Us</h1>
+            <p class="text-green-100 text-center line-height-3 m-0">We value your feedback and questions. Our team is here to support you.</p>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section bg-white p-6 md:w-7">
+            <div class="mb-5">
+                <h2 class="text-3xl font-bold text-gray-900 m-0 mb-2">Send Message</h2>
+                <p class="text-gray-500 font-medium">Have a question? We'll get back to you within 24 hours.</p>
+            </div>
+
+            <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-3">
+                <div class="flex flex-column gap-1">
+                    <label for="name" class="font-bold text-sm text-gray-700 ml-1">Full Name</label>
+                    <input pInputText id="name" formControlName="name" placeholder="John Doe" 
+                           class="p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none focus:border-green-500"/>
+                    @if (contactForm.get('name')?.invalid && contactForm.get('name')?.touched) {
+                        <small class="text-red-500 font-bold ml-1">Name is required (min 3 chars)</small>
+                    }
+                </div>
+
+                <div class="flex flex-column gap-1">
+                    <label for="email" class="font-bold text-sm text-gray-700 ml-1">Email Address</label>
+                    <input pInputText id="email" formControlName="email" placeholder="john@example.com" 
+                           class="p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none focus:border-green-500"/>
+                    @if (contactForm.get('email')?.invalid && contactForm.get('email')?.touched) {
+                        <small class="text-red-500 font-bold ml-1">Valid email is required</small>
+                    }
+                </div>
+
+                <div class="flex flex-column gap-1">
+                    <label for="subject" class="font-bold text-sm text-gray-700 ml-1">Subject</label>
+                    <input pInputText id="subject" formControlName="subject" placeholder="Subject of your inquiry" 
+                           class="p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none focus:border-green-500"/>
+                    @if (contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched) {
+                        <small class="text-red-500 font-bold ml-1">Subject is required (min 5 chars)</small>
+                    }
+                </div>
+
+                <div class="flex flex-column gap-1">
+                    <label for="message" class="font-bold text-sm text-gray-700 ml-1">Message</label>
+                    <textarea pInputTextarea id="message" formControlName="message" rows="4" placeholder="Your message here..." 
+                              class="p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none focus:border-green-500"></textarea>
+                    @if (contactForm.get('message')?.invalid && contactForm.get('message')?.touched) {
+                        <small class="text-red-500 font-bold ml-1">Message is required (min 10 chars)</small>
+                    }
+                </div>
+
+                <p-button type="submit" [label]="submitting ? 'Sending...' : 'Send Message'" 
+                          [loading]="submitting" 
+                          styleClass="p-button-success w-full p-3 border-round-xl font-bold text-lg shadow-2 mt-2" 
+                          icon="pi pi-send"></p-button>
+            </form>
+        </div>
+    </div>
+</div>
