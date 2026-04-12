@@ -62,7 +62,7 @@ export class DemandFormComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    if (!this.demand.categoryId || !this.demand.subCategoryId || !this.demand.quantity || !this.demand.expectedPricePerUnit) {
+    if (!this.demand.categoryId || !this.demand.subCategoryId || !this.demand.quantity || !this.demand.expectedPricePerUnit || !this.demand.description) {
       this.toastService.generalResponse('warning', 'Missing Information', 'Please fill in all mandatory fields.');
       return;
     }

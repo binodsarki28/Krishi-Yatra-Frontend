@@ -6,11 +6,13 @@
                 <i class="pi pi-megaphone text-white" style="font-size: 16px;"></i>
             </div>
             <div>
+                @if (mode !== 'fulfilled') {
                 <h2 class="m-0 text-xl font-bold text-900" style="letter-spacing: -0.3px;">
-                    {{ mode === 'my' ? 'My Demands' : (mode === 'fulfilled' ? 'Fulfilled Requests' : 'Market Demands') }}
+                    {{ mode === 'my' ? 'My Demands' : 'Market Demands' }}
                 </h2>
+                }
                 <p class="m-0 text-xs text-500 mt-1 font-medium">
-                    {{ mode === 'my' ? 'Manage your posted demand requests' : (mode === 'fulfilled' ? 'Demands you have fulfilled' : 'Browse active buyer requirements') }}
+                    {{ mode === 'my' ? 'Manage your posted demand requests' : (mode === 'fulfilled' ? 'Browse through the demands you have successfully accepted and fulfilled.' : 'Browse active buyer requirements') }}
                 </p>
             </div>
         </div>
@@ -132,7 +134,7 @@
                                         (click)="acceptDemand(demand)"></button>
                                 </div>
                                 }
-                                @if (mode === 'my') {
+                                @if (mode === 'my' && demand.status === 'OPEN') {
                                 <div class="w-full">
                                     <button pButton pRipple icon="pi pi-times" label="Cancel Demand" 
                                         class="p-button-danger p-button-outlined border-round-lg w-full font-bold bg-white" style="padding: 0.6rem 1rem;"
@@ -145,8 +147,24 @@
                 </div>
             }
         </div>
+        } @else if (hasLoaded && !loading && !loadingMore && demands.length === 0) {
+            <!-- Empty State -->
+            <div class="flex flex-column align-items-center justify-content-center p-8 surface-card border-round-xl shadow-1 border-1 border-200">
+                <div class="flex align-items-center justify-content-center border-round-full mb-4" style="width: 80px; height: 80px; background: linear-gradient(135deg, #f0fdf4, #ecfdf5);">
+                    <i class="pi pi-inbox text-4xl text-green-300"></i>
+                </div>
+                <h2 class="text-900 m-0 font-bold text-xl">No demands found</h2>
+                @if (mode === 'my') {
+                <span class="text-500 mt-2 mb-4 text-sm">Why not create a new demand to find sellers?</span>
+                }
+                @if (mode === 'all') {
+                <span class="text-500 mt-2 mb-4 text-sm">Check back later for new buyer requests.</span>
+                }
+                <button pButton label="Refresh Market" icon="pi pi-refresh" 
+                    class="p-button-outlined p-button-success border-round-xl px-5 font-bold" (click)="onFilter()"></button>
+            </div>
+        }
 
-        <!-- Lazy Loading Skeletons -->
         @if (loadingMore) {
             <div class="flex flex-column gap-3 mt-3">
                 @for (i of [1,2,3]; track i) {
@@ -163,25 +181,6 @@
                         </div>
                     </div>
                 }
-            </div>
-        }
-        }
-        
-        @if (!loading && !loadingMore && demands.length === 0) {
-            <!-- Empty State -->
-            <div class="flex flex-column align-items-center justify-content-center p-8 surface-card border-round-xl shadow-1 border-1 border-200">
-                <div class="flex align-items-center justify-content-center border-round-full mb-4" style="width: 80px; height: 80px; background: linear-gradient(135deg, #f0fdf4, #ecfdf5);">
-                    <i class="pi pi-inbox text-4xl text-green-300"></i>
-                </div>
-                <h2 class="text-900 m-0 font-bold text-xl">No demands found</h2>
-                @if (mode === 'my') {
-                <span class="text-500 mt-2 mb-4 text-sm">Why not create a new demand to find sellers?</span>
-                }
-                @if (mode === 'all') {
-                <span class="text-500 mt-2 mb-4 text-sm">Check back later for new buyer requests.</span>
-                }
-                <button pButton label="Refresh Market" icon="pi pi-refresh" 
-                    class="p-button-outlined p-button-success border-round-xl px-5 font-bold" (click)="onFilter()"></button>
             </div>
         }
     </div>
