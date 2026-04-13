@@ -9,7 +9,7 @@
             <div class="inline-flex bg-white border-round-xl overflow-hidden mb-4 shadow-3">
                 <img src="/logo.png" alt="Logo" style="height: 140px; width: auto; object-fit: contain; display: block;">
             </div>
-            <h1 class="text-4xl font-bold m-0 mb-2 text-center">Hello Friend</h1>
+            <h1 class="text-4xl font-bold m-0 mb-2 text-center">KrishiYatra</h1>
             <p class="text-green-100 text-center line-height-3 m-0">Connect with farmers, access markets, and grow your agricultural business</p>
         </div>
 
@@ -24,7 +24,7 @@
                 <div class="grid p-0 m-0">
                     <div class="col-12 md:col-6 p-2">
                         <label for="fullName" class="font-bold text-sm text-gray-700 ml-1 block mb-2">Full Name</label>
-                        <input pInputText id="fullName" formControlName="fullName" placeholder="John Doe" 
+                        <input pInputText id="fullName" formControlName="fullName" placeholder="John Doe"
                                class="p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none"/>
                         @if (registerForm.controls['fullName']?.invalid && registerForm.controls['fullName']?.touched) {
                             <small class="text-red-500 font-bold ml-1">5-20 characters required</small>
@@ -33,7 +33,7 @@
 
                     <div class="col-12 md:col-6 p-2">
                         <label for="username" class="font-bold text-sm text-gray-700 ml-1 block mb-2">Username</label>
-                        <input pInputText id="username" formControlName="username" placeholder="johndoe" 
+                        <input pInputText id="username" formControlName="username" placeholder="johndoe"
                                class="p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none"/>
                         @if (registerForm.controls['username']?.invalid && registerForm.controls['username']?.touched) {
                             <small class="text-red-500 font-bold ml-1">Username is required</small>
@@ -42,7 +42,7 @@
 
                     <div class="col-12 md:col-6 p-2">
                         <label for="email" class="font-bold text-sm text-gray-700 ml-1 block mb-2">Email Address</label>
-                        <input pInputText id="email" type="email" formControlName="email" placeholder="john@example.com" 
+                        <input pInputText id="email" type="email" formControlName="email" placeholder="john@example.com"
                                class="p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none"/>
                         @if (registerForm.controls['email']?.invalid && registerForm.controls['email']?.touched) {
                             <small class="text-red-500 font-bold ml-1">Invalid email address</small>
@@ -51,7 +51,7 @@
 
                     <div class="col-12 md:col-6 p-2">
                         <label for="phone" class="font-bold text-sm text-gray-700 ml-1 block mb-2">Phone Number</label>
-                        <input pInputText id="phone" type="tel" formControlName="phoneNumber" placeholder="+977 9800..." 
+                        <input pInputText id="phone" type="tel" formControlName="phoneNumber" placeholder="+977 9800..."
                                class="p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none"/>
                         @if (registerForm.controls['phoneNumber']?.invalid && registerForm.controls['phoneNumber']?.touched) {
                             <small class="text-red-500 font-bold ml-1">Use a valid Nepal number</small>
@@ -80,7 +80,7 @@
                     <small class="text-red-500 font-bold ml-3 mt--3">Passwords do not match</small>
                 }
 
-                <p-button type="submit" [label]="loading ? 'Creating Account...' : 'Create Account'" 
+                <p-button type="submit" [label]="loading ? 'Creating Account...' : 'Create Account'"
                           [loading]="loading"
                           styleClass="p-button-success w-full p-3 border-round-xl font-bold text-lg shadow-2 mt-2"></p-button>
             </form>
