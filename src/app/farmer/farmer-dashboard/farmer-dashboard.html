@@ -93,7 +93,7 @@
                             style="width:32px; height:32px;">
                             <i class="pi pi-megaphone" style="font-size: 14px;"></i>
                         </div>
-                        <span>Market Requests</span>
+                        <span>Demand Management</span>
                     </div>
                     <i class="pi pi-chevron-down text-400 group-arrow"
                         [style.transform]="expandedGroup === 'demand' ? 'rotate(180deg)' : 'none'"
@@ -104,7 +104,7 @@
                     <a class="flex align-items-center gap-2 px-3 py-2 border-round-md text-600 no-underline text-xs font-medium my-1 nav-sub-item"
                         routerLink="/farmer/demands" routerLinkActive="active-nav">
                         <i class="pi pi-search-plus" style="font-size: 12px;"></i>
-                        <span>Manage Market Requests</span>
+                        <span>Fulfilled Demands</span>
                     </a>
                 </div>
             </div>
@@ -112,7 +112,7 @@
 
         <!-- Sidebar Footer -->
         <div class="p-3 border-top-1 border-200">
-            <button (click)="goToProfile()" 
+            <button (click)="goToProfile()"
                class="flex align-items-center justify-content-center gap-2 w-full px-3 py-2 border-round-xl border-1 border-300 bg-white text-700 hover:surface-100 no-underline text-sm font-semibold transition-all transition-duration-200 cursor-pointer"
                style="height: 44px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); outline: none;">
                 <i class="pi pi-user" style="font-size: 14px;"></i>
@@ -128,37 +128,101 @@
         @if (isDefaultRoute) {
         <div class="fadein animation-duration-300">
             <!-- Basic Data / Stats -->
-            <div class="grid">
-                <div class="col-12 md:col-6 lg:col-3">
-                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between">
+            @if (dashboard) {
+            <div class="grid mb-4">
+                <div class="col-12 md:col-6 lg:col-4 xl:col">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1 h-full">
                         <div class="flex flex-column gap-1">
-                            <span class="text-xs text-500 font-medium uppercase tracking-wider">Total Stocks</span>
-                            <span class="text-3xl font-bold text-900" style="letter-spacing: -0.5px;">{{ totalStocks }}</span>
+                            <span class="text-xs text-500 font-bold uppercase tracking-wider">Active Stocks</span>
+                            <span class="text-3xl font-bold text-900">{{ dashboard.activeStocks }}</span>
                         </div>
-                        <div class="flex align-items-center justify-content-center border-round-xl bg-green-50 text-green-600" style="width:48px; height:48px;">
-                            <i class="pi pi-box" style="font-size: 20px;"></i>
+                        <div class="flex align-items-center justify-content-center border-round-xl bg-green-50 text-green-600" style="width:48px; height:48px; min-width:48px;">
+                            <i class="pi pi-check-circle" style="font-size: 20px;"></i>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 md:col-6 lg:col-3">
-                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between">
+                <div class="col-12 md:col-6 lg:col-4 xl:col">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1 h-full">
                         <div class="flex flex-column gap-1">
-                            <span class="text-xs text-500 font-medium uppercase tracking-wider">Total Orders</span>
-                            <span class="text-3xl font-bold text-900" style="letter-spacing: -0.5px;">{{ totalOrders }}</span>
+                            <span class="text-xs text-500 font-bold uppercase tracking-wider">Total Orders</span>
+                            <span class="text-3xl font-bold text-900">{{ dashboard.totalOrders }}</span>
                         </div>
-                        <div class="flex align-items-center justify-content-center border-round-xl bg-blue-50 text-blue-600" style="width:48px; height:48px;">
-                            <i class="pi pi-shopping-bag" style="font-size: 20px;"></i>
+                        <div class="flex align-items-center justify-content-center border-round-xl bg-blue-50 text-blue-600" style="width:48px; height:48px; min-width:48px;">
+                            <i class="pi pi-shopping-cart" style="font-size: 20px;"></i>
                         </div>
                     </div>
                 </div>
-                <!-- Future Visualization Placeholder -->
-                <div class="col-12">
-                   <div class="surface-card border-1 border-200 border-round-xl p-8 flex flex-column align-items-center justify-content-center text-500 bg-gray-50 border-dashed">
-                       <i class="pi pi-chart-bar text-4xl mb-3"></i>
-                       <p class="m-0 font-medium">Visualization Analytics Coming Soon</p>
-                   </div>
+                <div class="col-12 md:col-6 lg:col-4 xl:col">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1 h-full">
+                        <div class="flex flex-column gap-1">
+                            <span class="text-xs text-500 font-bold uppercase tracking-wider">Accepted Demands</span>
+                            <span class="text-3xl font-bold text-900">{{ dashboard.acceptedDemands }}</span>
+                        </div>
+                        <div class="flex align-items-center justify-content-center border-round-xl bg-purple-50 text-purple-600" style="width:48px; height:48px; min-width:48px;">
+                            <i class="pi pi-megaphone" style="font-size: 20px;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 md:col-6 lg:col-4 xl:col">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1 h-full">
+                        <div class="flex flex-column gap-1">
+                            <span class="text-xs text-500 font-bold uppercase tracking-wider">Low Stock</span>
+                            <span class="text-3xl font-bold text-red-500">{{ dashboard.outOfStock }}</span>
+                        </div>
+                        <div class="flex align-items-center justify-content-center border-round-xl bg-red-50 text-red-600" style="width:48px; height:48px; min-width:48px;">
+                            <i class="pi pi-exclamation-triangle" style="font-size: 20px;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 md:col-6 lg:col-4 xl:col">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 flex align-items-center justify-content-between shadow-1 h-full">
+                        <div class="flex flex-column gap-1">
+                            <span class="text-xs text-500 font-bold uppercase tracking-wider">Total Revenue</span>
+                            <span class="text-3xl font-bold text-green-600 truncate max-w-7rem">NPR {{ dashboard.totalRevenue | number:'1.0-1' }}</span>
+                        </div>
+                        <div class="flex align-items-center justify-content-center border-round-xl bg-green-50 text-green-700" style="width:48px; height:48px; min-width:48px;">
+                            <i class="pi pi-wallet" style="font-size: 20px;"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <!-- Visualization Charts -->
+            <div class="grid">
+                <div class="col-12 lg:col-8">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 shadow-1 h-full">
+                        <div class="flex align-items-center justify-content-between mb-4">
+                            <div>
+                                <h3 class="m-0 text-900 font-bold text-lg">Revenue Performance</h3>
+                                <p class="m-0 text-xs text-500 mt-1 font-medium">Monthly revenue trends for the current year</p>
+                            </div>
+                            <div class="flex align-items-center justify-content-center border-round-md bg-green-50 text-green-600" style="width:32px; height:32px;">
+                                <i class="pi pi-chart-line" style="font-size: 14px;"></i>
+                            </div>
+                        </div>
+                        <p-chart type="line" [data]="revenueChartData" [options]="revenueChartOptions" height="300px"></p-chart>
+                    </div>
+                </div>
+                <div class="col-12 lg:col-4">
+                    <div class="surface-card border-1 border-200 border-round-xl p-4 shadow-1 h-full">
+                        <div class="flex align-items-center justify-content-between mb-4">
+                            <div>
+                                <h3 class="m-0 text-900 font-bold text-lg">Stock Mix</h3>
+                                <p class="m-0 text-xs text-500 mt-1 font-medium">Distribution by category</p>
+                            </div>
+                            <div class="flex align-items-center justify-content-center border-round-md bg-blue-50 text-blue-600" style="width:32px; height:32px;">
+                                <i class="pi pi-chart-pie" style="font-size: 14px;"></i>
+                            </div>
+                        </div>
+                        <p-chart type="pie" [data]="categoryChartData" [options]="categoryChartOptions" height="250px"></p-chart>
+                    </div>
+                </div>
+            </div>
+            } @else {
+               <div class="flex align-items-center justify-content-center py-8">
+                   <i class="pi pi-spin pi-spinner text-4xl text-green-500"></i>
+               </div>
+            }
         </div>
         }
     </main>

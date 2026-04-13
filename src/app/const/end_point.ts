@@ -17,6 +17,10 @@ export class Endpoint {
     Endpoint.API_VERSION + 'user/profile';
   public static readonly UPDATE_PASSWORD: string =
     Endpoint.API_VERSION + 'user/password';
+  public static readonly FORGOT_PASSWORD: string =
+    Endpoint.API_VERSION + 'user/forgot-password';
+  public static readonly RESET_PASSWORD: string =
+    Endpoint.API_VERSION + 'user/reset-password';
 
   //Farmer
   public static readonly REGISTER_FARMER: string =
@@ -146,5 +150,9 @@ export class Endpoint {
     Endpoint.API_VERSION + 'notification/fcm-token';
   public static readonly NOTIFICATION_UNREAD_COUNT: string =
     Endpoint.API_VERSION + 'notification/unread-count';
+
+  // Contact
+  public static readonly CONTACT_SEND: string =
+    Endpoint.API_VERSION + 'contact/send';
 }
 

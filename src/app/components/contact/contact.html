@@ -1,0 +1,76 @@
+<div class="contact-page surface-ground flex align-items-center justify-content-center px-3 py-3">
+    <div class="grid m-0 shadow-6 border-round-2xl overflow-hidden surface-card w-full" style="max-width: 900px;">
+        <!-- Brand Info Side -->
+        <div class="col-12 md:col-5 p-0 bg-green-800 text-white flex flex-column justify-content-center align-items-center p-5 text-center relative overflow-hidden">
+            <div class="brand-overlay"></div>
+            <div class="surface-overlay-alpha border-circle p-3 mb-3 relative z-1">
+                <i class="pi pi-envelope text-5xl"></i>
+            </div>
+            <h1 class="text-3xl font-bold m-0 mb-2 relative z-1">Get in Touch</h1>
+            <p class="text-green-100 text-sm line-height-3 m-0 relative z-1">
+                Have questions about KrishiYatra? We are here to help.
+            </p>
+            <div class="mt-4 flex flex-column gap-2 relative z-1">
+                <div class="flex align-items-center gap-2">
+                    <i class="pi pi-phone text-green-300"></i>
+                    <span class="text-sm">+977 123456789</span>
+                </div>
+                <div class="flex align-items-center gap-2">
+                    <i class="pi pi-map-marker text-green-300"></i>
+                    <span class="text-sm">Kathmandu, Nepal</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Side -->
+        <div class="col-12 md:col-7 p-4 lg:p-5">
+            <div class="mb-3">
+                <h2 class="text-2xl font-bold text-900 m-0 mb-1">Send us a message</h2>
+                <p class="text-500 text-sm m-0">We'll get back to you shortly.</p>
+            </div>
+
+            <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-3">
+                <div class="flex flex-column gap-1">
+                    <label for="name" class="font-bold text-sm text-800">Full Name</label>
+                    <input pInputText id="name" formControlName="name" placeholder="John Doe" 
+                           class="w-full p-2 border-round-lg surface-50"/>
+                    @if (contactForm.get('name')?.invalid && contactForm.get('name')?.touched) {
+                        <small class="text-red-500 font-bold ml-1">Name is required (min 3 chars)</small>
+                    }
+                </div>
+
+                <div class="flex flex-column gap-1">
+                    <label for="email" class="font-bold text-sm text-800">Email Address</label>
+                    <input pInputText id="email" formControlName="email" placeholder="john@example.com" 
+                           class="w-full p-2 border-round-lg surface-50"/>
+                    @if (contactForm.get('email')?.invalid && contactForm.get('email')?.touched) {
+                        <small class="text-red-500 font-bold ml-1">Valid email is required</small>
+                    }
+                </div>
+
+                <div class="flex flex-column gap-1">
+                    <label for="subject" class="font-bold text-sm text-800">Subject</label>
+                    <input pInputText id="subject" formControlName="subject" placeholder="Subject of your inquiry" 
+                           class="w-full p-2 border-round-lg surface-50"/>
+                    @if (contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched) {
+                        <small class="text-red-500 font-bold ml-1">Subject is required (min 5 chars)</small>
+                    }
+                </div>
+
+                <div class="flex flex-column gap-1">
+                    <label for="message" class="font-bold text-sm text-800">Message</label>
+                    <textarea pInputTextarea id="message" formControlName="message" rows="3" placeholder="Your message here..." 
+                              class="w-full p-2 border-round-lg surface-50"></textarea>
+                    @if (contactForm.get('message')?.invalid && contactForm.get('message')?.touched) {
+                        <small class="text-red-500 font-bold ml-1">Message is required (min 10 chars)</small>
+                    }
+                </div>
+
+                <p-button type="submit" [label]="submitting ? 'Sending...' : 'Send Message'" 
+                          [loading]="submitting" 
+                          styleClass="p-button-success w-full p-2 font-bold border-round-xl shadow-2" 
+                          icon="pi pi-send"></p-button>
+            </form>
+        </div>
+    </div>
+</div>

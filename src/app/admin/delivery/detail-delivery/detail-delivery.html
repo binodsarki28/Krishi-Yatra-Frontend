@@ -1,101 +1,93 @@
 @if (delivery) {
 <div class="p-4 surface-card border-round-2xl">
-    <div class="flex justify-content-between align-items-center mb-5 border-bottom-1 border-200 pb-4">
-        <div class="flex gap-3 align-items-center">
-            <div class="flex align-items-center justify-content-center border-circle text-white"
-                style="width:60px; height:60px; background: linear-gradient(135deg, #f59e0b, #d97706);">
-                <i class="pi pi-truck" style="font-size: 1.5rem"></i>
+    <div class="flex flex-column md:flex-row justify-content-between align-items-start md:align-items-center mb-5 border-bottom-1 border-200 pb-4 gap-3">
+        <div class="flex gap-4 align-items-center">
+            <div class="flex align-items-center justify-content-center border-round-xl text-white text-2xl font-bold shadow-2"
+                style="width:70px; height:70px; background: linear-gradient(135deg, #f59e0b, #d97706);">
+                <i class="pi pi-truck" style="font-size: 1.8rem;"></i>
             </div>
             <div>
-                <h2 class="m-0 text-xl font-bold text-900">{{ delivery.fullName }}</h2>
-                <p class="m-0 mt-1 text-500 font-medium">&#64;{{ delivery.username }}</p>
-                <p-tag [value]="delivery.verified ? 'Verified Partner' : 'Verification Needed'"
-                    [severity]="delivery.verified ? 'success' : 'warn'"
-                    [icon]="delivery.verified ? 'pi pi-check-circle' : 'pi pi-clock'" [rounded]="true"
-                    styleClass="mt-2"></p-tag>
+                <h2 class="m-0 text-2xl font-bold text-900">{{ delivery.fullName }}</h2>
+                <p class="m-0 mt-1 text-600 font-medium">@{{ delivery.username }}</p>
+                <div class="flex gap-2 mt-2">
+                    <p-tag [value]="delivery.verified ? 'Verified Partner' : 'Verification Needed'"
+                        [severity]="delivery.verified ? 'success' : 'warn'"
+                        [icon]="delivery.verified ? 'pi pi-check-circle' : 'pi pi-clock'" [rounded]="true"></p-tag>
+                    <p-tag [value]="delivery.active ? 'Active' : 'Suspended'"
+                        [severity]="delivery.active ? 'success' : 'danger'"
+                        [icon]="delivery.active ? 'pi pi-user' : 'pi pi-ban'" [rounded]="true"></p-tag>
+                </div>
             </div>
-        </div>
-        <div class="flex gap-2">
-            @if (!delivery.verified) {
-            <p-button icon="pi pi-check" label="Verify" severity="success" size="small" [rounded]="true"
-                (onClick)="onApprove.emit(delivery.username)"></p-button>
-            <p-button icon="pi pi-times" label="Reject" severity="danger" size="small" [outlined]="true"
-                [rounded]="true" (onClick)="onReject.emit(delivery.username)"></p-button>
-            }
-            <p-button [icon]="delivery.active ? 'pi pi-lock' : 'pi pi-lock-open'"
-                [label]="delivery.active ? 'Suspend' : 'Resume'" [severity]="delivery.active ? 'danger' : 'success'"
-                size="small" [outlined]="true" [rounded]="true"
-                (onClick)="onBlockToggle.emit({username: delivery.username, active: delivery.active})"></p-button>
         </div>
     </div>
 
     <div class="grid">
         <div class="col-12 md:col-6">
-            <div class="surface-ground p-4 border-round-xl border-1 border-200 h-full">
-                <h3 class="mt-0 text-base text-600 flex align-items-center gap-2 mb-4">
-                    <i class="pi pi-car"></i> Fleet Details
+            <div class="bg-gray-50 p-4 border-round-xl border-1 border-200 h-full">
+                <h3 class="mt-0 text-sm font-bold text-500 uppercase tracking-wider flex align-items-center gap-2 mb-4">
+                    <i class="pi pi-car text-orange-500"></i> Fleet Registration
                 </h3>
-                <div class="flex justify-content-between py-2 border-bottom-1 border-100">
-                    <span class="text-500 text-sm">Vehicle Type:</span>
-                    <span class="font-semibold text-800">{{ delivery.vehicleType }}</span>
+                <div class="flex justify-content-between py-3 border-bottom-1 border-100">
+                    <span class="text-600 text-sm">Vehicle Type:</span>
+                    <span class="font-bold text-900">{{ delivery.vehicleType }}</span>
                 </div>
-                <div class="flex justify-content-between py-2 border-bottom-1 border-100">
-                    <span class="text-500 text-sm">Brand/Model:</span>
-                    <span class="font-semibold text-800">{{ delivery.vehicleBrand }}</span>
+                <div class="flex justify-content-between py-3 border-bottom-1 border-100">
+                    <span class="text-600 text-sm">Brand/Model:</span>
+                    <span class="font-bold text-900">{{ delivery.vehicleBrand }}</span>
                 </div>
-                <div class="flex justify-content-between py-2 border-bottom-1 border-100">
-                    <span class="text-500 text-sm">Number Plate:</span>
-                    <p-tag [value]="delivery.numberPlate" severity="contrast" [rounded]="true"></p-tag>
+                <div class="flex justify-content-between py-3 border-bottom-1 border-100">
+                    <span class="text-600 text-sm">Number Plate:</span>
+                    <p-tag [value]="delivery.numberPlate" severity="secondary" [rounded]="true"></p-tag>
                 </div>
-                <div class="flex justify-content-between py-2">
-                    <span class="text-500 text-sm">License No:</span>
-                    <span class="font-semibold text-800">{{ delivery.licenseNumber }}</span>
+                <div class="flex justify-content-between py-3">
+                    <span class="text-600 text-sm">License Number:</span>
+                    <span class="font-bold text-900">{{ delivery.licenseNumber }}</span>
                 </div>
             </div>
         </div>
 
         <div class="col-12 md:col-6">
-            <div class="surface-ground p-4 border-round-xl border-1 border-200 h-full">
-                <h3 class="mt-0 text-base text-600 flex align-items-center gap-2 mb-4">
-                    <i class="pi pi-user"></i> Partner Contact
+            <div class="bg-gray-50 p-4 border-round-xl border-1 border-200 h-full">
+                <h3 class="mt-0 text-sm font-bold text-500 uppercase tracking-wider flex align-items-center gap-2 mb-4">
+                    <i class="pi pi-user text-orange-500"></i> Partner Contact
                 </h3>
-                <div class="flex justify-content-between py-2 border-bottom-1 border-100">
-                    <span class="text-500 text-sm">Email:</span>
-                    <span class="font-semibold text-800">{{ delivery.email }}</span>
+                <div class="flex justify-content-between py-3 border-bottom-1 border-100">
+                    <span class="text-600 text-sm">Email Address:</span>
+                    <span class="font-bold text-900">{{ delivery.email }}</span>
                 </div>
-                <div class="flex justify-content-between py-2 border-bottom-1 border-100">
-                    <span class="text-500 text-sm">Phone:</span>
-                    <span class="font-semibold text-800">{{ delivery.phoneNumber }}</span>
+                <div class="flex justify-content-between py-3 border-bottom-1 border-100">
+                    <span class="text-600 text-sm">Phone Number:</span>
+                    <span class="font-bold text-900">{{ delivery.phoneNumber }}</span>
                 </div>
-                <div class="flex justify-content-between py-2">
-                    <span class="text-500 text-sm">Registration:</span>
-                    <span class="font-semibold text-800">{{ delivery.createdAt | date:'mediumDate' }}</span>
+                <div class="flex justify-content-between py-3">
+                    <span class="text-600 text-sm">Joined On:</span>
+                    <span class="font-bold text-900">{{ delivery.createdAt | date:'longDate' }}</span>
                 </div>
             </div>
         </div>
 
         <div class="col-12">
-            <div class="surface-ground p-4 border-round-xl border-1 border-200">
-                <h3 class="mt-0 text-base text-600 flex align-items-center gap-2 mb-4">
-                    <i class="pi pi-file"></i> Document Verification
+            <div class="bg-gray-50 p-4 border-round-xl border-1 border-200">
+                <h3 class="mt-0 text-sm font-bold text-500 uppercase tracking-wider flex align-items-center gap-2 mb-4">
+                    <i class="pi pi-file text-orange-500"></i> Document Status
                 </h3>
                 <div class="grid">
                     <div class="col-12 md:col-6">
-                        <div class="flex align-items-center gap-3 p-3 surface-card border-1 border-200 border-round-lg">
+                        <div class="flex align-items-center gap-3 p-3 bg-white border-1 border-200 border-round-lg shadow-1">
                             <div class="flex align-items-center justify-content-center border-round-lg bg-orange-50"
                                 style="width:48px; height:48px;">
                                 <i class="pi pi-image text-orange-600 text-xl"></i>
                             </div>
-                            <span class="font-semibold text-700">Vehicle Photo</span>
+                            <span class="font-bold text-900 text-sm">Vehicle Proof Uploaded</span>
                         </div>
                     </div>
                     <div class="col-12 md:col-6">
-                        <div class="flex align-items-center gap-3 p-3 surface-card border-1 border-200 border-round-lg">
+                        <div class="flex align-items-center gap-3 p-3 bg-white border-1 border-200 border-round-lg shadow-1">
                             <div class="flex align-items-center justify-content-center border-round-lg bg-blue-50"
                                 style="width:48px; height:48px;">
                                 <i class="pi pi-id-card text-blue-600 text-xl"></i>
                             </div>
-                            <span class="font-semibold text-700">Driving License</span>
+                            <span class="font-bold text-900 text-sm">Drivers License Uploaded</span>
                         </div>
                     </div>
                 </div>

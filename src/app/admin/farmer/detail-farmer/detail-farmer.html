@@ -1,56 +1,47 @@
 @if (farmer) {
 <div class="p-4 surface-card border-round-2xl">
     <!-- Header Section -->
-    <div class="flex justify-content-between align-items-center mb-5 border-bottom-1 border-200 pb-4">
-        <div class="flex gap-3 align-items-center">
-            <div class="flex align-items-center justify-content-center border-circle text-white text-xl font-bold"
-                style="width:60px; height:60px; background: linear-gradient(135deg, #48BB78, #38A169);">
+    <div class="flex flex-column md:flex-row justify-content-between align-items-start md:align-items-center mb-5 border-bottom-1 border-200 pb-4 gap-3">
+        <div class="flex gap-4 align-items-center">
+            <div class="flex align-items-center justify-content-center border-round-xl text-white text-2xl font-bold shadow-2"
+                style="width:70px; height:70px; background: linear-gradient(135deg, #48BB78, #38A169);">
                 {{ farmer.fullName.charAt(0) }}
             </div>
             <div>
-                <h2 class="m-0 text-xl font-bold text-900">{{ farmer.fullName }}</h2>
-                <p class="m-0 mt-1 text-500 font-medium">&#64;{{ farmer.username }}</p>
-                <p-tag [value]="farmer.verified ? 'Verified Farmer' : 'Pending Verification'"
-                    [severity]="farmer.verified ? 'success' : 'warn'"
-                    [icon]="farmer.verified ? 'pi pi-check-circle' : 'pi pi-clock'" [rounded]="true"
-                    styleClass="mt-2"></p-tag>
+                <h2 class="m-0 text-2xl font-bold text-900">{{ farmer.fullName }}</h2>
+                <p class="m-0 mt-1 text-600 font-medium">@{{ farmer.username }}</p>
+                <div class="flex gap-2 mt-2">
+                    <p-tag [value]="farmer.verified ? 'Verified Farmer' : 'Pending Verification'"
+                        [severity]="farmer.verified ? 'success' : 'warn'"
+                        [icon]="farmer.verified ? 'pi pi-check-circle' : 'pi pi-clock'" [rounded]="true"></p-tag>
+                    <p-tag [value]="farmer.active ? 'Active' : 'Account Blocked'"
+                        [severity]="farmer.active ? 'success' : 'danger'"
+                        [icon]="farmer.active ? 'pi pi-user' : 'pi pi-ban'" [rounded]="true"></p-tag>
+                </div>
             </div>
-        </div>
-        <div class="flex gap-2">
-            @if (!farmer.verified) {
-            <p-button icon="pi pi-check" label="Approve" severity="success" size="small" [rounded]="true"
-                (onClick)="onApprove.emit(farmer.username)"></p-button>
-            <p-button icon="pi pi-times" label="Reject" severity="danger" size="small" [outlined]="true"
-                [rounded]="true" (onClick)="onReject.emit(farmer.username)"></p-button>
-            }
-            <p-button [icon]="farmer.active ? 'pi pi-lock' : 'pi pi-lock-open'"
-                [label]="farmer.active ? 'Block Account' : 'Unblock Account'"
-                [severity]="farmer.active ? 'danger' : 'success'" size="small" [outlined]="true" [rounded]="true"
-                (onClick)="onBlockToggle.emit({username: farmer.username, active: farmer.active})"></p-button>
         </div>
     </div>
 
     <div class="grid">
-        <!-- Farm Information -->
         <div class="col-12 md:col-6">
-            <div class="surface-ground p-4 border-round-xl border-1 border-200 h-full">
-                <h3 class="mt-0 text-base text-600 flex align-items-center gap-2 mb-4">
-                    <i class="pi pi-map"></i> Farm Information
+            <div class="bg-gray-50 p-4 border-round-xl border-1 border-200 h-full">
+                <h3 class="mt-0 text-sm font-bold text-500 uppercase tracking-wider flex align-items-center gap-2 mb-4">
+                    <i class="pi pi-map text-green-500"></i> Farm Information
                 </h3>
-                <div class="flex justify-content-between py-2 border-bottom-1 border-100">
-                    <span class="text-500 text-sm">Farm Name:</span>
-                    <span class="font-semibold text-800">{{ farmer.farmName }}</span>
+                <div class="flex justify-content-between py-3 border-bottom-1 border-100">
+                    <span class="text-600 text-sm">Farm Name:</span>
+                    <span class="font-bold text-900">{{ farmer.farmName }}</span>
                 </div>
-                <div class="flex justify-content-between py-2 border-bottom-1 border-100">
-                    <span class="text-500 text-sm">Location:</span>
-                    <span class="font-semibold text-800">{{ farmer.farmLocation }}</span>
+                <div class="flex justify-content-between py-3 border-bottom-1 border-100">
+                    <span class="text-600 text-sm">Location:</span>
+                    <span class="font-bold text-900">{{ farmer.farmLocation }}</span>
                 </div>
-                <div class="flex justify-content-between py-2 border-bottom-1 border-100">
-                    <span class="text-500 text-sm">Farm Area:</span>
-                    <span class="font-semibold text-800">{{ farmer.farmArea }} Hectares</span>
+                <div class="flex justify-content-between py-3 border-bottom-1 border-100">
+                    <span class="text-600 text-sm">Farm Area:</span>
+                    <span class="font-bold text-900">{{ farmer.farmArea }} Hectares</span>
                 </div>
-                <div class="flex justify-content-between align-items-start py-2">
-                    <span class="text-500 text-sm">Crop Types:</span>
+                <div class="flex justify-content-between align-items-start py-3">
+                    <span class="text-600 text-sm">Crop Specialties:</span>
                     <div class="flex flex-wrap gap-1">
                         @for (type of farmer.farmTypes; track type) {
                         <p-tag [value]="type" severity="info" [rounded]="true"></p-tag>
@@ -60,47 +51,26 @@
             </div>
         </div>
 
-        <!-- Contact Details -->
         <div class="col-12 md:col-6">
-            <div class="surface-ground p-4 border-round-xl border-1 border-200 h-full">
-                <h3 class="mt-0 text-base text-600 flex align-items-center gap-2 mb-4">
-                    <i class="pi pi-phone"></i> Contact Details
+            <div class="bg-gray-50 p-4 border-round-xl border-1 border-200 h-full">
+                <h3 class="mt-0 text-sm font-bold text-500 uppercase tracking-wider flex align-items-center gap-2 mb-4">
+                    <i class="pi pi-phone text-green-500"></i> Contact Details
                 </h3>
-                <div class="flex justify-content-between py-2 border-bottom-1 border-100">
-                    <span class="text-500 text-sm">Email:</span>
-                    <span class="font-semibold text-800">{{ farmer.email }}</span>
+                <div class="flex justify-content-between py-3 border-bottom-1 border-100">
+                    <span class="text-600 text-sm">Email:</span>
+                    <span class="font-bold text-900">{{ farmer.email }}</span>
                 </div>
-                <div class="flex justify-content-between py-2 border-bottom-1 border-100">
-                    <span class="text-500 text-sm">Phone:</span>
-                    <span class="font-semibold text-800">{{ farmer.phoneNumber }}</span>
-                </div>
-                <div class="flex justify-content-between py-2">
-                    <span class="text-500 text-sm">Joined On:</span>
-                    <span class="font-semibold text-800">{{ farmer.createdAt | date:'longDate' }}</span>
+                <div class="flex justify-content-between py-3">
+                    <span class="text-600 text-sm">Phone Number:</span>
+                    <span class="font-bold text-900">{{ farmer.phoneNumber }}</span>
                 </div>
             </div>
         </div>
 
-        <!-- System Status -->
         <div class="col-12">
-            <div class="surface-ground p-4 border-round-xl border-1 border-200">
-                <h3 class="mt-0 text-base text-600 flex align-items-center gap-2 mb-4">
-                    <i class="pi pi-shield"></i> Safety & Status
-                </h3>
-                <div class="flex justify-content-around text-center">
-                    <div class="flex flex-column">
-                        <span class="text-xl font-bold" [class]="farmer.active ? 'text-green-600' : 'text-700'">
-                            {{ farmer.active ? 'ACTIVE' : 'INACTIVE' }}
-                        </span>
-                        <span class="text-xs text-400 uppercase font-bold mt-1" style="letter-spacing: 0.05em;">Network
-                            Status</span>
-                    </div>
-                    <div class="flex flex-column">
-                        <span class="text-xl font-bold text-700">{{ farmer.verified ? 'HIGH' : 'LOW' }}</span>
-                        <span class="text-xs text-400 uppercase font-bold mt-1" style="letter-spacing: 0.05em;">Trust
-                            Index</span>
-                    </div>
-                </div>
+            <div class="bg-green-50 p-3 border-round-lg border-1 border-green-100 text-center">
+                <span class="text-green-600 text-xs font-bold uppercase tracking-widest mr-2">Member Since:</span>
+                <span class="text-green-900 font-bold text-sm">{{ farmer.createdAt | date:'longDate' }}</span>
             </div>
         </div>
     </div>

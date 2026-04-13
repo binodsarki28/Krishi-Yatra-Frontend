@@ -7,7 +7,6 @@ export const routes: Routes = [
         path: '',
         loadComponent: () =>
             import('./components/landing/landing').then((l) => l.LandingComponent),
-        canActivate: [userGuard],
     },
     {
         path: 'stocks',
@@ -36,6 +35,13 @@ export const routes: Routes = [
             import('./components/guide/guide').then((m) => m.GuideComponent),
         canActivate: [userGuard],
         data: { breadcrumb: 'User Guide' }
+    },
+    {
+        path: 'contact',
+        loadComponent: () =>
+            import('./components/contact/contact').then((m) => m.Contact),
+        canActivate: [userGuard],
+        data: { breadcrumb: 'Contact Us' }
     },
     {
         path: 'order',

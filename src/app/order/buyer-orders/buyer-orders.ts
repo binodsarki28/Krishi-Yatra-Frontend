@@ -174,4 +174,18 @@ export class BuyerOrdersComponent implements OnInit {
   viewStockDetail(slug: string) {
     this.router.navigate(['/stock-detail', slug]);
   }
+
+  isConflictAllowed(order: IOrderResponse): boolean {
+    if (order.orderStatus !== 'DELIVERED') return false;
+    
+    const targetDateStr = order.deliveredAt || order.createdAt;
+    if (!targetDateStr) return false;
+
+    const targetDate = new Date(targetDateStr);
+    const now = new Date();
+    const msPerDay = 1000 * 60 * 60 * 24;
+    const diffDays = (now.getTime() - targetDate.getTime()) / msPerDay;
+
+    return diffDays <= 5;
+  }
 }

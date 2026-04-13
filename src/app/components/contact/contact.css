@@ -1,0 +1,39 @@
+.contact-page {
+    min-height: calc(100vh - 5rem);
+}
+
+.surface-overlay-alpha {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.brand-overlay {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+:host ::ng-deep .p-inputtext,
+:host ::ng-deep .p-inputtextarea {
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: none !important;
+}
+
+:host ::ng-deep .p-inputtext:focus,
+:host ::ng-deep .p-inputtextarea:focus {
+    border-color: var(--green-600) !important;
+    background: #ffffff !important;
+}
+
+:host ::ng-deep .p-button.p-button-success {
+    background: #16a34a !important;
+    border: none !important;
+}
+
+:host ::ng-deep .p-button.p-button-success:hover {
+    background: #15803d !important;
+}

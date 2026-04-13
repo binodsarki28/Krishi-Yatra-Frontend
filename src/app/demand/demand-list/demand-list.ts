@@ -40,6 +40,7 @@ export class DemandListComponent implements OnInit {
   page = 0;
   size = 6;
   totalElements = 0;
+  hasLoaded = false;
 
   categories: any[] = [];
   subCategories: any[] = [];
@@ -61,6 +62,9 @@ export class DemandListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // Skip API calls during SSR — no JWT token available on the server
+    if (!isPlatformBrowser(this.platformId)) return;
+
     this.loadCategories();
     // Default open status only for marketplace demands
     if (this.mode === 'all') {
@@ -75,7 +79,7 @@ export class DemandListComponent implements OnInit {
     if (reset) {
         this.page = 0;
         this.demands = [];
-        this.loading = true;
+        this.loading = isPlatformBrowser(this.platformId);
         this.hasMore = true;
     } else {
         if (!this.hasMore) return;
@@ -105,12 +109,14 @@ export class DemandListComponent implements OnInit {
 
         this.loading = false;
         this.loadingMore = false;
+        this.hasLoaded = true;
         this.cdr.detectChanges();
       },
       error: (err) => {
         this.toastService.errorResponse(err);
         this.loading = false;
         this.loadingMore = false;
+        this.hasLoaded = true;
         this.cdr.detectChanges();
       }
     });

@@ -24,7 +24,7 @@ import { NEPAL_DATA, NepalProvince, NepalDistrict } from '../../address/nepal-da
     CommonModule, FormsModule, ReactiveFormsModule,
     InputTextModule, ButtonModule, PasswordModule,
     ProgressSpinnerModule, SelectModule,
-    ConfirmDialogModule, NgOptimizedImage
+    ConfirmDialogModule,
   ],
   providers: [ConfirmationService],
   templateUrl: './profile.html',
@@ -180,37 +180,53 @@ export class ProfileComponent implements OnInit {
 
   get isFarmer() { return this.accountService.hasRole('FARMER'); }
   get isFarmerVerified() { return this.accountService.isRoleVerified('FARMER'); }
+  get hasFarmerApplied() { return !!this.accountService.getStatusMessage('FARMER'); }
 
   get isBuyer() { return this.accountService.hasRole('BUYER'); }
   get isBuyerVerified() { return this.accountService.isRoleVerified('BUYER'); }
+  get hasBuyerApplied() { return !!this.accountService.getStatusMessage('BUYER'); }
 
   get isDelivery() { return this.accountService.hasRole('DELIVERY'); }
   get isDeliveryVerified() { return this.accountService.isRoleVerified('DELIVERY'); }
+  get hasDeliveryApplied() { return !!this.accountService.getStatusMessage('DELIVERY'); }
 
   switchTab(tab: string) {
+    const statusF = this.accountService.getStatusMessage('FARMER');
+    const statusB = this.accountService.getStatusMessage('BUYER');
+    const statusD = this.accountService.getStatusMessage('DELIVERY');
+
     if (tab === 'farmer-dashboard') {
-      if (!this.isFarmer) { this.router.navigate(['/farmer/register']); return; }
-      else if (!this.isFarmerVerified) {
-        this.toastService.warningResponse(this.accountService.getStatusMessage('FARMER') || 'Your Farmer account is under verification.');
+      if (!this.isFarmer || (!this.isFarmerVerified && !statusF)) {
+        this.router.navigate(['/farmer/register']);
         return;
       }
-      else { this.router.navigate(['/farmer/dashboard']); return; }
+      else if (!this.isFarmerVerified) {
+        this.toastService.warningResponse(statusF || 'Your Farmer account is under verification.');
+        return;
+      }
+      else { this.router.navigate(['/farmer']); return; }
     }
     if (tab === 'buyer-dashboard') {
-      if (!this.isBuyer) { this.router.navigate(['/buyer/register']); return; }
-      else if (!this.isBuyerVerified) {
-        this.toastService.warningResponse(this.accountService.getStatusMessage('BUYER') || 'Your Buyer account is under verification.');
+      if (!this.isBuyer || (!this.isBuyerVerified && !statusB)) {
+        this.router.navigate(['/buyer/register']);
         return;
       }
-      else { this.router.navigate(['/buyer/dashboard']); return; }
+      else if (!this.isBuyerVerified) {
+        this.toastService.warningResponse(statusB || 'Your Buyer account is under verification.');
+        return;
+      }
+      else { this.router.navigate(['/buyer']); return; }
     }
     if (tab === 'delivery-dashboard') {
-      if (!this.isDelivery) { this.router.navigate(['/delivery/register']); return; }
-      else if (!this.isDeliveryVerified) {
-        this.toastService.warningResponse(this.accountService.getStatusMessage('DELIVERY') || 'Your Linker account is under verification.');
+      if (!this.isDelivery || (!this.isDeliveryVerified && !statusD)) {
+        this.router.navigate(['/delivery/register']);
         return;
       }
-      else { this.router.navigate(['/delivery/dashboard']); return; }
+      else if (!this.isDeliveryVerified) {
+        this.toastService.warningResponse(statusD || 'Your Linker account is under verification.');
+        return;
+      }
+      else { this.router.navigate(['/delivery']); return; }
     }
     this.activeTab = tab;
     if (tab === 'address') {
@@ -345,7 +361,7 @@ export class ProfileComponent implements OnInit {
         this.profilePreview = reader.result as string;
       };
       reader.readAsDataURL(file);
-      this.toastService.successResponse({ message: 'Profile picture selected! Click "Save Changes" to apply.' });
+      this.toastService.successResponse({ message: 'Profile picture added successfully.' });
     }
   }
 

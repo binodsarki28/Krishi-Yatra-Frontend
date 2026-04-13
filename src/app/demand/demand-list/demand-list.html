@@ -1,13 +1,20 @@
 <div class="fadein animation-duration-300 w-full">
     <!-- Header/Filter Bar -->
-    <div class="flex flex-column md:flex-row align-items-center justify-content-between mb-4 gap-3 bg-white p-3 border-round-xl border-1 border-200 shadow-1">
+    <div class="flex flex-column md:flex-row align-items-center justify-content-between mb-4 gap-3 surface-card p-4 border-round-xl border-1 border-200 shadow-1">
         <div class="flex align-items-center gap-3">
-            <div class="flex align-items-center justify-content-center border-round-lg bg-primary-50 text-primary w-2rem h-2rem">
-                <i class="pi pi-megaphone"></i>
+            <div class="flex align-items-center justify-content-center border-round-lg" style="width: 40px; height: 40px; background: linear-gradient(135deg, #064e3b, #059669);">
+                <i class="pi pi-megaphone text-white" style="font-size: 16px;"></i>
             </div>
-            <h2 class="m-0 text-lg font-bold text-900">
-                {{ mode === 'my' ? 'My Demands' : (mode === 'fulfilled' ? 'Fulfilled Requests' : 'Market Demands') }}
-            </h2>
+            <div>
+                @if (mode !== 'fulfilled') {
+                <h2 class="m-0 text-xl font-bold text-900" style="letter-spacing: -0.3px;">
+                    {{ mode === 'my' ? 'My Demands' : 'Market Demands' }}
+                </h2>
+                }
+                <p class="m-0 text-xs text-500 mt-1 font-medium">
+                    {{ mode === 'my' ? 'Manage your posted demand requests' : (mode === 'fulfilled' ? 'Browse through the demands you have successfully accepted and fulfilled.' : 'Browse active buyer requirements') }}
+                </p>
+            </div>
         </div>
 
         @if (mode === 'all') {
@@ -30,137 +37,150 @@
         <div class="flex flex-column gap-3">
             @for (i of [1,2,3,4,5,6]; track i) {
                 <div class="col-12 p-0">
-                    <p-card class="w-full border-round-xl overflow-hidden shadow-1 border-none bg-white">
+                    <div class="surface-card border-round-xl p-4 border-1 border-200 shadow-1">
                         <div class="flex flex-column md:flex-row gap-4 align-items-center">
-                            <p-skeleton width="20%" height="3rem"></p-skeleton>
-                            <p-skeleton width="40%" height="3rem"></p-skeleton>
-                            <p-skeleton width="30%" height="3rem"></p-skeleton>
+                            <p-skeleton shape="circle" size="3rem"></p-skeleton>
+                            <div class="flex flex-column gap-2 flex-1">
+                                <p-skeleton width="60%" height="1.2rem"></p-skeleton>
+                                <p-skeleton width="40%" height="0.8rem"></p-skeleton>
+                            </div>
+                            <p-skeleton width="120px" height="2.5rem"></p-skeleton>
                         </div>
-                    </p-card>
+                    </div>
                 </div>
             }
         </div>
         }
         
         @if (!loading && demands.length > 0) {
-        <div class="flex flex-column gap-3 mt-2">
+        <div class="flex flex-column gap-3">
             @for (demand of demands; track demand.demandId; let i = $index) {
                 <div class="col-12 p-0" style="animation: fadein 0.3s forwards;" [style.animation-delay]="(i % 10) * 0.05 + 's'">
-                    <div class="surface-card bg-white border-round-xl shadow-1 hover:shadow-3 transition-all transition-duration-200 border-1 border-200 flex flex-column md:flex-row align-items-center justify-content-between p-4 gap-4">
+                    <div class="surface-card border-round-xl shadow-1 hover:shadow-3 transition-all transition-duration-200 border-1 border-200 overflow-hidden">
+                        <!-- Green accent bar at top -->
+                        <div style="height: 3px; background: linear-gradient(90deg, #059669, #10b981);"></div>
                         
-                        <!-- Section 1: Identity & Description -->
-                        <div class="flex flex-column w-full md:w-4 gap-2">
-                            <div class="flex align-items-center gap-3">
-                                <div class="flex align-items-center justify-content-center bg-green-50 text-green-600 border-round-circle shadow-1 w-3rem h-3rem flex-shrink-0">
-                                    <i class="pi pi-box text-xl"></i>
+                        <div class="flex flex-column md:flex-row align-items-center justify-content-between p-3 gap-3">
+                            <!-- Section 1: Identity & Description -->
+                            <div class="flex flex-column w-full md:w-4 gap-2">
+                                <div class="flex align-items-center gap-3">
+                                    <div class="flex align-items-center justify-content-center border-round-lg shadow-1 flex-shrink-0" style="width: 38px; height: 38px; background: linear-gradient(135deg, #ecfdf5, #d1fae5);">
+                                        <i class="pi pi-box text-green-600" style="font-size: 16px;"></i>
+                                    </div>
+                                    <div class="flex flex-column">
+                                        <span class="font-bold text-lg text-900 line-height-2">{{demand.categoryName}}</span>
+                                        <span class="text-sm font-medium text-500">{{demand.subCategoryName}}</span>
+                                    </div>
                                 </div>
-                                <div class="flex flex-column">
-                                    <span class="font-bold text-lg text-900 line-height-2">{{demand.categoryName}}</span>
-                                    <span class="text-sm font-medium text-500">{{demand.subCategoryName}}</span>
+                                @if (demand.description) {
+                                <div class="text-sm text-600 line-clamp-2 mt-1 pl-1" style="border-left: 2px solid #d1fae5; padding-left: 12px;" [title]="demand.description">
+                                    "{{demand.description}}"
                                 </div>
-                            </div>
-                            @if (demand.description) {
-                            <div class="text-sm text-600 mt-2 line-clamp-2" [title]="demand.description">
-                                "{{demand.description}}"
-                            </div>
-                            } @else {
-                            <div class="text-sm text-400 mt-2 italic">
-                                No additional notes provided.
-                            </div>
-                            }
-                        </div>
-                        
-                        <!-- Section 2: Metrics -->
-                        <div class="flex w-full md:w-4 gap-5 align-items-center justify-content-start md:justify-content-center border-y-1 md:border-y-none md:border-x-1 surface-border py-3 md:py-0 md:px-4">
-                            <div class="flex flex-column">
-                                <span class="text-xs text-500 uppercase font-bold tracking-wide mb-1">Quantity</span>
-                                <div class="flex align-items-baseline gap-1">
-                                    <span class="text-xl font-bold text-900">{{demand.quantity}}</span>
-                                    <span class="text-sm font-medium text-600">units</span>
+                                } @else {
+                                <div class="text-sm text-400 mt-1 italic pl-1">
+                                    No additional notes provided.
                                 </div>
+                                }
                             </div>
-                            <div class="flex flex-column">
-                                <span class="text-xs text-500 uppercase font-bold tracking-wide mb-1">Target Price</span>
-                                <span class="text-xl font-bold text-primary">Rs. {{demand.expectedPricePerUnit | number:'1.0-2'}}</span>
-                            </div>
-                        </div>
-
-                        <!-- Section 3: User Details & Actions -->
-                        <div class="flex flex-column w-full md:w-3 gap-3 justify-content-center">
-                            <!-- Buyer Information for Open Demands -->
-                            @if (mode === 'all') {
-                            <div class="flex align-items-center gap-3 bg-primary-50 p-2 border-round-lg">
-                                <i class="pi pi-user text-primary border-round-circle bg-white shadow-1 p-2"></i>
-                                <div class="flex flex-column">
-                                    <span class="text-sm font-bold text-900">{{demand.buyerName}}</span>
-                                    <span class="text-xs font-semibold text-600 mt-1"><i class="pi pi-phone text-xs mr-1"></i>{{demand.buyerPhone}}</span>
-                                </div>
-                            </div>
-                            }
                             
-                            <!-- Fulfilled By Information (Only for 'My Demands' view if accepted) -->
-                            @if (mode === 'my' && demand.acceptedFarmerName) {
-                            <div class="flex align-items-center gap-3 bg-green-50 p-2 border-round-lg">
-                                <i class="pi pi-check-circle text-green-600 border-round-circle bg-white shadow-1 p-2"></i>
-                                <div class="flex flex-column">
-                                    <span class="text-xs text-500 uppercase font-bold">Fulfilled By</span>
-                                    <span class="text-sm font-bold text-900 mt-1">{{demand.acceptedFarmerName}}</span>
+                            <!-- Section 2: Metrics -->
+                            <div class="flex w-full md:w-auto gap-3 align-items-center justify-content-start md:justify-content-center py-2 md:py-0 md:px-4">
+                                <div class="flex flex-column align-items-center surface-50 border-round-lg px-3 py-2" style="min-width: 80px;">
+                                    <span class="text-xs text-500 uppercase font-bold mb-1" style="letter-spacing: 0.5px;">Quantity</span>
+                                    <div class="flex align-items-baseline gap-1">
+                                        <span class="text-xl font-bold text-900">{{demand.quantity}}</span>
+                                        <span class="text-xs font-medium text-500">units</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-column align-items-center surface-50 border-round-lg px-3 py-2" style="min-width: 80px;">
+                                    <span class="text-xs text-500 uppercase font-bold mb-1" style="letter-spacing: 0.5px;">Price</span>
+                                    <span class="text-xl font-bold" style="color: #059669;">Rs. {{demand.expectedPricePerUnit | number:'1.0-2'}}</span>
                                 </div>
                             </div>
-                            }
 
-                            <!-- Actions -->
-                            @if (mode === 'all' && accountService.isRoleVerified('FARMER')) {
-                            <div class="w-full">
-                                <button pButton pRipple icon="pi pi-check" label="Accept & List to Fulfill" 
-                                    class="p-button-success border-round-lg w-full font-bold shadow-1" 
-                                    (click)="acceptDemand(demand)"></button>
+                            <!-- Section 3: User Details & Actions -->
+                            <div class="flex flex-column w-full md:w-3 gap-2 justify-content-center">
+                                <!-- Buyer Information for Open Demands -->
+                                @if (mode === 'all') {
+                                <div class="flex align-items-center gap-2 p-2 border-round-lg" style="background: linear-gradient(135deg, #f0fdf4, #ecfdf5);">
+                                    <div class="flex align-items-center justify-content-center border-round-lg bg-white shadow-1 flex-shrink-0" style="width: 32px; height: 32px;">
+                                        <i class="pi pi-user text-green-600" style="font-size: 13px;"></i>
+                                    </div>
+                                    <div class="flex flex-column">
+                                        <span class="text-sm font-bold text-900">{{demand.buyerName}}</span>
+                                        <span class="text-xs font-medium text-600 mt-1"><i class="pi pi-phone text-xs mr-1"></i>{{demand.buyerPhone}}</span>
+                                    </div>
+                                </div>
+                                }
+                                
+                                <!-- Fulfilled By Information (Only for 'My Demands' view if accepted) -->
+                                @if (mode === 'my' && demand.acceptedFarmerName) {
+                                <div class="flex align-items-center gap-3 p-3 border-round-xl" style="background: linear-gradient(135deg, #f0fdf4, #ecfdf5);">
+                                    <div class="flex align-items-center justify-content-center border-round-lg bg-white shadow-1 flex-shrink-0" style="width: 36px; height: 36px;">
+                                        <i class="pi pi-check-circle text-green-600" style="font-size: 14px;"></i>
+                                    </div>
+                                    <div class="flex flex-column">
+                                        <span class="text-xs text-500 uppercase font-bold">Fulfilled By</span>
+                                        <span class="text-sm font-bold text-900 mt-1">{{demand.acceptedFarmerName}}</span>
+                                    </div>
+                                </div>
+                                }
+
+                                <!-- Actions -->
+                                @if (mode === 'all' && accountService.isRoleVerified('FARMER')) {
+                                <div class="w-full">
+                                    <button pButton pRipple icon="pi pi-check" label="Accept & List to Fulfill" 
+                                        class="p-button-success border-round-lg w-full font-bold shadow-1" style="padding: 0.6rem 1rem;"
+                                        (click)="acceptDemand(demand)"></button>
+                                </div>
+                                }
+                                @if (mode === 'my' && demand.status === 'OPEN') {
+                                <div class="w-full">
+                                    <button pButton pRipple icon="pi pi-times" label="Cancel Demand" 
+                                        class="p-button-danger p-button-outlined border-round-lg w-full font-bold bg-white" style="padding: 0.6rem 1rem;"
+                                        (click)="cancelDemand(demand.demandId)"></button>
+                                </div>
+                                }
                             </div>
-                            }
-                            @if (mode === 'my') {
-                            <div class="w-full">
-                                <button pButton pRipple icon="pi pi-times" label="Cancel Demand" 
-                                    class="p-button-danger p-button-outlined border-round-lg w-full font-bold bg-white" 
-                                    (click)="cancelDemand(demand.demandId)"></button>
-                            </div>
-                            }
                         </div>
                     </div>
                 </div>
             }
         </div>
-
-        <!-- Lazy Loading Skeletons -->
-        @if (loadingMore) {
-            <div class="flex flex-column gap-3 mt-2">
-                @for (i of [1,2,3]; track i) {
-                    <div class="col-12 p-0">
-                        <p-card class="w-full border-round-xl overflow-hidden shadow-1 border-none bg-white">
-                            <div class="flex flex-column md:flex-row gap-4 align-items-center">
-                                <p-skeleton width="20%" height="3rem"></p-skeleton>
-                                <p-skeleton width="40%" height="3rem"></p-skeleton>
-                                <p-skeleton width="30%" height="3rem"></p-skeleton>
-                            </div>
-                        </p-card>
-                    </div>
-                }
-            </div>
-        }
-        }
-        
-        @if (!loading && !loadingMore && demands.length === 0) {
+        } @else if (hasLoaded && !loading && !loadingMore && demands.length === 0) {
             <!-- Empty State -->
-            <div class="flex flex-column align-items-center justify-content-center p-8 bg-white border-round-3xl shadow-1">
-                <i class="pi pi-inbox text-7xl text-300 mb-4"></i>
-                <h2 class="text-900 m-0">No demands found</h2>
+            <div class="flex flex-column align-items-center justify-content-center p-8 surface-card border-round-xl shadow-1 border-1 border-200">
+                <div class="flex align-items-center justify-content-center border-round-full mb-4" style="width: 80px; height: 80px; background: linear-gradient(135deg, #f0fdf4, #ecfdf5);">
+                    <i class="pi pi-inbox text-4xl text-green-300"></i>
+                </div>
+                <h2 class="text-900 m-0 font-bold text-xl">No demands found</h2>
                 @if (mode === 'my') {
-                <span class="text-500 mt-2 mb-4">Why not create a new demand to find sellers?</span>
+                <span class="text-500 mt-2 mb-4 text-sm">Why not create a new demand to find sellers?</span>
                 }
                 @if (mode === 'all') {
-                <span class="text-500 mt-2 mb-4">Check back later for new buyer requests.</span>
+                <span class="text-500 mt-2 mb-4 text-sm">Check back later for new buyer requests.</span>
                 }
                 <button pButton label="Refresh Market" icon="pi pi-refresh" 
-                    class="p-button-outlined border-round-3xl px-6" (click)="onFilter()"></button>
+                    class="p-button-outlined p-button-success border-round-xl px-5 font-bold" (click)="onFilter()"></button>
+            </div>
+        }
+
+        @if (loadingMore) {
+            <div class="flex flex-column gap-3 mt-3">
+                @for (i of [1,2,3]; track i) {
+                    <div class="col-12 p-0">
+                        <div class="surface-card border-round-xl p-4 border-1 border-200 shadow-1">
+                            <div class="flex flex-column md:flex-row gap-4 align-items-center">
+                                <p-skeleton shape="circle" size="3rem"></p-skeleton>
+                                <div class="flex flex-column gap-2 flex-1">
+                                    <p-skeleton width="60%" height="1.2rem"></p-skeleton>
+                                    <p-skeleton width="40%" height="0.8rem"></p-skeleton>
+                                </div>
+                                <p-skeleton width="120px" height="2.5rem"></p-skeleton>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         }
     </div>

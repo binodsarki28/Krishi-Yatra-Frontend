@@ -1,16 +1,20 @@
 <div class="guide-page" style="font-family: 'Outfit', sans-serif;">
 
   <!-- Hero Section -->
-  <div class="guide-hero flex flex-column align-items-center justify-content-center text-center px-4 py-6" 
-       style="background: linear-gradient(135deg, #064e3b, #059669); color: white; min-height: 260px;">
-    <i class="pi pi-compass text-6xl mb-3 text-green-200"></i>
+  <div class="guide-hero flex flex-column align-items-center justify-content-center text-center px-4 pt-8 pb-6" 
+       style="background: linear-gradient(135deg, #064e3b, #059669); color: white; min-height: 320px;">
+    <div class="inline-flex bg-white border-round-xl shadow-3 overflow-hidden mb-4">
+        <img src="/logo.png" alt="Logo" style="height: 120px; width: auto; object-fit: contain; display: block;">
+    </div>
     <h1 class="m-0 text-4xl md:text-5xl font-black" style="letter-spacing: -1px;">How to Use KrishiYatra</h1>
     <p class="m-0 mt-3 text-xl text-white-alpha-80 font-medium" style="max-width: 600px;">
       Your complete guide to buying, selling, and delivering fresh produce — from farm to table.
     </p>
     <div class="flex gap-3 mt-4">
-      <p-button label="Browse Marketplace" icon="pi pi-shopping-bag" (onClick)="goToStocks()" class="bg-white text-green-800 border-none font-bold border-round-xl px-4"></p-button>
-      <p-button label="My Profile" icon="pi pi-user" (onClick)="goToProfile()" [outlined]="true" class="border-white-alpha-50 text-white font-bold border-round-xl px-4"></p-button>
+      <p-button label="Browse Marketplace" icon="pi pi-shopping-bag" (onClick)="goToStocks()" 
+                styleClass="p-button-lg bg-white text-green-800 border-none font-bold border-round-xl px-4"></p-button>
+      <p-button label="My Profile" icon="pi pi-user" (onClick)="goToProfile()" [outlined]="true" 
+                styleClass="p-button-lg border-white-alpha-50 text-white font-bold border-round-xl px-4"></p-button>
     </div>
   </div>
 
