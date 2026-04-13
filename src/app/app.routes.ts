@@ -7,7 +7,6 @@ export const routes: Routes = [
         path: '',
         loadComponent: () =>
             import('./components/landing/landing').then((l) => l.LandingComponent),
-        canActivate: [userGuard],
     },
     {
         path: 'stocks',

@@ -178,6 +178,7 @@ export class AdminDashboardComponent implements OnInit {
                     grid: { display: false }
                 },
                 y: {
+                    min: 0,
                     ticks: {
                         color: textColorSecondary,
                         stepSize: 1

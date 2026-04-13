@@ -49,7 +49,10 @@ export class RegisterDeliveryComponent implements OnInit {
       vehicleType: [null, [Validators.required]],
       vehicleBrand: ['', [Validators.required]],
       numberPlate: ['', [Validators.required]],
-      licenseNumber: ['', [Validators.required]],
+      licenseNumber: ['', [
+        Validators.required, 
+        Validators.pattern('^\\d{2}-\\d{2}-\\d{10}$')
+      ]],
       vehiclePhoto: [''],
       licensePhoto: ['']
     });

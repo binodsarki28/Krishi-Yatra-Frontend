@@ -165,6 +165,7 @@ export class BuyerDashboard implements OnInit {
           grid: { display: false }
         },
         y: {
+          min: 0,
           ticks: {
             color: textColorSecondary,
             callback: (value: any) => 'NPR ' + value

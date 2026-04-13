@@ -58,7 +58,8 @@
                     placeholder="Your license ID" class="w-full" />
                 @if(deliveryForm.controls['licenseNumber']?.invalid && deliveryForm.controls['licenseNumber']?.touched) {
                 <small class="p-error block font-bold text-red-500 text-xs mt-1">
-                    License is required.
+                    @if(deliveryForm.controls['licenseNumber']?.errors?.['required']) { License is required. }
+                    @if(deliveryForm.controls['licenseNumber']?.errors?.['pattern']) { Invalid format. Expected: 01-01-0012345678 }
                 </small>
                 }
             </div>

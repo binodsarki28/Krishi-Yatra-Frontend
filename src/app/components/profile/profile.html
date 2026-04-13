@@ -307,7 +307,7 @@
                            [loading]="addressSubmitting" (onClick)="deleteAddress()" 
                            styleClass="p-button-danger border-round-xl font-bold flex-1 p-3"></p-button>
                  <p-button label="Save Address" icon="pi pi-save" [loading]="addressSubmitting" (onClick)="updateAddress()" 
-                           [disabled]="addressForm.invalid"
+                           [disabled]="addressForm.invalid || !addressForm.dirty"
                            styleClass="p-button-success border-round-xl font-bold flex-1 p-3"></p-button>
                </div>
             </form>
@@ -354,7 +354,7 @@
                     }
                 </div>
                 <div class="border-top-1 border-200 pt-4">
-                  <p-button label="Update Password" icon="pi pi-lock" type="submit" [loading]="loading" severity="success" [disabled]="passwordForm.invalid" styleClass="w-full p-3 border-round-xl font-bold text-lg"></p-button>
+                  <p-button label="Update Password" icon="pi pi-lock" type="submit" [loading]="loading" severity="success" [disabled]="passwordForm.invalid || !passwordForm.dirty" styleClass="w-full p-3 border-round-xl font-bold text-lg"></p-button>
                 </div>
             </form>
         </div>
