@@ -28,7 +28,7 @@
             </div>
             <div class="col-12 md:col-3">
                 <label class="block text-xs font-bold text-500 mb-1 ml-1">ORDER STATUS</label>
-                <p-select [options]="statusOptions" [(ngModel)]="selectedStatus" 
+                <p-select [options]="statusOptions" [(ngModel)]="selectedStatus"
                     placeholder="All Status" styleClass="w-full border-round-lg text-sm"
                     (onChange)="onFilterChange()" [showClear]="true"></p-select>
             </div>
@@ -42,7 +42,7 @@
 
     <!-- Table (Official PrimeNG styling) -->
     <div class="surface-card border-round-xl border-1 border-200 shadow-1 flex flex-column overflow-hidden" style="min-height: calc(100vh - 210px);">
-        <p-table [value]="orders" [loading]="loading" responsiveLayout="scroll" 
+        <p-table [value]="orders" [loading]="loading" responsiveLayout="scroll"
             styleClass="p-datatable-sm p-datatable-striped flex-1" [rowHover]="true"
             [scrollable]="true" scrollHeight="flex">
             <ng-template pTemplate="header">
@@ -70,7 +70,7 @@
                     <td class="text-sm font-medium">{{ order.orderQuantity }} Units</td>
                     <td class="text-sm font-bold text-green-700">Rs. {{ order.totalPrice | number }}</td>
                     <td>
-                        <p-tag [value]="getStatusLabel(order.orderStatus)" 
+                        <p-tag [value]="getStatusLabel(order.orderStatus)"
                             [severity]="getStatusSeverity(order.orderStatus)" [rounded]="true" size="small"></p-tag>
                     </td>
                     <td class="text-xs text-500">{{ order.createdAt | date:'medium' }}</td>
@@ -86,20 +86,20 @@
                         <div class="flex gap-1">
                             <!-- Track Button: Now visible after delivery too -->
                             @if (order.orderStatus !== 'CANCELLED' && order.orderStatus !== 'REJECTED') {
-                                <p-button icon="pi pi-map-marker" [routerLink]="['/buyer/orders/track', order.orderId]" 
+                                <p-button icon="pi pi-map-marker" [routerLink]="['/buyer/orders/track', order.orderId]"
                                     severity="info" [text]="true" [rounded]="true" size="small" pTooltip="Track Journey"></p-button>
                             }
 
                             <!-- Conflict Button: Only for Delivered orders within 5 days -->
                             @if (isConflictAllowed(order)) {
-                                <p-button icon="pi pi-exclamation-triangle" (onClick)="openConflictDialog(order.orderId)" 
+                                <p-button icon="pi pi-exclamation-triangle" (onClick)="openConflictDialog(order.orderId)"
                                     severity="danger" [text]="true" [rounded]="true" size="small" pTooltip="Report Conflict"></p-button>
                             }
 
-                            <p-button icon="pi pi-eye" severity="secondary" [text]="true" [rounded]="true" size="small" 
+                            <p-button icon="pi pi-eye" severity="secondary" [text]="true" [rounded]="true" size="small"
                                 pTooltip="Product Detail" (onClick)="viewStockDetail(order.stockSlug)"></p-button>
 
-                            <p-button icon="pi pi-file" severity="primary" [text]="true" [rounded]="true" size="small" 
+                            <p-button icon="pi pi-file" severity="primary" [text]="true" [rounded]="true" size="small"
                                 pTooltip="Order Details" [routerLink]="['/order/detail', order.orderId]"></p-button>
                         </div>
                     </td>
@@ -130,11 +130,11 @@
 </div>
 
 <!-- Conflict Message Dialog -->
-<p-dialog header="Report Conflict" [(visible)]="showConflictDialog" [modal]="true" [style]="{width: '450px'}" 
+<p-dialog header="Report Conflict" [(visible)]="showConflictDialog" [modal]="true" [style]="{width: '450px'}"
     [draggable]="false" [resizable]="false" styleClass="border-round-xl">
     <div class="flex flex-column gap-3 py-2">
         <label class="font-semibold text-900">What is the issue with this order?</label>
-        <textarea rows="5" pTextarea [(ngModel)]="conflictMessage" placeholder="E.g. Product damaged, missing items, or delivery issue..." 
+        <textarea rows="5" pTextarea [(ngModel)]="conflictMessage" placeholder="E.g. Product damaged, missing items, or delivery issue..."
             class="w-full border-round-lg p-3 text-sm surface-ground border-1 border-200 focus:border-primary" style="resize: none;"></textarea>
         <div class="flex align-items-center gap-2 text-orange-500 bg-orange-50 p-2 border-round-lg">
             <i class="pi pi-info-circle"></i>
@@ -143,7 +143,7 @@
     </div>
     <ng-template pTemplate="footer">
         <p-button label="Cancel" [text]="true" severity="secondary" (onClick)="showConflictDialog = false" [disabled]="submittingConflict"></p-button>
-        <p-button label="Submit Report" icon="pi pi-send" severity="danger" (onClick)="submitConflict()" [loading]="submittingConflict" 
+        <p-button label="Submit Report" icon="pi pi-send" severity="danger" (onClick)="submitConflict()" [loading]="submittingConflict"
             [disabled]="!conflictMessage.trim()" styleClass="border-round-lg font-bold"></p-button>
     </ng-template>
 </p-dialog>

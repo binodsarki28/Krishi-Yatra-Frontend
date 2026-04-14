@@ -49,15 +49,15 @@ export class StockListComponent implements OnInit {
   stocks: IStockListResponse[] = [];
   categories: ICategoryResponse[] = [];
   subCategories: ISubCategoryResponse[] = [];
-  
+
   loading = true;
   loadingMore = false;
-  
+
   // Filters
   searchTerm: string = '';
   selectedCategoryId: number | null = null;
   selectedSubCategoryId: number | null = null;
-  
+
   // Pagination
   page = 0;
   size = 10;
@@ -132,7 +132,7 @@ export class StockListComponent implements OnInit {
           this.stocks = [...this.stocks, ...newStocks];
           this.hasMore = newStocks.length === this.size;
           if (this.hasMore) this.page++;
-          
+
           this.loading = false;
           this.loadingMore = false;
           this.cdr.markForCheck();
@@ -188,7 +188,7 @@ export class StockListComponent implements OnInit {
     const windowHeight = window.innerHeight;
     const dirtyHeight = document.documentElement.scrollHeight;
     const scrollPos = window.scrollY || document.documentElement.scrollTop;
-    
+
     // Load more when user is 100px from the absolute bottom
     if (windowHeight + scrollPos >= dirtyHeight - 100) {
       this.loadStocks();
@@ -207,6 +207,6 @@ export class StockListComponent implements OnInit {
   }
 
   orderNow(stock: IStockListResponse) {
-    this.router.navigate(['/order/create', stock.stockSlug]);
+    this.router.navigate(['/stock-detail', stock.stockSlug]);
   }
 }

@@ -64,7 +64,7 @@
                                    formControlName="password" placeholder="••••••••"
                                    class="w-full" [inputStyleClass]="'p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none'"></p-password>
                         @if (registerForm.controls['password']?.invalid && registerForm.controls['password']?.touched) {
-                            <small class="text-red-500 font-bold ml-1">Must be 8+ characters</small>
+                            <small class="text-red-500 font-bold ml-1">Password must be at least 8 characters and include uppercase, lowercase, a number, and a special character</small>
                         }
                     </div>
 

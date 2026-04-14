@@ -32,8 +32,8 @@
                         </div>
                         <div class="map-container overflow-hidden h-30rem">
                            @if (pickupLoc && dropLoc && mapVisible) {
-                               <app-map [pickupLocation]="pickupLoc" 
-                                        [dropLocation]="dropLoc" 
+                               <app-map [pickupLocation]="pickupLoc"
+                                        [dropLocation]="dropLoc"
                                         [pickerMode]="false"
                                         [drawRoute]="true"
                                         [initialCheckpoints]="orderForm.controls['checkpoints']?.value"
@@ -47,7 +47,7 @@
                                </div>
                            }
                         </div>
-                        
+
                         <div class="px-4 py-3 border-top-1 border-100">
                             <div class="grid">
                                 <div class="col-12 md:col-6">
@@ -156,7 +156,7 @@
                                 </label>
                                 <div class="p-3 border-1 border-200 border-round-xl bg-gray-50">
                                     <p class="m-0 mb-2 text-xs text-gray-500">
-                                        Add your preferred stops or landmarks along the path. 
+                                        Add your preferred stops or landmarks along the path.
                                     </p>
                                     <p-autocomplete formControlName="checkpoints"
                                         [multiple]="true"
@@ -172,7 +172,7 @@
                             <!-- Notes -->
                             <div class="field mb-4">
                                 <label class="block text-gray-600 font-bold mb-1 text-sm">
-                                    Additional Notes <span class="text-red-500">*</span>
+                                    Additional Notes (Mention clear address and any suggestion if you want.) <span class="text-red-500">*</span>
                                 </label>
                                 <textarea pTextarea formControlName="notes" rows="2"
                                     class="w-full p-2 border-round-xl border-1 border-gray-300 resize-none"
@@ -190,11 +190,11 @@
                                     <span class="text-gray-600 text-sm">Items Total</span>
                                     <span class="text-gray-800 font-medium">Rs. {{ (orderForm.controls['orderQuantity']?.value || 0) * stock.pricePerUnit | number:'1.2-2' }}</span>
                                 </div>
-                                
+
                                 <div class="flex justify-content-between align-items-center mb-2">
                                     <div class="flex align-items-center gap-1">
                                         <span class="text-gray-600 text-sm">Delivery Fee</span>
-                                        <i class="pi pi-question-circle text-gray-400 text-xs" 
+                                        <i class="pi pi-question-circle text-gray-400 text-xs"
                                            pTooltip="Based on distance ({{ deliveryDistance.toFixed(1) }} km) @ Rs. 5/km and Quantity ({{ orderForm.controls['orderQuantity']?.value || 0 }} kg) @ Rs. 2/kg."></i>
                                     </div>
                                     @if (deliveryFee > 0) {

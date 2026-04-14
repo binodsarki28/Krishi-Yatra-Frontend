@@ -97,9 +97,14 @@
                         <p-inputNumber formControlName="quantity" placeholder="Quantity"
                             class="w-full" inputClass="w-full border-round-lg text-sm" inputId="quantity"></p-inputNumber>
                     </div>
-                    @if (stockForm.controls['quantity']?.invalid && stockForm.controls['quantity']?.touched) {
-                        <small class="validation-error">Quantity must be at least 1</small>
+                  @if (stockForm.controls['quantity']?.touched) {
+                    @if (stockForm.controls['quantity']?.errors?.['required']) {
+                      <small class="validation-error">Quantity is required</small>
                     }
+                    @if (stockForm.controls['quantity']?.errors?.['min']) {
+                      <small class="validation-error">Quantity cannot be negative</small>
+                    }
+                  }
                 </div>
 
                 <div class="col-12 md:col-4 relative">
@@ -109,6 +114,14 @@
                         <p-inputNumber formControlName="pricePerUnit" placeholder="Price"
                             class="w-full" inputClass="w-full border-round-lg text-sm" inputId="price"></p-inputNumber>
                     </div>
+                  @if (stockForm.controls['pricePerUnit']?.touched) {
+                    @if (stockForm.controls['pricePerUnit']?.errors?.['required']) {
+                      <small class="validation-error">Price is required</small>
+                    }
+                    @if (stockForm.controls['pricePerUnit']?.errors?.['min']) {
+                      <small class="validation-error">Price cannot be negative</small>
+                    }
+                  }
                 </div>
 
                 <div class="col-12 md:col-4 relative">
@@ -118,6 +131,14 @@
                         <p-inputNumber formControlName="minQuantity" placeholder="Min Qty"
                             class="w-full" inputClass="w-full border-round-lg text-sm" inputId="minQuantity"></p-inputNumber>
                     </div>
+                  @if (stockForm.controls['minQuantity']?.touched) {
+                    @if (stockForm.controls['minQuantity']?.errors?.['required']) {
+                      <small class="validation-error">Minimum quantity is required</small>
+                    }
+                    @if (stockForm.controls['minQuantity']?.errors?.['min']) {
+                      <small class="validation-error">Minimum quantity cannot be negative</small>
+                    }
+                  }
                 </div>
 
                 <!-- Modern Multi-Photo Upload -->

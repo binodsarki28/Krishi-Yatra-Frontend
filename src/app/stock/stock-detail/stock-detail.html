@@ -1,8 +1,8 @@
 <div class="min-h-screen surface-ground py-4 px-4 md:px-8">
     <div class="mx-auto" style="max-width: 1200px;">
         <div class="mb-3">
-            <button pButton label="Back to Marketplace" icon="pi pi-arrow-left" 
-                class="p-button-text p-button-secondary font-semibold text-sm" 
+            <button pButton label="Back to Marketplace" icon="pi pi-arrow-left"
+                class="p-button-text p-button-secondary font-semibold text-sm"
                 [routerLink]="['/stocks']"></button>
         </div>
 
@@ -49,7 +49,7 @@
                         <div class="p-5 lg:p-6 flex flex-column h-full">
                             <!-- Badges -->
                             <div class="flex align-items-center gap-2 mb-3">
-                                <p-tag [value]="stock.quantity > 0 ? 'In Stock' : 'Out of Stock'" 
+                                <p-tag [value]="stock.quantity > 0 ? 'In Stock' : 'Out of Stock'"
                                        [severity]="stock.quantity > 0 ? 'success' : 'danger'"></p-tag>
                                 <p-tag [value]="stock.categoryName" severity="info" [rounded]="true"></p-tag>
                             </div>
@@ -101,20 +101,20 @@
 
                             <!-- Order Button -->
                             @if (stock.farmerUsername !== currentUserUsername) {
-                            <button pButton label="Place Order" icon="pi pi-shopping-bag" 
+                            <button pButton label="Place Order" icon="pi pi-shopping-bag"
                                 class="p-button-success w-full p-3 text-lg font-bold border-round-xl shadow-2 order-btn"
                                 [routerLink]="['/order/create', stock.stockSlug]"></button>
                             } @else {
                             <div class="p-3 bg-blue-50 border-round-xl border-1 border-blue-100 flex align-items-center gap-3">
                                 <i class="pi pi-info-circle text-blue-600"></i>
-                                <span class="text-blue-800 font-medium">This is your own product listing.</span>
+                                <span class="text-blue-800 font-medium">This is your own stock. You cannot order.</span>
                             </div>
                             }
                         </div>
                     </div>
                 </div>
             </div>
-        } 
+        }
         @else {
             <div class="flex flex-column align-items-center justify-content-center p-8">
                 <p-progressSpinner></p-progressSpinner>
