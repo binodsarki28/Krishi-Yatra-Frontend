@@ -12,3 +12,10 @@
     padding: 1rem;
     font-size: 0.875rem;
 }
+
+:host ::ng-deep .p-tooltip-text {
+    white-space: nowrap !important;
+    font-size: 12px;
+    padding: 6px 10px;
+}
+

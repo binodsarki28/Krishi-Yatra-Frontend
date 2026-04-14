@@ -29,6 +29,7 @@
 }
 /* Clean Overlay for Map Directions (Itinerary) */
 :host ::ng-deep .leaflet-routing-container {
+    display: none !important;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(8px);
     border-radius: 12px;

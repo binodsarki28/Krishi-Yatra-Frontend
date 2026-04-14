@@ -100,9 +100,16 @@
                             </div>
 
                             <!-- Order Button -->
+                            @if (stock.farmerUsername !== currentUserUsername) {
                             <button pButton label="Place Order" icon="pi pi-shopping-bag" 
                                 class="p-button-success w-full p-3 text-lg font-bold border-round-xl shadow-2 order-btn"
                                 [routerLink]="['/order/create', stock.stockSlug]"></button>
+                            } @else {
+                            <div class="p-3 bg-blue-50 border-round-xl border-1 border-blue-100 flex align-items-center gap-3">
+                                <i class="pi pi-info-circle text-blue-600"></i>
+                                <span class="text-blue-800 font-medium">This is your own product listing.</span>
+                            </div>
+                            }
                         </div>
                     </div>
                 </div>

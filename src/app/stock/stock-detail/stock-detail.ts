@@ -10,6 +10,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ChangeDetectorRef } from '@angular/core';
 import { GenerateUrlUtils } from '../../util/generate-url.utils';
 
+import { AccountService } from '../../components/account/account.service';
+
 @Component({
   selector: 'app-stock-detail',
   standalone: true,
@@ -21,6 +23,7 @@ export class StockDetailComponent implements OnInit, OnDestroy {
   stock: any;
   images: any[] = [];
   activeIndex: number = 0;
+  currentUserUsername: string = '';
   private autoSlideTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private readonly autoSlideMs = 2000;
   private readonly fallbackImage = 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=800';
@@ -28,10 +31,12 @@ export class StockDetailComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute, 
     private stockService: StockService,
+    private accountService: AccountService,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
+    this.currentUserUsername = this.accountService.getUsername();
     const slug = this.route.snapshot.paramMap.get('slug');
     if (slug) {
       this.stockService.getStockDetails(slug).subscribe({

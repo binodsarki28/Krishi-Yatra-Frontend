@@ -219,8 +219,8 @@ export class OwnStockListComponent implements OnInit, OnDestroy {
 
   deleteOrUndeleteStock(slug: string, currentStatus: boolean) {
     this.confirmationService.confirm({
-      message: `Are you sure you want to ${currentStatus ? 'deactivate (soft delete)' : 'activate (undelete)'} this stock?`,
-      header: 'Confirm Change',
+      message: `Are you sure you want to ${currentStatus ? 'deactivate' : 'activate'} this stock listing?`,
+      header: 'Confirm Status Change',
       icon: currentStatus ? 'pi pi-exclamation-triangle' : 'pi pi-info-circle',
       accept: () => {
         this.stockService.deleteOrUndeleteStock(slug).subscribe({

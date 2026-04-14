@@ -112,7 +112,8 @@
                                 <p-button [icon]="stock.active ? 'pi pi-eye-slash' : 'pi pi-eye'"
                                     (onClick)="deleteOrUndeleteStock(stock.stockSlug, stock.active)"
                                     [severity]="stock.active ? 'warn' : 'success'" [text]="true" [rounded]="true" size="small"
-                                    [pTooltip]="stock.active ? 'Deactivate (Soft Delete)' : 'Activate (Undelete)'"></p-button>
+                                    [pTooltip]="stock.active ? 'Deactivate' : 'Activate'"
+                                    tooltipPosition="left"></p-button>
                             </div>
                         </td>
                     </tr>

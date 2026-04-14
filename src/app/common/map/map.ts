@@ -499,6 +499,8 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit
             fitSelectedRoutes: true,
             show: false,
             // @ts-ignore
+            geocoder: null,
+            // @ts-ignore
             itinerary: { show: false }
         }).addTo(this.map);
 
