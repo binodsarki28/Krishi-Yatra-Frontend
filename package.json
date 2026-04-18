@@ -39,6 +39,7 @@
     "express": "^5.1.0",
     "firebase": "^12.11.0",
     "leaflet": "^1.9.4",
+    "leaflet-routing-machine": "^3.2.12",
     "primeflex": "^4.0.0",
     "primeicons": "^7.0.0",
     "primeng": "^21.1.1",
@@ -53,7 +54,6 @@
     "@types/leaflet-routing-machine": "^3.2.9",
     "@types/node": "^20.17.19",
     "jsdom": "^27.1.0",
-    "leaflet-routing-machine": "^3.2.12",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
   }
