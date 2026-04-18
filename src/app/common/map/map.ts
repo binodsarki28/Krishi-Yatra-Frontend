@@ -103,6 +103,10 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit
         script.src = 'https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js';
         script.onload = () => {
             console.log('Leaflet Routing Machine script injected successfully.');
+            // Re-sync with global L where the script attached itself
+            if ((window as any).L) {
+                this.L = (window as any).L;
+            }
             if (this.drawRoute) {
                 this.drawRouteLine();
             }
@@ -594,6 +598,9 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit
         script.src = 'https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js';
         script.onload = () => {
             console.log('Routing script loaded from click. Continuing redraw...');
+            if ((window as any).L) {
+                this.L = (window as any).L;
+            }
             this.routeLineRedrawSequence();
         };
         script.onerror = () => {
