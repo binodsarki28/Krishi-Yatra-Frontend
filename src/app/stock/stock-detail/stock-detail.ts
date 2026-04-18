@@ -165,8 +165,12 @@ export class StockDetailComponent implements OnInit, OnDestroy {
       return this.fallbackImage;
     }
 
-    if (trimmedUrl.startsWith('http://') || trimmedUrl.startsWith('https://')) {
+    if (trimmedUrl.startsWith('https://')) {
       return trimmedUrl;
+    }
+
+    if (trimmedUrl.startsWith('http://')) {
+      return trimmedUrl.replace('http://', 'https://');
     }
 
     const baseUrl = GenerateUrlUtils.generateUrl('');

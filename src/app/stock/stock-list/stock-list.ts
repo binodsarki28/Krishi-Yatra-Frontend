@@ -196,10 +196,16 @@ export class StockListComponent implements OnInit {
   }
 
   getStockImage(stockImages: string[]): string {
-    if (!stockImages || stockImages.length === 0) {
-      return 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=400';
+    const fallback = 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=400';
+    if (!stockImages || stockImages.length === 0 || !stockImages[0]) {
+      return fallback;
     }
-    return stockImages[0] || 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=400';
+    
+    let url = stockImages[0].trim();
+    if (url.startsWith('http://')) {
+      return url.replace('http://', 'https://');
+    }
+    return url;
   }
 
   viewDetail(slug: string) {
