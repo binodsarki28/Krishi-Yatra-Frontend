@@ -81,7 +81,8 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit
 
   private async loadLeaflet() {
     if (!isPlatformBrowser(this.platformId)) return;
-    const L = await import('leaflet');
+    const leafletModule = await import('leaflet');
+    const L = (leafletModule as any).default || leafletModule;
     this.L = L;
     (window as any).L = L;
 
