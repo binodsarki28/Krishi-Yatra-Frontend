@@ -1,5 +1,5 @@
 export class GenerateUrlUtils {
-    private static readonly BASE_URL: string = 'http://localhost:8080/';
+    private static readonly BASE_URL: string = 'https://krishi-yatra-backend.onrender.com/';
 
     /**
      * Generates the full API URL from an endpoint constant.
