@@ -98,6 +98,12 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit
   }
 
   private initMap() {
+    // Priority: use the window.L if it has Routing, otherwise use the module L
+    const globalL = (window as any).L;
+    if (globalL && globalL.Routing) {
+        this.L = globalL;
+    }
+
     if (!this.L || this.map || !isPlatformBrowser(this.platformId)) return;
     
     // Safety check for the container
