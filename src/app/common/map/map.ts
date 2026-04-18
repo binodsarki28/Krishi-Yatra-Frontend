@@ -81,29 +81,37 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit
 
   private async loadLeaflet() {
     if (!isPlatformBrowser(this.platformId)) return;
-    
-    // Import leaflet normally
     const L = await import('leaflet');
-    
-    // In Angular, we need to ensure Leaflet is on the window object 
-    // for the routing machine (bundled in scripts) to find it.
-    (window as any).L = L;
     this.L = L;
+    (window as any).L = L;
 
-    // The Routing machine is now bundled in angular.json "scripts",
-    // so it should automatically attach itself to window.L / this.L
+    try {
+        await import('leaflet-routing-machine');
+    } catch(e) {}
     
+    const globalL = (window as any).L || L;
+    if (!(window as any).L) (window as any).L = globalL;
+    this.L = globalL;
     this.leafletReady = true;
+    
     this.initMap();
+
+    // Force load Leaflet Routing Machine if Webpack failed to attach it to window.L
+    if (!this.L.Routing) {
+        console.warn('Dynamic import failed to bind L.Routing. Injecting script tag directly...');
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js';
+        script.onload = () => {
+            console.log('Leaflet Routing Machine script injected successfully.');
+            if (this.drawRoute) {
+                this.drawRouteLine();
+            }
+        };
+        document.head.appendChild(script);
+    }
   }
 
   private initMap() {
-    // Priority: use the window.L if it has Routing, otherwise use the module L
-    const globalL = (window as any).L;
-    if (globalL && globalL.Routing) {
-        this.L = globalL;
-    }
-
     if (!this.L || this.map || !isPlatformBrowser(this.platformId)) return;
     
     // Safety check for the container
@@ -577,9 +585,22 @@ export class MapComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit
     console.log('User manually requested to redraw the route line');
     
     // Inject the script if Leaflet Routing Machine is missing
-    if (this.L && !this.L.Routing) {
-        this.distanceInfo = 'Routing Engine Unavailable';
+    if (this.L && !this.L.Routing && isPlatformBrowser(this.platformId)) {
+        console.warn('Routing engine missing! Force injecting script...');
+        this.distanceInfo = 'Loading Routing Engine...';
         this.cdr.detectChanges();
+        
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js';
+        script.onload = () => {
+            console.log('Routing script loaded from click. Continuing redraw...');
+            this.routeLineRedrawSequence();
+        };
+        script.onerror = () => {
+            this.distanceInfo = 'Straight Line Path';
+            this.cdr.detectChanges();
+        };
+        document.head.appendChild(script);
         return;
     }
 
