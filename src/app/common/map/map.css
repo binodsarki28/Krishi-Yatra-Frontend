@@ -9,9 +9,7 @@
 }
 
 .leaflet-map {
-    z-index: 1;
-    min-height: 450px; /* Force a height so it doesn't disappear in production */
-    width: 100%;
+    z-index: 1; /* Important for p-dropdown/select and other fixed elements */
 }
 
 /* Ensure images load smoothly and are rounded */
