@@ -25,9 +25,9 @@
 
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-4">
                 <div class="flex flex-column gap-2">
-                    <label for="username" class="font-bold text-sm text-gray-700 ml-1">Email or Username</label>
+                    <label for="username" class="font-bold text-sm text-gray-700 ml-1">Username</label>
                     <input pInputText id="username" formControlName="username"
-                        placeholder="Enter your email or username"
+                        placeholder="Enter your username"
                         class="p-3 border-round-xl w-full surface-50 border-1 border-200 shadow-none" />
                     @if (loginForm.controls['username']?.invalid && loginForm.controls['username']?.touched) {
                     <small class="text-red-500 font-bold ml-1">Username is required</small>
