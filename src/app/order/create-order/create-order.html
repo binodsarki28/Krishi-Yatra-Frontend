@@ -80,7 +80,7 @@
                         <div class="flex align-items-center gap-3 mb-4 pb-3 border-bottom-1 border-100">
                             <div class="product-thumb bg-gray-100 border-round-lg overflow-hidden flex-shrink-0">
                                 @if (stock.stockImages?.length) {
-                                  <img [ngSrc]="stock.stockImages[0]" width="80" height="80" alt="Product" class="w-full h-full object-cover"/>
+                                  <img [ngSrc]="getProductImage()" width="80" height="80" alt="Product" class="w-full h-full object-cover"/>
                                 } @else {
                                   <i class="pi pi-image text-gray-400 text-3xl flex align-items-center justify-content-center w-full h-full"></i>
                                 }

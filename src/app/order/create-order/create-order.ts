@@ -403,4 +403,12 @@ export class CreateOrder implements OnInit, AfterViewInit, OnDestroy {
       }
     });
   }
+
+  getProductImage(): string {
+    const fallback = 'https://images.unsplash.com/photo-1592982537447-7440770cbfc9?q=80&w=400';
+    if (!this.stock?.stockImages?.length || !this.stock.stockImages[0]) return fallback;
+    let url = this.stock.stockImages[0].trim();
+    if (url.startsWith('http://')) return url.replace('http://', 'https://');
+    return url;
+  }
 }
