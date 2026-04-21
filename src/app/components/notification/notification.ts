@@ -10,8 +10,9 @@ import { AccountService } from '../account/account.service';
 import { NotificationService, INotification } from './notification.service';
 import { finalize, fromEvent, debounceTime } from 'rxjs';
 import { ToastService } from '../../util/toast.service';
-import { inject, PLATFORM_ID } from '@angular/core';
+import { inject, PLATFORM_ID, OnDestroy } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-notification',
@@ -37,7 +38,7 @@ import { isPlatformBrowser } from '@angular/common';
     }
   `]
 })
-export class NotificationComponent implements OnInit {
+export class NotificationComponent implements OnInit, OnDestroy {
   notifications: INotification[] = [];
   loading: boolean = false;
   totalRecords: number = 0;
@@ -47,6 +48,7 @@ export class NotificationComponent implements OnInit {
   unreadCountManual: number = 0;
   hasMore: boolean = true;
   isBrowser: boolean = false;
+  private messageSubscription?: Subscription;
   private platformId = inject(PLATFORM_ID);
 
   constructor(
@@ -62,6 +64,25 @@ export class NotificationComponent implements OnInit {
     this.isBrowser = true;
     this.fetchNotifications();
     this.setupInfiniteScroll();
+    this.listenForNewMessages();
+  }
+
+  listenForNewMessages() {
+    this.messageSubscription = this.notificationService.newMessage$.subscribe({
+      next: (notif) => {
+        if (notif) {
+          // Prepend the new notification to the list
+          this.notifications = [notif, ...this.notifications];
+          this.totalRecords++;
+          this.updateUnreadCount();
+          this.cdr.detectChanges();
+        }
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.messageSubscription?.unsubscribe();
   }
 
   setupInfiniteScroll() {

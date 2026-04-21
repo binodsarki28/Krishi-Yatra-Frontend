@@ -9,7 +9,8 @@ import { NavigationService } from './util/navigation.service';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { firebaseConfig } from './util/firebase.config';
-import { NotificationService } from './components/notification/notification.service';
+import { NotificationService, INotification } from './components/notification/notification.service';
+import { ToastService } from './util/toast.service';
 import { AccountService } from './components/account/account.service';
 
 @Component({
@@ -24,6 +25,7 @@ export class AppComponent {
   showFooter = true;
   showNavbar = true;
   private router = inject(Router);
+  private toastService = inject(ToastService);
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -136,7 +138,23 @@ export class AppComponent {
 
         onMessage(messaging, (payload) => {
           console.log('Foreground message received:', payload);
-          // You could trigger a toast here if needed
+          if (payload.notification) {
+            const newNotif: INotification = {
+              id: Number(payload.data?.['id']) || Date.now(),
+              title: payload.notification.title || 'New Notification',
+              body: payload.notification.body || '',
+              type: payload.data?.['type'] || 'INFO',
+              read: false,
+              category: payload.data?.['category'] || 'GENERAL',
+              actionUrl: payload.data?.['actionUrl'],
+              createdAt: new Date().toISOString()
+            };
+            
+            this.notificationService.notifyNewMessage(newNotif);
+            
+            // Show global toast
+            this.toastService.generalResponse('info', newNotif.title, newNotif.body);
+          }
         });
       } catch (e) {
         console.error('Firebase initialization error:', e);

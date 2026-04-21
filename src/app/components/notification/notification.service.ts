@@ -23,10 +23,19 @@ export class NotificationService {
   private unreadCountSubject = new BehaviorSubject<number>(0);
   unreadCount$ = this.unreadCountSubject.asObservable();
 
+  private newMessageSubject = new BehaviorSubject<INotification | null>(null);
+  newMessage$ = this.newMessageSubject.asObservable();
+
   constructor(private http: HttpClient) { }
 
   updateUnreadCount(count: number) {
     this.unreadCountSubject.next(count);
+  }
+
+  notifyNewMessage(notification: INotification) {
+    this.newMessageSubject.next(notification);
+    // Also refresh the count from backend to stay in sync
+    this.getUnreadCount().subscribe();
   }
 
   getNotifications(page: number = 0, size: number = 10): Observable<IResponseWithObject> {
