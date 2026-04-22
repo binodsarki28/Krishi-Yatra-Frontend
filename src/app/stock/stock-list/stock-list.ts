@@ -74,11 +74,13 @@ export class StockListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Large applications often benefit from pushing initial data loads to the next macro-task
-    // to avoid ExpressionChangedAfterItHasBeenCheckedError during the initial check.
-    setTimeout(() => {
-      this.loadInitialData();
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      // Large applications often benefit from pushing initial data loads to the next macro-task
+      // to avoid ExpressionChangedAfterItHasBeenCheckedError during the initial check.
+      setTimeout(() => {
+        this.loadInitialData();
+      });
+    }
   }
 
   loadInitialData() {

@@ -1,6 +1,10 @@
 export class GenerateUrlUtils {
-    private static readonly BASE_URL: string = 'https://krishi-yatra-backend.onrender.com/';
 
+  // for deployed backend ( always keep it inside the git so that it will connect with deployed bakcend
+  private static readonly BASE_URL: string = 'https://krishi-yatra-backend.onrender.com/';
+
+  // with localhost backend (do not push it without commenting it in the Github)
+  // private static readonly BASE_URL: string = 'http://localhost:8080/';
     /**
      * Generates the full API URL from an endpoint constant.
      * Example: GenerateUrlUtils.generateUrl(Endpoint.LOGIN_USER)
