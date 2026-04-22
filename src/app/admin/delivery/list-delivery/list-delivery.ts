@@ -4,7 +4,7 @@ import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
 import { TextareaModule } from 'primeng/textarea';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
+import { debounceTime, finalize } from 'rxjs/operators';
 import { DeliveryService } from '../delivery.service';
 import { ToastService } from '../../../util/toast.service';
 import { IDeliveryListResponse } from '../IDelivery';
@@ -192,26 +192,26 @@ export class ListDeliveryComponent implements OnInit {
         }
         if (this.actionType === 'REJECT') {
             this.deliveryService.verifyDelivery({ username: this.selectedUsername, approved: false, reason: this.actionReason }).subscribe({
-                next: (res: any) => { 
-                    this.toastService.successResponse(res); 
-                    this.actionDialog = false; 
-                    this.loadDeliveries(); 
+                next: (res: any) => {
+                    this.toastService.successResponse(res);
+                    this.actionDialog = false;
+                    this.loadDeliveries();
                 },
-                error: (err: any) => { 
-                    this.toastService.errorResponse(err); 
-                    this.actionDialog = false; 
+                error: (err: any) => {
+                    this.toastService.errorResponse(err);
+                    this.actionDialog = false;
                 }
             });
         } else {
             this.deliveryService.blockUnblockDelivery(this.selectedUsername, true, this.actionReason).subscribe({
-                next: (res: any) => { 
-                    this.toastService.successResponse(res); 
-                    this.actionDialog = false; 
-                    this.loadDeliveries(); 
+                next: (res: any) => {
+                    this.toastService.successResponse(res);
+                    this.actionDialog = false;
+                    this.loadDeliveries();
                 },
-                error: (err: any) => { 
-                    this.toastService.errorResponse(err); 
-                    this.actionDialog = false; 
+                error: (err: any) => {
+                    this.toastService.errorResponse(err);
+                    this.actionDialog = false;
                 }
             });
         }

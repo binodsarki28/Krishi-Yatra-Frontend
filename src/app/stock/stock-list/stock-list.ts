@@ -2,8 +2,6 @@ import { Component, OnInit, HostListener, Inject, PLATFORM_ID, ChangeDetectorRef
 import { CommonModule, isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { finalize } from 'rxjs';
 
 // PrimeNG
 import { ButtonModule } from 'primeng/button';
@@ -202,7 +200,7 @@ export class StockListComponent implements OnInit {
     if (!stockImages || stockImages.length === 0 || !stockImages[0]) {
       return fallback;
     }
-    
+
     let url = stockImages[0].trim();
     if (url.startsWith('http://')) {
       return url.replace('http://', 'https://');

@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { AutoCompleteModule } from 'primeng/autocomplete';
@@ -159,11 +158,11 @@ export class CreateOrder implements OnInit, AfterViewInit, OnDestroy {
         this.farmerAddress = res.response;
         this.farmerAddressString = this.farmerAddress?.fullAddress || '';
         this.orderForm.patchValue({ pickupAddress: this.farmerAddressString });
-        
+
         // Nuclear Reset Map to ensure fresh state on every visit/update
         this.mapVisible = false;
         this.cdr.detectChanges();
-        
+
         setTimeout(() => {
             // Set temp location to stop "Loading map..." spinner
             this.pickupLoc = { lat: 27.7, lng: 85.3, label: 'Farmer Address' };
@@ -217,10 +216,10 @@ export class CreateOrder implements OnInit, AfterViewInit, OnDestroy {
 
   private geocodeAndSetLoc(address: string, type: 'pickup' | 'drop') {
     if (!address || !isPlatformBrowser(this.platformId)) return;
-    
+
     const addrObj = type === 'pickup' ? this.farmerAddress : this.buyerAddress;
     const queries = [address + ', Nepal'];
-    
+
     if (addrObj) {
       if (addrObj.municipality) queries.push(`${addrObj.municipality}, ${addrObj.district}, Nepal`);
       if (addrObj.district) queries.push(`${addrObj.district}, Nepal`);
@@ -232,11 +231,11 @@ export class CreateOrder implements OnInit, AfterViewInit, OnDestroy {
   private runGeocodeSequentially(queries: string[], type: 'pickup' | 'drop') {
     if (queries.length === 0) return;
     const query = queries.shift()!;
-    
+
     // Fast fallback: Use photon.komoot.io for quicker geocoding
     const photonUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=1`;
     const nominatimUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
-    
+
     fetch(photonUrl)
       .then(res => res.json())
       .then(data => {
@@ -367,12 +366,12 @@ export class CreateOrder implements OnInit, AfterViewInit, OnDestroy {
 
     // Build checkpoints: prioritize user-defined checkpoints
     const userTags = this.orderForm.get('checkpoints')?.value || [];
-    
+
     // If user provided custom checkpoints, use ONLY those. Otherwise fallback to auto-generated milestones.
-    const finalCheckpointTags = userTags.length > 0 
-      ? userTags 
+    const finalCheckpointTags = userTags.length > 0
+      ? userTags
       : (this.calculatedCheckpoints ? this.calculatedCheckpoints.split('|').map((s: string) => s.trim()) : []);
-      
+
     const allCheckpoints = finalCheckpointTags.join(' | ');
 
     const request = {

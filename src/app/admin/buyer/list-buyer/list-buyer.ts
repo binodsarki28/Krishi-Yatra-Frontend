@@ -4,7 +4,7 @@ import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
 import { TextareaModule } from 'primeng/textarea';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
+import { debounceTime, finalize } from 'rxjs/operators';
 import { BuyerService } from '../buyer.service';
 import { ToastService } from '../../../util/toast.service';
 import { IBuyerListResponse } from '../IBuyer';
@@ -188,26 +188,26 @@ export class ListBuyerComponent implements OnInit {
         }
         if (this.actionType === 'REJECT') {
             this.buyerService.verifyBuyer({ username: this.selectedUsername, approved: false, reason: this.actionReason }).subscribe({
-                next: (res: any) => { 
-                    this.toastService.successResponse(res); 
-                    this.actionDialog = false; 
-                    this.loadBuyers(); 
+                next: (res: any) => {
+                    this.toastService.successResponse(res);
+                    this.actionDialog = false;
+                    this.loadBuyers();
                 },
-                error: (err: any) => { 
-                    this.toastService.errorResponse(err); 
-                    this.actionDialog = false; 
+                error: (err: any) => {
+                    this.toastService.errorResponse(err);
+                    this.actionDialog = false;
                 }
             });
         } else {
             this.buyerService.blockUnblockBuyer(this.selectedUsername, true, this.actionReason).subscribe({
-                next: (res: any) => { 
-                    this.toastService.successResponse(res); 
-                    this.actionDialog = false; 
-                    this.loadBuyers(); 
+                next: (res: any) => {
+                    this.toastService.successResponse(res);
+                    this.actionDialog = false;
+                    this.loadBuyers();
                 },
-                error: (err: any) => { 
-                    this.toastService.errorResponse(err); 
-                    this.actionDialog = false; 
+                error: (err: any) => {
+                    this.toastService.errorResponse(err);
+                    this.actionDialog = false;
                 }
             });
         }

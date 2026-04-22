@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -25,15 +25,15 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
   selector: 'app-create-stock',
   standalone: true,
   imports: [
-    CommonModule, 
-    FormsModule, 
-    ReactiveFormsModule, 
-    CardModule, 
-    InputTextModule, 
-    InputNumberModule, 
-    TextareaModule, 
-    SelectModule, 
-    ButtonModule, 
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CardModule,
+    InputTextModule,
+    InputNumberModule,
+    TextareaModule,
+    SelectModule,
+    ButtonModule,
     ToastModule,
     RouterModule,
     InputGroupModule,
@@ -54,7 +54,7 @@ export class CreateStockComponent implements OnInit {
   subCategoriesFiltered: ISubCategoryResponse[] = [];
   submitting: boolean = false;
   selectedFiles: any[] = [];
-  
+
   hasAddress: boolean = false;
   loadingAddress: boolean = true;
   demandId: string | null = null;
@@ -155,7 +155,7 @@ export class CreateStockComponent implements OnInit {
   onCategoryChange() {
     const categoryId = this.stockForm.get('categoryId')?.value;
     const subCatControl = this.stockForm.get('subCategoryId');
-    
+
     if (categoryId) {
       this.subCategoriesFiltered = this.subCategories.filter(s => s.categoryId === categoryId);
       subCatControl?.enable();
@@ -205,10 +205,10 @@ export class CreateStockComponent implements OnInit {
     if (this.demandId) {
         stockData.demandId = this.demandId;
     }
-    
+
     // Send stock data as a JSON blob
     formData.append('stockData', new Blob([JSON.stringify(stockData)], { type: 'application/json' }));
-    
+
     // Add images with unique keys
     console.log('Frontend (Create): Total files to send:', this.selectedFiles.length);
     this.selectedFiles.forEach((file, index) => {

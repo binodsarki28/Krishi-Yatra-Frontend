@@ -37,9 +37,6 @@ export class AdminDashboardComponent implements OnInit {
     expandedGroup: string = '';
 
     constructor(
-        private farmerService: FarmerService,
-        private buyerService: BuyerService,
-        private deliveryService: DeliveryService,
         private adminAppService: AdminAppService,
         private accountService: AccountService,
         private navigationService: NavigationService,

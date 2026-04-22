@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Endpoint } from '../const/end_point';
 import { GenerateUrlUtils } from '../util/generate-url.utils';
 
 @Injectable({
